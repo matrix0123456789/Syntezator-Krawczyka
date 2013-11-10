@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Syntezator_Krawczyka.Synteza.lfoUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Background="BurlyWood"
+             d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
+    <Grid>
+        <Slider Height="23" HorizontalAlignment="Left" Margin="106,25,0,0" Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" ToolTip="Moc"/>
+        <Slider Height="23" HorizontalAlignment="Left" Margin="106,47,0,0" Name="sliderB" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider2_ValueChanged" ToolTip="częstotliwość" />
+        <Slider Height="23" HorizontalAlignment="Left" Margin="106,69,0,0" Name="sliderC" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider3_ValueChanged" ToolTip="gładkość" />
+        <Label Content="LFO" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
+        <RadioButton Content="sinusoidalna" Height="16" HorizontalAlignment="Left" Margin="0,25,0,0" Name="sinusoidalny" VerticalAlignment="Top" Checked="sinusoidalny_Checked" />
+        <RadioButton Content="trójkątna" Height="16" HorizontalAlignment="Left" Margin="0,47,0,0" Name="trójkątny" VerticalAlignment="Top" Checked="trójkątny_Checked" />
+        <RadioButton Content="prostokątna" HorizontalAlignment="Left" Margin="0,69,0,0" Name="prostokątny" Height="16" VerticalAlignment="Top" Checked="prostokątny_Checked" />
+        <RadioButton Content="piłokształtna" HorizontalAlignment="Left" Margin="0,91,0,0" Name="piłokształtny" Height="16" VerticalAlignment="Top" Checked="piłokształtny_Checked" />
+
+    </Grid>
+
+</UserControl>
