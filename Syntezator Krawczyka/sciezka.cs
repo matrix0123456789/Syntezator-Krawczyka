@@ -19,7 +19,7 @@ namespace Syntezator_Krawczyka
         /// <summary>
         /// sekwencer, do którego zostaną wysłane nuty
         /// </summary>
-        public sekwencer sekw{get;set;}
+        public soundStart sekw{get;set;}
         public UIElement UI{get;set;}
         /// <summary>
         /// nazwa
@@ -41,17 +41,22 @@ namespace Syntezator_Krawczyka
         {
            lock(granie.grają)
            {
-               granie.liczbaGenerowanychMax = nuty.Count;
+               granie.liczbaGenerowanychMax+= nuty.Count;
                granie.liczbaGenerowanych += nuty.Count;
                foreach(var prz in nuty)
             {var tabl = (nuta)prz.Clone();
+            tabl.grajDo = long.MaxValue;
             System.Threading.ThreadPool.QueueUserWorkItem((o) =>
             {
                 if(sekw!=null)
-                sekw.wyjście[0].DrógiModół.działaj(tabl);
+                
+sekw.działaj(tabl);
                 lock (granie.liczbaGenerowanychBlokada)
                 {
                     granie.liczbaGenerowanych--;
+                    if(!granie.można&&granie.liczbaGenerowanych==0)
+
+                        granie.grajcale(false);
                 }
             }, tabl);
             }

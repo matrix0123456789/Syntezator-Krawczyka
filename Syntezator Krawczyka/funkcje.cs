@@ -11,7 +11,7 @@ namespace Syntezator_Krawczyka
     {
 
         //static byte[] puste2=null;
-        static public bool graj(double[] fala, double głośność)
+        static public bool graj(float[] fala, double głośność)
         {
             var bufor=new byte[fala.Length*2];
             for (var i = 0; i < fala.Length; i++)
@@ -59,7 +59,7 @@ namespace Syntezator_Krawczyka
         /// <param name="fala"></param>
         /// <param name="głośność"></param>
         /// <param name="plik">ścierzka do pliku</param>
-        static public void zapisz(double[] fala, double głośność, string plik)
+        static public void zapisz(float[] fala, double głośność, string plik)
         {
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
                 System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
@@ -74,7 +74,7 @@ namespace Syntezator_Krawczyka
         /// <param name="fala"></param>
         /// <param name="głośność"></param>
         /// <returns>Tablica odpowiadająca plikowi wave</returns>
-        static public byte[] wave(double[] fala, double głośność)
+        static public byte[] wave(float[] fala, double głośność)
         {
             /*System.IO.StreamReader sa = new System.IO.StreamReader("C:\\Users\\Public\\Documents\\sinusoida.wav");
             System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
@@ -99,6 +99,18 @@ namespace Syntezator_Krawczyka
             puste[41] = rozmiar2[1];
             puste[42] = rozmiar2[2];
             puste[43] = rozmiar2[3];
+
+
+            byte[] czestotliwosc = BitConverter.GetBytes((int)plik.Hz);
+            puste[24] = czestotliwosc[0];
+            puste[25] = czestotliwosc[1];
+            puste[26] = czestotliwosc[2];
+            puste[27] = czestotliwosc[3];
+            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz*2);
+            puste[28] = czestotliwosc2[0];
+            puste[29] = czestotliwosc2[1];
+            puste[30] = czestotliwosc2[2];
+            puste[31] = czestotliwosc2[3];
             long falai = 0;
             for (int z = pus.Length - 2; z < puste.Length && fala.LongLength > falai; z = z + 2)
             {
@@ -126,7 +138,11 @@ namespace Syntezator_Krawczyka
         /// <returns>Częstotliwość w hercach</returns>
         public static double częstotliwość(short oktawa, float ton)
         {
-            return 130.812783 * Math.Pow(2, (oktawa)+(ton / 6));
+            return 130.812783 * Math.Pow(2, (oktawa) + (ton / 6));
+        }
+        public static double ilepróbek(short oktawa, float ton)
+        {
+            return plik.Hz/(130.812783 * Math.Pow(2, (oktawa) + (ton / 6)));
         }
         
     }

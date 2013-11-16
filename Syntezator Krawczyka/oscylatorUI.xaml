@@ -10,7 +10,7 @@
         <RadioButton Content="trójkątna" Height="16" HorizontalAlignment="Left" Margin="0,47,0,0" Name="trójkątny" VerticalAlignment="Top" Checked="trójkątny_Checked" />
         <RadioButton Content="prostokątna" HorizontalAlignment="Left" Margin="0,69,0,0" Name="prostokątny" Height="16" VerticalAlignment="Top" Checked="prostokątny_Checked" />
         <RadioButton Content="piłokształtna" HorizontalAlignment="Left" Margin="0,91,0,0" Name="piłokształtny" Height="16" VerticalAlignment="Top" Checked="piłokształtny_Checked" />
-        <RadioButton Content="piłokształtna2x" Height="16" HorizontalAlignment="Left" Margin="0,113,0,0" Name="radioButton1" VerticalAlignment="Top" Checked="radioButton1_Checked" />
+        <RadioButton Content="niestandardowa" Height="16" HorizontalAlignment="Left" Margin="0,113,0,0" Name="radioButton1" VerticalAlignment="Top" Checked="radioButton1_Checked" />
         <Slider ToolTip="Kształt fali" Height="23" HorizontalAlignment="Left" Margin="130,25,0,0" x:Name="slider1" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" />
         <Slider ToolTip="Attack — Wejście" Height="23" HorizontalAlignment="Left" Margin="130,50,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderA_ValueChanged" />
         <Slider ToolTip="Delay — Długość maksymalnej głośności" Height="23" HorizontalAlignment="Left" Margin="130,69,0,0" x:Name="sliderD" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderD_ValueChanged" />
@@ -21,5 +21,6 @@
         <Label Content="R" HorizontalAlignment="Left" Margin="110,107,0,0" VerticalAlignment="Top" />
         <Label Content="S" HorizontalAlignment="Left" Margin="111,88,0,0" VerticalAlignment="Top" />
         <Label Content="Oscylator" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
+        <Button Content="edytuj" HorizontalAlignment="Left" Margin="7,134,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
     </Grid>
 </UserControl>

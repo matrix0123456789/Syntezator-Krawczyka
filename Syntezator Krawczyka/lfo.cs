@@ -14,13 +14,13 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
+         public long symuluj(long p)
+         {
+             return wyjście[0].DrógiModół.symuluj(p);
+         }
          public XmlNode XML { get; set; }
-        UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+         UserControl _UI;
+         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -33,9 +33,7 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public lfo()
         {
-            _wejście = new Typ[2];
-            _wejście[0] = new Typ();
-            _wejście[1] = new Typ();
+            wejście = new List<Typ>();
             _wyjście = new Typ[2];
             _wyjście[0] = new Typ();
             _wyjście[1] = new Typ();
@@ -44,6 +42,8 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("czestotliwosc", "0");
             _ustawienia.Add("typ", "sinusoidalna");
             _ustawienia.Add("gladkosc", "0");
+            _ustawienia.Add("kwantyzacja", "0");
+            _ustawienia.Add("nowanuta", "false");
             _UI = new lfoUI(this);
         }
         public void działaj(nuta input)
@@ -58,20 +58,64 @@ namespace Syntezator_Krawczyka.Synteza
                 else
             {
                 {
-
                     nuta n = input;
                     var moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
-                    var jedenPrzebieg = oscylator.generujJedenPrzebieg(ustawienia["typ"], (long)(1 / float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) * plik.Hz), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
-                    float[] jak = new float[n.dane.Length];
-                    for (int i = 0; i < n.dane.Length; i++)
-                    {
-                        var miejsce = (i+n.generujOd) % jedenPrzebieg.Length;
-                        //jak[i] = n.dane[i] * (1 + (-jedenPrzebieg[miejsce] * 0.5f - 0.5f) * moc);
-                        jak[i] = 1 + (-jedenPrzebieg[miejsce] * 0.5f - 0.5f) * moc;
+                    var jedenPrzebieg = oscylator.generujJedenPrzebiegStatyczny(ustawienia["typ"], (long)(1 / float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) * plik.Hz), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
+                    var kwantyzacja = float.Parse(_ustawienia["kwantyzacja"], CultureInfo.InvariantCulture);
+                    if (wyjście[0].DrógiModół.GetType() == typeof(oscylator)&&bool.Parse(_ustawienia["nowanuta"]))
+                    {//do optymalizacji
+                        var pozA = 0f;//sprawdzanie, co było wcześniej
+                        var pozB = 0f;
+                        //long opuzn, opuzn2;
+                        //opuzn=0;
+                        for (int i = 0; i < n.długość; i++)
+                        {
+                            var miejsce = (i + n.generujOd) % jedenPrzebieg.Length;
+                            //jak[i] = n.dane[i] * (1 + (-jedenPrzebieg[miejsce] * 0.5f - 0.5f) * moc);
+                            pozB = (float)Math.Round((1 + (-jedenPrzebieg[(i + n.generujOd) % jedenPrzebieg.Length] * 0.5f - 0.5f)) / kwantyzacja) * kwantyzacja * moc;
+                            if (pozB != pozA)
+                            {
+                                pozA = pozB;
+                                var nowaNuta = input.Clone() as nuta;
+                                nowaNuta.id = nuta.nowyid;
+                                nowaNuta.ilepróbek = input.ilepróbek / Math.Pow(2,pozA);//sprawdzić, czy to ma sens
+                                nowaNuta.opuznienie += i;
+                                nowaNuta.długość = (long)nowaNuta.ilepróbek;
+                                //generowanie nuty
+                                wyjście[0].DrógiModół.działaj(nowaNuta);
+                                //opuzn = i;
+                            }
+                        }
                     }
-                    if (wyjście[0].DrógiModół != null && wyjście[1].DrógiModół != null)
+                    else
                     {
-                        wyjście[0].DrógiModół.działaj((wyjście[1].DrógiModół as filtr).działaj(input, jak));
+                        if (kwantyzacja == 0)
+                        {
+                            for (int i = 0; i < jedenPrzebieg.Length; i++)
+                            {
+                                //jak[i] = n.dane[i] * (1 + (-jedenPrzebieg[miejsce] * 0.5f - 0.5f) * moc);
+                                jedenPrzebieg[i] = 1 + (-jedenPrzebieg[(i) % jedenPrzebieg.Length] * 0.5f - 0.5f) * moc;
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < jedenPrzebieg.Length; i++)
+                            {
+                                //jak[i] = n.dane[i] * (1 + (-jedenPrzebieg[miejsce] * 0.5f - 0.5f) * moc);
+                                jedenPrzebieg[i] = (float)Math.Round((1 + (-jedenPrzebieg[(i) % jedenPrzebieg.Length] * 0.5f - 0.5f)) / kwantyzacja) * kwantyzacja * moc;
+                            }
+                        }
+
+                        if (wyjście[0].DrógiModół != null && wyjście[1].DrógiModół != null)
+                        {
+                            if (wyjście[1].GetType() == typeof(oscylator))
+                            {
+                                (wyjście[0].DrógiModół as oscylator).działaj(input, jedenPrzebieg);
+
+                            }//zrobić obsługę oscylatora
+                            else
+                                wyjście[0].DrógiModół.działaj(((filtr)wyjście[1].DrógiModół).działaj(input, jedenPrzebieg));
+                        }
                     }
                 }
             }

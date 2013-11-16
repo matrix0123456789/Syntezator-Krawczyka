@@ -62,7 +62,12 @@ namespace Syntezator_Krawczyka.Synteza
         private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["gladkosc"] = sliderC.Value.ToString(CultureInfo.InvariantCulture);
-            
+
+        }
+        private void slider4_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            parentNode.ustawienia["kwantyzacja"] = sliderD.Value.ToString(CultureInfo.InvariantCulture);
+
         }
         void ustawSuwaki()
         {
@@ -74,6 +79,14 @@ namespace Syntezator_Krawczyka.Synteza
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
             ustawSuwaki();
+            if (parentNode.wyjście[0].DrógiModół.GetType() == typeof(oscylator))
+            {
+                DoOscylatora.Visibility = Visibility.Visible;  
+            }
+            else
+            {
+                DoOscylatora.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

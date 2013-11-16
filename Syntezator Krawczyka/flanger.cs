@@ -14,18 +14,18 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
+        public long symuluj(long p)
+        {
+            return wyjście[0].DrógiModół.symuluj(p);
+        }
         public XmlNode XML { get; set; }
         UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }
+            get;
+            set;
         }
-        Typ[] _wyjście;
         public Dictionary<string, string> ustawienia
         {
             get { return _ustawienia; }
@@ -46,10 +46,9 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public flanger()
         {
-            _wejście = new Typ[1];
-            _wejście[0] = new Typ();
-            _wyjście = new Typ[1];
-            _wyjście[0] = new Typ();
+            wejście = new List<Typ>();
+            wyjście = new Typ[1];
+            wyjście[0] = new Typ();
             _ustawienia = new Dictionary<string, string>();
             _ustawienia.Add("czestotliwosc", (0).ToString());
             _ustawienia.Add("przesuniecie", (0).ToString());

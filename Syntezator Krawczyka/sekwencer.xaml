@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="Syntezator_Krawczyka.Synteza.sekwencerUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" d:DesignHeight="86" d:DesignWidth="163">
+    <Grid Background="#FFDBDBDB">
+        <Slider ValueChanged="slider1_ValueChanged" Name="slider1" ToolTip="Zmiana oktawy" Minimum="-5" Maximum="5" Value="0" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="82"/>
+    </Grid>
+</UserControl>

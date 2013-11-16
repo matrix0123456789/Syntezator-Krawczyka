@@ -10,5 +10,6 @@
             
         </ComboBox>
         <Label Content="Ścieżka" Height="28" HorizontalAlignment="Left" Name="nazwa" VerticalAlignment="Top" />
+        <Button Content="Edytuj" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
     </Grid>
 </UserControl>

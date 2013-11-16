@@ -14,18 +14,18 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
+        public long symuluj(long p)
+        {
+            return wyjście[0].DrógiModół.symuluj(p);
+        }
         public XmlNode XML { get; set; }
         UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }
+            get;
+            set;
         }
-        Typ[] _wyjście;
         public Dictionary<string, string> ustawienia
         {
             get { return _ustawienia; }
@@ -33,17 +33,9 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public mikser()
         {
-            _wyjście = new Typ[1];
-            _wyjście[0] = new Typ();
-            _wejście = new Typ[8];
-            _wejście[0] = new Typ();
-            _wejście[1] = new Typ();
-            _wejście[2] = new Typ();
-            _wejście[3] = new Typ();
-            _wejście[4] = new Typ();
-            _wejście[5] = new Typ();
-            _wejście[6] = new Typ();
-            _wejście[7] = new Typ();
+            wyjście = new Typ[1];
+            wyjście[0] = new Typ();
+            wejście = new List<Typ>();
             _ustawienia = new Dictionary<string, string>();
             _UI = new UserControl();
         }

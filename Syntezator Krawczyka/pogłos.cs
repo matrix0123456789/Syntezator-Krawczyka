@@ -15,12 +15,8 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _UI; }
         }
          public XmlNode XML { get; set; }
-        UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+         UserControl _UI;
+         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -33,16 +29,34 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public pogłos()
         {
-            _wejście = new Typ[1];
-            _wejście[0] = new Typ();
             _wyjście = new Typ[1];
             _wyjście[0] = new Typ();
+            wejście = new List<Typ>();
             _ustawienia = new Dictionary<string, string>();
             _ustawienia.Add("czas", (0).ToString());
             _ustawienia.Add("zmniejszenie", (0).ToString());
             
             _ustawienia.Add("glosnosc", (1).ToString());
             _UI = new pogłosUI(this);
+        }
+        public long symuluj(long wej)
+        {
+            if (wyjście[0].DrógiModół != null)
+            {
+
+                var czas = (long)(float.Parse(_ustawienia["czas"], CultureInfo.InvariantCulture) * plik.Hz);
+                var zmniejszenie = float.Parse(_ustawienia["zmniejszenie"], CultureInfo.InvariantCulture);
+                var ilejest = float.Parse(_ustawienia["glosnosc"], CultureInfo.InvariantCulture);
+
+                var ix = 0;
+                while (ilejest * zmniejszenie > 0.02)
+                {
+                    wej += czas;
+                    ilejest *= zmniejszenie;
+                }
+                return wyjście[0].DrógiModół.symuluj(wej);
+            }
+            else return 0;
         }
         public void działaj(nuta input)
         {
@@ -65,8 +79,15 @@ namespace Syntezator_Krawczyka.Synteza
                             inp.opuznienie += czasjest;
 
                             inp.generujOd = 0;
+                            inp.czyPogłos = true;
+                            if (wyjście[0].DrógiModół.GetType() == typeof(granie) || (wyjście[0].DrógiModół.GetType() == typeof(glosnosc) && wyjście[0].DrógiModół.wyjście[0].DrógiModół.GetType() == typeof(granie)))
+                            {
+                                inp.dane = input.dane;
+                                inp.głośność = inp.głośność * ilejest;
+                            }
+                            else{
                             inp.dane=new float[input.dane.Length];
-                            int max;
+                            int max; 
                             if (inp.dane.Length < inp.grajDo)
                                 max = inp.dane.Length;
                             else
@@ -74,7 +95,7 @@ namespace Syntezator_Krawczyka.Synteza
                             for (int i = (int)inp.grajOd; max > i; i++)
                             {
                                 inp.dane[i] = input.dane[i] * ilejest;
-                            }
+                            }}
                         wyjście[0].DrógiModół.działaj(inp);
                         }
                         wyjście[0].DrógiModół.działaj(input);

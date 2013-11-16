@@ -16,11 +16,7 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _UI; }
         }
         UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -35,11 +31,15 @@ namespace Syntezator_Krawczyka.Synteza
         public player()
         {
             _UI = new playerUI(this);
-            _wejście = new Typ[0];
+            wejście = new List<Typ>();
             _wyjście = new Typ[1];
             _wyjście[0] = new Typ();
             _ustawienia = new Dictionary<string, string>();
             _ustawienia.Add("oktawy", "0");
+        }
+        public long symuluj(long p)
+        {
+            return wyjście[0].DrógiModół.symuluj(p);
         }
         public void działaj(nuta input)
         {

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Background="BurlyWood"
-             d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
+             d:DesignHeight="300" MouseMove="UserControl_MouseMove" Width="469">
     <Grid>
         <Slider Height="23" HorizontalAlignment="Left" Margin="106,25,0,0" Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" ToolTip="Moc"/>
         <Slider Height="23" HorizontalAlignment="Left" Margin="106,47,0,0" Name="sliderB" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider2_ValueChanged" ToolTip="częstotliwość" />
@@ -14,7 +14,10 @@
         <RadioButton Content="trójkątna" Height="16" HorizontalAlignment="Left" Margin="0,47,0,0" Name="trójkątny" VerticalAlignment="Top" Checked="trójkątny_Checked" />
         <RadioButton Content="prostokątna" HorizontalAlignment="Left" Margin="0,69,0,0" Name="prostokątny" Height="16" VerticalAlignment="Top" Checked="prostokątny_Checked" />
         <RadioButton Content="piłokształtna" HorizontalAlignment="Left" Margin="0,91,0,0" Name="piłokształtny" Height="16" VerticalAlignment="Top" Checked="piłokształtny_Checked" />
-
+        <Grid Margin="211,10,151,272" Name="DoOscylatora" Visibility="Collapsed">
+            <CheckBox HorizontalAlignment="Left" Width="112" Height="21" VerticalAlignment="Top">Jako nowa nuta</CheckBox>
+        </Grid>
+        <Slider Height="23" HorizontalAlignment="Left" Margin="106,92,0,0" x:Name="sliderD" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider4_ValueChanged" ToolTip="Kwantyzacja" />
     </Grid>
 
 </UserControl>

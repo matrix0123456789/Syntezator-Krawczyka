@@ -33,7 +33,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-           // parentNode.ustawienia["czestotliwosc"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["gladkosc"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
             
         }
         void ustawSuwaki()

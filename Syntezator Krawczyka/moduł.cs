@@ -16,10 +16,7 @@ namespace Syntezator_Krawczyka
         {
             get;
         }
-        Typ[] wejście
-        {
-            get;
-        }
+        List<Typ> wejście { get; set; }
         /// <summary>
         /// Elementy, do których dalej będą przekazywane dane
         /// </summary>
@@ -43,6 +40,8 @@ namespace Syntezator_Krawczyka
         /// <param name="input"></param>
         void działaj(nuta input);
 
+
+        long symuluj(long p);
     }
     public static class modułFunkcje
     {

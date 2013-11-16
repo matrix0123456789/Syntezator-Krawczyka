@@ -93,5 +93,12 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "piłokształtna2x";
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+            var okno = new EdytorFali();
+            okno.Show();
+        }
     }
 }

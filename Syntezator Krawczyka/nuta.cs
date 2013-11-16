@@ -11,7 +11,12 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public class nuta:ICloneable
     {
-       public double ilepróbek;
+        /// <summary>
+        /// długość jednego przebiegu fali
+        /// </summary>
+        public double ilepróbek;
+        public bool czyPogłos = false;
+        public double ilepróbekNaStarcie;
         /// <summary>
         /// Długość wciśnięcia klawisza (bez opadania dźwięku i pogłosu)
         /// </summary>
@@ -25,12 +30,14 @@ namespace Syntezator_Krawczyka
         /// </summary>
        public long opuznienie = 0;
        static int ilenut = 0;
+        public static int nowyid{get{return ilenut++;}}
        public long wygenerowanoWcześniej = 0;
        public System.Diagnostics.Stopwatch start;
         /// <summary>
         /// identyfikator
-        /// </summary>
+       /// </summary>
        public long id = 0;
+       public long idOryginalne = 0;
         /// <summary>
         /// liczba losowa, urzywana np. przy flangerze
         /// </summary>
@@ -46,13 +53,14 @@ namespace Syntezator_Krawczyka
        /// przesunięcie zakończenia grania w danych
        /// </summary>
        public long grajDo = 0;
+       public float głośność = 1;
        public byte kopiaInnaId = 0;///<summary>Zawiera liczbę jaka jest dodawana do id np. przy pogłosie</summary>
-       public sekwencer sekw;
+       public soundStart sekw;
        public Dictionary<long, gra> grająLokalne;
         //public static 
        public nuta()
        {
-           id = ilenut++;
+           idOryginalne=id = ilenut++;
            start = System.Diagnostics.Stopwatch.StartNew();
            
        }
@@ -68,17 +76,17 @@ namespace Syntezator_Krawczyka
 
        public nuta(double ilepróbek, long długość)
        {
-           this.ilepróbek = ilepróbek;
+           this.ilepróbek=ilepróbekNaStarcie = ilepróbek;
            this.długość = długość;
-           id = ilenut++;
+           idOryginalne=id = ilenut++;
            start = System.Diagnostics.Stopwatch.StartNew();
        }
        public nuta(double ilepróbek, long długość, long opuznienie)
        {
-           this.ilepróbek = ilepróbek;
+           this.ilepróbek = ilepróbekNaStarcie = ilepróbek;
            this.długość = długość;
            this.opuznienie = opuznienie;
-           id = ilenut++;
+           idOryginalne= id = ilenut++;
            start = System.Diagnostics.Stopwatch.StartNew();
 
        }

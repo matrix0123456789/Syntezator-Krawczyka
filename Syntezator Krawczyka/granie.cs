@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using Microsoft.Win32;
 using System.Xml;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace Syntezator_Krawczyka.Synteza
 {
@@ -16,16 +17,17 @@ namespace Syntezator_Krawczyka.Synteza
         static System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
         public static Dictionary<long, gra> grają = new Dictionary<long, gra>();
         static bool jest = false;
+        static public float[] wynik = null;
         public UserControl UI
         {
             get { return _UI; }
         }
         UserControl _UI;
-        public Typ[] wejście
+        public long symuluj(long wej)
         {
-            get { return _wejście; }
+            return wej;
         }
-        Typ[] _wejście;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -37,42 +39,71 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public static bool grateraz = false;
         Dictionary<string, string> _ustawienia;
+        static float[] pustaTablica = new float[0];
         public static void grajcale(bool graj)
         {
             grateraz = false;
             long oz = 0;
             gra[] zz;
-            lock (grają)
+            float[] fala;
+            if (wynik == null)
             {
-                zz = grają.Values.ToArray();
-            } foreach (gra dospr in zz)
-            {
-                if (dospr != null)
+                lock (grają)
                 {
-                    dospr.zagrano = -dospr.nuta.opuznienie;
-                    if (dospr.dźwięk.Length - dospr.zagrano > oz)
-                        oz = dospr.dźwięk.Length - dospr.zagrano;
+                    zz = grają.Values.ToArray();
+                } foreach (gra dospr in zz)
+                {
+                    if (dospr != null)
+                    {
+                        dospr.zagrano = -dospr.nuta.opuznienie;
+                        if (dospr.dźwięk.Length - dospr.zagrano > oz)
+                            oz = dospr.dźwięk.Length - dospr.zagrano;
+                    }
                 }
-            }
-            double[] fala = new double[oz];
-            for (int x = 0; x < grają.Count; x++)
-            {
-                
+                fala = new float[oz];
+                for (int x = 0; x < zz.Length; x++)
+                {
+
                     long i = 0;
                     if (zz[x].zagrano < 0 && -zz[x].zagrano < oz)
                         i = -zz[x].zagrano;
                     else if (zz[x].zagrano < 0)
                         i = o;
-                    for (; i < oz && i + zz[x].zagrano < zz[x].dźwięk.LongLength; i++)
+                    long max;
+                    if (oz < zz[x].dźwięk.LongLength - zz[x].zagrano)
+                        max = oz;
+                    else
+                        max = zz[x].dźwięk.LongLength - zz[x].zagrano;
+                    if (zz[x].nuta.głośność == 1)
                     {
-
-                        if (zz[x].zagrano + i >= 0)
+                        for (; i < max; i++)
                         {
+
+
                             fala[i] += zz[x].dźwięk[i + zz[x].zagrano];
+
+                        }
+                    }
+                    else
+                    {
+                        for (; i < oz && i + zz[x].zagrano < zz[x].dźwięk.LongLength; i++)
+                        {
+
+
+                            fala[i] += zz[x].dźwięk[i + zz[x].zagrano] * zz[x].nuta.głośność;
+
                         }
                     }
                     zz[x].zagrano += oz;
-                
+                    if (zz[x].zagrano >= zz[x].dźwięk.Length)
+                        zz[x].nuta.dane = zz[x].dźwięk = null;
+
+                }
+            }
+            else
+            {
+                fala = wynik;
+                wynik = null;
             }
 
             //System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
@@ -86,6 +117,7 @@ namespace Syntezator_Krawczyka.Synteza
             }
             catch (FormatException a)
             {*/
+            grają.Clear();
             if (graj)
                 funkcje.graj(fala, 1);
             else
@@ -100,13 +132,22 @@ namespace Syntezator_Krawczyka.Synteza
             //}
             //});
         }
-        DateTime data;
+        static DateTime data;
         public static int liczbaGenerowanych = 0;
         public static int liczbaGenerowanychMax = 1;
         public static object liczbaGenerowanychBlokada = new object();
         public static object obLock = new object();
         public static bool można = true;
         public granie()
+        {
+            graniestart();
+            _UI = new GranieUI(this);
+            wejście = new List<Typ>();
+            _wyjście = new Typ[0];
+            _ustawienia = new Dictionary<string, string>();
+            _ustawienia.Add("głośność", "1.0");
+        }
+        static public void graniestart()
         {
             if (!jest)
             {
@@ -128,65 +169,87 @@ namespace Syntezator_Krawczyka.Synteza
                     //if (!grateraz)
                     var dataTeraz = DateTime.Now;
                     o = (int)((dataTeraz - data).TotalSeconds * plik.Hz);
-                    
+
                     if (o > 10000)
                         o = 10000;
                     data = dataTeraz;
                     if (można && liczbaGenerowanych == 0)
-                    lock (grają)
-                    {
-                        lock (klawiaturaKomputera.wszytskieNuty)
+                        lock (grają)
                         {
-                            var wszystNuty = klawiaturaKomputera.wszytskieNuty.ToArray();
-                            for (var i = 0; i < wszystNuty.Length; i++)
+                            lock (klawiaturaKomputera.wszytskieNuty)
                             {
-                                if (grają.ContainsKey(wszystNuty[i].id))
+                                var wszystNuty = klawiaturaKomputera.wszytskieNuty.ToArray();
+                                for (var i = 0; i < wszystNuty.Length; i++)
                                 {
-                                    if (grają[wszystNuty[i].id].zagrano < 0)
-                                        wszystNuty[i].generujOd = 0;
-                                    else if (grają[wszystNuty[i].id].zagrano < 256)
+                                    if (grają.ContainsKey(wszystNuty[i].id))
                                     {
-                                        wszystNuty[i].generujOd = 0;
-                                        wszystNuty[i].grajOd = grają[wszystNuty[i].id].zagrano;
+                                        if (grają[wszystNuty[i].id].zagrano < 0)
+                                            wszystNuty[i].generujOd = 0;
+                                        else if (grają[wszystNuty[i].id].zagrano < 256)
+                                        {
+                                            wszystNuty[i].generujOd = 0;
+                                            wszystNuty[i].grajOd = grają[wszystNuty[i].id].zagrano;
+                                        }
+                                        else
+                                        {
+                                            wszystNuty[i].generujOd = grają[wszystNuty[i].id].zagrano - 256;
+                                            wszystNuty[i].grajOd = 256;
+                                        }
+                                        wszystNuty[i].generujDo = grają[wszystNuty[i].id].zagrano + o + 256;
                                     }
                                     else
-                                    {
-                                        wszystNuty[i].generujOd = grają[wszystNuty[i].id].zagrano - 256;
-                                        wszystNuty[i].grajOd = 256;
-                                    }
-                                    wszystNuty[i].generujDo = grają[wszystNuty[i].id].zagrano + o+256;
+                                        wszystNuty[i].generujDo = o + 256;
+                                    wszystNuty[i].grajDo = o + 256;
+                                    wszystNuty[i].ilepróbek = wszystNuty[i].ilepróbekNaStarcie;
+                                    wszystNuty[i].sekw.działaj(wszystNuty[i]);
                                 }
-                                else
-                                    wszystNuty[i].generujDo = o + 256;
-                                wszystNuty[i].grajDo = o+256;
-                                wszystNuty[i].sekw.wyjście[0].DrógiModół.działaj(wszystNuty[i]);
-                            }
-                            var i2 = 0;
-                            while (i2 < klawiaturaKomputera.wszytskieNuty.Count)
-                            {
-                                if (klawiaturaKomputera.wszytskieNuty[i2].dane.Length == 0)
+                                var i2 = 0;
+                                while (i2 < klawiaturaKomputera.wszytskieNuty.Count)
                                 {
-                                    klawiaturaKomputera.wszytskieNuty.RemoveAt(i2);
+                                    if (klawiaturaKomputera.wszytskieNuty[i2].dane != null)
+                                    {
+                                        if (klawiaturaKomputera.wszytskieNuty[i2].dane.Length == 0)
+                                        {
+                                            klawiaturaKomputera.wszytskieNuty.RemoveAt(i2);
+                                        }
+                                        else
+                                            i2++;
+                                    }
+                                    else
+                                        i2++;
                                 }
-                                else
-                                    i2++;
                             }
-                        }
 
 
-                        
-                        
+
+
                             {
                             dodatkowy:
-                                double[] fala = new double[o];
-
-                                gra[] zz = grają.Values.ToArray();
-                                var liczIle = 0;
-                                for (int x = 0; x < zz.Length; x++)
+                                float[] fala = new float[o];
+                                /*if (MainWindow.gpgpu)
                                 {
                                     
+
+                                        fixed (float* _fala = &fala[0])
+                                        {
+                                            square_array(_fala, fala.Length);
+                                        }
+                                    
+                                }
+                                else*/
+                                {
+
+                                    gra[] zz = grają.Values.ToArray();
+                                    var liczIle = 0;
+                                    for (int x = 0; x < zz.Length; x++)
+                                    {
+
                                         if (zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
+                                        {
+                                            zz[x].nuta.dane = null;
+                                            zz[x].dźwięk = null;
                                             grają.Remove(zz[x].nuta.id);
+                                        }
 
                                         else
                                         {
@@ -207,19 +270,37 @@ namespace Syntezator_Krawczyka.Synteza
                                                 opt3 = opt2;
                                             else
                                                 opt3 = fala.LongLength;
-                                            for (; i < opt3; i++)
+                                            if (zz[x].nuta.głośność == 1)
                                             {
+                                                if (i < -opt1)
+                                                    i = -opt1;
+                                                for (; i < opt3; i++)
+                                                {
 
-                                                if (i + opt1 >= 0)
                                                     {
                                                         fala[i] += zz[x].dźwięk[i + opt1];
                                                     }
-                                                
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (i < -opt1)
+                                                    i = -opt1;
+                                                for (; i < opt3; i++)
+                                                {
+
+                                                    {
+                                                        fala[i] += zz[x].dźwięk[i + opt1] * zz[x].nuta.głośność;
+                                                    }
+
+                                                }
                                             }
                                             zz[x].zagrano += o;
                                         }
-                                    
 
+
+                                    }
                                 }
 
                                 //System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
@@ -227,39 +308,157 @@ namespace Syntezator_Krawczyka.Synteza
                                 try
                                 {
                                     if (grają.Count > 0)
-                                        if (funkcje.graj(fala, double.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture)))
+                                        if (funkcje.graj(fala, 1))
                                             goto dodatkowy;
                                 }
                                 catch (FormatException a) { funkcje.graj(fala, 1); }
                                 //});
 
                             }
-                    }
-                }, data, 0, (int)(10));
+                        }
+                }, data, 0, 50);
             }
-            _UI = new GranieUI(this);
-            _wejście = new Typ[1];
-            _wyjście = new Typ[0];
-            _wejście[0] = new Typ();
-            _ustawienia = new Dictionary<string, string>();
-            _ustawienia.Add("głośność", "1.0");
         }
-        public void działaj(nuta input)
+        public static void Działaj(nuta input)
         {
-
-            lock (grają)
-            {
-                if (grają.ContainsKey(input.id))
+            if (wynik == null)
+                lock (grają)
                 {
-                    grają[input.id].dźwięk = (input).dane;
-                    grają[input.id].nuta = input;
+                    if (grają.ContainsKey(input.id))
+                    {
+                        grają[input.id].dźwięk = (input).dane;
+                        grają[input.id].nuta = input;
+                    }
+                    else
+                        grają.Add(input.id, new gra(input));
                 }
+            else
+            {
+
+
+                long i = input.opuznienie + input.generujOd;
+                var opt1 = -input.generujOd - input.opuznienie;
+
+                var opt3 = input.dane.Length - opt1;
+                if (input.głośność == 1)
+                    try
+                    {
+                        for (; i < opt3; i++)
+                        {
+
+
+                            wynik[i] += input.dane[i + opt1];
+
+
+                        }
+                    }
+                    catch (IndexOutOfRangeException) { }
                 else
-                    grają.Add(input.id, new gra(input));
+                    for (; i < opt3; i++)
+                    {
+                        wynik[i] += input.dane[i + opt1] * input.głośność;
+                    }
+
+                input.dane = null;
             }
             //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }
             //catch { }
         }
         public static System.Threading.Timer t;
+        short ileNutMusiByć = 0;
+        static short analizujIleNutMusiByć(moduł wej)
+        {
+            if (typeof(sekwencer) == wej.GetType())
+            {
+                return 1;
+            }
+
+            else
+            {
+                var rozdzielacze = new List<int>();
+                short ret = 0;
+                for (int i = 0; i < wej.wejście.Count; i++)
+                {
+                    if (wej.wejście[i].DrógiModół.GetType() == typeof(flanger))
+                        for (var x = 0; x < wej.wejście[x].DrógiModół.wejście.Count; x++)
+                        {
+                            if (wej.wejście[i].DrógiModół.wejście[x].DrógiModół.GetType() == typeof(rozdzielacz))
+                            {
+                                if (!rozdzielacze.Contains(wej.wejście[i].DrógiModół.wejście[x].DrógiModół.GetHashCode()))
+                                    rozdzielacze.Add(wej.wejście[i].DrógiModół.wejście[x].DrógiModół.GetHashCode());
+
+
+
+                            }
+                            else
+                                ret += analizujIleNutMusiByć(wej.wejście[i].DrógiModół.wejście[x].DrógiModół);
+
+                        }
+                    else
+                        ret += analizujIleNutMusiByć(wej.wejście[i].DrógiModół);
+                }
+                ret += (short)rozdzielacze.Count;
+                if (ret > 2)
+                { }
+                return ret;
+            }
+        }
+        public void analizujIleNutMusiByć()
+        {
+            //ileNutMusiByć = analizujIleNutMusiByć(this);
+        }
+        Dictionary<long, Object[]> grupowane = new Dictionary<long, object[]>();
+        public void działaj(nuta n)
+        {
+            //if (ileNutMusiByć == 0||n.czyPogłos||!MainWindow.czyGC)
+            Działaj(n);
+            /*else
+            {
+                lock (grupowane)
+                {
+                    if (!grupowane.ContainsKey(n.idOryginalne))
+                    {
+                        object[] tablica = new object[ileNutMusiByć + 1];
+                        tablica[0] = 1;
+                        tablica[1] = n;
+                        grupowane.Add(n.idOryginalne, tablica);
+                    }
+                    else
+                    {
+                        (grupowane[n.idOryginalne][0]) = ((int)grupowane[n.idOryginalne][0]) + 1;
+                        grupowane[n.idOryginalne][((int)grupowane[n.idOryginalne][0])] = n;
+                    }
+                    if (((int)grupowane[n.idOryginalne][0]) == grupowane[n.idOryginalne].Length - 1)
+                    {
+                        long opuznienie = 0;
+                        long długość = 0;
+                        for (int i = 1; i < grupowane[n.idOryginalne].Length; i++)
+                        {
+                            if ((grupowane[n.idOryginalne][i] as nuta).opuznienie + (grupowane[n.idOryginalne][i] as nuta).generujOd < opuznienie)
+                                opuznienie = (grupowane[n.idOryginalne][i] as nuta).opuznienie + (grupowane[n.idOryginalne][i] as nuta).generujOd;
+                            if ((grupowane[n.idOryginalne][i] as nuta).opuznienie + (grupowane[n.idOryginalne][i] as nuta).dane.Length > długość)
+                                długość = (grupowane[n.idOryginalne][i] as nuta).opuznienie + (grupowane[n.idOryginalne][i] as nuta).dane.Length;
+                        }
+                        var dane = new float[długość - opuznienie];
+                        for (int i = 1; i < grupowane[n.idOryginalne].Length; i++)
+                        {
+                            long opuznienieAkt = -opuznienie + (grupowane[n.idOryginalne][i] as nuta).opuznienie;
+                            for (long x = (grupowane[n.idOryginalne][i] as nuta).generujOd; x < (grupowane[n.idOryginalne][i] as nuta).dane.Length; x++)
+                            {
+                                dane[x + opuznienieAkt] += (grupowane[n.idOryginalne][i] as nuta).dane[x] * (grupowane[n.idOryginalne][i] as nuta).głośność;
+                            }
+                        }
+                        var nutaKoniec = (grupowane[n.idOryginalne][1] as nuta);
+                        nutaKoniec.id = nutaKoniec.idOryginalne;
+                        nutaKoniec.dane = dane;
+                        nutaKoniec.generujOd = 0;
+                        nutaKoniec.opuznienie = opuznienie;
+                        Działaj(nutaKoniec);
+
+                        grupowane.Remove(n.idOryginalne);
+                    }
+                }
+            }*/
+        }
     }
 }

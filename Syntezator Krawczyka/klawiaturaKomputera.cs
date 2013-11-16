@@ -21,7 +21,7 @@ namespace Syntezator_Krawczyka
         /// Sekwencer, do którego mają być przekazywane grane nuty.
         /// </summary>
         /// <seealso cref="sekwencer"/>
-        public sekwencer sekw { get; set; }
+        public soundStart sekw { get; set; }
         /// <summary>
         /// uruchamia metodę akt()
         /// </summary>
@@ -35,7 +35,7 @@ namespace Syntezator_Krawczyka
             UI = new KlawiaturaKomputeraUI(this);
             akttimer = new Timer((object o) =>
             {
-                akt();
+                // akt();
                 //MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, (ThreadStart)delegate() { akt(); });
             }, null, 10, 10);
             //new Timer((object o) => { akt(); }, null, 0, 10);
@@ -43,6 +43,188 @@ namespace Syntezator_Krawczyka
         public void działaj()
         {
 
+        }
+        public void klawisz(KeyEventArgs e, bool down)
+        {
+            lock(nuty)
+            {
+                short t;
+                switch (e.Key)
+                {
+                    case Key.LeftShift:
+                        t = -1;
+                        break;
+                    case Key.Z:
+                        t = 0;
+                        break;
+                    case Key.S:
+                       t=1;
+                        break;
+                    case Key.X:
+                        t=2;
+                        break;
+                    case Key.D:
+                        t = 3;
+                        break;
+                    case Key.C:
+                        t = 4;
+                        break;
+                    case Key.V:
+                        t = 5;
+                        break;
+                    case Key.G:
+                        t = 6;
+                        break;
+                    case Key.B:
+                        t = 7;
+                        break;
+                    case Key.H:
+                        t = 8;
+                        break;
+                    case Key.N:
+                        t = 9;
+                        break;
+                    case Key.J:
+                        t = 10;
+                        break;
+                    case Key.M:
+                        t = 11;
+                        break;
+                   /* case 12:
+                        klawisz = Key.OemComma;
+                        klawisz2 = Key.Q;
+                        break;
+                    case 13:
+                        klawisz = Key.L;
+                        klawisz2 = Key.D2;
+                        break;
+                    case 14:
+                        klawisz = Key.OemPeriod;
+                        klawisz2 = Key.W;
+                        break;
+                    case 15:
+                        klawisz = Key.Oem1;
+                        klawisz2 = Key.D3;
+                        break;
+                    case 16:
+                        klawisz = Key.Oem2;
+                        klawisz2 = Key.E;
+                        break;
+                    case 17:
+                        klawisz = Key.RightShift;
+                        klawisz2 = Key.R;
+                        break;
+                    case 18:
+                        klawisz = Key.Enter;
+                        klawisz2 = Key.D5;
+                        break;
+                    case 19:
+                        klawisz = Key.T;
+                        klawisz2 = Key.T;
+                        break;
+                    case 20:
+                        klawisz = Key.D6;
+                        klawisz2 = Key.D6;
+                        break;
+                    case 21:
+                        klawisz = Key.Y;
+                        klawisz2 = Key.Y;
+                        break;
+                    case 22:
+                        klawisz = Key.D7;
+                        klawisz2 = Key.D7;
+                        break;
+                    case 23:
+                        klawisz = Key.U;
+                        klawisz2 = Key.U;
+                        break;
+                    case 24:
+                        klawisz = Key.I;
+                        klawisz2 = Key.I;
+                        break;
+                    case 25:
+                        klawisz = Key.D9;
+                        klawisz2 = Key.D9;
+                        break;
+                    case 26:
+                        klawisz = Key.O;
+                        klawisz2 = Key.O;
+                        break;
+                    case 27:
+                        klawisz = Key.D0;
+                        klawisz2 = Key.D0;
+                        break;
+                    case 28:
+                        klawisz = Key.P;
+                        klawisz2 = Key.P;
+                        break;
+                    case 29:
+                        klawisz = Key.Oem4;
+                        klawisz2 = Key.Oem4;
+                        break;
+                    case 30:
+                        klawisz = Key.OemPlus;
+                        klawisz2 = Key.OemPlus;
+                        break;
+                    case 31:
+                        klawisz = Key.Oem6;
+                        klawisz2 = Key.Oem6;
+                        break;*/
+                    default:
+                        return;
+                }
+                if (down)
+                {
+                    if (sekw != null)
+                    {
+
+                        if (sekw.czyWłączone)
+                        {
+                            short oktawa = 0;
+
+                            nuta prz;
+                            if (nuty.ContainsKey(t))
+                                prz = nuty[t];
+                            else
+                            {
+                                prz = new nuta();
+                                ///// try
+                                //{
+                                nuty.Add(t, prz);
+                                /*}
+                                catch (Exception ezz)
+                                {
+
+                                    if (nuty.ContainsKey(t))
+                                        prz = nuty[t];
+                                    else
+                                        throw new Exception("Błąd ze słownikami");
+                                }*/
+                                lock (wszytskieNuty)
+                                    wszytskieNuty.Add(prz);
+                            }
+                            prz.ilepróbek = prz.ilepróbekNaStarcie = plik.Hz / funkcje.częstotliwość(0, t / 2f);
+                            prz.długość = int.MaxValue / 16;
+                            prz.sekw = sekw;
+                            //object[] tabl = new object[1];
+                            //tabl[0] = prz;
+                            /*System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                            {
+                            lock (granie.grają) { sekw.wyjście[0].DrógiModół.działaj(prz); }
+                            });*/
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (nuty.ContainsKey(t))
+                    {
+                        nuty[t].długość = (long)((nuty[t].start.ElapsedMilliseconds) * plik.kHz);
+                        nuty.Remove(t);
+                    }
+                }
+            }
         }
         /// <summary>
         /// spprawdza, które klawisze są aktualnie wciśnięte
@@ -56,181 +238,8 @@ namespace Syntezator_Krawczyka
                 {
                     MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, (ThreadStart)delegate()
                     {
-                        for (short ton = -1; ton <= 31; ton++)
-                        {
-                            Key klawisz;
-                            Key klawisz2;
-                            switch (ton)
-                            {
-                                case -1:
-                                    klawisz = Key.LeftShift;
-                                    klawisz2 = Key.LeftShift;
-                                    break;
-                                case 0:
-                                    klawisz = Key.Z;
-                                    klawisz2 = Key.Z;
-                                    break;
-                                case 1:
-                                    klawisz = Key.S;
-                                    klawisz2 = Key.S;
-                                    break;
-                                case 2:
-                                    klawisz = Key.X;
-                                    klawisz2 = Key.X;
-                                    break;
-                                case 3:
-                                    klawisz = Key.D;
-                                    klawisz2 = Key.D;
-                                    break;
-                                case 4:
-                                    klawisz = Key.C;
-                                    klawisz2 = Key.C;
-                                    break;
-                                case 5:
-                                    klawisz = Key.V;
-                                    klawisz2 = Key.V;
-                                    break;
-                                case 6:
-                                    klawisz = Key.G;
-                                    klawisz2 = Key.G;
-                                    break;
-                                case 7:
-                                    klawisz = Key.B;
-                                    klawisz2 = Key.B;
-                                    break;
-                                case 8:
-                                    klawisz = Key.H;
-                                    klawisz2 = Key.H;
-                                    break;
-                                case 9:
-                                    klawisz = Key.N;
-                                    klawisz2 = Key.N;
-                                    break;
-                                case 10:
-                                    klawisz = Key.J;
-                                    klawisz2 = Key.J;
-                                    break;
-                                case 11:
-                                    klawisz = Key.M;
-                                    klawisz2 = Key.M;
-                                    break;
-                                case 12:
-                                    klawisz = Key.OemComma;
-                                    klawisz2 = Key.Q;
-                                    break;
-                                case 13:
-                                    klawisz = Key.L;
-                                    klawisz2 = Key.D2;
-                                    break;
-                                case 14:
-                                    klawisz = Key.OemPeriod;
-                                    klawisz2 = Key.W;
-                                    break;
-                                case 15:
-                                    klawisz = Key.Oem1;
-                                    klawisz2 = Key.D3;
-                                    break;
-                                case 16:
-                                    klawisz = Key.Oem2;
-                                    klawisz2 = Key.E;
-                                    break;
-                                case 17:
-                                    klawisz = Key.RightShift;
-                                    klawisz2 = Key.R;
-                                    break;
-                                case 18:
-                                    klawisz = Key.Enter;
-                                    klawisz2 = Key.D5;
-                                    break;
-                                case 19:
-                                    klawisz = Key.T;
-                                    klawisz2 = Key.T;
-                                    break;
-                                case 20:
-                                    klawisz = Key.D6;
-                                    klawisz2 = Key.D6;
-                                    break;
-                                case 21:
-                                    klawisz = Key.Y;
-                                    klawisz2 = Key.Y;
-                                    break;
-                                case 22:
-                                    klawisz = Key.D7;
-                                    klawisz2 = Key.D7;
-                                    break;
-                                case 23:
-                                    klawisz = Key.U;
-                                    klawisz2 = Key.U;
-                                    break;
-                                case 24:
-                                    klawisz = Key.I;
-                                    klawisz2 = Key.I;
-                                    break;
-                                case 25:
-                                    klawisz = Key.D9;
-                                    klawisz2 = Key.D9;
-                                    break;
-                                case 26:
-                                    klawisz = Key.O;
-                                    klawisz2 = Key.O;
-                                    break;
-                                case 27:
-                                    klawisz = Key.D0;
-                                    klawisz2 = Key.D0;
-                                    break;
-                                case 28:
-                                    klawisz = Key.P;
-                                    klawisz2 = Key.P;
-                                    break;
-                                case 29:
-                                    klawisz = Key.Oem4;
-                                    klawisz2 = Key.Oem4;
-                                    break;
-                                case 30:
-                                    klawisz = Key.OemPlus;
-                                    klawisz2 = Key.OemPlus;
-                                    break;
-                                case 31:
-                                    klawisz = Key.Oem6;
-                                    klawisz2 = Key.Oem6;
-                                    break;
-                                default:
-                                    continue;
-                            }
-                            if (Keyboard.IsKeyDown(klawisz)||Keyboard.IsKeyDown(klawisz2))
-                            {
-
-                                if (sekw.wyjście[0].DrógiModół != null)
-                                {
-                                    short oktawa = 0;
-
-                                    nuta prz;
-                                    if (nuty.ContainsKey(ton))
-                                        prz = nuty[ton];
-                                    else
-                                    {
-                                        prz = new nuta();
-                                        nuty.Add(ton, prz);
-                                        lock (wszytskieNuty)
-                                            wszytskieNuty.Add(prz);
-                                    }
-                                    prz.ilepróbek = plik.Hz / funkcje.częstotliwość((short)(oktawa+short.Parse(sekw.ustawienia["oktawy"])), ton / 2f);
-                                    prz.długość = (long)((prz.start.ElapsedMilliseconds + 100) * plik.kHz);
-                                    prz.sekw = sekw;
-                                    //object[] tabl = new object[1];
-                                    //tabl[0] = prz;
-                                    /*System.Threading.ThreadPool.QueueUserWorkItem((o) =>
-                                    {
-                                    lock (granie.grają) { sekw.wyjście[0].DrógiModół.działaj(prz); }
-                                    });*/
-                                }
-                            }
-                            else
-                            {
-                                if (nuty.ContainsKey(ton))
-                                    nuty.Remove(ton);
-                            }
-                        }
+                        
+                        
                     });
                 }
             }

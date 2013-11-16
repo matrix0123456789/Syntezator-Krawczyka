@@ -16,11 +16,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public XmlNode XML { get; set; }
         UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -34,8 +30,7 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<nuta, nuta[]> referencjeNut = new Dictionary<nuta, nuta[]>();
         public rozdzielacz()
         {
-            _wejście = new Typ[1];
-            _wejście[0] = new Typ();
+            wejście = new List<Typ>();
             _wyjście = new Typ[8];
             _wyjście[0] = new Typ();
             _wyjście[1] = new Typ();
@@ -47,6 +42,20 @@ namespace Syntezator_Krawczyka.Synteza
             _wyjście[7] = new Typ();
             _ustawienia = new Dictionary<string, string>();
             _UI = new UserControl();
+        }
+        public long symuluj(long wej)
+        {
+            long ret=0;
+            for (var i = 0; i < 8; i++)
+            {
+                if (wyjście[i].DrógiModół != null)
+                {
+                    long t = wyjście[i].DrógiModół.symuluj(wej);
+                    if (t > ret)
+                        ret = t;
+                }
+            }
+                return ret;
         }
         public void działaj(nuta input)
         {
@@ -112,7 +121,7 @@ namespace Syntezator_Krawczyka.Synteza
                     input.dane=dane;
                     x.Key.działaj(input);
                 }
-                for (var i = 0; i < 8; i++)
+                for (var i = 7; i >=0; i--)
                 {
                     if (wyjście[i].DrógiModół != null)
                     {

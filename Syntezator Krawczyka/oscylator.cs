@@ -15,11 +15,7 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _UI; }
         }
         UserControl _UI;
-        public Typ[] wejście
-        {
-            get { return _wejście; }
-        }
-        Typ[] _wejście;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -33,8 +29,7 @@ namespace Syntezator_Krawczyka.Synteza
         public XmlNode XML { get; set; }
         public oscylator()
         {
-            _wejście = new Typ[1];
-            _wejście[0] = new Typ();
+            wejście = new List<Typ>();
             _wyjście = new Typ[2];
             _wyjście[0] = new Typ();
             _wyjście[1] = new Typ();
@@ -51,15 +46,10 @@ namespace Syntezator_Krawczyka.Synteza
         /// <summary>
         /// Zawiera wynik funkcji generujJedenPrzebieg zapisany w celu optymalizacji
         /// </summary>
-        static Dictionary<string, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<string, float[]>();
-        public static float[] generujJedenPrzebieg(string typ, long ilePróbek, float gladkość)
+        Dictionary<long, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<long, float[]>();
+        public static float[] generujJedenPrzebiegStatyczny(string typ, long ilePróbek, float gladkość)
         {
-            if (zapisanePojedyńczePrzebiegi.ContainsKey(typ + ilePróbek.ToString() + ' ' + gladkość.ToString()))
-            {
-                return zapisanePojedyńczePrzebiegi[typ + ilePróbek.ToString() + ' ' + gladkość.ToString()];
-            }
-            else
-            {
+           
                 float[] jedenPrzebieg;
                 if (typ == "trójkątna")
                     jedenPrzebieg = trójkątna((float)ilePróbek, ilePróbek);
@@ -75,25 +65,107 @@ namespace Syntezator_Krawczyka.Synteza
                     jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
                 //zapisanePojedyńczePrzebiegi.Add(typ + ilePróbek.ToString() + ' ' + gladkość.ToString(), jedenPrzebieg);
                 return jedenPrzebieg;
-            }
+            
         }
-        public void działaj(nuta input)
+        public float[] generujJedenPrzebieg(string typ, long ilePróbek, float gladkość)
+        {
+            /*if (zapisanePojedyńczePrzebiegi.ContainsKey(ilePróbek))
+            {
+                return zapisanePojedyńczePrzebiegi[ilePróbek];
+            }
+            else
+            {*/
+                float[] jedenPrzebieg=generujJedenPrzebiegStatyczny(typ, ilePróbek, gladkość);
+               // zapisanePojedyńczePrzebiegi.Add(ilePróbek, jedenPrzebieg);
+                return jedenPrzebieg;
+           // }
+        }
+
+        public long symuluj(long p)
+        {
+            return wyjście[0].DrógiModół.symuluj(p + (long)(float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz));
+        }
+        public /*unsafe*/ void działaj(nuta input)
         {
 
             {
                 nuta n = input;
+
+                {
+                    lock (n)
+                    {
+                        n.ilepróbek = Math.Floor(n.ilepróbek);
+                        n.długość = (long)(Math.Floor(n.długość / n.ilepróbek) * n.ilepróbek);
+                        if (wyjście[0].DrógiModół != null && (float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) != 0 || float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture) != 0))
+                        {
+                            object[] wy = new object[2];
+                            float[] jedenPrzebieg = generujJedenPrzebieg(_ustawienia["typ"], (long)Math.Floor(n.ilepróbek), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
+                            long długośćCała = (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
+                            if (n.długość + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz - n.generujOd > 0)
+                            {
+                                if (n.generujDo < 0)
+                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz)];
+                                else if (n.generujDo - n.generujOd < (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz))
+                                    n.dane = new float[n.generujDo - n.generujOd];
+                                else
+                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz)];
+
+
+                            }
+                            else
+                                n.dane = new float[0];//koniec wykonywania
+                            float aProcent, dProcent;
+                            float rProcent = 1;
+                            aProcent = 0;
+                            var aMax = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture) * plik.kHz;
+                            var dMax = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) * plik.kHz;
+                            var rMax = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz;
+                            var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
+                            aProcent = 1;
+                            for (int i = 0; i < n.dane.Length; i++)
+                            {
+                                if (długośćCała - i - n.generujOd > rMax)
+                                    if (aMax > i + (int)n.generujOd)
+                                        aProcent = (i + (int)n.generujOd) / aMax;
+                                    else
+                                        aProcent = 1;
+                                else
+                                {
+                                    rProcent = (długośćCała - i - n.generujOd) / rMax;
+                                    //aProcent = 1;
+                                }
+                                if (dMax > i + (int)n.generujOd)
+                                {
+                                    dProcent = s + (dMax - i - (int)n.generujOd) / dMax * (1 - s);
+                                }
+                                else
+                                    dProcent = s;
+                                n.dane[i] = jedenPrzebieg[(i + (int)n.generujOd) % jedenPrzebieg.Length] * (aProcent * rProcent * dProcent);
+
+                            }
+                            wyjście[0].DrógiModół.działaj(n);
+                        }
+                    }
+                }
+            }
+
+        }
+        public void działaj(nuta input, float[] jak)
+        {
+            nuta n = input;
+
+            {
                 lock (n)
                 {
                     n.ilepróbek = Math.Floor(n.ilepróbek);
                     n.długość = (long)(Math.Floor(n.długość / n.ilepróbek) * n.ilepróbek);
-                    if (wyjście[0].DrógiModół != null && (float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture)!=0||float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture)!=0))
+                    if (wyjście[0].DrógiModół != null && (float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) != 0 || float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture) != 0))
                     {
                         object[] wy = new object[2];
-                        float[] jedenPrzebieg = generujJedenPrzebieg(_ustawienia["typ"], (long)Math.Floor(n.ilepróbek), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
                         long długośćCała = (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
                         if (n.długość + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz - n.generujOd > 0)
                         {
-                            if (n.generujDo == -1)
+                            if (n.generujDo < 0)
                                 n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz)];
                             else if (n.generujDo - n.generujOd < (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz))
                                 n.dane = new float[n.generujDo - n.generujOd];
@@ -137,17 +209,18 @@ namespace Syntezator_Krawczyka.Synteza
                     }
                 }
             }
-
         }
         public static float[] prostokątna(float ilepróbek, long długość, float gladkosc)
         {
             float[] ret = new float[długość];
+            var wysoki = 2f-2*gladkosc;
+            var niski = 0-2*gladkosc;
             for (long i = 0; i < długość; i++)
             {
                 if (i % ilepróbek < ilepróbek * gladkosc)
-                    ret[i] = 1;
+                    ret[i] = wysoki;
                 else
-                    ret[i] = -1;
+                    ret[i] = niski;
             }
             return ret;
         }
