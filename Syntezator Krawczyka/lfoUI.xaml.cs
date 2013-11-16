@@ -56,7 +56,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["czestotliwosc"] = (sliderB.Value*50).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["czestotliwosc"] = (sliderB.Value *sliderB.Value* 150).ToString(CultureInfo.InvariantCulture);
             
         }
         private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -72,21 +72,23 @@ namespace Syntezator_Krawczyka.Synteza
         void ustawSuwaki()
         {
 
-            //sliderA.Value = double.Parse(parentNode.ustawienia["przesuniecie"], CultureInfo.InvariantCulture) / 5;
-            //sliderB.Value = double.Parse(parentNode.ustawienia["czestotliwosc"], CultureInfo.InvariantCulture);
+            sliderA.Value = double.Parse(parentNode.ustawienia["moc"], CultureInfo.InvariantCulture);
+            sliderB.Value = Math.Sqrt(double.Parse(parentNode.ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) / 150);
+            sliderC.Value = double.Parse(parentNode.ustawienia["gladkosc"], CultureInfo.InvariantCulture);
+            sliderD.Value = double.Parse(parentNode.ustawienia["kwantyzacja"], CultureInfo.InvariantCulture);
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
             ustawSuwaki();
-            if (parentNode.wyjście[0].DrógiModół.GetType() == typeof(oscylator))
+            /*if (parentNode.wyjście[0].DrógiModół.GetType() == typeof(oscylator))
             {
                 DoOscylatora.Visibility = Visibility.Visible;  
             }
             else
             {
                 DoOscylatora.Visibility = Visibility.Collapsed;
-            }
+            }*/
         }
     }
 }

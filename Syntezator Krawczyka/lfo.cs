@@ -106,15 +106,15 @@ namespace Syntezator_Krawczyka.Synteza
                             }
                         }
 
-                        if (wyjście[0].DrógiModół != null && wyjście[1].DrógiModół != null)
+                        if (wyjście[0].DrógiModół != null)
                         {
-                            if (wyjście[1].GetType() == typeof(oscylator))
+                             if (wyjście[1].DrógiModół != null)
+                                wyjście[0].DrógiModół.działaj(((filtr)wyjście[1].DrógiModół).działaj(input, jedenPrzebieg));
+                            else if (wyjście[0].DrógiModół.GetType() == typeof(oscylator))
                             {
                                 (wyjście[0].DrógiModół as oscylator).działaj(input, jedenPrzebieg);
 
-                            }//zrobić obsługę oscylatora
-                            else
-                                wyjście[0].DrógiModół.działaj(((filtr)wyjście[1].DrógiModół).działaj(input, jedenPrzebieg));
+                            }
                         }
                     }
                 }

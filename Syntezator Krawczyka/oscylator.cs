@@ -222,7 +222,7 @@ namespace Syntezator_Krawczyka.Synteza
                             }
                             else
                                 dProcent = s;
-                            pozycja += jak[i + (int)n.generujOd] + 1;
+                            pozycja += jak[(i + (int)n.generujOd)%jak.Length] + 1;
 
                             if (jakaFala == typFali.sinusoidalna)
                                 n.dane[i] = (float)Math.Sin(pozycja / n.ilepróbek * 2 * Math.PI) * (aProcent * rProcent * dProcent);
