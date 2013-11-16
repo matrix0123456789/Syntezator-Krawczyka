@@ -35,12 +35,12 @@ namespace Syntezator_Krawczyka
             lock (comboBox1)
             {
                 comboBox1.Items.Clear();
-                foreach (var mod in MainWindow.otwartyplik.moduły)
+                foreach (var mod in Statyczne.otwartyplik.moduły)
                 {
                     comboBox1.Items.Add(new ComboBoxItem());
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = (sekwencer)mod.Value["<sekwencer"];
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
                     (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
-                    if (parent.sekw == (sekwencer)mod.Value["<sekwencer"])
+                    if (parent.sekw == mod.Value.sekw)
                     {
                         comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
                     }
@@ -52,7 +52,7 @@ namespace Syntezator_Krawczyka
         {
             if(comboBox1.SelectedItem!=null)
             {
-                parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as sekwencer;
+                parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
             }
         }
     }

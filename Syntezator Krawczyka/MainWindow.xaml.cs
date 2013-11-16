@@ -15,6 +15,7 @@ using Syntezator_Krawczyka.Synteza;
 using System.Windows.Threading;
 using System.Threading;
 using System.Security.Principal;
+using System.Diagnostics;
 namespace Syntezator_Krawczyka
 {
 
@@ -26,7 +27,7 @@ namespace Syntezator_Krawczyka
         /// <summary>
         /// Przedstawia dane, które są aktualnie otwarte.
         /// </summary>
-        static public plik otwartyplik = new plik();
+        //static public plik otwartyplik = new plik();
         static Random rand = new Random();
         //byte[] sinus;
         /// <summary>
@@ -35,8 +36,9 @@ namespace Syntezator_Krawczyka
         static public MainWindow thi;
         public sekwencer głównySekwencer;
         static public Dispatcher dispat;
-        
-        Timer aktualizacjaOkna;
+        static public bool czyGC = false;
+
+        Thread aktualizacjaOkna;
         /// <summary>
         /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
         /// </summary>
@@ -57,66 +59,120 @@ namespace Syntezator_Krawczyka
             dispat = Dispatcher;
             string[] parametry = Environment.GetCommandLineArgs();
             bool otwarto = false;
+            bool zamknij = false;
             for (var x = 1; x < parametry.Length; x++)
             {
                 if (parametry[x] == "/d" || parametry[x] == "-d")
                 {
                     debugowanie = true;
+                    gpgpu = true;
+                }
+                else if (parametry[x] == "/z" || parametry[x] == "-z")
+                {
+                    zamknij = true;
+                }
+                else if (parametry[x] == "/gc" || parametry[x] == "-gc")
+                {
+                    czyGC = true;
+                }
+                else if (parametry[x] == "/p" || parametry[x] == "-p")
+                {//graj od razu
+                }
+                else if (parametry[x] == "/s" || parametry[x] == "-s")
+                {
+                    if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
+                        Statyczne.skojarzPliki();
                 }
                 else if (!otwarto)
                 {
-                    otwartyplik = new plik(parametry[1]);
+                    Statyczne.otwartyplik = new plik(parametry[x]);
                     otwarto = true;
                 }
             }
-            klawiatkompa = new klawiaturaKomputera();
-            pokaz.Children.Add(klawiatkompa.UI);
-            aktualizacjaOkna = new Timer(akt, null, 10, 100);
-            //System.IO.StreamReader sa = new System.IO.StreamReader("C:\\Users\\Public\\Documents\\sinusoida.wav");
-
-
-            //System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
-            //sinus = read.ReadBytes((int)read.BaseStream.Length);
-
-            if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".synkra", false) == null)
+            if (zamknij)
+                App.Current.Shutdown();
+            else
             {
-                if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .synkra z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
+                klawiatkompa = new klawiaturaKomputera();
+                pokaz.Children.Add(klawiatkompa.UI);
+                //aktualizacjaOkna = new Timer(akt, null, 10, 100);
+                aktualizacjaOkna = new Thread(akt);
+                aktualizacjaOkna.Start();
+                //System.IO.StreamReader sa = new System.IO.StreamReader("C:\\Users\\Public\\Documents\\sinusoida.wav");
+
+
+                //System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
+                //sinus = read.ReadBytes((int)read.BaseStream.Length);
+
+                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".synkra", false) == null)
                 {
-                    if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
-                        skojarzPliki();
+                    if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .synkra z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
+                    {
+                        if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
+                            Statyczne.skojarzPliki();
+                        else
+                        {
+                            ProcessStartInfo startInfo = new ProcessStartInfo();
+                            startInfo.UseShellExecute = true;
+                            startInfo.WorkingDirectory = Environment.CurrentDirectory;
+                            startInfo.FileName = System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
+                            startInfo.Verb = "runas";
+                            startInfo.Arguments = "/s /z";
+                            try
+                            {
+                                Process p = Process.Start(startInfo);
+                            }
+                            catch (System.ComponentModel.Win32Exception)
+                            {
+                                MessageBox.Show("Nie udało się skojażyć plików.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                }
+
+                for (var i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
+                {
+                    //var info = NAudio.Midi.MidiIn.DeviceInfo(i);
+                    var midiwejście = new MidiIn(i);
                 }
             }
-
-            for (var i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
-            {
-                //var info = NAudio.Midi.MidiIn.DeviceInfo(i);
-                var midiwejście = new MidiIn(i);
-            }
-            
         }
         void akt(object o)
         {
-            MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+            ushort ileDoGC = 0;
+            while (true)
             {
-                if (debugowanie)
-                    Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString();
-                postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
-                postęp.Maximum = granie.liczbaGenerowanychMax;
-
-                foreach (var x in otwartyplik.sciezki)
+                ileDoGC++;
+                if (ileDoGC > 50&&czyGC||ileDoGC>300)
                 {
-                    try
-                    {
-                        if (!pokaz.Children.Contains(x.UI))
-                            pokaz.Children.Add(x.UI);
-                    }
-                    catch (ArgumentException) { }
+
+                    
+                        GC.Collect(20, GCCollectionMode.Forced);
+                    ileDoGC = 0;
                 }
-            });
+                MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                    {
+                        if (debugowanie)
+                            Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString() + "; " + ileDoGC.ToString();
+                        postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
+                        postęp.Maximum = granie.liczbaGenerowanychMax;
+
+                        foreach (var x in Statyczne.otwartyplik.sciezki)
+                        {
+                            try
+                            {
+                                if (!pokaz.Children.Contains(x.UI))
+                                    pokaz.Children.Add(x.UI);
+                            }
+                            catch (ArgumentException) { }
+                        }
+                    });
+                Thread.Sleep(100);
+            }
         }
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            Statyczne.bufor.ClearBuffer();
+            GC.Collect(2, GCCollectionMode.Forced);
 
         }
 
@@ -130,7 +186,7 @@ namespace Syntezator_Krawczyka
             pokaz.Children.Add(mod1.UI);
             pokaz.Children.Add(mod2.UI);
             pokaz.Children.Add(mod3.UI);*/
-            otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
+            Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
         }
 
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
@@ -146,14 +202,14 @@ namespace Syntezator_Krawczyka
             dialog.ShowDialog();
             string[] explode = dialog.FileName.Split('.');
             if (explode.Last() == "mid" || explode.Last() == "midi")
-                otwartyplik = new plikmidi(dialog.FileName);
+                Statyczne.otwartyplik = new plikmidi(dialog.FileName);
             else
-                otwartyplik = new plik(dialog.FileName);
+                Statyczne.otwartyplik = new plik(dialog.FileName);
         }
 
         private void button4_Click(object sender, RoutedEventArgs e)
         {
-            otwartyplik.zapisz();
+            Statyczne.otwartyplik.zapisz();
         }
         private void button5_Click(object sender, RoutedEventArgs e)
         {
@@ -163,90 +219,78 @@ namespace Syntezator_Krawczyka
 
         private void Window_Closed(object sender, EventArgs e)
         {
+
+            aktualizacjaOkna.Abort();
             App.Current.Shutdown();
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var x in otwartyplik.sciezki)
+            foreach (var x in Statyczne.otwartyplik.sciezki)
+            {
                 x.działaj();
+                //akt(null);
+            }
         }
 
         private void button7_Click(object sender, RoutedEventArgs e)
         {
             granie.można = false;
-            foreach (var x in otwartyplik.sciezki)
+            granie.grają.Clear();
+            long długość = 0;
+            foreach (var x in Statyczne.otwartyplik.sciezki)
+            {
+                if (x.sekw != null)
+                {
+                    long długośćStart = 0;
+                    for (var i = 0; i < x.nuty.Count; i++)
+                    {
+
+                        if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
+                            długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
+
+                    }
+
+                    long długośćTeraz = x.sekw.symuluj(długośćStart);
+                    if (długośćTeraz > długość)
+                        długość = długośćTeraz;
+                }
+            }
+            granie.wynik = new float[długość];
+            foreach (var x in Statyczne.otwartyplik.sciezki)
+            {
                 x.działaj();
-            granie.grajcale(false);
+                //akt(null);
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(((System.Windows.Input.KeyboardEventArgs)(e)).KeyboardDevice.GetHashCode().ToString() + "\n" + e.Device.GetHashCode().ToString() + "\n" + e.InputSource.GetHashCode().ToString());
+            if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.S)
+                    button4_Click(null, null);
+                if (e.Key == Key.O)
+                    button3_Click(null, null);
+            }
+            else klawiatkompa.klawisz(e, true);
         }
-
+        
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            
+             klawiatkompa.klawisz(e,false);
+        }
         private void button8_Click(object sender, RoutedEventArgs e)
         {
             granie.grają.Clear();
         }
-        /// <summary>
-        /// Tworzy informacje o plikach *.synkra w rejestrze systemowym.
-        /// </summary>
-        /// <remarks>Wymaga uprawnień administratora.</remarks>
-        void skojarzPliki()
-        {
 
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(".synkra");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\.synkra", "", "PlikSyntezatoraKrawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\.synkra", "Content Type", "audio/x-syntezator-krawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\.synkra", "application", "syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(".synkra\\OpenWithList");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\.synkra\\OpenWithList", "a", "syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(".synkra\\OpenWithList\\syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(".synkra");
-
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\synkra", "", "URL:PlikSyntezatoraKrawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\synkra", "URL Protocol", "");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\synkra", "application", "syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("synkra\\OpenWithList");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\synkra\\OpenWithList", "a", "syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("synkra\\OpenWithList\\syntezator krawczyka.exe");
-
-
-            Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.synkra\\OpenWithList", "a", "syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.SetValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.synkra", "application", "syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("applications\\syntezator krawczyka.exe");
-            //Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("applications\\syntezator krawczyka.exe\\DefaultIcon");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("applications\\syntezator krawczyka.exe\\shell\\open\\command");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\applications\\syntezator krawczyka.exe\\shell\\open\\command", "", "\"" + System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName + "\" \"%1\"");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("applications\\syntezator krawczyka.exe\\shell\\Graj\\command");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\applications\\syntezator krawczyka.exe\\shell\\Graj\\command", "", "\"" + System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName + "\" -p \"%1\"");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("applications\\syntezator krawczyka.exe\\SupportedTypes");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\applications\\syntezator krawczyka.exe\\SupportedTypes", ".synkra", "");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("MIME\\Database\\Content Type\\audio/x-syntezator-krawczyka");//{E436EB83-524F-11CE-9F53-0020AF0BA770}, {A82E50BA-8E92-41eb-9DF2-433F50EC2993}
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\MIME\\Database\\Content Type\\audio/x-syntezator-krawczyka", "Extension", ".synkra");//HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{083863F1-70DE-11D0-BD40-00A0C911CE86}\Instance\{11A947C3-BABC-466E-A678-1FFEC95EB2F8} sprawdzić
-            //HKEY_LOCAL_MACHINE\SOFTWARE\Classes\SystemFileAssociations dodać
-            //{cd3afa76-b84f-48f0-9393-7edc34128127} sprawdzić
-
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka", "", "Plik programu SYntezator Krawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka", "FriendlyTypeName", "Plik programu SYntezator Krawczyka");
-
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka\\open");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka\\open\\command");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka\\open\\command", "", "\"" + System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName + "\" \"%1\"");
-
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka\\Graj");
-            Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka\\Graj\\command");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka\\Graj\\command", "", "\"" + System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName + "\" \"%1\" -p");
-
-            Microsoft.Win32.Registry.LocalMachine.CreateSubKey("SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths\\syntezator krawczyka.exe");
-            Microsoft.Win32.Registry.SetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths\\syntezator krawczyka.exe", "", System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
-
-        }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             granie.t.Change(0, (long)(sender as Slider).Value);
         }
+        public static bool gpgpu = false;
     }
 }

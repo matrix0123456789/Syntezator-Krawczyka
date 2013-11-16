@@ -24,6 +24,12 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             Children=wewnętrzny.Children;
         }
+
+        public Instrument(string p):this()
+        {
+            if (p != null)
+                label1.Content += " — "+p;
+        }
         public UIElementCollection Children;
     }
 }

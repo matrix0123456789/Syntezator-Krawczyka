@@ -13,7 +13,7 @@ namespace Syntezator_Krawczyka
     {
         NAudio.Midi.MidiIn urządzenie;
         public UIElement UI { get; set; }
-        public sekwencer sekw { get; set; }
+        public soundStart sekw { get; set; }
         public MidiIn(int numerUrządzenia)
         {
             urządzenie = new NAudio.Midi.MidiIn(numerUrządzenia);
