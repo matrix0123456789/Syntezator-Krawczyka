@@ -27,6 +27,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         Dictionary<string, string> _ustawienia;
         public XmlNode XML { get; set; }
+        enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna }
         public oscylator()
         {
             wejście = new List<Typ>();
@@ -49,23 +50,23 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<long, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<long, float[]>();
         public static float[] generujJedenPrzebiegStatyczny(string typ, long ilePróbek, float gladkość)
         {
-           
-                float[] jedenPrzebieg;
-                if (typ == "trójkątna")
-                    jedenPrzebieg = trójkątna((float)ilePróbek, ilePróbek);
-                else if (typ == "prostokątna")
-                    jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
-                else if (typ == "sinusoidalna")
-                    jedenPrzebieg = sinusoidalna((float)ilePróbek, ilePróbek);
-                else if (typ == "piłokształtna2x")
-                    jedenPrzebieg = piłokształtna2x((float)ilePróbek, ilePróbek, 1, gladkość);
-                else if (typ == "piłokształtna")
-                    jedenPrzebieg = piłokształtna((float)ilePróbek, ilePróbek, 1, gladkość);
-                else
-                    jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
-                //zapisanePojedyńczePrzebiegi.Add(typ + ilePróbek.ToString() + ' ' + gladkość.ToString(), jedenPrzebieg);
-                return jedenPrzebieg;
-            
+
+            float[] jedenPrzebieg;
+            if (typ == "trójkątna")
+                jedenPrzebieg = trójkątna((float)ilePróbek, ilePróbek);
+            else if (typ == "prostokątna")
+                jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
+            else if (typ == "sinusoidalna")
+                jedenPrzebieg = sinusoidalna((float)ilePróbek, ilePróbek);
+            else if (typ == "piłokształtna2x")
+                jedenPrzebieg = piłokształtna2x((float)ilePróbek, ilePróbek, 1, gladkość);
+            else if (typ == "piłokształtna")
+                jedenPrzebieg = piłokształtna((float)ilePróbek, ilePróbek, 1, gladkość);
+            else
+                jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
+            //zapisanePojedyńczePrzebiegi.Add(typ + ilePróbek.ToString() + ' ' + gladkość.ToString(), jedenPrzebieg);
+            return jedenPrzebieg;
+
         }
         public float[] generujJedenPrzebieg(string typ, long ilePróbek, float gladkość)
         {
@@ -75,10 +76,10 @@ namespace Syntezator_Krawczyka.Synteza
             }
             else
             {*/
-                float[] jedenPrzebieg=generujJedenPrzebiegStatyczny(typ, ilePróbek, gladkość);
-               // zapisanePojedyńczePrzebiegi.Add(ilePróbek, jedenPrzebieg);
-                return jedenPrzebieg;
-           // }
+            float[] jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, ilePróbek, gladkość);
+            // zapisanePojedyńczePrzebiegi.Add(ilePróbek, jedenPrzebieg);
+            return jedenPrzebieg;
+            // }
         }
 
         public long symuluj(long p)
@@ -184,6 +185,25 @@ namespace Syntezator_Krawczyka.Synteza
                         var rMax = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz;
                         var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
                         aProcent = 1;
+
+                        var typ = _ustawienia["typ"];
+                        typFali jakaFala = typFali.trójkątna;
+                        if (typ == "trójkątna")
+                            jakaFala = typFali.trójkątna;
+                        else if (typ == "prostokątna")
+                            jakaFala = typFali.prostokątka;
+                        else if (typ == "sinusoidalna")
+                            jakaFala = typFali.sinusoidalna;
+                        else if (typ == "piłokształtna")
+                            jakaFala = typFali.piłokształtna;
+                        else
+                            jakaFala = typFali.prostokątka;
+                        var gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
+                        var niski = -2 * gladkosc;
+                        var wysoki = 2f + niski;
+
+                        float granica = (float)(n.ilepróbek * gladkosc);
+                        float pozycja = 0;//przy podziale nuty zrobić zapamiętywanie
                         for (int i = 0; i < n.dane.Length; i++)
                         {
                             if (długośćCała - i - n.generujOd > rMax)
@@ -202,7 +222,37 @@ namespace Syntezator_Krawczyka.Synteza
                             }
                             else
                                 dProcent = s;
-                            n.dane[i] = jedenPrzebieg[(i + (int)n.generujOd) % jedenPrzebieg.Length] * (aProcent * rProcent * dProcent);
+                            pozycja += jak[i + (int)n.generujOd] + 1;
+
+                            if (jakaFala == typFali.sinusoidalna)
+                                n.dane[i] = (float)Math.Sin(pozycja / n.ilepróbek * 2 * Math.PI) * (aProcent * rProcent * dProcent);
+                            else if (jakaFala == typFali.trójkątna)
+                            {
+                                var z = (float)(pozycja % n.ilepróbek / n.ilepróbek);
+                                if (z < 0.25)
+                                    n.dane[i] = z * 4 * (aProcent * rProcent * dProcent);
+                                else if (z < 0.75)
+                                    n.dane[i] = (0.5f - z) * 4f * (aProcent * rProcent * dProcent);
+                                else
+                                    n.dane[i] = (1 - z) * -4 * (aProcent * rProcent * dProcent);
+                            }
+                            else if (jakaFala == typFali.prostokątka)
+                            {
+
+                                if (pozycja % n.ilepróbek < n.ilepróbek * gladkosc)
+                                    n.dane[i] = wysoki * (aProcent * rProcent * dProcent);
+                                else
+                                    n.dane[i] = niski * (aProcent * rProcent * dProcent);
+
+                            }
+                            else if (jakaFala == typFali.piłokształtna)
+                            {
+                                float a = (float)(((n.ilepróbek / 3) + i) % (n.ilepróbek));
+                                if (a < granica)
+                                    n.dane[i] += ((a / granica) * 2 - 1);
+                                else
+                                    n.dane[i] += (float)((a - granica) / (n.ilepróbek - granica) * -2 + 1);
+                            }
 
                         }
                         wyjście[0].DrógiModół.działaj(n);
@@ -213,8 +263,8 @@ namespace Syntezator_Krawczyka.Synteza
         public static float[] prostokątna(float ilepróbek, long długość, float gladkosc)
         {
             float[] ret = new float[długość];
-            var wysoki = 2f-2*gladkosc;
-            var niski = 0-2*gladkosc;
+            var wysoki = 2f - 2 * gladkosc;
+            var niski = 0 - 2 * gladkosc;
             for (long i = 0; i < długość; i++)
             {
                 if (i % ilepróbek < ilepróbek * gladkosc)
@@ -250,18 +300,17 @@ namespace Syntezator_Krawczyka.Synteza
         public static float[] piłokształtna(float ilepróbek, long długość, short ilenut, float gladkosc)
         {
             float[] ret = new float[długość];
-            for (short i2 = 0; i2 < ilenut; i2++)
-            {
-                float granica = ilepróbek * gladkosc + (ilepróbek / ilenut * i2 / 25);
+            
+                float granica = ilepróbek * gladkosc;
                 for (long i = 0; i < długość; i++)
                 {
-                    float a = ((ilepróbek / ilenut * i2 / 3) + i) % (ilepróbek);
+                    float a = ((ilepróbek  / 3) + i) % (ilepróbek);
                     if (a < granica)
-                        ret[i] += ((a / granica) * 2 - 1) / ilenut;
+                        ret[i] += ((a / granica) * 2 - 1);
                     else
-                        ret[i] += ((a - granica) / (ilepróbek - granica) * -2 + 1) / ilenut;
+                        ret[i] += ((a - granica) / (ilepróbek - granica) * -2 + 1);
                 }
-            }
+           
             return ret;
         }
         public static float[] piłokształtna2x(float ilepróbek, long długość, short ilenut, float gladkosc)
