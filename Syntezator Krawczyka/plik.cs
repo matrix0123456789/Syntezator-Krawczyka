@@ -97,7 +97,121 @@ namespace Syntezator_Krawczyka
             try
             {
                 var granieLista = new List<granie>();
-                foreach (XmlNode n in xml.GetElementsByTagName("sound"))
+                dekoduj(xml.GetElementsByTagName("sound"));
+                var doSkopiowania = new List<object[]>();
+                foreach (XmlNode n in xml.GetElementsByTagName("track"))
+                {
+                    sciezka scie = new sciezka(n.ChildNodes.Count.ToString());
+                    sciezki.Add(scie);
+                    if (n.Attributes.GetNamedItem("id") != null)
+                        scieżkiZId.Add(n.Attributes.GetNamedItem("id").Value, scie);
+                    if (n.Attributes.GetNamedItem("copy") != null)
+                    {
+                        var ob = new object[2];
+                        ob[0] = scie;
+                        ob[1] = n;
+                        doSkopiowania.Add(ob);
+                    }
+                    foreach (XmlNode nutax in n.ChildNodes)
+                    {
+                        if (nutax.Name == "nute")
+                        {
+                            try
+                            {
+                                nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (long)(float.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo), (long)(float.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo));
+                                scie.nuty.Add(nu);
+                            }
+                            catch { }
+                        }
+                    }
+                    if (n.Attributes.GetNamedItem("sound") != null)
+                        foreach (string sound in n.Attributes.GetNamedItem("sound").Value.Split(' '))
+                        {
+
+                            try
+                            {
+                                // ((sekwencer)moduły[sound]["<sekwencer"]).sciezkaa = scie;
+                                scie.sekw = (moduły[sound].sekw);
+                                break;
+                            }
+                            catch { }
+                        }
+
+
+                }
+                foreach (var n in doSkopiowania)
+                {
+                    if ((n[1] as XmlElement).Attributes.GetNamedItem("copy") != null)
+                        if (scieżkiZId.ContainsKey((n[1] as XmlElement).Attributes.GetNamedItem("copy").Value))
+                        {
+                            int delay;
+                            if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
+                                delay = (int)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo);
+                            else
+                                delay = 0;
+
+                            foreach (var x in scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].nuty)
+                            {
+                                var xx = x.Clone() as nuta;
+                                xx.id = nuta.nowyid;
+                                xx.opuznienie += delay;
+                                (n[0] as sciezka).nuty.Add(xx);
+                            }
+                        }
+                }
+                foreach (sound z in moduły.Values)
+                {
+                    z.UI = new Instrument(z.nazwa);
+                    foreach (moduł zz in z.Values)
+                    {
+                        try
+                        {
+                            z.UI.Children.Add(zz.UI);
+                        }
+                        catch (System.ArgumentException e)
+                        {
+
+                        }
+                    }
+                    MainWindow.thi.pokaz.Children.Add(z.UI);
+                }
+                for (var i = 0; i < granieLista.Count; i++)
+                    granieLista[i].analizujIleNutMusiByć();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.ToString(), "Błąd przy przetwarzaniu pliku", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public plik()
+        {
+            URL = null;
+            xml = new XmlDocument();
+            xml.LoadXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><file></file>");
+        }
+        public void zapisz()
+        {
+            foreach (var x in moduły)
+            {
+                foreach (var y in x.Value)
+                {
+                    modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
+                }
+            }
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.Filter = "Plik XML|*.xml|Plik Syntezatora Krawczyka|*.synkra";
+            dialog.ShowDialog();
+            if (dialog.FileName != "")
+            {
+                System.IO.StreamWriter zapis = new System.IO.StreamWriter(dialog.FileName);
+                zapis.Write(xml.OuterXml);
+                zapis.Close();
+            }
+        }
+        public void dekoduj(XmlNodeList a)
+        {
+             foreach (XmlNode n in a)
                 {
                     if (n.Attributes.GetNamedItem("type").Value == "syntezator-krawczyka")
                     {
@@ -124,7 +238,7 @@ namespace Syntezator_Krawczyka
                                         var gr = new granie();
 
                                         moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, gr);
-                                        granieLista.Add(gr);
+                                       // granieLista.Add(gr);
                                         break;
                                     case "oscylator":
 
@@ -238,116 +352,6 @@ namespace Syntezator_Krawczyka
                     }
 
                 }
-                var doSkopiowania = new List<object[]>();
-                foreach (XmlNode n in xml.GetElementsByTagName("track"))
-                {
-                    sciezka scie = new sciezka(n.ChildNodes.Count.ToString());
-                    sciezki.Add(scie);
-                    if (n.Attributes.GetNamedItem("id") != null)
-                        scieżkiZId.Add(n.Attributes.GetNamedItem("id").Value, scie);
-                    if (n.Attributes.GetNamedItem("copy") != null)
-                    {
-                        var ob = new object[2];
-                        ob[0] = scie;
-                        ob[1] = n;
-                        doSkopiowania.Add(ob);
-                    }
-                    foreach (XmlNode nutax in n.ChildNodes)
-                    {
-                        if (nutax.Name == "nute")
-                        {
-                            try
-                            {
-                                nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (long)(float.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo), (long)(float.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo));
-                                scie.nuty.Add(nu);
-                            }
-                            catch { }
-                        }
-                    }
-                    if (n.Attributes.GetNamedItem("sound") != null)
-                        foreach (string sound in n.Attributes.GetNamedItem("sound").Value.Split(' '))
-                        {
-
-                            try
-                            {
-                                // ((sekwencer)moduły[sound]["<sekwencer"]).sciezkaa = scie;
-                                scie.sekw = (moduły[sound].sekw);
-                                break;
-                            }
-                            catch { }
-                        }
-
-
-                }
-                foreach (var n in doSkopiowania)
-                {
-                    if ((n[1] as XmlElement).Attributes.GetNamedItem("copy") != null)
-                        if (scieżkiZId.ContainsKey((n[1] as XmlElement).Attributes.GetNamedItem("copy").Value))
-                        {
-                            int delay;
-                            if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
-                                delay = (int)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo);
-                            else
-                                delay = 0;
-
-                            foreach (var x in scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].nuty)
-                            {
-                                var xx = x.Clone() as nuta;
-                                xx.id = nuta.nowyid;
-                                xx.opuznienie += delay;
-                                (n[0] as sciezka).nuty.Add(xx);
-                            }
-                        }
-                }
-                foreach (sound z in moduły.Values)
-                {
-                    z.UI = new Instrument(z.nazwa);
-                    foreach (moduł zz in z.Values)
-                    {
-                        try
-                        {
-                            z.UI.Children.Add(zz.UI);
-                        }
-                        catch (System.ArgumentException e)
-                        {
-
-                        }
-                    }
-                    MainWindow.thi.pokaz.Children.Add(z.UI);
-                }
-                for (var i = 0; i < granieLista.Count; i++)
-                    granieLista[i].analizujIleNutMusiByć();
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.ToString(), "Błąd przy przetwarzaniu pliku", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        public plik()
-        {
-            URL = null;
-            xml = new XmlDocument();
-            xml.LoadXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><file></file>");
-        }
-        public void zapisz()
-        {
-            foreach (var x in moduły)
-            {
-                foreach (var y in x.Value)
-                {
-                    modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
-                }
-            }
-            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.Filter = "Plik XML|*.xml|Plik Syntezatora Krawczyka|*.synkra";
-            dialog.ShowDialog();
-            if (dialog.FileName != "")
-            {
-                System.IO.StreamWriter zapis = new System.IO.StreamWriter(dialog.FileName);
-                zapis.Write(xml.OuterXml);
-                zapis.Close();
-            }
         }
     }
 }
