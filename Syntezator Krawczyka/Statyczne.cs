@@ -25,7 +25,7 @@ namespace Syntezator_Krawczyka
    }
     public class StatyczneMono{
         public static bool debugowanie = false;
-        static public plik otwartyplik = new plik();
+        static public plik otwartyplik;
         /// <summary>
         /// Tworzy informacje o plikach *.synkra w rejestrze systemowym.
         /// </summary>

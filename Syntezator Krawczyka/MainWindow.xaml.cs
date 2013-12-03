@@ -90,6 +90,10 @@ namespace Syntezator_Krawczyka
                     otwarto = true;
                 }
             }
+
+            if(!otwarto)
+                Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
+
             if (zamknij)
                 App.Current.Shutdown();
             else
@@ -185,19 +189,7 @@ namespace Syntezator_Krawczyka
 
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
-        {
-            /*sekwencer mod1=new sekwencer();
-            oscylator mod2 = new oscylator();
-            granie mod3 = new granie();
-            mod1.wyjście[0].DrógiModół = mod2;
-            mod2.wyjście[0].DrógiModół = mod3;
-            pokaz.Children.Add(mod1.UI);
-            pokaz.Children.Add(mod2.UI);
-            pokaz.Children.Add(mod3.UI);*/
-            Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
-        }
-
+       
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { granie.o = int.Parse(((TextBox)sender).Text); }
@@ -301,5 +293,10 @@ namespace Syntezator_Krawczyka
             granie.t.Change(0, (long)(sender as Slider).Value);
         }
         public static bool gpgpu = false;
+
+        private void buttonNowyInstrument_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

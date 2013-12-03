@@ -8,20 +8,19 @@
     </Window.TaskbarItemInfo>
     <Grid>
         <Button Content="Czyść bufor" HorizontalAlignment="Left" Margin="12,0,0,10" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
-        <Button Content="Przykład prosty" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button2" VerticalAlignment="Top" Width="92" Click="button2_Click" />
-        <Button Content="Przykład złożony" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button2b" VerticalAlignment="Top" Width="92" Click="button2_Click" />
         <ScrollViewer Margin="109,12,12,12" CanContentScroll="False" VerticalScrollBarVisibility="Auto">
             <WrapPanel Name="pokaz" />
         </ScrollViewer>
-        
-            <Button Content="Otwórz plik"  Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button3" VerticalAlignment="Top" Width="92" Click="button3_Click" ToolTip="Otwórz plik zawierający nuty">
+
+        <Button Content="Otwórz plik"  Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button3" VerticalAlignment="Top" Width="92" Click="button3_Click" ToolTip="Otwórz plik zawierający nuty">
 
         </Button>
-        <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,96,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
-        <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="12,124,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="button6_Click" />
-        <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,152,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" />
-        <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="67,124,0,0" Name="button8" VerticalAlignment="Top" Width="37" Click="button8_Click" />
-        <ProgressBar Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,180,0,0" VerticalAlignment="Top" Width="92"/>
-        <Slider HorizontalAlignment="Left" Margin="12,198,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
+        <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
+        <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="button6_Click" />
+        <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,96,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" />
+        <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="67,68,0,0" Name="button8" VerticalAlignment="Top" Width="37" Click="button8_Click" />
+        <ProgressBar Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,124,0,0" VerticalAlignment="Top" Width="92"/>
+        <Slider HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
+        <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="12,165,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Otwórz plik zawierający nuty"/>
     </Grid>
 </Window>

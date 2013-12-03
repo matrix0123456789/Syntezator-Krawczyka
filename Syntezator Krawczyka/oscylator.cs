@@ -38,10 +38,10 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("typ", "trójkątna");
             _ustawienia.Add("ilefal", "1");
             _ustawienia.Add("gladkosc", "1");
-            _ustawienia.Add("A", "200");
+            _ustawienia.Add("A", "0");
             _ustawienia.Add("D", "0");
-            _ustawienia.Add("S", (0.5).ToString());
-            _ustawienia.Add("R", "1000");
+            _ustawienia.Add("S", "0.2");
+            _ustawienia.Add("R", "0");
             _UI = new oscylatorUI(this);
         }
         /// <summary>

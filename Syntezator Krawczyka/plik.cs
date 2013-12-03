@@ -53,7 +53,7 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-                Statyczne.otwartyplik.URL = URL = a;
+                this.URL = URL = a;
                 xml = new XmlDocument();
                 try
                 {
@@ -81,6 +81,19 @@ namespace Syntezator_Krawczyka
         }
         void dekoduj()
         {
+            if(Statyczne.otwartyplik!=null)
+            {
+                moduły.Clear();
+                sciezki.Clear();
+                scieżkiZId.Clear();
+                for (var i = 0; i < MainWindow.thi.pokaz.Children.Count;i++ )
+                {
+                    if (MainWindow.thi.pokaz.Children[i].GetType() != typeof(KlawiaturaKomputeraUI))
+                    {
+                        MainWindow.thi.pokaz.Children.Remove((UIElement)MainWindow.thi.pokaz.Children[i]);
+                    }
+                }
+            }
             try
             {
                 var granieLista = new List<granie>();
