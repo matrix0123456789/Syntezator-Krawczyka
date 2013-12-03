@@ -145,7 +145,7 @@ namespace Syntezator_Krawczyka
         }
         void akt(object o)
         {
-            ushort ileDoGC = 0;
+            ushort ileDoGC = 0,ileDoKopii=0;
             while (true)
             {
                 ileDoGC++;
@@ -155,6 +155,13 @@ namespace Syntezator_Krawczyka
                     
                         GC.Collect(20, GCCollectionMode.Forced);
                     ileDoGC = 0;
+                }
+                ileDoKopii++;
+                if(ileDoKopii>600)
+                {
+                    System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
+                    Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia"+DateTime.Now.ToFileTime()+".synkra");
+                    ileDoKopii = 0;
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {

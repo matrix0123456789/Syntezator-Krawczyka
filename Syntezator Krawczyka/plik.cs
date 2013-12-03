@@ -209,6 +209,22 @@ namespace Syntezator_Krawczyka
                 zapis.Close();
             }
         }
+        public void zapisz(string path)
+        {
+            foreach (var x in moduły)
+            {
+                foreach (var y in x.Value)
+                {
+                    modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
+                }
+            }
+            
+            
+                System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
+                zapis.Write(xml.OuterXml);
+                zapis.Close();
+            
+        }
         public void dekoduj(XmlNodeList a)
         {
              foreach (XmlNode n in a)
