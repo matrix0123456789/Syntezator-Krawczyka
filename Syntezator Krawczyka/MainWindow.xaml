@@ -2,6 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Syntezator Krawczyka" Height="350" Width="525" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="pasekZadań" >
+        </TaskbarItemInfo>
+    </Window.TaskbarItemInfo>
     <Grid>
         <Button Content="Czyść bufor" HorizontalAlignment="Left" Margin="12,0,0,10" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
         <Button Content="Przykład prosty" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button2" VerticalAlignment="Top" Width="92" Click="button2_Click" />

@@ -51,6 +51,9 @@ namespace Syntezator_Krawczyka
                 short t;
                 switch (e.Key)
                 {
+                    case Key.CapsLock:
+                        t = -2;
+                        break;
                     case Key.LeftShift:
                         t = -1;
                         break;
@@ -90,35 +93,28 @@ namespace Syntezator_Krawczyka
                     case Key.M:
                         t = 11;
                         break;
-                   /* case 12:
-                        klawisz = Key.OemComma;
-                        klawisz2 = Key.Q;
+                    case Key.OemComma:
+                        t = 12;
                         break;
-                    case 13:
-                        klawisz = Key.L;
-                        klawisz2 = Key.D2;
+                    case Key.L:
+                        t = 13;
                         break;
-                    case 14:
-                        klawisz = Key.OemPeriod;
-                        klawisz2 = Key.W;
+                    case Key.OemPeriod:
+                        t = 14;
                         break;
-                    case 15:
-                        klawisz = Key.Oem1;
-                        klawisz2 = Key.D3;
+                    case Key.Oem1:
+                        t = 15;
                         break;
-                    case 16:
-                        klawisz = Key.Oem2;
-                        klawisz2 = Key.E;
+                    case Key.Oem2:
+                        t = 16;
                         break;
-                    case 17:
-                        klawisz = Key.RightShift;
-                        klawisz2 = Key.R;
+                    case Key.RightShift:
+                        t = 17;
                         break;
-                    case 18:
-                        klawisz = Key.Enter;
-                        klawisz2 = Key.D5;
+                    case Key.Enter:
+                        t = 18;
                         break;
-                    case 19:
+                   /* case 19:
                         klawisz = Key.T;
                         klawisz2 = Key.T;
                         break;

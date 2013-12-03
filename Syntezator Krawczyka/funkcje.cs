@@ -144,6 +144,9 @@ namespace Syntezator_Krawczyka
         {
             return plik.Hz/(130.812783 * Math.Pow(2, (oktawa) + (ton / 6)));
         }
-        
+        public static double ton(double ileprobek)
+        {
+            return Math.Log(plik.Hz/(130.812783*ileprobek),2)*6;
+        }
     }
 }

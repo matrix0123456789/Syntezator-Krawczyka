@@ -1,6 +1,5 @@
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\Syntezator Krawczyka.exe
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\Syntezator Krawczyka.pdb
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\Syntezator Krawczyka.csprojResolveAssemblyReference.cache
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\EdytorFali.baml
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\EdytorNut.baml
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\suwak.baml
@@ -47,3 +46,4 @@ C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Synte
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\Syntezator Krawczyka.csproj.GenerateResource.Cache
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\Syntezator Krawczyka.exe
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\Syntezator Krawczyka.pdb
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\x86\Debug\Syntezator Krawczyka.csprojResolveAssemblyReference.cache

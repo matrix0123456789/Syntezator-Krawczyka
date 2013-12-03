@@ -29,7 +29,7 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["czas"] = (Math.Pow(2, Math.Round(sliderA.Value)) * (Statyczne.otwartyplik.tempo / 60)).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["czas"] = (Math.Pow(2, Math.Round(sliderA.Value)) * (plik.tempo / 60)).ToString(CultureInfo.InvariantCulture);
             
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -46,7 +46,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             if(double.Parse(parentNode.ustawienia["czas"], CultureInfo.InvariantCulture)!=0)
-                sliderA.Value = Math.Log(60 * double.Parse(parentNode.ustawienia["czas"], CultureInfo.InvariantCulture) / Statyczne.otwartyplik.tempo, 2);
+                sliderA.Value = Math.Log(60 * double.Parse(parentNode.ustawienia["czas"], CultureInfo.InvariantCulture) / plik.tempo, 2);
             sliderB.Value = double.Parse(parentNode.ustawienia["zmniejszenie"], CultureInfo.InvariantCulture);
             sliderC.Value = double.Parse(parentNode.ustawienia["glosnosc"], CultureInfo.InvariantCulture);
         }

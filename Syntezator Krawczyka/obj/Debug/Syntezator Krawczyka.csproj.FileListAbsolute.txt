@@ -1,0 +1,48 @@
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\Syntezator Krawczyka.exe
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\Syntezator Krawczyka.pdb
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\EdytorFali.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\EdytorNut.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\suwak.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\zmianaWysokościUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\pogłosUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Copy of GranieUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\lfoUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\preloader.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\sciezkaUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\flangerUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Instrument.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\playerUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\MainWindow.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\sekwencer.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\EdytorFali.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\EdytorNut.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\generatorObwiedniFiltruUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\suwak.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\zmianaWysokościUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\cutoffUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\pogłosUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Copy of GranieUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\lfoUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\preloader.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\sciezkaUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\flangerUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Instrument.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\KlawiaturaKomputeraUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\playerUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\glosnoscUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\MainWindow.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\oscylatorUI.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\sekwencer.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\App.g.cs
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka_MarkupCompile.cache
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka_MarkupCompile.lref
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\generatorObwiedniFiltruUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\cutoffUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\KlawiaturaKomputeraUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\glosnoscUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\oscylatorUI.baml
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.g.resources
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator_Krawczyka.Properties.Resources.resources
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.csproj.GenerateResource.Cache
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.exe
+C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.pdb

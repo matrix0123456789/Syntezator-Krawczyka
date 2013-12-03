@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
+using System.Windows.Shell;
 namespace Syntezator_Krawczyka
 {
 
@@ -156,7 +157,15 @@ namespace Syntezator_Krawczyka
                             Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString() + "; " + ileDoGC.ToString();
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
+                        if (postęp.Value != 0)
+                        {
+                            if (postęp.Value / (double)granie.liczbaGenerowanychMax<1)
+                            pasekZadań.ProgressState = TaskbarItemProgressState.Normal;
+                            else
+                                pasekZadań.ProgressState = TaskbarItemProgressState.None;
 
+                            pasekZadań.ProgressValue = postęp.Value / (double)granie.liczbaGenerowanychMax;
+                        }
                         foreach (var x in Statyczne.otwartyplik.sciezki)
                         {
                             try
