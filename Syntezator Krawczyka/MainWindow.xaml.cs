@@ -46,6 +46,7 @@ namespace Syntezator_Krawczyka
         /// </summary>
         static public bool debugowanie = false;
         klawiaturaKomputera klawiatkompa;
+        List<KlawiaturaMidi> klawiatMidi=new List<KlawiaturaMidi>();
         public MainWindow()
         {
             try
@@ -100,7 +101,13 @@ namespace Syntezator_Krawczyka
             else
             {
                 klawiatkompa = new klawiaturaKomputera();
-                pokaz.Children.Add(klawiatkompa.UI);
+                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices;i++ )
+                {
+                    var k = new KlawiaturaMidi(i);
+                    klawiatMidi.Add(k);
+                    pokaz.Children.Add(k.UI);
+                }
+                    pokaz.Children.Add(klawiatkompa.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
                 aktualizacjaOkna.Start();
