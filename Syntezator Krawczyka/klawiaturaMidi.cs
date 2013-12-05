@@ -12,7 +12,7 @@ using NAudio.Midi;
 namespace Syntezator_Krawczyka
 {
     /// <summary>
-    /// Umożliwia granie na żywo bez klawiatury midi za pomocą klawiatury komputerowej
+    /// Umożliwia granie na żywo z urzyciem urządzenia MIDI np. Keyboard
     /// </summary>
     public class KlawiaturaMidi : wejście
     {

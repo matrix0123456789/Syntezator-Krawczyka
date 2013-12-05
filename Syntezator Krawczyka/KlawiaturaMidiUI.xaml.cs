@@ -17,7 +17,8 @@ using Syntezator_Krawczyka.Synteza;
 namespace Syntezator_Krawczyka
 {
     /// <summary>
-    /// Interaction logic for KlawiaturaKomputeraUI.xaml
+    /// Interfejs graiczny dla
+    /// <see cref="KlawiaturaMidi"/>
     /// </summary>
     public partial class KlawiaturaMidiUI : UserControl
     {
