@@ -29,7 +29,6 @@ namespace Syntezator_Krawczyka
         /// <seealso cref="akt"/>
         Timer akttimer;
         Dictionary<short, nuta> nuty = new Dictionary<short, nuta>();
-        public static List<nuta> wszytskieNuty = new List<nuta>();
         NAudio.Midi.MidiIn wej;
         public KlawiaturaMidi(int i)
         {
@@ -70,8 +69,8 @@ namespace Syntezator_Krawczyka
                                 {
                                     prz = new nuta();
                                     nuty.Add(t, prz);
-                                    lock (wszytskieNuty)
-                                        wszytskieNuty.Add(prz);
+                                    lock (klawiaturaKomputera.wszytskieNuty)
+                                        klawiaturaKomputera.wszytskieNuty.Add(prz);
                                 }
                                 prz.ilepróbek = prz.ilepróbekNaStarcie = plik.Hz / funkcje.częstotliwość(0, t / 2f);
                                 prz.długość = int.MaxValue / 16;

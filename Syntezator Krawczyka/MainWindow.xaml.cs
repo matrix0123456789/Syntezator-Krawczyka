@@ -305,7 +305,7 @@ namespace Syntezator_Krawczyka
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            granie.t.Change(0, (long)(sender as Slider).Value);
+            //granie.t.Change(0, (long)(sender as Slider).Value);
         }
         public static bool gpgpu = false;
 
