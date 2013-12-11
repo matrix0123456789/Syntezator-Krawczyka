@@ -10,6 +10,7 @@ namespace Syntezator_Krawczyka
 {
     public class plik
     {
+        public static string URLStatyczne;
         public string URL;
         public XmlDocument xml;
         public Dictionary<string, sound> moduły = new Dictionary<string, sound>();
@@ -23,8 +24,7 @@ namespace Syntezator_Krawczyka
             if (a != "")
             {
                 URL = a;
-                if (Statyczne.otwartyplik != null)
-                    Statyczne.otwartyplik.URL = a;
+                    URLStatyczne = a;
                 xml = new XmlDocument();
                 try
                 {
@@ -55,7 +55,7 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-                this.URL = URL = a;
+                this.URL = URLStatyczne = URL = a;
                 xml = new XmlDocument();
                 try
                 {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
@@ -23,11 +24,19 @@ namespace Syntezator_Krawczyka
                 BinaryReader zawartość;
                 try
                 {
-                    zawartość = new BinaryReader((new StreamReader((new Regex("\\\\([^\\\\]*)$")).Replace(Statyczne.otwartyplik.URL, "\\"+ _plik) , Encoding.ASCII)).BaseStream);
+                    zawartość = new BinaryReader((new StreamReader((new Regex("\\\\([^\\\\]*)$")).Replace(Syntezator_Krawczyka.plik.URLStatyczne, "\\" + _plik), Encoding.ASCII)).BaseStream);
                 }
                 catch (Exception e)
                 {
-                    zawartość = new BinaryReader((new StreamReader(_plik, Encoding.ASCII)).BaseStream);
+                    try
+                    {
+                        zawartość = new BinaryReader((new StreamReader(_plik, Encoding.ASCII)).BaseStream);
+                    }
+                    catch (Exception e2)
+                    {
+                        MessageBox.Show(e2.ToString(),"Błąd",MessageBoxButton.OK,MessageBoxImage.Error);
+                        return;
+                    }
                 }
                 zawartość.BaseStream.Position = 24;
                 częstotliwość = zawartość.ReadInt32();

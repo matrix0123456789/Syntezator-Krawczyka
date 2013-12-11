@@ -179,8 +179,10 @@ namespace Syntezator_Krawczyka.Synteza
             //Dictionary<string, string> ustawienia = (Dictionary<string, string>)act[0];
             //List<gra> grają = (List<gra>)act[1];
             //if (!grateraz)
-            while(liczbaGenerowanych>0||teraz)
+            for (byte i = 0; liczbaGenerowanych > 0 || teraz && i < 10;i++ )
             {
+                if (i == 10)
+                    return;
                 Thread.Sleep(1);
             }
             var dataTeraz = DateTime.Now;

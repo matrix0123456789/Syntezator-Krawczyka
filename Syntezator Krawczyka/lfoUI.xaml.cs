@@ -31,42 +31,50 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             parentNode.ustawienia["typ"] = "sinusoidalna";
+            parentNode.jedenPrzebieg = null;
         }
 
         private void trójkątny_Checked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["typ"] = "trójkątna";
+            parentNode.jedenPrzebieg = null;
         }
 
         private void prostokątny_Checked(object sender, RoutedEventArgs e)
         {
 
             parentNode.ustawienia["typ"] = "prostokątna";
+            parentNode.jedenPrzebieg = null;
         }
 
         private void piłokształtny_Checked(object sender, RoutedEventArgs e)
         {
 
             parentNode.ustawienia["typ"] = "piłokształtna";
+            parentNode.jedenPrzebieg = null;
         }
 
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["moc"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.jedenPrzebieg = null;
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["czestotliwosc"] = (sliderB.Value *sliderB.Value* 150).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["czestotliwosc"] = (sliderB.Value * sliderB.Value * 150).ToString(CultureInfo.InvariantCulture);
+            parentNode.jedenPrzebieg = null;
             
         }
         private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["gladkosc"] = sliderC.Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.jedenPrzebieg = null;
 
         }
         private void slider4_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["kwantyzacja"] = sliderD.Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.jedenPrzebieg = null;
 
         }
         void ustawSuwaki()

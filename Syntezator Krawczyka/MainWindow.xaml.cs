@@ -156,11 +156,17 @@ namespace Syntezator_Krawczyka
             while (true)
             {
                 ileDoGC++;
-                if (ileDoGC > 50&&czyGC||ileDoGC>300)
+                if (ileDoGC > 50 && czyGC)
                 {
 
-                    
-                        GC.Collect(20, GCCollectionMode.Forced);
+
+                    GC.Collect(20, GCCollectionMode.Forced);
+                    ileDoGC = 0;
+                }else if( ileDoGC > 300)
+                {
+
+
+                    GC.Collect(10, GCCollectionMode.Optimized);
                     ileDoGC = 0;
                 }
                 ileDoKopii++;
