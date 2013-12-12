@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace Syntezator_Krawczyka
 {
@@ -146,6 +147,26 @@ namespace Syntezator_Krawczyka
         public static double ton(double ileprobek)
         {
             return Math.Log(plik.Hz/(130.812783*ileprobek),2)*6;
+        }
+
+        public static XmlNode klonujXML(XmlDocument doc, System.Xml.XmlNode wej)
+        {
+            if(wej.NodeType==XmlNodeType.Element)
+            {
+                var ret = doc.CreateElement(wej.Name);
+                foreach (XmlAttribute x in wej.Attributes)
+                {
+                    XmlAttribute nowyAtr=doc.CreateAttribute(x.Name);
+                    nowyAtr.Value=x.Value;
+                    ret.Attributes.Append(nowyAtr);
+                }
+                foreach (XmlNode x in wej.ChildNodes)
+                {
+                    ret.AppendChild(klonujXML(doc, x));
+                }
+                return ret;
+            }
+            else return null;
         }
     }
 }

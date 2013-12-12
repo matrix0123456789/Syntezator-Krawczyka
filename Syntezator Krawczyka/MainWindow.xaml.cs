@@ -17,6 +17,7 @@ using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics;
 using System.Windows.Shell;
+using System.Xml;
 namespace Syntezator_Krawczyka
 {
 
@@ -45,6 +46,7 @@ namespace Syntezator_Krawczyka
         /// </summary>
         static public bool debugowanie = false;
         klawiaturaKomputera klawiatkompa;
+        List<KlawiaturaMidi> klawiatMidi=new List<KlawiaturaMidi>();
         public MainWindow()
         {
             try
@@ -99,7 +101,13 @@ namespace Syntezator_Krawczyka
             else
             {
                 klawiatkompa = new klawiaturaKomputera();
-                pokaz.Children.Add(klawiatkompa.UI);
+                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices;i++ )
+                {
+                    var k = new KlawiaturaMidi(i);
+                    klawiatMidi.Add(k);
+                    pokaz.Children.Add(k.UI);
+                }
+                    pokaz.Children.Add(klawiatkompa.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
                 aktualizacjaOkna.Start();
@@ -144,16 +152,29 @@ namespace Syntezator_Krawczyka
         }
         void akt(object o)
         {
-            ushort ileDoGC = 0;
+            ushort ileDoGC = 0,ileDoKopii=0;
             while (true)
             {
                 ileDoGC++;
-                if (ileDoGC > 50&&czyGC||ileDoGC>300)
+                if (ileDoGC > 50 && czyGC)
                 {
 
-                    
-                        GC.Collect(20, GCCollectionMode.Forced);
+
+                    GC.Collect(20, GCCollectionMode.Forced);
                     ileDoGC = 0;
+                }else if( ileDoGC > 300)
+                {
+
+
+                    GC.Collect(10, GCCollectionMode.Optimized);
+                    ileDoGC = 0;
+                }
+                ileDoKopii++;
+                if(ileDoKopii>600)
+                {
+                    System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
+                    Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia"+DateTime.Now.ToFileTime()+".synkra");
+                    ileDoKopii = 0;
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {
@@ -290,13 +311,36 @@ namespace Syntezator_Krawczyka
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            granie.t.Change(0, (long)(sender as Slider).Value);
+            //granie.t.Change(0, (long)(sender as Slider).Value);
         }
         public static bool gpgpu = false;
 
         private void buttonNowyInstrument_Click(object sender, RoutedEventArgs e)
         {
+            if(Statyczne.otwartyplik!=null)
+            {
+                
+                var xml = new XmlDocument();
+                xml.LoadXml(Properties.Resources.przyklad);
+                var soundList=xml.GetElementsByTagName("sound");
+                var sound=soundList[0];
+                var id = sound.Attributes.GetNamedItem("id").Value;
+                for (var i = 1; true; i++)
+                {
+                    if (!Statyczne.otwartyplik.moduły.ContainsKey(id + i.ToString()))
+                    {
+                        id = id + i.ToString();
+                        break;
+                    }
 
+                }
+                sound.Attributes.GetNamedItem("id").Value = id;
+                var klon=funkcje.klonujXML(Statyczne.otwartyplik.xml, sound);
+                Statyczne.otwartyplik.xml.GetElementsByTagName("file")[0].AppendChild(klon);
+                
+
+                Statyczne.otwartyplik.dekoduj(soundList);//poprawić na nową referencję
+            }
         }
     }
 }

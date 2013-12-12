@@ -91,25 +91,29 @@ namespace Syntezator_Krawczyka.Synteza
 
             {
                 nuta n = input;
-
+                var A = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture);
+                var D = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture);
+                var S = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
+                var R = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture);
+                var gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
                 {
                     lock (n)
                     {
                         n.ilepróbek = Math.Floor(n.ilepróbek);
                         n.długość = (long)(Math.Floor(n.długość / n.ilepróbek) * n.ilepróbek);
-                        if (wyjście[0].DrógiModół != null && (float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) != 0 || float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture) != 0))
+                        if (wyjście[0].DrógiModół != null && (D != 0 || S != 0))
                         {
                             object[] wy = new object[2];
-                            float[] jedenPrzebieg = generujJedenPrzebieg(_ustawienia["typ"], (long)Math.Floor(n.ilepróbek), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
-                            long długośćCała = (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
-                            if (n.długość + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz - n.generujOd > 0)
+                            float[] jedenPrzebieg = generujJedenPrzebieg(_ustawienia["typ"], (long)Math.Floor(n.ilepróbek), gladkosc);
+                            long długośćCała = (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz);
+                            if (n.długość + R * plik.kHz - n.generujOd > 0)
                             {
                                 if (n.generujDo < 0)
-                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz)];
-                                else if (n.generujDo - n.generujOd < (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz))
+                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz)];
+                                else if (n.generujDo - n.generujOd < (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz))
                                     n.dane = new float[n.generujDo - n.generujOd];
                                 else
-                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz)];
+                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz)];
 
 
                             }
@@ -118,15 +122,19 @@ namespace Syntezator_Krawczyka.Synteza
                             float aProcent, dProcent;
                             float rProcent = 1;
                             aProcent = 0;
-                            var aMax = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture) * plik.kHz;
-                            var dMax = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) * plik.kHz;
-                            var rMax = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz;
-                            var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
+                            var aMax = A * plik.kHz;
+                            var dMax = D * plik.kHz;
+                            var rMax = R * plik.kHz;
+                            var s = S;
                             aProcent = 1;
+                            var Max1 = długośćCała - n.generujOd - rMax;
+                            var Max2 = aMax - (int)n.generujOd;
+                            var Max3 = dMax - (int)n.generujOd;
+                            var Acc1 = dMax * (1 - s);
                             for (int i = 0; i < n.dane.Length; i++)
                             {
-                                if (długośćCała - i - n.generujOd > rMax)
-                                    if (aMax > i + (int)n.generujOd)
+                                if (Max1 > i)
+                                    if (Max2 > i)
                                         aProcent = (i + (int)n.generujOd) / aMax;
                                     else
                                         aProcent = 1;
@@ -135,13 +143,16 @@ namespace Syntezator_Krawczyka.Synteza
                                     rProcent = (długośćCała - i - n.generujOd) / rMax;
                                     //aProcent = 1;
                                 }
-                                if (dMax > i + (int)n.generujOd)
+                                if (Max3 > i)
                                 {
-                                    dProcent = s + (dMax - i - (int)n.generujOd) / dMax * (1 - s);
+                                    dProcent = s + (Max3 - i ) / Acc1;
                                 }
                                 else
                                     dProcent = s;
-                                n.dane[i] = jedenPrzebieg[(i + (int)n.generujOd) % jedenPrzebieg.Length] * (aProcent * rProcent * dProcent);
+                                if (dProcent == 0)
+                                    break;//sprawdzić, czi nie powoduje problemów
+
+                                n.dane[i] = jedenPrzebieg[(i + (int)n.generujOd) % jedenPrzebieg.Length] * aProcent * rProcent * dProcent;
 
                             }
                             wyjście[0].DrógiModół.działaj(n);

@@ -24,7 +24,7 @@ namespace Syntezator_Krawczyka.Konsola
                 Console.WriteLine(parametry[x]);
                 if (parametry[x] == "/d" || parametry[x] == "-d")
                 {
-                    StatyczneMono.debugowanie = true;
+                    Statyczne.debugowanie = true;
                    
                 }
                 else if (parametry[x] == "/z" || parametry[x] == "-z")

@@ -12,7 +12,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// zawiera niektóre elementy, które są statyczne, a nie było dla nich lepszego miejsca
     /// </summary>
-   public  class Statyczne:StatyczneMono
+   public  class Statyczne
     {
         public static BufferedWaveProvider bufor=new BufferedWaveProvider(new WaveFormat((int)plik.Hz,1));
         public static WasapiOut WasapiWyjście = new WasapiOut(AudioClientShareMode.Shared, 100);
@@ -22,8 +22,6 @@ namespace Syntezator_Krawczyka
             WasapiWyjście.Init(bufor);
             WasapiWyjście.Play();
         }
-   }
-    public class StatyczneMono{
         public static bool debugowanie = false;
         static public plik otwartyplik;
         /// <summary>

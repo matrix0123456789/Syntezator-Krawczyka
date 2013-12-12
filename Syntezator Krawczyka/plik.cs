@@ -10,6 +10,7 @@ namespace Syntezator_Krawczyka
 {
     public class plik
     {
+        public static string URLStatyczne;
         public string URL;
         public XmlDocument xml;
         public Dictionary<string, sound> moduły = new Dictionary<string, sound>();
@@ -22,7 +23,8 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-                Statyczne.otwartyplik.URL = URL = a;
+                URL = a;
+                    URLStatyczne = a;
                 xml = new XmlDocument();
                 try
                 {
@@ -53,7 +55,7 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-                this.URL = URL = a;
+                this.URL = URLStatyczne = URL = a;
                 xml = new XmlDocument();
                 try
                 {
@@ -81,12 +83,12 @@ namespace Syntezator_Krawczyka
         }
         void dekoduj()
         {
-            if(Statyczne.otwartyplik!=null)
+            if (Statyczne.otwartyplik != null)
             {
                 moduły.Clear();
                 sciezki.Clear();
                 scieżkiZId.Clear();
-                for (var i = 0; i < MainWindow.thi.pokaz.Children.Count;i++ )
+                for (var i = 0; i < MainWindow.thi.pokaz.Children.Count; i++)
                 {
                     if (MainWindow.thi.pokaz.Children[i].GetType() != typeof(KlawiaturaKomputeraUI))
                     {
@@ -97,147 +99,7 @@ namespace Syntezator_Krawczyka
             try
             {
                 var granieLista = new List<granie>();
-                foreach (XmlNode n in xml.GetElementsByTagName("sound"))
-                {
-                    if (n.Attributes.GetNamedItem("type").Value == "syntezator-krawczyka")
-                    {
-                        moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value));
-                        foreach (XmlNode nn in n.ChildNodes)
-                        {
-                            if (nn.Name == "module")
-                            {
-                                switch (nn.Attributes.GetNamedItem("type").Value)
-                                {
-                                    case "sekwencer":
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].sekw = new sekwencer();
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, moduły[n.Attributes.GetNamedItem("id").Value].sekw as sekwencer);
-                                        // moduły[n.Attributes.GetNamedItem("id").Value]["<sekwencer"] = moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value];
-                                        break;
-                                    case "player":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new player());
-                                        moduły[n.Attributes.GetNamedItem("id").Value]["<player"] = moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value];
-                                        break;
-                                    case "granie":
-                                        var gr = new granie();
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, gr);
-                                        granieLista.Add(gr);
-                                        break;
-                                    case "oscylator":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new oscylator());
-                                        break;
-                                    case "flanger":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new flanger());
-                                        break;
-                                    case "rozdzielacz":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new rozdzielacz());
-                                        break;
-                                    case "mikser":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new mikser());
-                                        break;
-                                    case "lfo":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new lfo());
-                                        break;
-                                    case "zmianaWysokości":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new zmianaWysokości());
-                                        break;
-                                    case "glosnosc":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new glosnosc());
-                                        break;
-                                    case "poglos":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new pogłos());
-                                        break;
-                                    case "cutoff":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new cutoff());
-                                        break;
-                                    case "generatorObwiedniFiltru":
-
-
-                                        moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new generatorObwiedniFiltru());
-                                        break;
-                                    default:
-                                        continue;
-                                }
-                                moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].XML = nn;
-                                if (moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].ustawienia == null)
-                                { }
-                                modułFunkcje.czytajXML(moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].ustawienia, nn);
-                            }
-                        }
-                    }
-                    else if (n.Attributes.GetNamedItem("type").Value == "samples")
-                    {
-                        moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value));
-                        moduły[n.Attributes.GetNamedItem("id").Value].sekw = new sampler();
-                        if (n.Attributes.GetNamedItem("volume") != null)
-                            (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
-                        foreach (XmlNode nn in n.ChildNodes)
-                        {
-                            if (nn.Name == "sample")
-                            {
-                                var sam = new sample();
-                                if (nn.Attributes.GetNamedItem("file") != null)
-                                    sam.plik = nn.Attributes.GetNamedItem("file").Value;
-                                if (nn.Attributes.GetNamedItem("note") != null)
-                                    sam.note = float.Parse(nn.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture);
-                                if (nn.Attributes.GetNamedItem("accept") != null)
-                                    sam.accept = float.Parse(nn.Attributes.GetNamedItem("accept").Value, CultureInfo.InvariantCulture);
-                                (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).sample.Add(sam);
-
-                            }
-                        }
-                    }
-
-                }
-                foreach (XmlNode n in xml.GetElementsByTagName("sound"))
-                {
-                    if (n.Attributes.GetNamedItem("type").Value == "syntezator-krawczyka")
-                    {
-                        foreach (XmlNode nn in n.ChildNodes)
-                        {
-                            if (nn.Name == "module")
-                            {
-
-                                if (nn.Attributes.GetNamedItem("output") != null)
-                                {
-                                    string[] exp = nn.Attributes.GetNamedItem("output").Value.Split(' ');
-                                    for (int az = 0; az < exp.Length; az++)
-                                    {
-                                        try
-                                        {
-                                            moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].wyjście[az].DrógiModół = moduły[n.Attributes.GetNamedItem("id").Value][exp[az]];
-                                            moduły[n.Attributes.GetNamedItem("id").Value][exp[az]].wejście.Add(new Typ(moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value]));
-                                        }
-                                        catch { }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-
-                }
+                dekoduj(xml.GetElementsByTagName("sound"));
                 var doSkopiowania = new List<object[]>();
                 foreach (XmlNode n in xml.GetElementsByTagName("track"))
                 {
@@ -318,7 +180,7 @@ namespace Syntezator_Krawczyka
                 for (var i = 0; i < granieLista.Count; i++)
                     granieLista[i].analizujIleNutMusiByć();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.ToString(), "Błąd przy przetwarzaniu pliku", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -347,6 +209,166 @@ namespace Syntezator_Krawczyka
                 System.IO.StreamWriter zapis = new System.IO.StreamWriter(dialog.FileName);
                 zapis.Write(xml.OuterXml);
                 zapis.Close();
+            }
+        }
+        public void zapisz(string path)
+        {
+            foreach (var x in moduły)
+            {
+                foreach (var y in x.Value)
+                {
+                    modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
+                }
+            }
+
+
+            System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
+            zapis.Write(xml.OuterXml);
+            zapis.Close();
+
+        }
+        public void dekoduj(XmlNodeList a)
+        {
+            foreach (XmlNode n in a)
+            {
+                if (n.Attributes.GetNamedItem("type").Value == "syntezator-krawczyka")
+                {
+                    moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value));
+                    foreach (XmlNode nn in n.ChildNodes)
+                    {
+                        if (nn.Name == "module")
+                        {
+                            switch (nn.Attributes.GetNamedItem("type").Value)
+                            {
+                                case "sekwencer":
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].sekw = new sekwencer();
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, moduły[n.Attributes.GetNamedItem("id").Value].sekw as sekwencer);
+                                    // moduły[n.Attributes.GetNamedItem("id").Value]["<sekwencer"] = moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value];
+                                    break;
+                                case "player":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new player());
+                                    moduły[n.Attributes.GetNamedItem("id").Value]["<player"] = moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value];
+                                    break;
+                                case "granie":
+                                    var gr = new granie();
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, gr);
+                                    // granieLista.Add(gr);
+                                    break;
+                                case "oscylator":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new oscylator());
+                                    break;
+                                case "flanger":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new flanger());
+                                    break;
+                                case "rozdzielacz":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new rozdzielacz());
+                                    break;
+                                case "mikser":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new mikser());
+                                    break;
+                                case "lfo":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new lfo());
+                                    break;
+                                case "zmianaWysokości":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new zmianaWysokości());
+                                    break;
+                                case "glosnosc":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new glosnosc());
+                                    break;
+                                case "poglos":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new pogłos());
+                                    break;
+                                case "cutoff":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new cutoff());
+                                    break;
+                                case "generatorObwiedniFiltru":
+
+
+                                    moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new generatorObwiedniFiltru());
+                                    break;
+                                default:
+                                    continue;
+                            }
+                            moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].XML = nn;
+                            if (moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].ustawienia == null)
+                            { }
+                            modułFunkcje.czytajXML(moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].ustawienia, nn);
+                        }
+                    }
+                }
+                else if (n.Attributes.GetNamedItem("type").Value == "samples")
+                {
+                    moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value));
+                    moduły[n.Attributes.GetNamedItem("id").Value].sekw = new sampler();
+                    if (n.Attributes.GetNamedItem("volume") != null)
+                        (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
+                    foreach (XmlNode nn in n.ChildNodes)
+                    {
+                        if (nn.Name == "sample")
+                        {
+                            var sam = new sample();
+                            if (nn.Attributes.GetNamedItem("file") != null)
+                                sam.plik = nn.Attributes.GetNamedItem("file").Value;
+                            if (nn.Attributes.GetNamedItem("note") != null)
+                                sam.note = float.Parse(nn.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture);
+                            if (nn.Attributes.GetNamedItem("accept") != null)
+                                sam.accept = float.Parse(nn.Attributes.GetNamedItem("accept").Value, CultureInfo.InvariantCulture);
+                            (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).sample.Add(sam);
+
+                        }
+                    }
+                }
+
+            }
+            foreach (XmlNode n in xml.GetElementsByTagName("sound"))
+            {
+                if (n.Attributes.GetNamedItem("type").Value == "syntezator-krawczyka")
+                {
+                    foreach (XmlNode nn in n.ChildNodes)
+                    {
+                        if (nn.Name == "module")
+                        {
+
+                            if (nn.Attributes.GetNamedItem("output") != null)
+                            {
+                                string[] exp = nn.Attributes.GetNamedItem("output").Value.Split(' ');
+                                for (int az = 0; az < exp.Length; az++)
+                                {
+                                    try
+                                    {
+                                        moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].wyjście[az].DrógiModół = moduły[n.Attributes.GetNamedItem("id").Value][exp[az]];
+                                        moduły[n.Attributes.GetNamedItem("id").Value][exp[az]].wejście.Add(new Typ(moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value]));
+                                    }
+                                    catch { }
+                                }
+                            }
+
+                        }
+                    }
+                }
+
             }
         }
     }

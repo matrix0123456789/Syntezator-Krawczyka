@@ -18,15 +18,18 @@ namespace Syntezator_Krawczyka
 {
     /// <summary>
     /// Interfejs graiczny dla
-    /// <seealso cref="KlawiaturaKomputera"/>
+    /// <see cref="KlawiaturaMidi"/>
     /// </summary>
-    public partial class KlawiaturaKomputeraUI : UserControl
+    public partial class KlawiaturaMidiUI : UserControl
     {
-        klawiaturaKomputera parent;
+        KlawiaturaMidi parent;
         Timer akttimer;
-        public KlawiaturaKomputeraUI(klawiaturaKomputera thi)
+        string nazwa;
+        public KlawiaturaMidiUI(KlawiaturaMidi thi, string nazwa)
         {
             parent = thi;
+            this.nazwa = nazwa;
+            label1.Content += nazwa;
             InitializeComponent();
             akttimer = new Timer((object o) => { MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate() { aktModuły(); ; }); }, null, 0, 1000);
 
