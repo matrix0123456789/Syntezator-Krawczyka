@@ -47,6 +47,12 @@ namespace Syntezator_Krawczyka
             //new Timer((object o) => { akt(); }, null, 0, 10);
         }
 
+        public KlawiaturaMidi()
+        {
+            UI = new KlawiaturaMidiUI(this, "Test");
+            
+        }
+
         private void wej_MessageReceived(object sender, NAudio.Midi.MidiInMessageEventArgs e)
         {
             switch (e.MidiEvent.CommandCode)
@@ -135,6 +141,13 @@ namespace Syntezator_Krawczyka
                     });
                 }
             }
+        }
+        public List<przedział> przedziały = new List<przedział>();
+        public class przedział
+        {
+            public int min;
+            public int max;
+            soundStart sekw;
         }
     }
 }

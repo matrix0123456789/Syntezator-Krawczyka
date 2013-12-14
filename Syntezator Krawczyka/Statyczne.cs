@@ -16,6 +16,7 @@ namespace Syntezator_Krawczyka
     {
         public static BufferedWaveProvider bufor=new BufferedWaveProvider(new WaveFormat((int)plik.Hz,1));
         public static WasapiOut WasapiWyjście = new WasapiOut(AudioClientShareMode.Shared, 100);
+        public static String[] nazwyDźwięków = { "C","C♯","D","D♯","E","F","F♯","G","G♯","A","B","H"};
         public Statyczne()
         {
 

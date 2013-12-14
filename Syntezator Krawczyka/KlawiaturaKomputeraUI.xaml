@@ -8,12 +8,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="#FF0081FF">
-        
-            <ComboBox ToolTip="Wybierz" Height="23" HorizontalAlignment="Left" Margin="0,25,0,0" Name="comboBox1" VerticalAlignment="Top" Width="127" SelectionChanged="comboBox1_SelectionChanged">
+        <ComboBox ToolTip="Wybierz" Height="23" HorizontalAlignment="Left" Margin="0,25,0,0" Name="comboBox1" VerticalAlignment="Top" Width="127" SelectionChanged="comboBox1_SelectionChanged">
             <ComboBoxItem>22</ComboBoxItem>
             <ComboBoxItem>22</ComboBoxItem>
             <ComboBoxItem>22</ComboBoxItem>
         </ComboBox>
         <Label Content="Klawiatura Komputera" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
-    </Grid>
+        </Grid>
 </UserControl>

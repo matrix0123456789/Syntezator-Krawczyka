@@ -19,6 +19,10 @@ namespace Syntezator_Krawczyka.Synteza
         public static Dictionary<long, gra> grają = new Dictionary<long, gra>();
         static bool jest = false;
         static public float[] wynik = null;
+        static public int graniePrzy = 0,granieMax=0,granieI=0;
+        static public bool graniePlay = false;
+        static public nuta[] granieNuty;
+        
         public UserControl UI
         {
             get { return _UI; }
@@ -191,7 +195,7 @@ namespace Syntezator_Krawczyka.Synteza
             if (o > 10000)
                 o = 10000;
             data = dataTeraz;
-            if (można && liczbaGenerowanych == 0&&klawiaturaKomputera.wszytskieNuty.Count>0)
+            if (można && liczbaGenerowanych == 0&&(klawiaturaKomputera.wszytskieNuty.Count>0||graniePlay))
                 lock (grają)
                 {
                     teraz = true;
@@ -234,8 +238,29 @@ namespace Syntezator_Krawczyka.Synteza
                                     grajRaz();
                             }, wszystNuty[i]);
                         }
+                            if(graniePlay)
+                            {
+                                graniePrzy+=o;
+                                while(granieNuty[granieI].opuznienie<=graniePrzy)
+                                {
+
+                                    lock (zmianaLiczGenLock) { liczbaGenerowanych++; }
+                                    System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
+                                    {
+                                        (Action as nuta).sekw.działaj((Action as nuta));
+                                        lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
+                                        if (liczbaGenerowanych == 0)
+
+                                            grajRaz();
+                                    }, granieNuty[granieI]);
+                                    granieI++;
+                                }
+                            }
                     }
                 }
+            if (liczbaGenerowanych == 0 || grają.Count > 0)
+
+                grajRaz();
         }
         public static void grajRaz()
         {

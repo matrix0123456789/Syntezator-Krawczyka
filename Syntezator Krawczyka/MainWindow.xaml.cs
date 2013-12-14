@@ -107,6 +107,12 @@ namespace Syntezator_Krawczyka
                     klawiatMidi.Add(k);
                     pokaz.Children.Add(k.UI);
                 }
+                if(debugowanie)
+                {
+                    var k = new KlawiaturaMidi();
+                    klawiatMidi.Add(k);
+                    pokaz.Children.Add(k.UI);
+                }
                     pokaz.Children.Add(klawiatkompa.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
@@ -180,6 +186,8 @@ namespace Syntezator_Krawczyka
                     {
                         if (debugowanie)
                             Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString() + "; " + ileDoGC.ToString();
+                        czas.Content = funkcje.sekundy(granie.graniePrzy) + '/' + funkcje.sekundy(granie.granieMax);
+                        
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
                         if (postęp.Value != 0)
@@ -247,11 +255,24 @@ namespace Syntezator_Krawczyka
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var x in Statyczne.otwartyplik.sciezki)
+            List<nuta> lista=new List<nuta>();
+            
+                foreach (var x in Statyczne.otwartyplik.sciezki)
+                {
+                    foreach (var nuta in x.nuty)
+                    {
+                        nuta.sekw = x.sekw;
+                        lista.Add(nuta);
+                    }
+                }
+            lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
+            granie.granieNuty=lista.ToArray();
+            granie.graniePlay = true;
+            /*foreach (var x in Statyczne.otwartyplik.sciezki)
             {
                 x.działaj();
                 //akt(null);
-            }
+            }*/
         }
 
         private void button7_Click(object sender, RoutedEventArgs e)

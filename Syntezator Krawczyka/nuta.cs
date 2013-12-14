@@ -100,7 +100,11 @@ namespace Syntezator_Krawczyka
 
        public string ToString()
        {
-           return generujOd.ToString() + "-" + generujDo.ToString() + "-" + długość.ToString();
+           return opuznienie.ToString();
        }
+        public static int sortuj(nuta a,nuta b)
+        {
+            return (int)(a.opuznienie - b.opuznienie);
+        }
     }
 }

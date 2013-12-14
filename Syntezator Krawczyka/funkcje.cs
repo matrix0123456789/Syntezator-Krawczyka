@@ -168,5 +168,29 @@ namespace Syntezator_Krawczyka
             }
             else return null;
         }
+
+        internal static string sekundy(int p)
+        {
+            string ret="";
+            var sek = (int)(p / plik.Hz);
+            var min = sek / 60;
+            sek = sek % 60;
+            var godz = min / 60;
+            min = min % 60;
+            if (godz > 9)
+                ret = godz.ToString() + ':';
+            else if (godz > 0)
+                ret = '0' + godz.ToString() + ':';
+            if (min > 9)
+                ret += min.ToString() + ':';
+            else
+                ret += '0' + min.ToString() + ':';
+            if (sek > 9)
+                ret += sek.ToString();
+            else
+                ret += '0' + sek.ToString();
+            return ret;
+
+        }
     }
 }

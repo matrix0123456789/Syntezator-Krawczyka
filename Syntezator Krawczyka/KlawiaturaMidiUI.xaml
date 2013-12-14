@@ -15,5 +15,7 @@
             <ComboBoxItem>22</ComboBoxItem>
         </ComboBox>
         <Label Content="Klawiatura MIDI" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
+        <Button Content="Dodaj przedział" ToolTip="Umożliwia wybranie innego instrumentu dla fragmętu klawiatury" HorizontalAlignment="Left" Margin="0,53,0,0" VerticalAlignment="Top" Width="127" Click="Button_Click"/>
+        <StackPanel Margin="0,78,0,0" Name="przedzialy"></StackPanel>
     </Grid>
 </UserControl>
