@@ -62,5 +62,7 @@ sekw.działaj(tabl);
             }
            }
         }
+
+        public int delay = 0;
     }
 }

@@ -22,7 +22,7 @@
         <ProgressBar Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,124,0,0" VerticalAlignment="Top" Width="92"/>
         <Slider HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
         <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="12,165,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Otwórz plik zawierający nuty"/>
-        <Slider Margin="192,17,75,0" VerticalAlignment="Top" Name="suwak"/>
-        <Label Content="0:00/0:00" Margin="0,12,12,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right" Width="59"/>
+        <Slider Margin="192,17,89,0" VerticalAlignment="Top" Name="suwak"/>
+        <Label Content="00:00/00:00" Margin="0,12,12,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

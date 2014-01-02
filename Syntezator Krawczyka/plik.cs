@@ -107,6 +107,8 @@ namespace Syntezator_Krawczyka
                     sciezki.Add(scie);
                     if (n.Attributes.GetNamedItem("id") != null)
                         scieżkiZId.Add(n.Attributes.GetNamedItem("id").Value, scie);
+                    if (n.Attributes.GetNamedItem("delay") != null)
+                        scie.delay = (int)(float.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)* plik.Hz * 60 / tempo);
                     if (n.Attributes.GetNamedItem("copy") != null)
                     {
                         var ob = new object[2];
@@ -120,7 +122,7 @@ namespace Syntezator_Krawczyka
                         {
                             try
                             {
-                                nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (long)(float.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo), (long)(float.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo));
+                                nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (long)(float.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo), (long)(float.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo)+scie.delay);
                                 scie.nuty.Add(nu);
                             }
                             catch { }
@@ -148,9 +150,9 @@ namespace Syntezator_Krawczyka
                         {
                             int delay;
                             if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
-                                delay = (int)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo);
+                                delay = (int)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
                             else
-                                delay = 0;
+                                delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
 
                             foreach (var x in scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].nuty)
                             {
