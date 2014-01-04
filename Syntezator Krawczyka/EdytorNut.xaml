@@ -1,9 +1,17 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.EdytorNut"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EdytorNut — Syntezator Krawczyka" Height="300" Width="300">
+        Title="EdytorNut — Syntezator Krawczyka" Height="445" Width="588">
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
-            <Grid Name="panel"></Grid></ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Margin="0,0,113,0">
+            <Grid Name="panel"></Grid>
+        </ScrollViewer>
+        <Label Content="czas" HorizontalAlignment="Right" Margin="0,0,81,0" VerticalAlignment="Top"/>
+
+        <Label Content="długość" HorizontalAlignment="Right" Margin="0,54,61,0" VerticalAlignment="Top"/>
+        <Label Content="wysokość" HorizontalAlignment="Right" Margin="0,107,53,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="0,26,10,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="czas"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="0,79,10,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="dlugosc"/>
+        <TextBox HorizontalAlignment="Right" Height="23" Margin="0,133,10,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="ton"/>
     </Grid>
 </Window>
