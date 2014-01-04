@@ -139,7 +139,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         static DateTime data;
         public static int liczbaGenerowanych = 0;
-        public static int liczbaGenerowanychMax = 1;
+        public static int liczbaGenerowanychMax = 0;
         public static object liczbaGenerowanychBlokada = new object();
         public static object obLock = new object();
         public static bool można = true;
