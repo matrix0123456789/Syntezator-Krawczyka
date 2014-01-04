@@ -198,12 +198,18 @@ namespace Syntezator_Krawczyka
                         postęp.Maximum = granie.liczbaGenerowanychMax;
                         if (postęp.Value != 0)
                         {
+                            postęp.Visibility = System.Windows.Visibility.Visible;
                             if (postęp.Value / (double)granie.liczbaGenerowanychMax<1)
                             pasekZadań.ProgressState = TaskbarItemProgressState.Normal;
                             else
                                 pasekZadań.ProgressState = TaskbarItemProgressState.None;
 
                             pasekZadań.ProgressValue = postęp.Value / (double)granie.liczbaGenerowanychMax;
+                        }
+                        else
+                        {
+                            pasekZadań.ProgressState = TaskbarItemProgressState.None;
+                            postęp.Visibility = System.Windows.Visibility.Collapsed;
                         }
                         foreach (var x in Statyczne.otwartyplik.sciezki)
                         {
@@ -283,6 +289,7 @@ namespace Syntezator_Krawczyka
 
         private void button7_Click(object sender, RoutedEventArgs e)
         {
+            granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
             granie.można = false;
             granie.grają.Clear();
             long długość = 0;
