@@ -74,6 +74,12 @@ namespace Syntezator_Krawczyka
                 {
                     zamknij = true;
                 }
+                else if (parametry[x] == "/f" || parametry[x] == "-f")
+                {
+                    x++;
+                    plik.Hz = float.Parse(parametry[x]);
+                    plik.kHz = plik.Hz / 1000;
+                }
                 else if (parametry[x] == "/gc" || parametry[x] == "-gc")
                 {
                     czyGC = true;
