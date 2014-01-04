@@ -46,7 +46,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public void działaj(nuta input)
         {
-            float[] jak = new float[input.dane.Length];
+            float[] jak;
             if (wyjście[0].DrógiModół != null && wyjście[1].DrógiModół != null)
             {
                 float aProcent, dProcent;
@@ -55,36 +55,45 @@ namespace Syntezator_Krawczyka.Synteza
                 var aMax = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture) * plik.kHz;
                 var dMax = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) * plik.kHz;
                 var rMax = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz;
-                var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
-                aProcent = 1;
-                long długośćCała = (int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
-                        
-                for (int i = 0; i < input.dane.Length; i++)
+                    var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
+                if (aMax == 0 && dMax == 0 & rMax == 0)
                 {
-                    if (długośćCała - i - input.generujOd > rMax)
-                        if (aMax > i + (int)input.generujOd)
-                            aProcent = (i + (int)input.generujOd) / aMax;
-                        else
-                            aProcent = 1;
-                    else
-                    {
-                        rProcent = (długośćCała - i - input.generujOd) / rMax;
-                        if (rProcent < 0)
-                            rProcent = 0;
-                        //aProcent = 1;
-                    }
-                    if (dMax > i + (int)input.generujOd)
-                    {
-                        dProcent = s + (dMax - i - (int)input.generujOd) / dMax * (1 - s);
-                    }
-                    else
-                        dProcent = s;
-                    jak[i] = aProcent * rProcent * dProcent;
+                    jak = new float[1];
+                    jak[0] = s;
+                }
+                else
+                {
+                    jak = new float[input.dane.Length];
+                    aProcent = 1;
+                    long długośćCała = (int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
 
+                    for (int i = 0; i < input.dane.Length; i++)
+                    {
+                        if (długośćCała - i - input.generujOd > rMax)
+                            if (aMax > i + (int)input.generujOd)
+                                aProcent = (i + (int)input.generujOd) / aMax;
+                            else
+                                aProcent = 1;
+                        else
+                        {
+                            rProcent = (długośćCała - i - input.generujOd) / rMax;
+                            if (rProcent < 0)
+                                rProcent = 0;
+                            //aProcent = 1;
+                        }
+                        if (dMax > i + (int)input.generujOd)
+                        {
+                            dProcent = s + (dMax - i - (int)input.generujOd) / dMax * (1 - s);
+                        }
+                        else
+                            dProcent = s;
+                        jak[i] = aProcent * rProcent * dProcent;
+
+                    }
                 }
                 wyjście[0].DrógiModół.działaj((wyjście[1].DrógiModół as filtr).działaj(input, jak));
             }
-            
+
         }
     }
 }

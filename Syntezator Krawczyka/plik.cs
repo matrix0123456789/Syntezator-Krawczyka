@@ -204,7 +204,7 @@ namespace Syntezator_Krawczyka
                 }
             }
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.Filter = "Plik XML|*.xml|Plik Syntezatora Krawczyka|*.synkra";
+            dialog.Filter = "Plik Syntezatora Krawczyka|*.synkra";
             dialog.ShowDialog();
             if (dialog.FileName != "")
             {
