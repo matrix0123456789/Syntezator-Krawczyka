@@ -198,12 +198,16 @@ namespace Syntezator_Krawczyka
                         postęp.Maximum = granie.liczbaGenerowanychMax;
                         if (postęp.Value != 0)
                         {
+                            if (postęp.Value / (double)granie.liczbaGenerowanychMax < 1)
+                            {
+                                pasekZadań.ProgressState = TaskbarItemProgressState.Normal;
                             postęp.Visibility = System.Windows.Visibility.Visible;
-                            if (postęp.Value / (double)granie.liczbaGenerowanychMax<1)
-                            pasekZadań.ProgressState = TaskbarItemProgressState.Normal;
+                            }
                             else
+                            {
                                 pasekZadań.ProgressState = TaskbarItemProgressState.None;
-
+                            postęp.Visibility = System.Windows.Visibility.Collapsed;
+                            }
                             pasekZadań.ProgressValue = postęp.Value / (double)granie.liczbaGenerowanychMax;
                         }
                         else
@@ -371,9 +375,8 @@ namespace Syntezator_Krawczyka
                 sound.Attributes.GetNamedItem("id").Value = id;
                 var klon=funkcje.klonujXML(Statyczne.otwartyplik.xml, sound);
                 Statyczne.otwartyplik.xml.GetElementsByTagName("file")[0].AppendChild(klon);
-                
 
-                Statyczne.otwartyplik.dekoduj(soundList);//poprawić na nową referencję
+                Statyczne.otwartyplik.dekoduj();//poprawić na nową referencję
             }
         }
     }

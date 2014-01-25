@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:a="clr-namespace:Syntezator_Krawczyka"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"  MouseMove="UserControl_MouseMove">
     <Grid Background="Purple">
         <Label VerticalAlignment="Top" HorizontalAlignment="Left" Margin="12,12,0,0">Głośność</Label>
-        <Slider Height="23" HorizontalAlignment="Left" Margin="12,32,0,0" Name="slider1" VerticalAlignment="Top"  Width="100" Maximum="1" ValueChanged="slider1_ValueChanged" />
-        <Slider Height="23" HorizontalAlignment="Left" Margin="12,84,0,0" Name="slider2" ToolTip="Przy jakiej głośności ucinać dźwięk" VerticalAlignment="Top" Width="100" Maximum="1" ValueChanged="slider2_ValueChanged" />
-        <CheckBox Content="Ucinanie dźwięku" HorizontalAlignment="Left" Margin="12,60,0,0" VerticalAlignment="Top" Checked="CheckBox_Unchecked" Unchecked="CheckBox_Unchecked"/>
+        <Slider Height="23" HorizontalAlignment="Left" Margin="10,32,0,0" Name="slider1" VerticalAlignment="Top"  Width="100" Maximum="1" ValueChanged="slider1_ValueChanged" />
+        <Slider Visibility="Collapsed" Height="23" HorizontalAlignment="Left" Margin="12,84,0,0" Name="slider2" ToolTip="Przy jakiej głośności ucinać dźwięk" VerticalAlignment="Top" Width="100" Maximum="1" ValueChanged="slider2_ValueChanged" />
+        <CheckBox Visibility="Collapsed" Content="Ucinanie dźwięku" HorizontalAlignment="Left" Margin="12,60,0,0" VerticalAlignment="Top" Checked="CheckBox_Unchecked" Unchecked="CheckBox_Unchecked"/>
         
     </Grid>
 </UserControl>

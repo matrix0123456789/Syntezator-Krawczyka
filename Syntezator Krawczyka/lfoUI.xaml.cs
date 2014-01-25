@@ -84,6 +84,21 @@ namespace Syntezator_Krawczyka.Synteza
             sliderB.Value = Math.Sqrt(double.Parse(parentNode.ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) / 150);
             sliderC.Value = double.Parse(parentNode.ustawienia["gladkosc"], CultureInfo.InvariantCulture);
             sliderD.Value = double.Parse(parentNode.ustawienia["kwantyzacja"], CultureInfo.InvariantCulture);
+            switch (parentNode.ustawienia["typ"])
+            {
+                case ("sinusoidalna"):
+                    sinusoidalny.IsChecked = true;
+                    break;
+                case ("trójkątna"):
+                    trójkątny.IsChecked = true;
+                    break;
+                case ("prostokątna"):
+                    prostokątny.IsChecked = true;
+                    break;
+                case ("piłokształtna"):
+                    piłokształtny.IsChecked = true;
+                    break;
+            }
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)

@@ -206,7 +206,7 @@ namespace Syntezator_Krawczyka.Synteza
                     {
                         wszystNuty = klawiaturaKomputera.wszytskieNuty.ToArray();
                     }
-                        liczbaGenerowanych += wszystNuty.Length;
+                        liczbaGenerowanych += wszystNuty.Length+1;
                         for (var i = 0; i < wszystNuty.Length; i++)
                         {
                             if (grają.ContainsKey(wszystNuty[i].id))
@@ -255,7 +255,10 @@ namespace Syntezator_Krawczyka.Synteza
                                     }, granieNuty[granieI]);
                                     granieI++;
                                 }
-                            }
+                            } lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
+                            if (liczbaGenerowanych == 0)
+
+                                grajRaz();
                     }
                 }
             if (liczbaGenerowanych == 0 || grają.Count > 0)
