@@ -33,10 +33,11 @@ namespace Syntezator_Krawczyka.Synteza
             _wyjście[0] = new Typ();
             wejście = new List<Typ>();
             _ustawienia = new Dictionary<string, string>();
-            _ustawienia.Add("czas", (0).ToString());
-            _ustawienia.Add("zmniejszenie", (0).ToString());
-            
-            _ustawienia.Add("glosnosc", (1).ToString());
+            _ustawienia.Add("czas", "0");
+            _ustawienia.Add("zmniejszenie", "0");
+
+            _ustawienia.Add("glosnosc", "1");
+            _ustawienia.Add("balans", "1");
             _UI = new pogłosUI(this);
         }
         public long symuluj(long wej)
@@ -70,7 +71,8 @@ namespace Syntezator_Krawczyka.Synteza
                         
                         long czasjest = 0;
                         var ix = 0;
-                        while (ilejest * zmniejszenie > 0.02)
+                        bool parzyste = false;
+                        while (ilejest * zmniejszenie > 0.01)
                         {
                             czasjest += czas;
                             ilejest *= zmniejszenie;
@@ -95,7 +97,14 @@ namespace Syntezator_Krawczyka.Synteza
                             for (int i = (int)inp.grajOd; max > i; i++)
                             {
                                 inp.dane[i] = input.dane[i] * ilejest;
-                            }}
+                            }
+                            } var Balans = float.Parse(_ustawienia["balans"], CultureInfo.InvariantCulture);
+                            if (parzyste)
+                                inp.balans1 *= (1 - Balans);
+                            else
+                                inp.balans0 *= (1 - Balans);
+
+                            parzyste = !parzyste;
                         wyjście[0].DrógiModół.działaj(inp);
                         }
                         wyjście[0].DrógiModół.działaj(input);

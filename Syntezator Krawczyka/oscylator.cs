@@ -36,7 +36,7 @@ namespace Syntezator_Krawczyka.Synteza
             _wyjście[1] = new Typ();
             _ustawienia = new Dictionary<string, string>();
             _ustawienia.Add("typ", "trójkątna");
-            _ustawienia.Add("ilefal", "1");
+            _ustawienia.Add("balans", "0");
             _ustawienia.Add("gladkosc", "1");
             _ustawienia.Add("A", "0");
             _ustawienia.Add("D", "0");
@@ -91,6 +91,12 @@ namespace Syntezator_Krawczyka.Synteza
 
             {
                 nuta n = input;
+
+                var Balans = float.Parse(_ustawienia["balans"], CultureInfo.InvariantCulture);
+                if (Balans < 0)
+                    input.balans1 *= (1 + Balans);
+                else
+                    input.balans0 *= (1  -Balans);
                 var A = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture);
                 var D = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture);
                 var S = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);

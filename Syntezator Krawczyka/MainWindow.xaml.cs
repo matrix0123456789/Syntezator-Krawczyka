@@ -315,7 +315,7 @@ namespace Syntezator_Krawczyka
                         długość = długośćTeraz;
                 }
             }
-            granie.wynik = new float[długość];
+            granie.wynik = new float[2,długość];
             foreach (var x in Statyczne.otwartyplik.sciezki)
             {
                 x.działaj();

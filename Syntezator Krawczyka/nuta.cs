@@ -54,6 +54,9 @@ namespace Syntezator_Krawczyka
        /// </summary>
        public long grajDo = 0;
        public float głośność = 1;
+       //głośność w prawym i lewym kanale
+       public float balans0 = 1;
+       public float balans1 = 1;
        public byte kopiaInnaId = 0;///<summary>Zawiera liczbę jaka jest dodawana do id np. przy pogłosie</summary>
        public soundStart sekw;
        public Dictionary<long, gra> grająLokalne;

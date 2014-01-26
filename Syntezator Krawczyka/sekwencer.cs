@@ -82,7 +82,8 @@ namespace Syntezator_Krawczyka.Synteza
                 {
                     var oktawy = float.Parse(_ustawienia["oktawy"], CultureInfo.InvariantCulture);
                     o.ilepróbek = o.ilepróbek / Math.Pow(2, oktawy);
-                    o.głośność = 1;
+                    o.głośność =o.balans0=o.balans1= 1;
+                    
                     wyjście[0].DrógiModół.działaj(o);
                 }
             }

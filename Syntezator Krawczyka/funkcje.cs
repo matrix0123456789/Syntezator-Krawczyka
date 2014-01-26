@@ -13,18 +13,18 @@ namespace Syntezator_Krawczyka
         //static byte[] puste2=null;
         static public bool graj(float[] fala, double głośność)
         {
-            var bufor=new byte[fala.Length*2];
+            var bufor = new byte[fala.Length * 2];
             for (var i = 0; i < fala.Length; i++)
             {
                 short liczba;
                 //if(fala[i]>=0)
-                    liczba = (short)(fala[i] * głośność * short.MaxValue);
+                liczba = (short)(fala[i] * głośność * short.MaxValue);
                 //else
-                    //liczba = (short)(fala[i] * głośność * -short.MaxValue);
-                bufor[2 * i+1] = (byte)Math.Floor(liczba / 256f);
+                //liczba = (short)(fala[i] * głośność * -short.MaxValue);
+                bufor[2 * i + 1] = (byte)Math.Floor(liczba / 256f);
                 bufor[2 * i] = (byte)(liczba % 256);
             }
-            bufordodaj:
+        bufordodaj:
             try
             {
                 Statyczne.bufor.AddSamples(bufor, 0, fala.Length * 2);
@@ -32,24 +32,38 @@ namespace Syntezator_Krawczyka
             catch (InvalidOperationException)
             {
                 Statyczne.bufor.ClearBuffer();
-            goto bufordodaj;
+                goto bufordodaj;
             }
 
             return false;
-            //var c = BassAsio.BASS_ASIO_GetDeviceInfos();
-            //Un4seen.BassAsio.BassAsio.BASS_ASIO_Init(0, BASSASIOInit.BASS_ASIO_THREAD);
 
-            //Microsoft.VisualBasic.Devices.Audio iss = new Microsoft.VisualBasic.Devices.Audio();
-            //iss.Play(wave(fala, głośność), Microsoft.VisualBasic.AudioPlayMode.Background);
-            /*
+
+        }
+        static public bool graj(float[,] fala)
+        {
+            var bufor = new byte[fala.Length * 2];
+            for (var i = 0; i < fala.Length/2; i++)
+            {
+                short liczba;
+                liczba = (short)(fala[0,i] * short.MaxValue);
+                bufor[4 * i + 1] = (byte)Math.Floor(liczba / 256f);
+                bufor[4 * i] = (byte)(liczba % 256);
+                liczba = (short)(fala[1,i] * short.MaxValue);
+                bufor[4 * i + 3] = (byte)Math.Floor(liczba / 256f);
+                bufor[4 * i+2] = (byte)(liczba % 256);
+            }
+        bufordodaj:
             try
             {
-                //string adr="C:\\Users\\Public\\Documents\\synteza\\wynik.wav";
-                //System.IO.StreamWriter sw = new System.IO.StreamWriter(adr, false);
-                //System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
-                //write.Write(puste);
+                Statyczne.bufor.AddSamples(bufor, 0, fala.Length * 2);
             }
-            catch { }*/
+            catch (InvalidOperationException)
+            {
+                Statyczne.bufor.ClearBuffer();
+                goto bufordodaj;
+            }
+
+            return false;
 
 
         }
@@ -59,11 +73,11 @@ namespace Syntezator_Krawczyka
         /// <param name="fala"></param>
         /// <param name="głośność"></param>
         /// <param name="plik">ścierzka do pliku</param>
-        static public void zapisz(float[] fala, double głośność, string plik)
+        static public void zapisz(float[,] fala, string plik)
         {
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
                 System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
-                var p = wave(fala, głośność);
+                var p = wave(fala);
                 write.Write(p);
 
 
@@ -74,21 +88,14 @@ namespace Syntezator_Krawczyka
         /// <param name="fala"></param>
         /// <param name="głośność"></param>
         /// <returns>Tablica odpowiadająca plikowi wave</returns>
-        static public byte[] wave(float[] fala, double głośność)
+        static public byte[] wave(float[] fala)
         {
-            /*System.IO.StreamReader sa = new System.IO.StreamReader("C:\\Users\\Public\\Documents\\sinusoida.wav");
-            System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
-            puste2 = read.ReadBytes((int)read.BaseStream.Length);*/
             char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
             byte[] puste = new byte[pus.Length + fala.Length * 2 - 2];
-            //byte[] puste = new byte[40000];
             for (int i = 0; i < pus.Length && i < puste.Length; i++)
             {
                 puste[i] = (byte)pus[i];
             }
-            //for (int iss = 0; iss < 10000; iss++)
-            //   sinus[rand.Next(1000, sinus.Length - 1)] = 20;
-            //sinus[rand.Next(sinus.Length - 1)] = (byte)rand.Next(255);
             byte[] rozmiar = BitConverter.GetBytes(puste.Length - 8);
             puste[4] = rozmiar[0];
             puste[5] = rozmiar[1];
@@ -106,7 +113,7 @@ namespace Syntezator_Krawczyka
             puste[25] = czestotliwosc[1];
             puste[26] = czestotliwosc[2];
             puste[27] = czestotliwosc[3];
-            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz*2);
+            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 4);
             puste[28] = czestotliwosc2[0];
             puste[29] = czestotliwosc2[1];
             puste[30] = czestotliwosc2[2];
@@ -115,15 +122,78 @@ namespace Syntezator_Krawczyka
             for (int z = pus.Length - 2; z < puste.Length && fala.LongLength > falai; z = z + 2)
             {
 
-                if (fala[falai] * głośność >= 1)
+                if (fala[falai] >= 1)
                     puste[z] = 127;
                 else if (fala[falai] >= 0)
-                    puste[z] = (byte)(fala[falai] * 127 * głośność);
-                else if (fala[falai] * głośność > -1)
-                    puste[z] = (byte)((1 + fala[falai] * głośność) * 127 + 128);
+                    puste[z] = (byte)(fala[falai] * 127);
+                else if (fala[falai] > -1)
+                    puste[z] = (byte)((1 + fala[falai]) * 127 + 128);
                 else
                     puste[z] = 128;
-                puste[z - 1] = (byte)((fala[falai] * głośność * 127 * 256) % 256);
+                puste[z - 1] = (byte)((fala[falai] * 127 * 256) % 256);
+                //puste[z + 1] = 0;
+                falai++;
+
+            }
+            return puste;
+        }
+        static public byte[] wave(float[,] fala)
+        {
+            char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
+            byte[] puste = new byte[pus.Length + fala.Length * 2 - 2];
+            for (int i = 0; i < pus.Length && i < puste.Length; i++)
+            {
+                puste[i] = (byte)pus[i];
+            }
+            byte[] rozmiar = BitConverter.GetBytes(puste.Length - 8);
+            puste[4] = rozmiar[0];
+            puste[5] = rozmiar[1];
+            puste[6] = rozmiar[2];
+            puste[7] = rozmiar[3];
+            byte[] rozmiar2 = BitConverter.GetBytes(fala.Length * 2);
+            puste[40] = rozmiar2[0];
+            puste[41] = rozmiar2[1];
+            puste[42] = rozmiar2[2];
+            puste[43] = rozmiar2[3];
+
+
+            byte[] czestotliwosc = BitConverter.GetBytes((int)plik.Hz);
+            puste[24] = czestotliwosc[0];
+            puste[25] = czestotliwosc[1];
+            puste[26] = czestotliwosc[2];
+            puste[27] = czestotliwosc[3];
+            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 2);
+            puste[28] = czestotliwosc2[0];
+            puste[29] = czestotliwosc2[1];
+            puste[30] = czestotliwosc2[2];
+            puste[31] = czestotliwosc2[3];
+
+
+
+            puste[23] = 2;
+            long falai = 0;
+            for (int z = pus.Length - 2; z < puste.Length && fala.LongLength/2 > falai; z = z + 4)
+            {
+
+                if (fala[0, falai] > 1)
+                    fala[0, falai] = 1;
+                else if (fala[0, falai] < -1)
+                    fala[0, falai] = -1;
+                if (fala[1, falai] > 1)
+                    fala[1, falai] = 1;
+                else if (fala[1, falai] < -1)
+                    fala[1, falai] = -1;
+
+                if (fala[0, falai] >= 0)
+                    puste[z-2] = (byte)(fala[0, falai] * 127);
+                else
+                    puste[z-2] = (byte)((1 + fala[0, falai]) * 127 + 128);
+                puste[z - 3] = (byte)((fala[0, falai] * 127 * 256) % 256);
+                if (fala[1, falai] >= 0)
+                    puste[z] = (byte)(fala[1, falai] * 127);
+                else
+                    puste[z] = (byte)((1 + fala[1, falai]) * 127 + 128);
+                puste[z - 1] = (byte)((fala[1, falai] * 127 * 256) % 256);
                 //puste[z + 1] = 0;
                 falai++;
 
