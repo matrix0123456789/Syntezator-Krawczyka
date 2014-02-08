@@ -4,7 +4,7 @@
         Title="Syntezator Krawczyka" Height="350" Width="525" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp" MinHeight="200" MinWidth="310">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="pasekZadań" >
-           
+
         </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
     <Grid>
@@ -16,11 +16,14 @@
         <Button Content="Czyść bufor" Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,0,0,131" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
         <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="109,12,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="button6_Click" />
         <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="150,12,0,0" Name="button8" VerticalAlignment="Top" Width="37" Click="button8_Click" />
-        <Slider Margin="192,17,89,0" VerticalAlignment="Top" Name="suwak"/>
+        <Slider Margin="192,17,193,0" VerticalAlignment="Top" Name="suwak"/>
         <Slider Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
-        <Label Content="00:00/00:00" Margin="0,12,12,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <Label Content="00:00/00:00" Margin="0,10,116,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <ScrollViewer Margin="109,68,12,12" CanContentScroll="True" VerticalScrollBarVisibility="Auto">
             <WrapPanel Name="pokaz" />
         </ScrollViewer>
+        <Grid Height="26" Margin="0,10,10,0" VerticalAlignment="Top" Background="#223" MouseDown="Grid_MouseEnter" HorizontalAlignment="Right" Width="101">
+            <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" >Zaloguj</Label>
+        </Grid>
     </Grid>
 </Window>

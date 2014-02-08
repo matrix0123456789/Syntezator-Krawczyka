@@ -39,7 +39,7 @@ namespace Syntezator_Krawczyka
         public sekwencer głównySekwencer;
         static public Dispatcher dispat;
         static public bool czyGC = false;
-
+        public static Logowanie oknoLogowanie = null;
         Thread aktualizacjaOkna;
         /// <summary>
         /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
@@ -378,6 +378,14 @@ namespace Syntezator_Krawczyka
 
                 Statyczne.otwartyplik.dekoduj();//poprawić na nową referencję
             }
+        }
+
+        private void Grid_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (oknoLogowanie == null)
+                oknoLogowanie = new Logowanie();
+            oknoLogowanie.Show();
+            oknoLogowanie.Activate();
         }
     }
 }

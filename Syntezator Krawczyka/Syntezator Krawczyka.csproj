@@ -119,6 +119,9 @@
     <Compile Include="KlawiaturaMidiUI.xaml.cs">
       <DependentUpon>KlawiaturaMidiUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logowanie.xaml.cs">
+      <DependentUpon>Logowanie.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MidiIn.cs" />
     <Compile Include="sample.cs" />
     <Compile Include="sampler.cs" />
@@ -205,6 +208,10 @@
     <Page Include="KlawiaturaMidiUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Logowanie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="suwak.xaml">
       <SubType>Designer</SubType>
