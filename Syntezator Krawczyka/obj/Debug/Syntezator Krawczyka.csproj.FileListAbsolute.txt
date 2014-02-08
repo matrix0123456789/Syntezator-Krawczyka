@@ -53,7 +53,6 @@ C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\S
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.pdb
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\Syntezator Krawczyka.exe
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\Syntezator Krawczyka.pdb
-C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.csprojResolveAssemblyReference.cache
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\EdytorFali.baml
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\EdytorNut.baml
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\suwak.baml
@@ -102,3 +101,4 @@ C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\S
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.csproj.GenerateResource.Cache
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Logowanie.baml
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Logowanie.g.cs
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.csprojResolveAssemblyReference.cache

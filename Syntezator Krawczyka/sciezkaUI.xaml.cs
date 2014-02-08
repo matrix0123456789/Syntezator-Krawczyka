@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using Syntezator_Krawczyka.Synteza;
+using System.Globalization;
 
 namespace Syntezator_Krawczyka
 {
@@ -27,6 +28,14 @@ namespace Syntezator_Krawczyka
         {
             parent = thi;
             InitializeComponent();
+            if(thi.kopia)
+            {
+                przyciskEdytuj.Visibility = Visibility.Collapsed;
+            }
+            if(thi.xml.Attributes.GetNamedItem("delay")!=null)
+            {
+                delay.Text=double.Parse(thi.xml.Attributes.GetNamedItem("delay").Value,CultureInfo.InvariantCulture).ToString();
+            }
             akttimer = new Timer((object o) => { MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate() { 
                 aktModuły();
                 nazwa.Content = "Ścieżka – "+parent.nazwa;

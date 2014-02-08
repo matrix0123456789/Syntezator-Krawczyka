@@ -6,10 +6,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="#FFB0FF79">
-        <ComboBox ToolTip="Wybierz na czym ma ta ścierzka być odegrana" Height="23" HorizontalAlignment="Left" Margin="0,23,0,0" Name="comboBox1" VerticalAlignment="Top" Width="120" SelectionChanged="comboBox1_SelectionChanged">
-            
+        <ComboBox ToolTip="Wybierz na czym ma ta ścierzka być odegrana" Height="23" HorizontalAlignment="Left" Margin="0,23,0,0" Name="comboBox1" VerticalAlignment="Top" Width="136" SelectionChanged="comboBox1_SelectionChanged">
+
         </ComboBox>
         <Label Content="Ścieżka" Height="28" HorizontalAlignment="Left" Name="nazwa" VerticalAlignment="Top" />
-        <Button Content="Edytuj" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Edytuj" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Name="przyciskEdytuj"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="75,51,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="61" Name="delay"/>
+        <Label Content="Przesunięcie" Height="28" HorizontalAlignment="Left" x:Name="nazwa_Copy" VerticalAlignment="Top" Margin="0,51,0,0" />
     </Grid>
 </UserControl>

@@ -101,21 +101,35 @@ namespace Syntezator_Krawczyka
                 var granieLista = new List<granie>();
                 dekoduj(xml.GetElementsByTagName("sound"));
                 var doSkopiowania = new List<object[]>();
+                int pusteID=0;
                 foreach (XmlNode n in xml.GetElementsByTagName("track"))
                 {
-                    sciezka scie = new sciezka(n.ChildNodes.Count.ToString());
+                    bool kopia=false;
+                    string id;
+                    if (n.Attributes.GetNamedItem("copy") != null)
+                    {
+                        kopia = true;
+                        id = n.Attributes.GetNamedItem("copy").Value;
+                    }
+                    else if (n.Attributes.GetNamedItem("id") == null)
+                    {
+                        id = "track" + (pusteID++);
+                    }
+                    else
+                        id = n.Attributes.GetNamedItem("id").Value;
+                    sciezka scie = new sciezka(id,n, kopia);
                     sciezki.Add(scie);
-                    if (n.Attributes.GetNamedItem("id") != null)
-                        scieżkiZId.Add(n.Attributes.GetNamedItem("id").Value, scie);
                     if (n.Attributes.GetNamedItem("delay") != null)
                         scie.delay = (int)(float.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)* plik.Hz * 60 / tempo);
-                    if (n.Attributes.GetNamedItem("copy") != null)
+                    if (kopia)
                     {
                         var ob = new object[2];
                         ob[0] = scie;
                         ob[1] = n;
                         doSkopiowania.Add(ob);
                     }
+                    else
+                        scieżkiZId.Add(id, scie);
                     foreach (XmlNode nutax in n.ChildNodes)
                     {
                         if (nutax.Name == "nute")
@@ -148,6 +162,7 @@ namespace Syntezator_Krawczyka
                     if ((n[1] as XmlElement).Attributes.GetNamedItem("copy") != null)
                         if (scieżkiZId.ContainsKey((n[1] as XmlElement).Attributes.GetNamedItem("copy").Value))
                         {
+                            (n[0] as sciezka).kopia = true;
                             int delay;
                             if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
                                 delay = (int)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;

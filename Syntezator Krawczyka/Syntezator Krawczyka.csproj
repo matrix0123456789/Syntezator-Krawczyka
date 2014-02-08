@@ -105,6 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BladWPliku.cs" />
     <Compile Include="EdytorFali.xaml.cs">
       <DependentUpon>EdytorFali.xaml</DependentUpon>
     </Compile>
