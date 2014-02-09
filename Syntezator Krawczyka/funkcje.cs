@@ -118,6 +118,7 @@ namespace Syntezator_Krawczyka
             puste[29] = czestotliwosc2[1];
             puste[30] = czestotliwosc2[2];
             puste[31] = czestotliwosc2[3];
+            puste[32] = 4;
             long falai = 0;
             for (int z = pus.Length - 2; z < puste.Length && fala.LongLength > falai; z = z + 2)
             {
@@ -162,11 +163,12 @@ namespace Syntezator_Krawczyka
             puste[25] = czestotliwosc[1];
             puste[26] = czestotliwosc[2];
             puste[27] = czestotliwosc[3];
-            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 2);
+            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 4);
             puste[28] = czestotliwosc2[0];
             puste[29] = czestotliwosc2[1];
             puste[30] = czestotliwosc2[2];
             puste[31] = czestotliwosc2[3];
+            puste[32] = 4;
 
 
 

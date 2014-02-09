@@ -101,4 +101,3 @@ C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\S
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.csproj.GenerateResource.Cache
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Logowanie.baml
 C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Logowanie.g.cs
-C:\Users\Mateusz\Documents\Syntezator Krawczyka\Syntezator Krawczyka\obj\Debug\Syntezator Krawczyka.csprojResolveAssemblyReference.cache

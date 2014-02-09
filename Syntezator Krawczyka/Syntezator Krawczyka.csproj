@@ -124,6 +124,7 @@
       <DependentUpon>Logowanie.xaml</DependentUpon>
     </Compile>
     <Compile Include="MidiIn.cs" />
+    <Compile Include="PolaczenieHTTP.cs" />
     <Compile Include="sample.cs" />
     <Compile Include="sampler.cs" />
     <Compile Include="sound.cs" />

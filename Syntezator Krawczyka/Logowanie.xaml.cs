@@ -27,5 +27,10 @@ namespace Syntezator_Krawczyka
         {
             MainWindow.oknoLogowanie = null;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Statyczne.serwer.loguj(login.Text, haslo.Content.ToString());
+        }
     }
 }

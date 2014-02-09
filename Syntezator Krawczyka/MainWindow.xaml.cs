@@ -387,5 +387,6 @@ namespace Syntezator_Krawczyka
             oknoLogowanie.Show();
             oknoLogowanie.Activate();
         }
+
     }
 }
