@@ -174,7 +174,7 @@ namespace Syntezator_Krawczyka
 
             puste[22] = 2;
             long falai = 0;
-            for (int z = pus.Length - 2; z < puste.Length && fala.LongLength/2 > falai; z = z + 4)
+            for (int z = pus.Length + 2; z < puste.Length && fala.LongLength/2 > falai; z = z + 4)
             {
 
                 if (fala[0, falai] > 1)
