@@ -48,7 +48,7 @@ namespace Syntezator_Krawczyka.Synteza
         public void działaj(nuta input)
         {
             float[] jak;
-            if (wyjście[0].DrógiModół != null && wyjście[1].DrógiModół != null)
+            if (wyjście[0].DrógiModół != null)
             {
                 float aProcent, dProcent;
                 float rProcent = 1;
@@ -64,11 +64,17 @@ namespace Syntezator_Krawczyka.Synteza
                 }
                 else
                 {
+                    if (input.dane == null)
+                    {
+                        jak = new float[input.długość+(int)rMax];
+                    
+                    }
+                    else
                     jak = new float[input.dane.Length];
                     aProcent = 1;
                     long długośćCała = (int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
 
-                    for (int i = 0; i < input.dane.Length; i++)
+                    for (int i = 0; i < jak.Length; i++)
                     {
                         if (długośćCała - i - input.generujOd > rMax)
                             if (aMax > i + (int)input.generujOd)
@@ -92,7 +98,17 @@ namespace Syntezator_Krawczyka.Synteza
 
                     }
                 }
-                wyjście[0].DrógiModół.działaj((wyjście[1].DrógiModół as filtr).działaj(input, jak));
+
+                if (wyjście[0].DrógiModół != null)
+                {
+                    if (wyjście[1].DrógiModół != null)
+                        wyjście[0].DrógiModół.działaj(((filtr)wyjście[1].DrógiModół).działaj(input, jak));
+                    else if (wyjście[0].DrógiModół.GetType() == typeof(oscylator))
+                    {
+                        (wyjście[0].DrógiModół as oscylator).działaj(input, jak);
+
+                    }
+                }
             }
 
         }
