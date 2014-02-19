@@ -17,9 +17,20 @@ namespace Syntezator_Krawczyka
         {
             System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
             {
-
-                WebClient polaczenie = new WebClient();
-                string kody=polaczenie.DownloadString("http://syntezator.aq.pl/json.php");
+                byte licz=0;
+                start:
+                try
+                {
+                    WebClient polaczenie = new WebClient();
+                    string kody = polaczenie.DownloadString("http://syntezator.aq.pl/json.php");
+                }catch(System.Net.WebException e)
+                {
+                    if (licz++ > 3)
+                    {
+                        Thread.Sleep(6000);
+                        goto start;
+                    }
+                }
             }, null);
         }
 

@@ -42,6 +42,8 @@ namespace Syntezator_Krawczyka
 
 
         long symuluj(long p);
+
+        void akt();
     }
     public static class modułFunkcje
     {

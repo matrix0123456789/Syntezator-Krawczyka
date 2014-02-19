@@ -23,6 +23,7 @@ namespace Syntezator_Krawczyka.Synteza
         static public bool graniePlay = false;
         static public nuta[] granieNuty;
 
+        public void akt() { }
         public UserControl UI
         {
             get { return _UI; }

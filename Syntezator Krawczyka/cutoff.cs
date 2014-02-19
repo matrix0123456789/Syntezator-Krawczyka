@@ -32,6 +32,8 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _ustawienia; }
         }
         Dictionary<string, string> _ustawienia;
+        private float moc;
+        private float gladkosc;
         public cutoff()
         {
             wejście = new List<Typ>();
@@ -43,13 +45,17 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("przesuniecie", (0).ToString());
             _UI = new cutoffUI(this);
         }
+        public void akt()
+        {
+            
+                moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
+                gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
+        }
         public void działaj(nuta input)
         {
 
             if (input.dane.Length > 0)
             {
-                var moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
-                var gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
                 input.dane[0] = moc * input.dane[0];
                 if (gladkosc == 0f)
                 {
@@ -90,7 +96,6 @@ namespace Syntezator_Krawczyka.Synteza
 
             if(jak.Length>0&&input.dane.Length>0)
             {
-                var moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
             input.dane[0] = moc * jak[0] * input.dane[0];
             var iJak = input.generujOd % jak.Length;
             for (var i = 1; i < input.dane.Length; i++)

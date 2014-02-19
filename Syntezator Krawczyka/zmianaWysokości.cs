@@ -15,6 +15,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
+        public void akt() { }
         public long symuluj(long p)
         {
             return wyjście[0].DrógiModół.symuluj(p);

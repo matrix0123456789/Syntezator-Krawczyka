@@ -30,10 +30,12 @@ namespace Syntezator_Krawczyka.Synteza
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["moc"] = (sliderA.Value * 5).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["gladkosc"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
             
         }
         void ustawSuwaki()
@@ -46,6 +48,7 @@ namespace Syntezator_Krawczyka.Synteza
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
             ustawSuwaki();
+            parentNode.akt();
         }
     }
 }

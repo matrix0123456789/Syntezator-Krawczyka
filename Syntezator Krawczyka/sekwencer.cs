@@ -12,6 +12,7 @@ namespace Syntezator_Krawczyka.Synteza
     public class sekwencer : moduł, soundStart
     {
         public XmlNode XML { get; set; }
+        public void akt() { }
         public UserControl UI
         {
             get { return _UI; }

@@ -15,6 +15,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
+        public void akt() { }
         UserControl _UI;
         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
