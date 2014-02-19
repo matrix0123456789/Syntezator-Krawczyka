@@ -21,10 +21,10 @@ namespace Syntezator_Krawczyka
     public partial class EdytorNut : Window
     {
         sciezka main;
-                const double skalaX = 20;
-                const double skalaY = 20;
-                double tonMax;
-                double tonMin;
+        const double skalaX = 20;
+        const double skalaY = 20;
+        double tonMax;
+        double tonMin;
         public EdytorNut(sciezka input)
         {
             InitializeComponent();
@@ -45,11 +45,11 @@ namespace Syntezator_Krawczyka
                     }
                 }
                 // double tonMin=funkcje.ton(ilepróbekMin)-funkcje.ton(ilepróbekMax)
-                tonMin = funkcje.ton(ilepróbekMin)+1;
-                tonMax = funkcje.ton(ilepróbekMax)-1;
+                tonMin = funkcje.ton(ilepróbekMin) + 1;
+                tonMax = funkcje.ton(ilepróbekMax) - 1;
                 for (var i = tonMin; i >= tonMax; i = i - .5)
                 {
-                    var tonTeraz = Math.Round((i+600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
+                    var tonTeraz = Math.Round((i + 600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
                     if (tonTeraz == .5 || tonTeraz == 1.5 || tonTeraz == 3 || tonTeraz == 4 || tonTeraz == 5)
                     {
                         var prostokat = new Rectangle();
@@ -59,7 +59,8 @@ namespace Syntezator_Krawczyka
                         prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
                         prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                         panel.Children.Add(prostokat);
-                    } else if (tonTeraz == 0)//oktawa
+                    }
+                    else if (tonTeraz == 0)//oktawa
                     {
                         var prostokat = new Rectangle();
                         prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
@@ -70,7 +71,7 @@ namespace Syntezator_Krawczyka
                         panel.Children.Add(prostokat);
                     }
                 }
-                for(int i=0;i<input.nuty.Count;i++)
+                for (int i = 0; i < input.nuty.Count; i++)
                 {
                     var prostokat = new Rectangle();
                     prostokat.Margin = new Thickness((plik.tempo * (input.nuty[i].opuznienie - input.delay) / (60 * plik.Hz) * skalaX), (tonMin - funkcje.ton(input.nuty[i].ilepróbekNaStarcie)) * skalaY, 0, 0);
@@ -80,7 +81,7 @@ namespace Syntezator_Krawczyka
                     prostokat.Fill = Brushes.Red;
                     prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
                     prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                    prostokat.Tag = new nutaXml(input.nuty[i],input.xml.ChildNodes[i]);
+                    prostokat.Tag = new nutaXml(input.nuty[i], input.xml.ChildNodes[i]);
                     prostokat.MouseDown += prostokat_MouseClick;
                     panel.Children.Add(prostokat);
                 }
@@ -97,8 +98,30 @@ namespace Syntezator_Krawczyka
             czas.IsEnabled = dlugosc.IsEnabled = ton.IsEnabled = true;
             aktywna.Stroke = Brushes.Green;
 
-            czas.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture).ToString();
-            dlugosc.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture).ToString();
+            try
+            {
+                czas.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture).ToString();
+            }
+            catch (NullReferenceException)
+            {
+                czas.Text = "0";
+            }
+            try
+            {
+                dlugosc.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture).ToString();
+            }
+            catch (NullReferenceException)
+            {
+                dlugosc.Text = "0";
+            }
+            try
+            {
+                ton.Text = (double.Parse(nuta.xml.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture) + 6 * double.Parse(nuta.xml.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture)).ToString();
+            }
+            catch (NullReferenceException)
+            {
+                ton.Text = "0";
+            }
         }
 
         public Rectangle aktywna { get; set; }
@@ -152,6 +175,64 @@ namespace Syntezator_Krawczyka
                 nuta = a;
                 xml = b;
             }
+        }
+
+        private void ton_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            if (aktywna != null)
+            {
+                try
+                {
+                    var n = (nutaXml)aktywna.Tag;
+                    var cz = double.Parse(ton.Text);
+                    var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+                    atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
+                    n.xml.Attributes.SetNamedItem(atrybut);
+                    var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("octave");
+                    atrybut2.Value = "0";
+                    n.xml.Attributes.SetNamedItem(atrybut2);
+                    aktywna.Margin = new Thickness(aktywna.Margin.Left, (tonMin - cz) * skalaY, 0, 0);
+                    (sender as TextBox).Background = Brushes.White;
+                }
+                catch (FormatException)
+                {
+                    (sender as TextBox).Background = Brushes.Red;
+                }
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var nuta = new nuta(funkcje.częstotliwość(0, 0), (long)plik.Hz * 60 / (long)plik.tempo, main.delay);
+            var nutaXML = Statyczne.otwartyplik.xml.CreateElement("nute");
+
+            var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+            atrybut.Value = "0";
+            nutaXML.Attributes.SetNamedItem(atrybut);
+            var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("octave");
+            atrybut2.Value = "0";
+            nutaXML.Attributes.SetNamedItem(atrybut2);
+            var atrybut3 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+            atrybut3.Value = "0";
+            nutaXML.Attributes.SetNamedItem(atrybut3);
+            var atrybut4 = Statyczne.otwartyplik.xml.CreateAttribute("duration");
+            atrybut4.Value = "1";
+            nutaXML.Attributes.SetNamedItem(atrybut4);
+
+            main.xml.AppendChild(nutaXML);
+            var prostokat = new Rectangle();
+            prostokat.Margin = new Thickness(0, (tonMin) * skalaY, 0, 0);
+
+            prostokat.Width = skalaX;
+            prostokat.Height = (skalaY / 2);
+            prostokat.Fill = Brushes.Red;
+            prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            prostokat.Tag = new nutaXml(nuta, nutaXML);
+            prostokat.MouseDown += prostokat_MouseClick;
+            panel.Children.Add(prostokat);
+            prostokat_MouseClick(prostokat, null);
         }
     }
 }

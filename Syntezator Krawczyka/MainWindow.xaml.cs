@@ -379,7 +379,10 @@ namespace Syntezator_Krawczyka
                 Statyczne.otwartyplik.dekoduj();//poprawić na nową referencję
             }
         }
-
+        private void buttonNowaScierzka_Click(object sender, RoutedEventArgs e)
+        {
+            Statyczne.otwartyplik.nowaScierzka();
+        }
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
             if (oknoLogowanie == null)

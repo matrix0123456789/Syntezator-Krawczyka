@@ -18,6 +18,7 @@ namespace Syntezator_Krawczyka
         public Dictionary<string, sciezka> scieżkiZId = new Dictionary<string, sciezka>();
         public static float tempo = 120;
         public static float kHz = 48f;
+        int pusteID = 0;
         public static float Hz = kHz * 1000;
         public plik(string a)
         {
@@ -101,7 +102,6 @@ namespace Syntezator_Krawczyka
                 var granieLista = new List<granie>();
                 dekoduj(xml.GetElementsByTagName("sound"));
                 var doSkopiowania = new List<object[]>();
-                int pusteID=0;
                 foreach (XmlNode n in xml.GetElementsByTagName("track"))
                 {
                     bool kopia=false;
@@ -405,6 +405,18 @@ namespace Syntezator_Krawczyka
                     }
                 }
             }
+        }
+
+        internal void nowaScierzka()
+        {
+            var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
+            var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("duration");
+            atrybut1.Value = "track" + (pusteID++);
+            scierzkaXML.Attributes.SetNamedItem(atrybut1);
+            var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+            atrybut2.Value = "0";
+            scierzkaXML.Attributes.SetNamedItem(atrybut2);
+            Statyczne.otwartyplik.xml.DocumentElement.AppendChild(scierzkaXML);
         }
     }
 }

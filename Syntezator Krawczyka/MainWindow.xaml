@@ -11,7 +11,7 @@
         <Button Content="Otwórz plik"  Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button3" VerticalAlignment="Top" Width="92" Click="button3_Click" ToolTip="Otwórz plik zawierający nuty"></Button>
         <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
         <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" />
-        <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="12,96,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Otwórz plik zawierający nuty"/>
+        <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="12,96,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Dodaj wirtualny instrument"/>
         <ProgressBar Visibility="Hidden" Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,124,0,0" VerticalAlignment="Top" Width="92"/>
         <Button Content="Czyść bufor" Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,0,0,131" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
         <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="109,12,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="button6_Click" />
@@ -25,5 +25,6 @@
         <Grid Height="26" Margin="0,10,10,0" VerticalAlignment="Top" Background="#223" MouseDown="Grid_MouseEnter" HorizontalAlignment="Right" Width="101">
             <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" >Zaloguj</Label>
         </Grid>
+        <Button Content="Dodaj ścierzkę"  Height="23" HorizontalAlignment="Left" Margin="12,125,0,0" x:Name="buttonNowaScierzka" VerticalAlignment="Top" Width="92" Click="buttonNowaScierzka_Click" ToolTip="Dodaj scierzkę z nutami"/>
     </Grid>
 </Window>
