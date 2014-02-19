@@ -24,6 +24,7 @@ namespace Syntezator_Krawczyka
     {
         sciezka parent;
         Timer akttimer;
+        Boolean gotowe = false;
         public sciezkaUI(sciezka thi)
         {
             parent = thi;
@@ -36,6 +37,7 @@ namespace Syntezator_Krawczyka
             {
                 delay.Text=double.Parse(thi.xml.Attributes.GetNamedItem("delay").Value,CultureInfo.InvariantCulture).ToString();
             }
+            gotowe = true;
             akttimer = new Timer((object o) => { MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate() { 
                 aktModuły();
                 nazwa.Content = "Ścieżka – "+parent.nazwa;
@@ -82,6 +84,20 @@ namespace Syntezator_Krawczyka
         {
             var okno = new EdytorNut(parent);
             okno.Show();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Statyczne.otwartyplik.duplikujScierzke(parent);
+        }
+
+        private void delay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (gotowe)
+            {
+                parent.xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
+                parent.delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
+            }
         }
     }
 }

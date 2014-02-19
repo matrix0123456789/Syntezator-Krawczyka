@@ -410,13 +410,31 @@ namespace Syntezator_Krawczyka
         internal void nowaScierzka()
         {
             var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
-            var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("duration");
-            atrybut1.Value = "track" + (pusteID++);
+            var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("id");
+            var id = atrybut1.Value = "track" + (pusteID++);
             scierzkaXML.Attributes.SetNamedItem(atrybut1);
             var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
             atrybut2.Value = "0";
             scierzkaXML.Attributes.SetNamedItem(atrybut2);
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(scierzkaXML);
+
+            sciezka scie = new sciezka(id, scierzkaXML, false);
+            sciezki.Add(scie);
+            scieżkiZId.Add(id, scie);
+        }
+        internal void duplikujScierzke(sciezka org)
+        {
+            var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
+            var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("copy");
+            var id = atrybut1.Value = org.nazwa;
+            scierzkaXML.Attributes.SetNamedItem(atrybut1);
+            var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+            atrybut2.Value = "0";
+            scierzkaXML.Attributes.SetNamedItem(atrybut2);
+            Statyczne.otwartyplik.xml.DocumentElement.AppendChild(scierzkaXML);
+
+            sciezka scie = new sciezka(id, scierzkaXML, true);
+            sciezki.Add(scie);
         }
     }
 }
