@@ -31,49 +31,58 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             parentNode.ustawienia["typ"] = "sinusoidalna";
+            parentNode.akt();
         }
 
         private void trójkątny_Checked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["typ"] = "trójkątna";
+            parentNode.akt();
         }
 
         private void prostokątny_Checked(object sender, RoutedEventArgs e)
         {
 
             parentNode.ustawienia["typ"] = "prostokątna";
+            parentNode.akt();
         }
 
         private void piłokształtny_Checked(object sender, RoutedEventArgs e)
         {
 
             parentNode.ustawienia["typ"] = "piłokształtna";
+            parentNode.akt();
         }
 
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
 
             parentNode.ustawienia["gladkosc"] = slider1.Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         private void sliderA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["A"] = (sliderA.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         private void sliderD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["D"] = (sliderD.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         private void sliderS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["S"] = sliderS.Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         private void sliderR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["R"] = (sliderR.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
         void ustawSuwaki()
         {
@@ -102,6 +111,7 @@ namespace Syntezator_Krawczyka.Synteza
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
             ustawSuwaki();
+            parentNode.akt();
         }
         private void radioButton1_Checked(object sender, RoutedEventArgs e)
         {

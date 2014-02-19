@@ -27,7 +27,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         Dictionary<string, string> _ustawienia;
         public XmlNode XML { get; set; }
-        enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna }
+        public enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna }
         public oscylator()
         {
             wejście = new List<Typ>();
@@ -42,44 +42,59 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("D", "0");
             _ustawienia.Add("S", "0.2");
             _ustawienia.Add("R", "0");
+            akt();
             _UI = new oscylatorUI(this);
+        }
+        public void akt()
+        {
+
+            Balans = float.Parse(_ustawienia["balans"], CultureInfo.InvariantCulture);
+            A = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture);
+            D = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture);
+            S = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
+            R = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture);
+            gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
+            switch (_ustawienia["typ"])
+            {
+                case "trójkątna":
+                    typ = typFali.trójkątna;
+                    break;
+                case "sinusoidalna":
+                    typ = typFali.sinusoidalna;
+                    break;
+                case "piłokształtna":
+                    typ = typFali.piłokształtna;
+                    break;
+                case "prostokątna":
+                    typ = typFali.prostokątka;
+                    break;
+        }
         }
         /// <summary>
         /// Zawiera wynik funkcji generujJedenPrzebieg zapisany w celu optymalizacji
         /// </summary>
         Dictionary<long, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<long, float[]>();
-        public static float[] generujJedenPrzebiegStatyczny(string typ, long ilePróbek, float gladkość)
+        public static float[] generujJedenPrzebiegStatyczny(typFali typ, long ilePróbek, float gladkość)
         {
-
-            float[] jedenPrzebieg;
-            if (typ == "trójkątna")
-                jedenPrzebieg = trójkątna((float)ilePróbek, ilePróbek);
-            else if (typ == "prostokątna")
-                jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
-            else if (typ == "sinusoidalna")
-                jedenPrzebieg = sinusoidalna((float)ilePróbek, ilePróbek);
-            else if (typ == "piłokształtna2x")
-                jedenPrzebieg = piłokształtna2x((float)ilePróbek, ilePróbek, 1, gladkość);
-            else if (typ == "piłokształtna")
-                jedenPrzebieg = piłokształtna((float)ilePróbek, ilePróbek, 1, gladkość);
-            else
-                jedenPrzebieg = prostokątna((float)ilePróbek, ilePróbek, gladkość);
-            //zapisanePojedyńczePrzebiegi.Add(typ + ilePróbek.ToString() + ' ' + gladkość.ToString(), jedenPrzebieg);
-            return jedenPrzebieg;
-
-        }
-        public float[] generujJedenPrzebieg(string typ, long ilePróbek, float gladkość)
-        {
-            /*if (zapisanePojedyńczePrzebiegi.ContainsKey(ilePróbek))
+            switch (typ)
             {
-                return zapisanePojedyńczePrzebiegi[ilePróbek];
+                case typFali.sinusoidalna:
+                    return sinusoidalna((float)ilePróbek, ilePróbek);
+                    break;
+                case typFali.trójkątna:
+                    return trójkątna((float)ilePróbek, ilePróbek);
+                    break;
+                case typFali.piłokształtna:
+                    return piłokształtna((float)ilePróbek, ilePróbek, gladkość);
+                    break;
+                case typFali.prostokątka:
+                    return prostokątna((float)ilePróbek, ilePróbek, gladkość);
+                    break;
+                default:
+                    return null;
+                    break;
             }
-            else
-            {*/
-            float[] jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, ilePróbek, gladkość);
-            // zapisanePojedyńczePrzebiegi.Add(ilePróbek, jedenPrzebieg);
-            return jedenPrzebieg;
-            // }
+
         }
 
         public long symuluj(long p)
@@ -90,41 +105,34 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             {
-                nuta n = input;
 
-                var Balans = float.Parse(_ustawienia["balans"], CultureInfo.InvariantCulture);
                 if (Balans < 0)
                     input.balans1 *= (1 + Balans);
                 else
                     input.balans0 *= (1  -Balans);
-                var A = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture);
-                var D = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture);
-                var S = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
-                var R = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture);
-                var gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
                 {
-                    lock (n)
+                    lock (input)
                     {
-                        n.ilepróbek = Math.Floor(n.ilepróbek);
-                        n.długość = (long)(Math.Floor(n.długość / n.ilepróbek) * n.ilepróbek);
+                        input.ilepróbek = Math.Floor(input.ilepróbek);
+                        input.długość = (long)(Math.Floor(input.długość / input.ilepróbek) * input.ilepróbek);
                         if (wyjście[0].DrógiModół != null && (D != 0 || S != 0))
                         {
                             object[] wy = new object[2];
-                            float[] jedenPrzebieg = generujJedenPrzebieg(_ustawienia["typ"], (long)Math.Floor(n.ilepróbek), gladkosc);
-                            long długośćCała = (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz);
-                            if (n.długość + R * plik.kHz - n.generujOd > 0)
+                            float[] jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
+                            long długośćCała = (long)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz);
+                            if (input.długość + R * plik.kHz - input.generujOd > 0)
                             {
-                                if (n.generujDo < 0)
-                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz)];
-                                else if (n.generujDo - n.generujOd < (int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz))
-                                    n.dane = new float[n.generujDo - n.generujOd];
+                                if (input.generujDo < 0)
+                                    input.dane = new float[(int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz)];
+                                else if (input.generujDo - input.generujOd < (int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz))
+                                    input.dane = new float[input.generujDo - input.generujOd];
                                 else
-                                    n.dane = new float[(int)(Math.Floor((n.długość) / n.ilepróbek) * n.ilepróbek + R * plik.kHz)];
+                                    input.dane = new float[(int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz)];
 
 
                             }
                             else
-                                n.dane = new float[0];//koniec wykonywania
+                                input.dane = new float[0];//koniec wykonywania
                             float aProcent, dProcent;
                             float rProcent = 1;
                             aProcent = 0;
@@ -133,20 +141,21 @@ namespace Syntezator_Krawczyka.Synteza
                             var rMax = R * plik.kHz;
                             var s = S;
                             aProcent = 1;
-                            var Max1 = długośćCała - n.generujOd - rMax;
-                            var Max2 = aMax - (int)n.generujOd;
-                            var Max3 = dMax - (int)n.generujOd;
+                            var Max1 = długośćCała - input.generujOd - rMax;
+                            var Max2 = aMax - (int)input.generujOd;
+                            var Max3 = dMax - (int)input.generujOd;
                             var Acc1 = dMax * (1 - s);
-                            for (int i = 0; i < n.dane.Length; i++)
+                            var genInt = (int)input.generujOd;
+                            for (int i = 0; i < input.dane.Length; i++)
                             {
                                 if (Max1 > i)
                                     if (Max2 > i)
-                                        aProcent = (i + (int)n.generujOd) / aMax;
+                                        aProcent = (i + (int)input.generujOd) / aMax;
                                     else
                                         aProcent = 1;
                                 else
                                 {
-                                    rProcent = (długośćCała - i - n.generujOd) / rMax;
+                                    rProcent = (długośćCała - i - input.generujOd) / rMax;
                                     //aProcent = 1;
                                 }
                                 if (Max3 > i)
@@ -158,10 +167,10 @@ namespace Syntezator_Krawczyka.Synteza
                                 if (dProcent == 0)
                                     break;//sprawdzić, czi nie powoduje problemów
 
-                                n.dane[i] = jedenPrzebieg[(i + (int)n.generujOd) % jedenPrzebieg.Length] * aProcent * rProcent * dProcent;
+                                input.dane[i] = jedenPrzebieg[(i + genInt) % jedenPrzebieg.Length] * aProcent * rProcent * dProcent;
 
                             }
-                            wyjście[0].DrógiModół.działaj(n);
+                            wyjście[0].DrógiModół.działaj(input);
                         }
                     }
                 }
@@ -294,55 +303,41 @@ namespace Syntezator_Krawczyka.Synteza
         public static float[] trójkątna(float ilepróbek, long długość)
         {
             float[] ret = new float[długość];
+            long i = 0;
+            var długość1 = długość / 4;
+            var długość2 = długość1 * 3;
+            for (; i < długość1; i++)
+            {
+                ret[i] = i / ilepróbek * 4;
+
+            }
+            for (; i < długość2; i++)
+            {
+                ret[i] = (0.5f - i/ilepróbek) * 4f;
+
+            }
+            for (; i < długość; i++)
+            {
+                ret[i] = (1f - i/ilepróbek) * -4f;
+
+            }
+                
+            return ret;
+        }
+        public static float[] piłokształtna(float ilepróbek, long długość, float gladkosc)
+        {
+            float[] ret = new float[długość];
+
+            float granica = ilepróbek * gladkosc;
             for (long i = 0; i < długość; i++)
             {
-                var z = i % ilepróbek / ilepróbek;
-                if (z < 0.25)
-                    ret[i] = z * 4;
-                else if (z < 0.75)
-                    ret[i] = (0.5f - z) * 4f;
+                float a = ((ilepróbek / 3) + i) % (ilepróbek);
+                if (a < granica)
+                    ret[i] += ((a / granica) * 2 - 1);
                 else
-                    ret[i] = (1 - z) * -4;
-                /*if (i % ilepróbek < ilepróbek / 2)
-                    ret[i] = i % (ilepróbek / 2) / ilepróbek * 4 - 1;
-                else
-                    ret[i] = i % (ilepróbek / 2) / ilepróbek * -4 + 1;*/
+                    ret[i] += ((a - granica) / (ilepróbek - granica) * -2 + 1);
             }
-            /*for (long i = długość; i < długość + 10000; i++)
-            {
-                ret[i]=ret[długość - 1] * -((double)(i - długość - 10000) / 10000);
-            }*/
-            return ret;
-        }
-        public static float[] piłokształtna(float ilepróbek, long długość, short ilenut, float gladkosc)
-        {
-            float[] ret = new float[długość];
-            
-                float granica = ilepróbek * gladkosc;
-                for (long i = 0; i < długość; i++)
-                {
-                    float a = ((ilepróbek  / 3) + i) % (ilepróbek);
-                    if (a < granica)
-                        ret[i] += ((a / granica) * 2 - 1);
-                    else
-                        ret[i] += ((a - granica) / (ilepróbek - granica) * -2 + 1);
-                }
-           
-            return ret;
-        }
-        public static float[] piłokształtna2x(float ilepróbek, long długość, short ilenut, float gladkosc)
-        {
-            float[] ret = new float[długość];
-            for (short i2 = 0; i2 < ilenut; i2++)
-            {
-                for (long i = 0; i < długość; i++)
-                {
-                    if (i % ilepróbek < ilepróbek * gladkosc)
-                        ret[i] += ((ilepróbek / ilenut * i2 / 25) + i) % (ilepróbek * (1 - gladkosc)) / ilepróbek * 2 - 1;
-                    else
-                        ret[i] += ((ilepróbek / ilenut * i2 / 25) + i) % (ilepróbek * gladkosc) / ilepróbek * 2 - 1;
-                }
-            }
+
             return ret;
         }
         public static float[] sinusoidalna(double ilepróbek, long długość)
@@ -350,9 +345,12 @@ namespace Syntezator_Krawczyka.Synteza
             float[] ret = new float[długość];
             for (long i = 0; i < długość; i++)
             {
-                ret[i] = (float)Math.Sin(i / ilepróbek * 2 * Math.PI);
+                ret[i] = (float)Math.Sin(i / ilepróbek * piRazy2);
             }
             return ret;
         }
+        const double piRazy2 = 2 * Math.PI;
+        float Balans, A, D, S, R, gladkosc;
+        typFali typ;
     }
 }

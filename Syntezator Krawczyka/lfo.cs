@@ -32,6 +32,27 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _ustawienia; }
         }
         Dictionary<string, string> _ustawienia;
+        private oscylator.typFali typ;
+        public void akt()
+        {
+
+            //gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
+            switch (_ustawienia["typ"])
+            {
+                case "trójkątna":
+                    typ = oscylator.typFali.trójkątna;
+                    break;
+                case "sinusoidalna":
+                    typ = oscylator.typFali.sinusoidalna;
+                    break;
+                case "piłokształtna":
+                    typ = oscylator.typFali.piłokształtna;
+                    break;
+                case "prostokątna":
+                    typ = oscylator.typFali.prostokątka;
+                    break;
+            }
+        }
         public lfo()
         {
             wejście = new List<Typ>();
@@ -76,7 +97,7 @@ namespace Syntezator_Krawczyka.Synteza
                     {
                         nuta n = input;
                         var moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
-                        jedenPrzebieg = oscylator.generujJedenPrzebiegStatyczny(ustawienia["typ"], (long)(1 / float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) * plik.Hz), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
+                        jedenPrzebieg = oscylator.generujJedenPrzebiegStatyczny(typ, (long)(1 / float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) * plik.Hz), float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture));
                         var kwantyzacja = float.Parse(_ustawienia["kwantyzacja"], CultureInfo.InvariantCulture);
                         if (wyjście[0].DrógiModół.GetType() == typeof(oscylator) && bool.Parse(_ustawienia["nowanuta"]))
                         {//do optymalizacji, do zrobienia przy zapisie jedenPrzebieg
