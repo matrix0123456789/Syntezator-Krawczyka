@@ -193,7 +193,8 @@ namespace Syntezator_Krawczyka
                         if (debugowanie)
                             Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString() + "; " + ileDoGC.ToString();
                         czas.Content = funkcje.sekundy(granie.graniePrzy) + '/' + funkcje.sekundy(granie.granieMax);
-                        
+                        suwak.Value = granie.graniePrzy;
+                        suwak.Maximum = granie.granieMax;
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
                         if (postęp.Value != 0)
@@ -283,6 +284,7 @@ namespace Syntezator_Krawczyka
                 }
             lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
             granie.granieNuty=lista.ToArray();
+            granie.granieMax=(int)granie.granieNuty[granie.granieNuty.Length-1].sekw.symuluj(granie.granieNuty[granie.granieNuty.Length-1].opuznienie + granie.granieNuty[granie.granieNuty.Length-1].długość);
             granie.graniePlay = true;
             /*foreach (var x in Statyczne.otwartyplik.sciezki)
             {
@@ -389,6 +391,11 @@ namespace Syntezator_Krawczyka
                 oknoLogowanie = new Logowanie();
             oknoLogowanie.Show();
             oknoLogowanie.Activate();
+        }
+
+        private void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            granie.graniePrzy = (int)suwak.Value;
         }
 
     }

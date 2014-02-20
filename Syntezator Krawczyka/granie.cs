@@ -246,17 +246,20 @@ namespace Syntezator_Krawczyka.Synteza
                         if (graniePlay)
                         {
                             graniePrzy += o;
-                            while (granieNuty[granieI].opuznienie <= graniePrzy)
+                            while (granieNuty.Length > granieI && granieNuty[granieI].opuznienie <= graniePrzy+2*o)
                             {
-
+                                granieNuty[granieI].opuznienie -= graniePrzy;
                                 lock (zmianaLiczGenLock) { liczbaGenerowanych++; }
                                 System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
                                 {
-                                    (Action as nuta).sekw.działaj((Action as nuta));
-                                    lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
-                                    if (liczbaGenerowanych == 0)
+                                    if ((Action as nuta).sekw != null)
+                                    {
+                                        (Action as nuta).sekw.działaj((Action as nuta));
+                                        lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
+                                        if (liczbaGenerowanych == 0)
 
-                                        grajRaz();
+                                            grajRaz();
+                                    }
                                 }, granieNuty[granieI]);
                                 granieI++;
                             }

@@ -95,8 +95,15 @@ namespace Syntezator_Krawczyka
         {
             if (gotowe)
             {
-                parent.xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
-                parent.delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
+                try
+                {
+                    parent.xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
+                    parent.delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
+                }
+                catch(System.FormatException)
+                {
+                    (sender as TextBox).Background = Brushes.Red;
+                }
             }
         }
     }
