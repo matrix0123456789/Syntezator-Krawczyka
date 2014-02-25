@@ -357,29 +357,8 @@ namespace Syntezator_Krawczyka
 
         private void buttonNowyInstrument_Click(object sender, RoutedEventArgs e)
         {
-            if(Statyczne.otwartyplik!=null)
-            {
-                
-                var xml = new XmlDocument();
-                xml.LoadXml(Properties.Resources.przyklad);
-                var soundList=xml.GetElementsByTagName("sound");
-                var sound=soundList[0];
-                var id = sound.Attributes.GetNamedItem("id").Value;
-                for (var i = 1; true; i++)
-                {
-                    if (!Statyczne.otwartyplik.moduły.ContainsKey(id + i.ToString()))
-                    {
-                        id = id + i.ToString();
-                        break;
-                    }
-
-                }
-                sound.Attributes.GetNamedItem("id").Value = id;
-                var klon=funkcje.klonujXML(Statyczne.otwartyplik.xml, sound);
-                Statyczne.otwartyplik.xml.GetElementsByTagName("file")[0].AppendChild(klon);
-
-                Statyczne.otwartyplik.dekoduj();//poprawić na nową referencję
-            }
+            var a = new nowyInstrument();
+            a.Show();
         }
         private void buttonNowaScierzka_Click(object sender, RoutedEventArgs e)
         {
