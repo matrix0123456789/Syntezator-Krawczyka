@@ -138,6 +138,7 @@ namespace Syntezator_Krawczyka
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
                     n.xml.Attributes.SetNamedItem(atrybut);
                     aktywna.Margin = new Thickness((cz * skalaX), aktywna.Margin.Top, 0, 0);
+                    n.nuta.opuznienie = (long)(plik.Hz * 60 / plik.tempo * cz);
                     (sender as TextBox).Background = Brushes.White;
                 }
                 catch (FormatException)
@@ -153,11 +154,12 @@ namespace Syntezator_Krawczyka
                 try
                 {
                     var n = (nutaXml)aktywna.Tag;
-                    var cz = double.Parse(dlugosc.Text);
+                    var cz = float.Parse(dlugosc.Text);
                     var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("duration");
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
                     n.xml.Attributes.SetNamedItem(atrybut);
                     aktywna.Width = cz * skalaY;
+                    n.nuta.długość = (long)(plik.Hz * 60 / plik.tempo * cz);
                     (sender as TextBox).Background = Brushes.White;
                 }
                 catch (FormatException)
@@ -185,7 +187,7 @@ namespace Syntezator_Krawczyka
                 try
                 {
                     var n = (nutaXml)aktywna.Tag;
-                    var cz = double.Parse(ton.Text);
+                    var cz = float.Parse(ton.Text);
                     var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
                     n.xml.Attributes.SetNamedItem(atrybut);
@@ -194,6 +196,7 @@ namespace Syntezator_Krawczyka
                     n.xml.Attributes.SetNamedItem(atrybut2);
                     aktywna.Margin = new Thickness(aktywna.Margin.Left, (tonMin - cz) * skalaY, 0, 0);
                     (sender as TextBox).Background = Brushes.White;
+                    n.nuta.ilepróbekNaStarcie = n.nuta.ilepróbek = funkcje.ilepróbek(0, cz);
                 }
                 catch (FormatException)
                 {
@@ -202,9 +205,10 @@ namespace Syntezator_Krawczyka
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)//Przycisk "nowa nuta"
         {
             var nuta = new nuta(funkcje.częstotliwość(0, 0), (long)plik.Hz * 60 / (long)plik.tempo, main.delay);
+            main.nuty.Add(nuta);
             var nutaXML = Statyczne.otwartyplik.xml.CreateElement("nute");
 
             var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
