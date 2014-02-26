@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<file tempo="120">
+  <name lang="pl">Przykład</name>
+  <name lang="en">Example</name>
+  <sound type="syntezator-krawczyka" id="pad">
+    <module type="sekwencer" id="player1" output="rozd1" />
+    <module type="rozdzielacz" id="rozd1" output="zmianawys1 zmianawys2 zmianawys3 zmianawys4" />
+
+    <module type="zmianaWysokości" id="zmianawys1" output="oscylator1"/>
+    <module type="oscylator" id="oscylator1" output="adsr1" typ="piłokształtna" A="0" D="0" S="1" R="0" balans="0" />
+    <module type="generatorObwiedniFiltru" id="adsr1" output="rozdzielacz1 cutoff1" A="0" D="0" S="0" R="0" />
+    <module type="cutoff" id="cutoff1" />
+
+    <module type="zmianaWysokości" id="zmianawys2" output="oscylator2"/>
+    <module type="oscylator" id="oscylator2" output="adsr2" typ="piłokształtna" A="0" D="0" S="0" R="0" balans="0" />
+    <module type="generatorObwiedniFiltru" id="adsr2" output="rozdzielacz1 cutoff2" A="0" D="0" S="0" R="0" />
+    <module type="cutoff" id="cutoff2" output="rozdzielacz1" />
+
+    <module type="zmianaWysokości" id="zmianawys3" output="oscylator3"/>
+    <module type="oscylator" id="oscylator3" output="adsr3" typ="piłokształtna" A="0" D="0" S="0" R="0" balans="0" />
+    <module type="generatorObwiedniFiltru" id="adsr3" output="rozdzielacz1 cutoff3" A="0" D="0" S="0" R="0" />
+    <module type="cutoff" id="cutoff3" output="rozdzielacz1" />
+
+    <module type="zmianaWysokości" id="zmianawys4" output="oscylator4"/>
+    <module type="oscylator" id="oscylator4" output="adsr4" typ="piłokształtna" A="0" D="0" S="0" R="0" balans="0" />
+    <module type="generatorObwiedniFiltru" id="adsr4" output="rozdzielacz1 cutoff4" A="0" D="0" S="0" R="0" />
+    <module type="cutoff" id="cutoff4" output="rozdzielacz1" />
+    
+    
+    <module type="rozdzielacz" id="rozdzielacz1" output="flangerek1 flangerek2 flangerek3 flangerek4 flangerek5 flangerek6 flangerek7 flangerek8" />
+    <module type="flanger" id="flangerek1" output="poglos" czestotliwosc="1.03370786516855" przesuniecie="0.449438202247194" />
+    <module type="flanger" id="flangerek2" output="poglos" czestotliwosc="0.8314606741573" przesuniecie="0.505617977528089" />
+    <module type="flanger" id="flangerek3" output="poglos" czestotliwosc="0.943820224719101" przesuniecie="1.23595505617978" />
+    <module type="flanger" id="flangerek4" output="poglos" czestotliwosc="1.15730337078652" przesuniecie="1.29213483146067" />
+    <module type="flanger" id="flangerek5" output="poglos" czestotliwosc="1.01123595505618" przesuniecie="1.17977528089888" />
+    <module type="flanger" id="flangerek6" output="poglos" czestotliwosc="1.21348314606742" przesuniecie="1.29213483146068" />
+    <module type="flanger" id="flangerek7" output="poglos" czestotliwosc="1.3370786516854" przesuniecie="0.337078651685393" />
+    <module type="flanger" id="flangerek8" output="poglos" czestotliwosc="0.775280898876404" przesuniecie="0.56179775280899" />
+    <module type="poglos" id="poglos" output="glosnosc" czas="0.142708331346512" zmniejszenie="0" glosnosc="0" balans="1" />
+    <module type="glosnosc" id="glosnosc" output="granie" głośność="0.1" />
+    <module type="granie" id="granie" />
+  </sound>
+
+</file>
