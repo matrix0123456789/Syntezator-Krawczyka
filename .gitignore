@@ -216,3 +216,7 @@ pip-log.txt
 #inne
 bin/
 obj/
+Syntezator Krawczyka/bin/
+Syntezator Krawczyka/obj/
+Konsola/bin/
+Konsola/obj/
