@@ -133,6 +133,7 @@
     <Compile Include="EdytorNut.xaml.cs">
       <DependentUpon>EdytorNut.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FalaNiestandardowa.cs" />
     <Compile Include="generatorObwiedniFiltru.cs" />
     <Compile Include="generatorObwiedniFiltruUI.xaml.cs">
       <DependentUpon>generatorObwiedniFiltruUI.xaml</DependentUpon>
@@ -151,6 +152,7 @@
     <Compile Include="PolaczenieHTTP.cs" />
     <Compile Include="sample.cs" />
     <Compile Include="sampler.cs" />
+    <Compile Include="SkładoweHarmoniczne.cs" />
     <Compile Include="sound.cs" />
     <Compile Include="soundStart.cs" />
     <Compile Include="suwak.xaml.cs">
