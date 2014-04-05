@@ -84,6 +84,11 @@ namespace Syntezator_Krawczyka.Synteza
             parentNode.ustawienia["R"] = (sliderR.Value * 2000).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
+        private void sliderBalans_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            parentNode.ustawienia["balans"] = (sliderBalans.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
+        }
         void ustawSuwaki()
         {
 
@@ -92,6 +97,7 @@ namespace Syntezator_Krawczyka.Synteza
             sliderD.Value = double.Parse(parentNode.ustawienia["D"], CultureInfo.InvariantCulture) / 2000;
             sliderS.Value = double.Parse(parentNode.ustawienia["S"], CultureInfo.InvariantCulture);
             sliderR.Value = double.Parse(parentNode.ustawienia["R"], CultureInfo.InvariantCulture) / 2000;
+            sliderBalans.Value = double.Parse(parentNode.ustawienia["balans"], CultureInfo.InvariantCulture);
             switch(parentNode.ustawienia["typ"])
             {
                 case ("sinusoidalna"):
