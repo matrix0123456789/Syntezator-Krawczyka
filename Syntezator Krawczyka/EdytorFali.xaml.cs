@@ -22,6 +22,7 @@ namespace Syntezator_Krawczyka
         {
             aktywne = null;
             InitializeComponent();
+            aktListaFal();
         }
         public FalaNiestandardowa aktywne;
         public EdytorFali(FalaNiestandardowa wej):base()
@@ -81,9 +82,19 @@ namespace Syntezator_Krawczyka
         {
 
             aktywne = new SkładoweHarmoniczne();
+            aktywne.nazwa="fala"+(Statyczne.otwartyplik.fale.Count+1);
+            Statyczne.otwartyplik.fale.Add(aktywne.nazwa, aktywne);
             ładuj(aktywne as SkładoweHarmoniczne);
+            aktListaFal();
         }
-
+        void aktListaFal()
+        {
+            lista.Items.Clear();
+            foreach(var x in Statyczne.otwartyplik.fale)
+            {
+                lista.Items.Add(x.Key);
+            }
+        }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
            ( aktywne as SkładoweHarmoniczne).Składowe.Add(0);

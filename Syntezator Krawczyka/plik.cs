@@ -20,6 +20,7 @@ namespace Syntezator_Krawczyka
         public static float kHz = 48f;
         int pusteID = 0;
         public static float Hz = kHz * 1000;
+        public Dictionary<string, FalaNiestandardowa> fale = new Dictionary<string, FalaNiestandardowa>();
         public plik(string a)
         {
             if (a != "")
@@ -218,6 +219,15 @@ namespace Syntezator_Krawczyka
                 {
                     modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
                 }
+            }
+            var listaWave=xml.GetElementsByTagName("wave");
+            for(var i=listaWave.Count-1;i>=0;i--)
+            {
+                listaWave.Item(i).ParentNode.RemoveChild(listaWave.Item(i));
+            }
+            foreach(var x in fale)
+            {
+                xml.DocumentElement.AppendChild(x.Value.xml);
             }
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.Filter = "Plik Syntezatora Krawczyka|*.synkra";
