@@ -30,7 +30,7 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Statyczne.serwer.loguj(login.Text, haslo.Content.ToString());
+            Statyczne.serwer.loguj(login.Text, haslo.Password);
         }
     }
 }

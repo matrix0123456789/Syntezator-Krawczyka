@@ -377,5 +377,12 @@ namespace Syntezator_Krawczyka
             granie.graniePrzy = (int)suwak.Value;
         }
 
+        internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
+        {
+            if (polaczenieHTTP.zalogowano)
+                LogowanieTxt.Content = "zalogowano jako " + polaczenieHTTP.login;
+            else
+                LogowanieTxt.Content = "Zaloguj";
+        }
     }
 }

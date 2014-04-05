@@ -23,7 +23,7 @@
             <WrapPanel Name="pokaz" />
         </ScrollViewer>
         <Grid Height="26" Margin="0,10,10,0" VerticalAlignment="Top" Background="#223" MouseDown="Grid_MouseEnter" HorizontalAlignment="Right" Width="101">
-            <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" >Zaloguj</Label>
+            <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" Name="LogowanieTxt">Zaloguj</Label>
         </Grid>
         <Button Content="Dodaj ścierzkę"  Height="23" HorizontalAlignment="Left" Margin="12,125,0,0" x:Name="buttonNowaScierzka" VerticalAlignment="Top" Width="92" Click="buttonNowaScierzka_Click" ToolTip="Dodaj scierzkę z nutami"/>
     </Grid>
