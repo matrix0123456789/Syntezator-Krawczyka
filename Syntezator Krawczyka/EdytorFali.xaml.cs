@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syntezator_Krawczyka.Synteza;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public partial class EdytorFali : Window
     {
+        public oscylator gdzieKliknięto = null;
         public EdytorFali()
         {
             aktywne = null;
@@ -25,13 +27,18 @@ namespace Syntezator_Krawczyka
             aktListaFal();
         }
         public FalaNiestandardowa aktywne;
-        public EdytorFali(FalaNiestandardowa wej):base()
+        public EdytorFali(FalaNiestandardowa wej):this()
         {
-            aktywne = wej;
+            if (wej != null) { 
+                aktywne = wej;
             if(typeof(SkładoweHarmoniczne)==wej.GetType())
             {
                 ładuj(wej as SkładoweHarmoniczne);
-            }
+            }}
+        }
+        public EdytorFali(oscylator wej):this(wej.niestandardowa)
+        {
+            gdzieKliknięto = wej;
         }
         void ładuj(SkładoweHarmoniczne wej)
         {
@@ -112,7 +119,7 @@ namespace Syntezator_Krawczyka
                 linia.Stroke = Brushes.Black;
                 for (int i = 0; i < fala.Length; i++)
                 {
-                    linia.Points.Add(new Point(i, (fala[i] + 1) / 2 * wykres.ActualHeight));
+                    linia.Points.Add(new Point(i, (-fala[i] + 2f) / 4f * wykres.ActualHeight));
                 }
                 wykres.Children.Add(linia);
             }
@@ -121,6 +128,17 @@ namespace Syntezator_Krawczyka
         private void wykres_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             rysujWykres();
+        }
+
+        private void lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lista.SelectedItem != null)
+            {
+                aktywne = Statyczne.otwartyplik.fale[(string)lista.SelectedItem];
+                if (gdzieKliknięto != null)
+                    gdzieKliknięto.niestandardowa = aktywne;
+                ładuj(aktywne as SkładoweHarmoniczne);
+            }
         }
     }
 }

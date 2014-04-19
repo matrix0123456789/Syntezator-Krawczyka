@@ -44,6 +44,23 @@ namespace Syntezator_Krawczyka
         {
             Składowe.Add(1);
         }
+        public SkładoweHarmoniczne(XmlNode xml)
+        {
+            
+            nazwa = xml.Attributes.GetNamedItem("name").Value;
+            Dictionary<int, float> słownik = new Dictionary<int, float>();
+            for(var i=0;i<xml.ChildNodes.Count;i++)
+            {
+                słownik.Add(int.Parse(xml.ChildNodes[i].Attributes["number"].Value), float.Parse(xml.ChildNodes[i].Attributes["value"].Value, CultureInfo.InvariantCulture));
+            }
+
+
+            var max=słownik.Keys.Max();
+            for(var i=0;i<=max;i++)
+            {
+                Składowe.Add(słownik[i]);
+            }
+        }
         public float[] generujJedenPrzebieg(long długość)
         {
             var ret = new float[długość];

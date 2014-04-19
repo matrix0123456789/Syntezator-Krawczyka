@@ -100,6 +100,12 @@ namespace Syntezator_Krawczyka
             }
             try
             {
+                var listaWave=xml.GetElementsByTagName("wave");
+                for(var i=0;i<listaWave.Count;i++)
+                {
+                    if(listaWave.Item(i).Attributes.GetNamedItem("type").Value=="skladoweharmoniczne")
+                    fale.Add(listaWave.Item(i).Attributes.GetNamedItem("name").Value,new SkładoweHarmoniczne(listaWave.Item(i)));
+                }
                 var granieLista = new List<granie>();
                 dekoduj(xml.GetElementsByTagName("sound"));
                 var doSkopiowania = new List<object[]>();

@@ -127,8 +127,11 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-            var okno = new EdytorFali();
+            EdytorFali okno;
+            if(parentNode==null)
+                okno = new EdytorFali();
+            else
+                okno = new EdytorFali(parentNode);
             okno.Show();
         }
     }

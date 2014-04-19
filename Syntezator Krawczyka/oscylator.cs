@@ -27,7 +27,8 @@ namespace Syntezator_Krawczyka.Synteza
         }
         Dictionary<string, string> _ustawienia;
         public XmlNode XML { get; set; }
-        public enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna }
+        public FalaNiestandardowa niestandardowa = null;
+        public enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna, niestandardowa }
         public oscylator()
         {
             wejście = new List<Typ>();
@@ -68,7 +69,12 @@ namespace Syntezator_Krawczyka.Synteza
                 case "prostokątna":
                     typ = typFali.prostokątka;
                     break;
-        }
+                default:
+                    typ = typFali.niestandardowa;
+                    if (Statyczne.otwartyplik.fale.ContainsKey(_ustawienia["typ"]))
+                        niestandardowa = Statyczne.otwartyplik.fale[_ustawienia["typ"]];
+                    break;
+            }
         }
         /// <summary>
         /// Zawiera wynik funkcji generujJedenPrzebieg zapisany w celu optymalizacji
@@ -109,7 +115,7 @@ namespace Syntezator_Krawczyka.Synteza
                 if (Balans < 0)
                     input.balans1 *= (1 + Balans);
                 else
-                    input.balans0 *= (1  -Balans);
+                    input.balans0 *= (1 - Balans);
                 {
                     lock (input)
                     {
@@ -119,6 +125,13 @@ namespace Syntezator_Krawczyka.Synteza
                         {
                             object[] wy = new object[2];
                             float[] jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
+                            if (jedenPrzebieg == null)
+                            {
+                                if (niestandardowa != null)
+                                    jedenPrzebieg = niestandardowa.generujJedenPrzebieg((long)Math.Floor(input.ilepróbek));
+                                else
+                                    jedenPrzebieg = new float[(long)Math.Floor(input.ilepróbek)];
+                            }
                             long długośćCała = (long)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz);
                             if (input.długość + R * plik.kHz - input.generujOd > 0)
                             {
@@ -160,7 +173,7 @@ namespace Syntezator_Krawczyka.Synteza
                                 }
                                 if (Max3 > i)
                                 {
-                                    dProcent = s + (Max3 - i ) / Acc1;
+                                    dProcent = s + (Max3 - i) / Acc1;
                                 }
                                 else
                                     dProcent = s;
@@ -248,7 +261,7 @@ namespace Syntezator_Krawczyka.Synteza
                             }
                             else
                                 dProcent = s;
-                            pozycja += jak[(i + (int)n.generujOd)%jak.Length] + 1;
+                            pozycja += jak[(i + (int)n.generujOd) % jak.Length] + 1;
 
                             if (jakaFala == typFali.sinusoidalna)
                                 n.dane[i] = (float)Math.Sin(pozycja / n.ilepróbek * 2 * Math.PI) * (aProcent * rProcent * dProcent);
@@ -313,15 +326,15 @@ namespace Syntezator_Krawczyka.Synteza
             }
             for (; i < długość2; i++)
             {
-                ret[i] = (0.5f - i/ilepróbek) * 4f;
+                ret[i] = (0.5f - i / ilepróbek) * 4f;
 
             }
             for (; i < długość; i++)
             {
-                ret[i] = (1f - i/ilepróbek) * -4f;
+                ret[i] = (1f - i / ilepróbek) * -4f;
 
             }
-                
+
             return ret;
         }
         public static float[] piłokształtna(float ilepróbek, long długość, float gladkosc)
