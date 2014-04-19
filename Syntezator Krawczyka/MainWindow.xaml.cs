@@ -380,7 +380,9 @@ namespace Syntezator_Krawczyka
         internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
         {
             if (polaczenieHTTP.zalogowano)
-                LogowanieTxt.Content = "zalogowano jako " + polaczenieHTTP.login;
+            { LogowanieTxt.Content = "zalogowano jako " + polaczenieHTTP.login;
+            LogowanieTxt.FontSize = 8;
+            }
             else
                 LogowanieTxt.Content = "Zaloguj";
         }

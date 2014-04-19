@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
@@ -70,14 +71,22 @@ namespace Syntezator_Krawczyka
                 polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
 
                 var ret = polaczenie.UploadString("http://syntezator.aq.pl/json.php", "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
+                /*polaczenie.Headers.Add("User-Agent", "SyntezatorKrawczyka");
+                polaczenie.Headers.Add("Cookie", "PHPSESSID=" + sesjaPHP);
+                //polaczenie.Headers.Add("Cookie", sesjaPHP);
+                polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 var ret2 = polaczenie.UploadString("http://syntezator.aq.pl/json2.php", "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
-                ret2.ToString();
+                ret2.ToString();*/
                 if(ret=="{\"logowanie\":\"ok\"}")
                 {
-                    MainWindow.oknoLogowanie.Close();
-                    zalogowano = true;
-                    MainWindow.thi.zmianaLogowania(this);
+                    MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                    {
+                        MainWindow.oknoLogowanie.Close();
+                        zalogowano = true;
+                        MainWindow.thi.zmianaLogowania(this);
+                    });
                 }
+                else { MessageBox.Show(ret); }
             }, this);
         }
 
