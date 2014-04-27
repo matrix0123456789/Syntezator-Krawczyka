@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.EdytorNut"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EdytorNut — Syntezator Krawczyka" Height="445" Width="588">
+        Title="EdytorNut — Syntezator Krawczyka" Height="445" Width="588" KeyDown="Window_KeyDown">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Margin="0,0,113,0">
             <Grid Name="panel"></Grid>

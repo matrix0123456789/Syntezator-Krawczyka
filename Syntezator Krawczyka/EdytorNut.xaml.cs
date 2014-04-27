@@ -238,5 +238,24 @@ namespace Syntezator_Krawczyka
             panel.Children.Add(prostokat);
             prostokat_MouseClick(prostokat, null);
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.C:
+                    czas.Focus();
+                    break;
+                case Key.D:
+                    dlugosc.Focus();
+                    break;
+                case Key.W:
+                    ton.Focus();
+                    break;
+                case Key.N:
+                    Button_Click(null, null);
+                    break;
+            }
+        }
     }
 }
