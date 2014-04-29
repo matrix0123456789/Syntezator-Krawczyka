@@ -128,6 +128,7 @@ namespace Syntezator_Krawczyka
 
         private void czas_TextChanged(object sender, TextChangedEventArgs e)
         {
+           
             if (aktywna != null)
             {
                 try
@@ -243,6 +244,10 @@ namespace Syntezator_Krawczyka
         {
             switch (e.Key)
             {
+                case Key.LeftCtrl:
+                case Key.RightCtrl:
+                    nowaNuta.Focus();
+                    break;
                 case Key.C:
                     czas.Focus();
                     break;
@@ -254,6 +259,36 @@ namespace Syntezator_Krawczyka
                     break;
                 case Key.N:
                     Button_Click(null, null);
+                    break;
+                case Key.Right:
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                        if (aktywna == null)
+                        {
+                            if (panel.Children.Count > 0)
+                                prostokat_MouseClick(panel.Children[0], null);
+                        }
+                        else
+                        {
+                            var nr = panel.Children.IndexOf(aktywna);
+                            if (panel.Children.Count > nr+1)
+                                prostokat_MouseClick(panel.Children[nr + 1], null);
+
+                        }
+                    break;
+                case Key.Left:
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                        if (aktywna == null)
+                        {
+                            if (panel.Children.Count > 0)
+                                prostokat_MouseClick(panel.Children[0], null);
+                        }
+                        else
+                        {
+                            var nr = panel.Children.IndexOf(aktywna);
+                            if (nr > 0)
+                                prostokat_MouseClick(panel.Children[nr - 1], null);
+
+                        }
                     break;
             }
         }
