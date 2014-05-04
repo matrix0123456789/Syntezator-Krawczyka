@@ -27,12 +27,14 @@ namespace Syntezator_Krawczyka
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             laduj(Properties.Resources.przyklad);
+            Close();
         }
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             laduj(Properties.Resources.przyklad2);
+            Close();
         }
-        void laduj(String plik)
+        public static void laduj(String plik)
         {
 
             if (Statyczne.otwartyplik != null)
@@ -57,7 +59,7 @@ namespace Syntezator_Krawczyka
                 Statyczne.otwartyplik.xml.GetElementsByTagName("file")[0].AppendChild(klon);
 
                 Statyczne.otwartyplik.dekoduj();//poprawić na nową referencję
-                Close();
+                
             }
         }
     }

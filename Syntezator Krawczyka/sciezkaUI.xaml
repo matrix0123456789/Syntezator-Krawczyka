@@ -11,6 +11,7 @@
             <ContextMenu>
                 <MenuItem Header="Edytuj" Click="Button_Click"></MenuItem>
                 <MenuItem Header="Duplikuj" Click="MenuItem_Click"></MenuItem>
+                <MenuItem Header="Kopiuj" Click="MenuItem_Click_1"></MenuItem>
                 <MenuItem Header="Usuń"></MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>

@@ -46,7 +46,7 @@ namespace Syntezator_Krawczyka
         /// </summary>
         static public bool debugowanie = false;
         klawiaturaKomputera klawiatkompa;
-        List<KlawiaturaMidi> klawiatMidi=new List<KlawiaturaMidi>();
+        List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
             try
@@ -99,7 +99,7 @@ namespace Syntezator_Krawczyka
                 }
             }
 
-            if(!otwarto)
+            if (!otwarto)
                 Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
 
             if (zamknij)
@@ -107,19 +107,19 @@ namespace Syntezator_Krawczyka
             else
             {
                 klawiatkompa = new klawiaturaKomputera();
-                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices;i++ )
+                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
                 {
                     var k = new KlawiaturaMidi(i);
                     klawiatMidi.Add(k);
                     pokaz.Children.Add(k.UI);
                 }
-                if(debugowanie)
+                if (debugowanie)
                 {
                     var k = new KlawiaturaMidi();
                     klawiatMidi.Add(k);
                     pokaz.Children.Add(k.UI);
                 }
-                    pokaz.Children.Add(klawiatkompa.UI);
+                pokaz.Children.Add(klawiatkompa.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
                 aktualizacjaOkna.Start();
@@ -164,7 +164,7 @@ namespace Syntezator_Krawczyka
         }
         void akt(object o)
         {
-            ushort ileDoGC = 0,ileDoKopii=0;
+            ushort ileDoGC = 0, ileDoKopii = 0;
             while (true)
             {
                 ileDoGC++;
@@ -174,7 +174,8 @@ namespace Syntezator_Krawczyka
 
                     GC.Collect(20, GCCollectionMode.Forced);
                     ileDoGC = 0;
-                }else if( ileDoGC > 300)
+                }
+                else if (ileDoGC > 300)
                 {
 
 
@@ -182,10 +183,10 @@ namespace Syntezator_Krawczyka
                     ileDoGC = 0;
                 }
                 ileDoKopii++;
-                if(ileDoKopii>600)
+                if (ileDoKopii > 600)
                 {
                     System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
-                    Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia"+DateTime.Now.ToFileTime()+".synkra");
+                    Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia" + DateTime.Now.ToFileTime() + ".synkra");
                     ileDoKopii = 0;
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
@@ -202,12 +203,12 @@ namespace Syntezator_Krawczyka
                             if (postęp.Value / (double)granie.liczbaGenerowanychMax < 1)
                             {
                                 pasekZadań.ProgressState = TaskbarItemProgressState.Normal;
-                            postęp.Visibility = System.Windows.Visibility.Visible;
+                                postęp.Visibility = System.Windows.Visibility.Visible;
                             }
                             else
                             {
                                 pasekZadań.ProgressState = TaskbarItemProgressState.None;
-                            postęp.Visibility = System.Windows.Visibility.Collapsed;
+                                postęp.Visibility = System.Windows.Visibility.Collapsed;
                             }
                             pasekZadań.ProgressValue = postęp.Value / (double)granie.liczbaGenerowanychMax;
                         }
@@ -235,7 +236,7 @@ namespace Syntezator_Krawczyka
 
         }
 
-       
+
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { granie.o = int.Parse(((TextBox)sender).Text); }
@@ -272,19 +273,19 @@ namespace Syntezator_Krawczyka
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
-            List<nuta> lista=new List<nuta>();
-            
-                foreach (var x in Statyczne.otwartyplik.sciezki)
+            List<nuta> lista = new List<nuta>();
+
+            foreach (var x in Statyczne.otwartyplik.sciezki)
+            {
+                foreach (var nuta in x.nuty)
                 {
-                    foreach (var nuta in x.nuty)
-                    {
-                        nuta.sekw = x.sekw;
-                        lista.Add(nuta);
-                    }
+                    nuta.sekw = x.sekw;
+                    lista.Add(nuta);
                 }
+            }
             lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
-            granie.granieNuty=lista.ToArray();
-            granie.granieMax=(int)granie.granieNuty[granie.granieNuty.Length-1].sekw.symuluj(granie.granieNuty[granie.granieNuty.Length-1].opuznienie + granie.granieNuty[granie.granieNuty.Length-1].długość);
+            granie.granieNuty = lista.ToArray();
+            granie.granieMax = (int)granie.granieNuty[granie.granieNuty.Length - 1].sekw.symuluj(granie.granieNuty[granie.granieNuty.Length - 1].opuznienie + granie.granieNuty[granie.granieNuty.Length - 1].długość);
             granie.graniePlay = true;
             /*foreach (var x in Statyczne.otwartyplik.sciezki)
             {
@@ -317,7 +318,7 @@ namespace Syntezator_Krawczyka
                         długość = długośćTeraz;
                 }
             }
-            granie.wynik = new float[2,długość];
+            granie.wynik = new float[2, długość];
             foreach (var x in Statyczne.otwartyplik.sciezki)
             {
                 x.działaj();
@@ -332,16 +333,22 @@ namespace Syntezator_Krawczyka
             {
                 if (e.Key == Key.S)
                     button4_Click(null, null);
+                if (e.Key == Key.V)
+                {
+                    if (Clipboard.ContainsData("audio/x-syntezator-krawczyka-instrument"))
+                        nowyInstrument.laduj((string)Clipboard.GetData("audio/x-syntezator-krawczyka-instrument"));
+
+                }
                 if (e.Key == Key.O)
                     button3_Click(null, null);
             }
             else klawiatkompa.klawisz(e, true);
         }
-        
+
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
-            
-             klawiatkompa.klawisz(e,false);
+
+            klawiatkompa.klawisz(e, false);
         }
         private void button8_Click(object sender, RoutedEventArgs e)
         {
@@ -380,11 +387,36 @@ namespace Syntezator_Krawczyka
         internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
         {
             if (polaczenieHTTP.zalogowano)
-            { LogowanieTxt.Content = "zalogowano jako " + polaczenieHTTP.login;
-            LogowanieTxt.FontSize = 8;
+            {
+                LogowanieTxt.Content = "zalogowano jako " + polaczenieHTTP.login;
+                LogowanieTxt.FontSize = 8;
             }
             else
                 LogowanieTxt.Content = "Zaloguj";
         }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+
+            if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument")!=null)
+                        nowyInstrument.laduj((string)e.Data.GetData("audio/x-syntezator-krawczyka-instrument"));
+
+        }
+
+        private void Grid_DragOver(object sender, DragEventArgs e)
+        {
+            /*if(e.Data.GetData("audio/x-syntezator-krawczyka-instrument")==null)
+            {
+                e.Effects = DragDropEffects.None;
+                
+
+            }
+            else if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument").GetHashCode() == hashCodeDragAndDrop)
+            {
+                e.Effects = DragDropEffects.None;
+                e.Data.SetData(null);
+            }*/
+        }
+    static public int hashCodeDragAndDrop=0;
     }
 }

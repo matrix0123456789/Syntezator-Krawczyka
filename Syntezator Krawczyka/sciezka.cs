@@ -11,7 +11,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// prezentuje ścieszkę dźwiękową (linię melodyczną) w celu odtworzenia automatycznie (bez grania na żywo z klawiatury)
     /// </summary>
-    public class sciezka:wejście
+    public class sciezka : wejście
     {
         /// <summary>
         /// Lista nut
@@ -86,5 +86,6 @@ sekw.działaj(tabl);
         }
 
         public int delay = 0;
+
     }
 }

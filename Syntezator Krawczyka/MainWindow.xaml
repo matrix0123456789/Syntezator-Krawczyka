@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Syntezator Krawczyka" Height="350" Width="525" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp" MinHeight="200" MinWidth="310">
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo x:Name="pasekZadań" >
+        <TaskbarItemInfo x:Name="pasekZadań"  >
 
         </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
-    <Grid>
+    <Grid Drop="Grid_Drop" DragOver="Grid_DragOver" AllowDrop="True">
         <Button Content="Otwórz plik"  Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button3" VerticalAlignment="Top" Width="92" Click="button3_Click" ToolTip="Otwórz plik zawierający nuty"></Button>
         <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
         <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" />

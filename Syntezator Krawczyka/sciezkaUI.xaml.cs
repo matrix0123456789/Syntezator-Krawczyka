@@ -106,5 +106,10 @@ namespace Syntezator_Krawczyka
                 }
             }
         }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetData("audio/x-syntezator-krawczyka-track",parent.xml.OuterXml);
+        }
     }
 }

@@ -187,7 +187,7 @@ namespace Syntezator_Krawczyka
                 }
                 foreach (sound z in moduły.Values)
               {
-                    z.UI = new Instrument(z.nazwa);
+                    z.UI = new Instrument(z.nazwa,z);
                     foreach (moduł zz in z.Values)
                     {
                         try
@@ -200,7 +200,10 @@ namespace Syntezator_Krawczyka
                         }
                     }
                     if (!MainWindow.thi.pokaz.Children.Contains(z.UI))
-                    MainWindow.thi.pokaz.Children.Add(z.UI);
+                    {
+
+                        MainWindow.thi.pokaz.Children.Add(z.UI);
+                    }
                 }
                 for (var i = 0; i < granieLista.Count; i++)
                     granieLista[i].analizujIleNutMusiByć();
@@ -286,7 +289,7 @@ namespace Syntezator_Krawczyka
         {
             if (n.Attributes.GetNamedItem("type").Value == "syntezator-krawczyka")
             {
-                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value));
+                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value,n));
                 foreach (XmlNode nn in n.ChildNodes)
                 {
                     if (nn.Name == "module")
@@ -374,7 +377,7 @@ namespace Syntezator_Krawczyka
             }
             else if (n.Attributes.GetNamedItem("type").Value == "samples")
             {
-                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value));
+                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value,n));
                 moduły[n.Attributes.GetNamedItem("id").Value].sekw = new sampler();
                 if (n.Attributes.GetNamedItem("volume") != null)
                     (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
