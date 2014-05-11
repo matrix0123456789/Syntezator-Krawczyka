@@ -74,8 +74,13 @@ namespace Syntezator_Krawczyka
         {
             try
             {
-                if(comboBox1.SelectedItem!=null)
-                parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
+                if (comboBox1.SelectedItem != null)
+                {
+                    parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
+                    var atr = parent.xml.OwnerDocument.CreateAttribute("sound");
+                    atr.Value = (string)(comboBox1.SelectedItem as ComboBoxItem).Content;
+                    parent.xml.Attributes.Append(atr);
+                }
             }
             catch (NullReferenceException) { }
         }

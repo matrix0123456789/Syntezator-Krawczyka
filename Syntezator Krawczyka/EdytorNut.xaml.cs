@@ -250,6 +250,7 @@ namespace Syntezator_Krawczyka
                     break;
                 case Key.C:
                     czas.Focus();
+                    
                     break;
                 case Key.D:
                     dlugosc.Focus();

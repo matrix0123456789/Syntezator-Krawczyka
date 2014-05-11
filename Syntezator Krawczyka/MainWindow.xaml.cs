@@ -326,7 +326,7 @@ namespace Syntezator_Krawczyka
             }
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        public void Window_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(((System.Windows.Input.KeyboardEventArgs)(e)).KeyboardDevice.GetHashCode().ToString() + "\n" + e.Device.GetHashCode().ToString() + "\n" + e.InputSource.GetHashCode().ToString());
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
@@ -345,7 +345,7 @@ namespace Syntezator_Krawczyka
             else klawiatkompa.klawisz(e, true);
         }
 
-        private void Window_KeyUp(object sender, KeyEventArgs e)
+        public void Window_KeyUp(object sender, KeyEventArgs e)
         {
 
             klawiatkompa.klawisz(e, false);
@@ -398,8 +398,8 @@ namespace Syntezator_Krawczyka
         private void Grid_Drop(object sender, DragEventArgs e)
         {
 
-            if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument")!=null)
-                        nowyInstrument.laduj((string)e.Data.GetData("audio/x-syntezator-krawczyka-instrument"));
+            //if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument")!=null)
+            //            nowyInstrument.laduj((string)e.Data.GetData("audio/x-syntezator-krawczyka-instrument"));
 
         }
 
@@ -418,5 +418,10 @@ namespace Syntezator_Krawczyka
             }*/
         }
     static public int hashCodeDragAndDrop=0;
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
     }
 }

@@ -136,9 +136,23 @@ namespace Syntezator_Krawczyka
             {
                 aktywne = Statyczne.otwartyplik.fale[(string)lista.SelectedItem];
                 if (gdzieKliknięto != null)
+                {
                     gdzieKliknięto.niestandardowa = aktywne;
+                    gdzieKliknięto.ustawienia["typ"] = (string)lista.SelectedItem;
+                }
                 ładuj(aktywne as SkładoweHarmoniczne);
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            MainWindow.thi.Window_KeyDown(sender, e);
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            MainWindow.thi.Window_KeyUp(sender, e);
+
         }
     }
 }

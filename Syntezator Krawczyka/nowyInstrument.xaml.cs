@@ -34,6 +34,11 @@ namespace Syntezator_Krawczyka
             laduj(Properties.Resources.przyklad2);
             Close();
         }
+        private void Button3_Click(object sender, RoutedEventArgs e)
+        {
+            laduj(Properties.Resources.przyklad3);
+            Close();
+        }
         public static void laduj(String plik)
         {
 

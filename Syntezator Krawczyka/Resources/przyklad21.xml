@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<file tempo="120">
+
+  <sound type="syntezator-krawczyka" id="wiertara">
+    <module type="sekwencer" id="player1" output="rozd1">
+    </module>
+    <module type="rozdzielacz" id="rozd1" output="oscylator1 zmianawys2 zmianawys3 zmianawys4" />
+    <module type="oscylator" id="oscylator1" output="lfo1" typ="piłokształtna" />
+    <module type="lfo" id="lfo1" output="cutoff1 gllfo1" moc="1" czestotliwosc="108.427140024279" typ="piłokształtna" gladkosc="0" kwantyzacja="0" nowanuta="false" />
+    <module type="glosnosc" id="gllfo1" głośność="1" ucinanie="false" ucinanieWartość="1.0" />
+    <module type="zmianaWysokości" id="zmianawys2" output="oscylator2" oktawy="-1" tony="0" czestotliwosc="0" />
+    <module type="oscylator" id="oscylator2" output="lfo2" typ="piłokształtna" ilefal="1" gladkosc="0" A="0" D="0" S="0.719101123595506" R="0" balans="0" />
+    <module type="lfo" id="lfo2" output="flapoosc2 gllfo2" moc="1" czestotliwosc="75.234074166567" typ="piłokształtna" gladkosc="1" kwantyzacja="0" nowanuta="false" />
+    <module type="glosnosc" id="gllfo2" głośność="1.0" ucinanie="false" ucinanieWartość="1.0" />
+    <module type="flanger" id="flapoosc2" output="cutoff1" typ="piłokształtna" ilefal="1" gladkosc="0" A="0" D="0" S="0.303370786516854" R="359.550561797753" czestotliwosc="0.40449438202247" przesuniecie="0" />
+    <module type="zmianaWysokości" id="zmianawys3" output="oscylator3" oktawy="1" tony="0" czestotliwosc="0" />
+    <module type="oscylator" id="oscylator3" output="lfo3" typ="piłokształtna" ilefal="1" gladkosc="0" A="0" D="0" S="0.685393258426967" R="0" balans="0" />
+    <module type="lfo" id="lfo3" output="flapoosc3 gllfo3" moc="1" czestotliwosc="76.9615589540616" typ="piłokształtna" gladkosc="0" kwantyzacja="0" nowanuta="false" />
+    <module type="glosnosc" id="gllfo3" głośność="1" ucinanie="false" ucinanieWartość="1.0" />
+    <module type="flanger" id="flapoosc3" output="cutoff1" typ="piłokształtna" ilefal="1" gladkosc="0" A="0" D="0" S="0.303370786516854" R="359.550561797753" czestotliwosc="2.37078651685393" przesuniecie="0" />
+    <module type="zmianaWysokości" id="zmianawys4" output="oscylator4" oktawy="2" tony="0" czestotliwosc="0" />
+    <module type="oscylator" id="oscylator4" output="lfo4" typ="piłokształtna" ilefal="1" gladkosc="0" A="0" D="0" S="0.719101123595504" R="0" balans="0" />
+    <module type="lfo" id="lfo4" output="flapoosc4 gllfo4" moc="1" czestotliwosc="71.6687517019269" typ="piłokształtna" gladkosc="1" kwantyzacja="0" nowanuta="false" />
+    <module type="glosnosc" id="gllfo4" głośność="1.0" ucinanie="false" ucinanieWartość="1.0" />
+    <module type="flanger" id="flapoosc4" output="cutoff1" typ="piłokształtna" ilefal="1" gladkosc="0" A="0" D="0" S="0.303370786516854" R="359.550561797753" czestotliwosc="3" przesuniecie="0" />
+    <module type="cutoff" id="cutoff1" output="glosnosc1" moc="4.43820224719101" przesuniecie="0" gladkosc="0.719101123595506" />
+    <module type="glosnosc" id="glosnosc1" output="poglos2" głośność="0.25" ucinanie="false" ucinanieWartość="1.0">
+    </module>
+    <module type="poglos" id="poglos2" output="rozdzielacz1" czas="0.142708331346512" zmniejszenie="0.756404494382022" glosnosc="0.426966292134833" balans="1" />
+    <module type="rozdzielacz" id="rozdzielacz1" output="flangerek1 flangerek2 flangerek3 flangerek4 flangerek5 flangerek6 flangerek7 flangerek8" />
+    <module type="flanger" id="flangerek1" output="granie1" czestotliwosc="0.426966292134833" przesuniecie="1.40449438202247" />
+    <module type="flanger" id="flangerek2" output="granie1" czestotliwosc="0.258426966292133" przesuniecie="0.505617977528089" />
+    <module type="flanger" id="flangerek3" output="granie1" czestotliwosc="0" przesuniecie="0.561797752808989" />
+    <module type="flanger" id="flangerek4" output="granie1" czestotliwosc="0.483146067415731" przesuniecie="0.617977528089888" />
+    <module type="flanger" id="flangerek5" output="granie1" czestotliwosc="0.471910112359552" przesuniecie="0.730337078651682" />
+    <module type="flanger" id="flangerek6" output="granie1" czestotliwosc="0.168539325842698" przesuniecie="0.617977528089887" />
+    <module type="flanger" id="flangerek7" output="granie1" czestotliwosc="0.359550561797753" przesuniecie="0.617977528089887" />
+    <module type="flanger" id="flangerek8" output="granie1" czestotliwosc="0.235955056179775" przesuniecie="0.898876404494393" />
+    <module type="granie" id="granie1" głośność="1" />
+  </sound>
+
+</file>

@@ -104,5 +104,23 @@ namespace Syntezator_Krawczyka.Properties {
                 return ResourceManager.GetString("przyklad2", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;file tempo=&quot;120&quot;&gt;
+        ///  &lt;name lang=&quot;pl&quot;&gt;Przykład&lt;/name&gt;
+        ///  &lt;name lang=&quot;en&quot;&gt;Example&lt;/name&gt;
+        ///  &lt;sound type=&quot;syntezator-krawczyka&quot; id=&quot;pad&quot;&gt;
+        ///    &lt;module type=&quot;sekwencer&quot; id=&quot;player1&quot; output=&quot;rozd1&quot; /&gt;
+        ///    &lt;module type=&quot;rozdzielacz&quot; id=&quot;rozd1&quot; output=&quot;zmianawys1 zmianawys2 zmianawys3 zmianawys4&quot; /&gt;
+        ///
+        ///    &lt;module type=&quot;zmianaWysokości&quot; id=&quot;zmianawys1&quot; output=&quot;oscylator1&quot;/&gt;
+        ///    &lt;module type=&quot;oscylator&quot; id=&quot;oscylator1&quot; output=&quot;adsr1&quot; typ=&quot;piłokształtna&quot; A=&quot;0&quot; D=&quot;0&quot; S=&quot;1&quot; R=&quot;0&quot; bala [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string przyklad3 {
+            get {
+                return ResourceManager.GetString("przyklad3", resourceCulture);
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.EdytorFali"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="EdytorFali — Syntezator Krawczyka" Height="267.293" Width="251.504">
+        Title="EdytorFali — Syntezator Krawczyka" Height="267.293" Width="251.504" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Grid>
         <Button Click="Button_Click" Content="Dodaj" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Height="22"/>
         <ComboBox VerticalAlignment="Top" Margin="10,10,90,0" Name="lista" SelectionChanged="lista_SelectionChanged" />

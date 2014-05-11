@@ -112,6 +112,9 @@ namespace Syntezator_Krawczyka.Synteza
                 case ("piłokształtna"):
                     piłokształtny.IsChecked = true;
                     break;
+                default:
+                    niestandard.IsChecked = true;
+                    break;
             }
         }
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
@@ -121,8 +124,12 @@ namespace Syntezator_Krawczyka.Synteza
         }
         private void radioButton1_Checked(object sender, RoutedEventArgs e)
         {
+            if (parentNode.niestandardowa!=null)
+            {
+                parentNode.ustawienia["typ"] = parentNode.niestandardowa.nazwa;
 
-            parentNode.ustawienia["typ"] = "piłokształtna2x";
+            parentNode.akt();
+        }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

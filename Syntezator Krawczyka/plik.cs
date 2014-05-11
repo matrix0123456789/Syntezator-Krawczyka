@@ -103,7 +103,7 @@ namespace Syntezator_Krawczyka
                 var listaWave=xml.GetElementsByTagName("wave");
                 for(var i=0;i<listaWave.Count;i++)
                 {
-                    if(listaWave.Item(i).Attributes.GetNamedItem("type").Value=="skladoweharmoniczne")
+                    if(listaWave.Item(i).Attributes.GetNamedItem("type").Value=="skladoweharmoniczne"&&!fale.ContainsKey(listaWave.Item(i).Attributes.GetNamedItem("name").Value))
                     fale.Add(listaWave.Item(i).Attributes.GetNamedItem("name").Value,new SkładoweHarmoniczne(listaWave.Item(i)));
                 }
                 var granieLista = new List<granie>();
@@ -430,7 +430,10 @@ namespace Syntezator_Krawczyka
         {
             var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
             var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("id");
-            var id = atrybut1.Value = "track" + (pusteID++);
+            string id;
+            do{
+            id= atrybut1.Value = "track" + (pusteID++);
+            } while (scieżkiZId.ContainsKey(id));
             scierzkaXML.Attributes.SetNamedItem(atrybut1);
             var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
             atrybut2.Value = "0";
