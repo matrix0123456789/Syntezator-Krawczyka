@@ -187,15 +187,15 @@ namespace Syntezator_Krawczyka
                     fala[1, falai] = -1;
 
                 if (fala[0, falai] >= 0)
-                    puste[z-2] = (byte)(fala[0, falai] * 127);
+                    puste[z-2] = (byte)(fala[0, falai] * 128);
                 else
-                    puste[z-2] = (byte)((1 + fala[0, falai]) * 127 + 128);
-                puste[z - 3] = (byte)((fala[0, falai] * 127 * 256) % 256);
+                    puste[z-2] = (byte)((1 + fala[0, falai]) * 128 + 128);
+                puste[z - 3] = (byte)((fala[0, falai] * 128 * 256) % 256);
                 if (fala[1, falai] >= 0)
-                    puste[z] = (byte)(fala[1, falai] * 127);
+                    puste[z] = (byte)(fala[1, falai] * 128);
                 else
-                    puste[z] = (byte)((1 + fala[1, falai]) * 127 + 128);
-                puste[z - 1] = (byte)((fala[1, falai] * 127 * 256) % 256);
+                    puste[z] = (byte)((1 + fala[1, falai]) * 128 + 128);
+                puste[z - 1] = (byte)((fala[1, falai] * 128 * 256) % 256);
                 //puste[z + 1] = 0;
                 falai++;
 
