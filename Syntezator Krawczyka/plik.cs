@@ -85,6 +85,7 @@ namespace Syntezator_Krawczyka
         }
         public void dekoduj()
         {
+            Statyczne.otwartyplik = this;
             if (Statyczne.otwartyplik != null)
             {
                 moduły.Clear();
