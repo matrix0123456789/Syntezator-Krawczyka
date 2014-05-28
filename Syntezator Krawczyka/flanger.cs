@@ -32,7 +32,7 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _ustawienia; }
         }
         static Dictionary<double, double> sinusy = new Dictionary<double, double>();
-        static public double sin(double wej)
+        /*static public double sin(double wej)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Syntezator_Krawczyka.Synteza
                 sinusy.Add(wej, Math.Sin(wej * Math.PI));
                 return sinusy[wej];
             }
-        }
+        }*/
         Dictionary<string, string> _ustawienia;
         public flanger()
         {
@@ -65,28 +65,23 @@ namespace Syntezator_Krawczyka.Synteza
             else
             {
                 var przesunięcie = przesunięciea * plik.kHz;
-                var ileNaCykl = 1 / czestotliwosc * plik.Hz;
+                var ileNaCykl = 1 / czestotliwosc * plik.Hz/Math.PI/2;
                 var losIGenerujOd = input.los + input.generujOd;
-                float z;
+                double z;
                 for (int i = 0; i < dane.Length; i++)
                 {
-                    var zx = (i + losIGenerujOd) % ileNaCykl / ileNaCykl;
-                    if (zx < 0.25)
-                        z = zx * 4 * przesunięcie;
-                    else if (zx < 0.75)
-                        z = (0.5f - zx) * 4f * przesunięcie;
-                    else
-                        z = (1f - zx) * -4f * przesunięcie;
-                    var x = i + (int)Math.Floor(z);
-                    /*if (input.generujOd > 0 && x < 0)
-                    { }*/
                     
-                    var proporcje = z - (float)Math.Floor(z);
+                        z = przesunięcie*Math.Sin((i + losIGenerujOd)  / ileNaCykl);
+                    var x = i + (int)Math.Floor(z);
+                    
+                    
+                    var proporcje = z - Math.Floor(z);
                     if (input.dane.Length > x + 1 && x >= 0)
-                        dane[i] = (input.dane[x] * (1 - proporcje) + input.dane[x + 1] * proporcje) / 2 + dane[i];
+                        dane[i] = ((float)(input.dane[x] * (1 - proporcje) + input.dane[x + 1] * proporcje) / 2) + dane[i];
                    /* else { } if (i > 2000)
                         if (dane[i] == 0 && dane[i - 1] == 0)
                         { }*/
+
                     
                 }
                 return dane;
@@ -110,22 +105,18 @@ namespace Syntezator_Krawczyka.Synteza
                 var ileNaCykl = 1 / czestotliwosc * plik.Hz;
                 float[] noweDane = new float[input.dane.Length];
                 var losIGenerujOd = input.los + input.generujOd;
-                float z;
+                double z;
                 for (int i = 0; i < input.dane.Length; i++)
                 {
-                    var zx = (i + losIGenerujOd) % ileNaCykl / ileNaCykl;
-                    if (zx < 0.25)
-                        z = zx * 4 * przesunięcie;
-                    else if (zx < 0.75)
-                        z = (0.5f - zx) * 4f * przesunięcie;
-                    else
-                        z = (1f - zx) * -4f * przesunięcie;
+                    var zx = (i + losIGenerujOd) / ileNaCykl;
+
+                    z = przesunięcie * Math.Sin((i + losIGenerujOd) / ileNaCykl);
                     var x = i + (int)Math.Floor(z);
-                   /* if (input.generujOd > 0 && x < 0)
-                    { }*/
-                    var proporcje = z - (float)Math.Floor(z);
+
+
+                    var proporcje = z - Math.Floor(z);
                     if (input.dane.Length > x + 1 && x >= 0)
-                        noweDane[i] = (input.dane[x] * (1 - proporcje) + input.dane[x + 1] * proporcje) / 2;
+                        noweDane[i] = ((float)(input.dane[x] * (1 - proporcje) + input.dane[x + 1] * proporcje) / 2);
                     //noweDane[i] = z / 500;
                     /*else { }
                     if(i>0)

@@ -177,14 +177,14 @@ namespace Syntezator_Krawczyka
             for (int z = pus.Length + 2; z < puste.Length && fala.LongLength/2 > falai; z = z + 4)
             {
 
-                if (fala[0, falai] > 1)
-                    fala[0, falai] = 1;
-                else if (fala[0, falai] < -1)
-                    fala[0, falai] = -1;
-                if (fala[1, falai] > 1)
-                    fala[1, falai] = 1;
-                else if (fala[1, falai] < -1)
-                    fala[1, falai] = -1;
+                if (fala[0, falai] > .98f)
+                    fala[0, falai] = .98f;
+                else if (fala[0, falai] < -.98f)
+                    fala[0, falai] = -0.98f;
+                if (fala[1, falai] > .98f)
+                    fala[1, falai] = .98f;
+                else if (fala[1, falai] < -.98f)
+                    fala[1, falai] = -.98f;
 
                 if (fala[0, falai] >= 0)
                     puste[z-2] = (byte)(fala[0, falai] * 128);
