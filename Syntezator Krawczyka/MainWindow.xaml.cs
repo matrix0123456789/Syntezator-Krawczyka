@@ -18,6 +18,7 @@ using System.Security.Principal;
 using System.Diagnostics;
 using System.Windows.Shell;
 using System.Xml;
+using Microsoft.Win32;
 namespace Syntezator_Krawczyka
 {
 
@@ -318,12 +319,18 @@ namespace Syntezator_Krawczyka
                         długość = długośćTeraz;
                 }
             }
+            granie.PlikDoZapisu=null;
             granie.wynik = new float[2, długość];
             foreach (var x in Statyczne.otwartyplik.sciezki)
             {
                 x.działaj();
                 //akt(null);
             }
+
+            var dialog = new SaveFileDialog();
+            dialog.Filter = "Plik muzyczny|*.wav;*.wave";
+            dialog.ShowDialog();
+            granie.PlikDoZapisu = dialog.FileName;
         }
 
         public void Window_KeyDown(object sender, KeyEventArgs e)

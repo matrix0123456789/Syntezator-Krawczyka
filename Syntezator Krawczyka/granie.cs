@@ -132,11 +132,12 @@ namespace Syntezator_Krawczyka.Synteza
                 funkcje.graj(fala);
             else
             {
-                var dialog = new SaveFileDialog();
-                dialog.Filter = "Plik muzyczny|*.wav;*.wave";
-                dialog.ShowDialog();
-                if (dialog.FileName != "")
-                    funkcje.zapisz(fala, dialog.FileName);
+                while(PlikDoZapisu==null)
+                {
+                    Thread.Sleep(50);
+                }
+                if (PlikDoZapisu != "")
+                    funkcje.zapisz(fala, PlikDoZapisu);
             }
             można = true;
             //}
@@ -557,5 +558,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
 
         public static object zmianaLiczGenLock = new object();
+
+        public static string PlikDoZapisu=null;
     }
 }

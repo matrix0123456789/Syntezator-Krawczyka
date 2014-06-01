@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -77,71 +78,23 @@ namespace Syntezator_Krawczyka
         {
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
                 System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
-                var p = wave(fala);
-                write.Write(p);
+                wave(fala, write);
+               
 
 
         }
         /// <summary>
         /// Tworzy plik wave
         /// </summary>
-        /// <param name="fala"></param>
-        /// <param name="głośność"></param>
+        /// <param name="writer">Strumień do zapisu</param>
+        /// <param name="fala">fala dżwiękowa stereo</param>
         /// <returns>Tablica odpowiadająca plikowi wave</returns>
-        static public byte[] wave(float[] fala)
+        
+        static public void wave(float[,] fala, BinaryWriter writer)
         {
             char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
-            byte[] puste = new byte[pus.Length + fala.Length * 2 - 2];
-            for (int i = 0; i < pus.Length && i < puste.Length; i++)
-            {
-                puste[i] = (byte)pus[i];
-            }
-            byte[] rozmiar = BitConverter.GetBytes(puste.Length - 8);
-            puste[4] = rozmiar[0];
-            puste[5] = rozmiar[1];
-            puste[6] = rozmiar[2];
-            puste[7] = rozmiar[3];
-            byte[] rozmiar2 = BitConverter.GetBytes(fala.Length * 2);
-            puste[40] = rozmiar2[0];
-            puste[41] = rozmiar2[1];
-            puste[42] = rozmiar2[2];
-            puste[43] = rozmiar2[3];
-
-
-            byte[] czestotliwosc = BitConverter.GetBytes((int)plik.Hz);
-            puste[24] = czestotliwosc[0];
-            puste[25] = czestotliwosc[1];
-            puste[26] = czestotliwosc[2];
-            puste[27] = czestotliwosc[3];
-            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 4);
-            puste[28] = czestotliwosc2[0];
-            puste[29] = czestotliwosc2[1];
-            puste[30] = czestotliwosc2[2];
-            puste[31] = czestotliwosc2[3];
-            puste[32] = 4;
-            long falai = 0;
-            for (int z = pus.Length - 2; z < puste.Length && fala.LongLength > falai; z = z + 2)
-            {
-
-                if (fala[falai] >= 1)
-                    puste[z] = 127;
-                else if (fala[falai] >= 0)
-                    puste[z] = (byte)(fala[falai] * 127);
-                else if (fala[falai] > -1)
-                    puste[z] = (byte)((1 + fala[falai]) * 127 + 128);
-                else
-                    puste[z] = 128;
-                puste[z - 1] = (byte)((fala[falai] * 127 * 256) % 256);
-                //puste[z + 1] = 0;
-                falai++;
-
-            }
-            return puste;
-        }
-        static public byte[] wave(float[,] fala)
-        {
-            char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
-            byte[] puste = new byte[pus.Length + fala.Length * 2 - 2];
+            byte[] puste = new byte[pus.Length];
+            var pusteLength = pus.Length + fala.Length * 2 - 2;
             for (int i = 0; i < pus.Length && i < puste.Length; i++)
             {
                 puste[i] = (byte)pus[i];
@@ -173,8 +126,10 @@ namespace Syntezator_Krawczyka
 
 
             puste[22] = 2;
+
+            writer.Write(puste);
             long falai = 0;
-            for (int z = pus.Length + 2; z < puste.Length && fala.LongLength/2 > falai; z = z + 4)
+            for (int z = pus.Length + 2; z < pusteLength && fala.LongLength/2 > falai; z = z + 4)
             {
 
                 if (fala[0, falai] > .98f)
@@ -186,21 +141,23 @@ namespace Syntezator_Krawczyka
                 else if (fala[1, falai] < -.98f)
                     fala[1, falai] = -.98f;
 
+                writer.Write((byte)((fala[0, falai] * 128 * 256) % 256));
                 if (fala[0, falai] >= 0)
-                    puste[z-2] = (byte)(fala[0, falai] * 128);
+                    writer.Write((byte)(fala[0, falai] * 128));
                 else
-                    puste[z-2] = (byte)((1 + fala[0, falai]) * 128 + 128);
-                puste[z - 3] = (byte)((fala[0, falai] * 128 * 256) % 256);
+                    writer.Write((byte)((1 + fala[0, falai]) * 128 + 128));
+                writer.Write((byte)((fala[1, falai] * 128 * 256) % 256));
                 if (fala[1, falai] >= 0)
-                    puste[z] = (byte)(fala[1, falai] * 128);
+                    writer.Write((byte)(fala[1, falai] * 128));
                 else
-                    puste[z] = (byte)((1 + fala[1, falai]) * 128 + 128);
-                puste[z - 1] = (byte)((fala[1, falai] * 128 * 256) % 256);
+                    writer.Write((byte)((1 + fala[1, falai]) * 128 + 128));
                 //puste[z + 1] = 0;
                 falai++;
 
             }
-            return puste;
+            writer.Flush();
+            writer.Close();
+            //return puste;
         }
         /// <summary>
         /// Wylicza częstotliwość nuty na podstawie oktawy i tonu
