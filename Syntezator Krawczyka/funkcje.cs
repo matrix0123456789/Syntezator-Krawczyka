@@ -93,13 +93,13 @@ namespace Syntezator_Krawczyka
         static public void wave(float[,] fala, BinaryWriter writer)
         {
             char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
-            byte[] puste = new byte[pus.Length];
+            byte[] puste = new byte[pus.Length-5];
             var pusteLength = pus.Length + fala.Length * 2 - 2;
             for (int i = 0; i < pus.Length && i < puste.Length; i++)
             {
                 puste[i] = (byte)pus[i];
             }
-            byte[] rozmiar = BitConverter.GetBytes(puste.Length - 8);
+            byte[] rozmiar = BitConverter.GetBytes(pusteLength - 8);
             puste[4] = rozmiar[0];
             puste[5] = rozmiar[1];
             puste[6] = rozmiar[2];
