@@ -210,11 +210,11 @@ namespace Syntezator_Krawczyka
 
         private void usuńLitery(TextBox textBox)
         {
-            if ((textBox.Text[0] >= 'a' && textBox.Text[0] <= 'z') || (textBox.Text[0] >= 'A' && textBox.Text[0] <= 'Z'))
+            if (textBox.Text.Length>0&&((textBox.Text[0] >= 'a' && textBox.Text[0] <= 'z') || (textBox.Text[0] >= 'A' && textBox.Text[0] <= 'Z')))
             {
                 textBox.Text = textBox.Text.Substring(1);
                 textBox.Select(textBox.Text.Length, 0);
-            } if ((textBox.Text[textBox.Text.Length - 1] >= 'a' && textBox.Text[textBox.Text.Length - 1] <= 'z') || (textBox.Text[textBox.Text.Length - 1] >= 'A' && textBox.Text[textBox.Text.Length - 1] <= 'Z'))
+            } if (textBox.Text.Length > 0 && ((textBox.Text[textBox.Text.Length - 1] >= 'a' && textBox.Text[textBox.Text.Length - 1] <= 'z') || (textBox.Text[textBox.Text.Length - 1] >= 'A' && textBox.Text[textBox.Text.Length - 1] <= 'Z')))
             {
                 textBox.Text = textBox.Text.Substring(0, textBox.Text.Length - 1);
                 textBox.Select(textBox.Text.Length, 0);

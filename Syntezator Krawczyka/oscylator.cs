@@ -80,6 +80,8 @@ namespace Syntezator_Krawczyka.Synteza
         /// Zawiera wynik funkcji generujJedenPrzebieg zapisany w celu optymalizacji
         /// </summary>
         Dictionary<long, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<long, float[]>();
+        static Dictionary<short, float[]> zapisanePojedyńczePrzebiegiTrojkatna = new Dictionary<short, float[]>();
+        
         public static float[] generujJedenPrzebiegStatyczny(typFali typ, long ilePróbek, float gladkość)
         {
             switch (typ)
@@ -88,7 +90,7 @@ namespace Syntezator_Krawczyka.Synteza
                     return sinusoidalna((float)ilePróbek, ilePróbek);
                     break;
                 case typFali.trójkątna:
-                    return trójkątna((float)ilePróbek, ilePróbek);
+                    return trójkątna(ilePróbek);
                     break;
                 case typFali.piłokształtna:
                     return piłokształtna((float)ilePróbek, ilePróbek, gladkość);
@@ -313,28 +315,36 @@ namespace Syntezator_Krawczyka.Synteza
             }
             return ret;
         }
-        public static float[] trójkątna(float ilepróbek, long długość)
+        public static float[] trójkątna(long ilepróbek)
         {
-            float[] ret = new float[długość];
+            if(ilepróbek>100)
+            {
+                if (zapisanePojedyńczePrzebiegiTrojkatna.ContainsKey((short)ilepróbek))
+                    return zapisanePojedyńczePrzebiegiTrojkatna[(short)ilepróbek];
+
+            }
+            float[] ret = new float[ilepróbek];
             long i = 0;
-            var długość1 = długość / 4;
+            var ilepróbekFloat = (float)ilepróbek;
+            var długość1 = ilepróbek ;
             var długość2 = długość1 * 3;
             for (; i < długość1; i++)
             {
-                ret[i] = i / ilepróbek * 4;
+                ret[i] = i / ilepróbekFloat * 4;
 
             }
             for (; i < długość2; i++)
             {
-                ret[i] = (0.5f - i / ilepróbek) * 4f;
+                ret[i] = (0.5f - i / ilepróbekFloat) * 4f;
 
             }
-            for (; i < długość; i++)
+            for (; i < ilepróbek; i++)
             {
-                ret[i] = (1f - i / ilepróbek) * -4f;
+                ret[i] = (1f - i / ilepróbekFloat) * -4f;
 
             }
-
+            if (ilepróbek > 100)
+                zapisanePojedyńczePrzebiegiTrojkatna.Add((short)ilepróbek, ret);
             return ret;
         }
         public static float[] piłokształtna(float ilepróbek, long długość, float gladkosc)

@@ -14,7 +14,6 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
-         public void akt() { }
          public XmlNode XML { get; set; }
          UserControl _UI;
          public List<Typ> wejście { get; set; }
@@ -39,6 +38,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             _ustawienia.Add("glosnosc", "1");
             _ustawienia.Add("balans", "1");
+            akt();
             _UI = new pogłosUI(this);
         }
         public long symuluj(long wej)
@@ -60,22 +60,31 @@ namespace Syntezator_Krawczyka.Synteza
             }
             else return 0;
         }
+        float czas, zmniejszenie, głośność, Balans;
+        long czas2;
+        public void akt()
+        {
+            czas = float.Parse(_ustawienia["czas"], CultureInfo.InvariantCulture);
+            czas2 = (long)(czas * plik.Hz);
+            zmniejszenie = float.Parse(_ustawienia["zmniejszenie"], CultureInfo.InvariantCulture);
+            głośność = float.Parse(_ustawienia["glosnosc"], CultureInfo.InvariantCulture);
+            Balans = float.Parse(_ustawienia["balans"], CultureInfo.InvariantCulture);
+        }
         public void działaj(nuta input)
         {
             
                     if (wyjście[0].DrógiModół != null)
                     {
 
-                        var czas = (long)(float.Parse(_ustawienia["czas"], CultureInfo.InvariantCulture) * plik.Hz);
-                        var zmniejszenie = float.Parse(_ustawienia["zmniejszenie"], CultureInfo.InvariantCulture);
-                        var ilejest = float.Parse(_ustawienia["glosnosc"], CultureInfo.InvariantCulture);
+                        
+                        var ilejest = głośność;
                         
                         long czasjest = 0;
                         var ix = 0;
                         bool parzyste = false;
                         while (ilejest * zmniejszenie > 0.01)
                         {
-                            czasjest += czas;
+                            czasjest += czas2;
                             ilejest *= zmniejszenie;
                             var inp = (nuta)input.Clone();
                             inp.id = inp.id * 256 + input.kopiaInnaId++;
@@ -99,7 +108,7 @@ namespace Syntezator_Krawczyka.Synteza
                             {
                                 inp.dane[i] = input.dane[i] * ilejest;
                             }
-                            } var Balans = float.Parse(_ustawienia["balans"], CultureInfo.InvariantCulture);
+                            } 
                             if (parzyste)
                                 inp.balans1 *= (1 - Balans);
                             else

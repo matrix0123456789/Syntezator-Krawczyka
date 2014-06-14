@@ -98,7 +98,7 @@
     <Reference Include="Accessibility" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NAudio">
-      <HintPath>..\..\..\..\NAudio-Release\NAudio.dll</HintPath>
+      <HintPath>..\..\..\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />

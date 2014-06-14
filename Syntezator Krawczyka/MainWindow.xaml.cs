@@ -50,6 +50,7 @@ namespace Syntezator_Krawczyka
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             try
             {
                 new Statyczne();
