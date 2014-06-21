@@ -14,7 +14,12 @@ namespace Syntezator_Krawczyka.Synteza
         {
             get { return _UI; }
         }
-        public void akt() { }
+        float czestotliwosc, przesunięciea;
+        public void akt()
+        {
+            przesunięciea = float.Parse(_ustawienia["przesuniecie"], CultureInfo.InvariantCulture);
+            czestotliwosc = float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture);
+        }
         public long symuluj(long p)
         {
             return wyjście[0].DrógiModół.symuluj(p);
@@ -54,11 +59,10 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("czestotliwosc", (0).ToString());
             _ustawienia.Add("przesuniecie", (0).ToString());
             _UI = new flangerUI(this);
+            akt();
         }
         public float[] działaj(nuta input, float[] dane)
         {
-            var przesunięciea = float.Parse(_ustawienia["przesuniecie"], CultureInfo.InvariantCulture);
-            var czestotliwosc = float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture);
 
             if (przesunięciea == 0 || czestotliwosc == 0)
                 return dane;

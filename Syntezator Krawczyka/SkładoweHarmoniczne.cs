@@ -35,7 +35,7 @@ namespace Syntezator_Krawczyka
                     atrValue.Value = Składowe[i].ToString(CultureInfo.InvariantCulture);
                     skl.Attributes.Append(atrValue);
                     ret.AppendChild(skl);
-                }
+                } zapisanePojedyńczePrzebiegi = new Dictionary<short, float[]>();
                     return ret;
 
             }
@@ -43,6 +43,7 @@ namespace Syntezator_Krawczyka
         public SkładoweHarmoniczne()
         {
             Składowe.Add(1);
+            zapisanePojedyńczePrzebiegi = new Dictionary<short, float[]>();
         }
         public SkładoweHarmoniczne(XmlNode xml)
         {
@@ -61,8 +62,12 @@ namespace Syntezator_Krawczyka
                 Składowe.Add(słownik[i]);
             }
         }
+        Dictionary<short, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<short, float[]>();
         public float[] generujJedenPrzebieg(long długość)
         {
+
+            if (zapisanePojedyńczePrzebiegi.ContainsKey((short)długość))
+                return zapisanePojedyńczePrzebiegi[(short)długość];
             var ret = new float[długość];
             for (int i = 0; i < Składowe.Count; i++)
             {
@@ -73,7 +78,9 @@ namespace Syntezator_Krawczyka
                     ret[i2] += (float)Math.Sin(i2 * stała) * głośność;
                 }
             }
+            zapisanePojedyńczePrzebiegi.Add((short)długość, ret);
             return ret;
         }
+
     }
 }

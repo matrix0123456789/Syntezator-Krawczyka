@@ -219,6 +219,7 @@ namespace Syntezator_Krawczyka
                             pasekZadań.ProgressState = TaskbarItemProgressState.None;
                             postęp.Visibility = System.Windows.Visibility.Collapsed;
                         }
+                        Statyczne.otwartyplik.sciezki.Sort();
                         foreach (var x in Statyczne.otwartyplik.sciezki)
                         {
                             try
@@ -298,40 +299,44 @@ namespace Syntezator_Krawczyka
 
         private void button7_Click(object sender, RoutedEventArgs e)
         {
-            granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
-            granie.można = false;
-            granie.grają.Clear();
-            long długość = 0;
-            foreach (var x in Statyczne.otwartyplik.sciezki)
+            try
             {
-                if (x.sekw != null)
+                granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
+                granie.można = false;
+                granie.grają.Clear();
+                long długość = 0;
+                foreach (var x in Statyczne.otwartyplik.sciezki)
                 {
-                    long długośćStart = 0;
-                    for (var i = 0; i < x.nuty.Count; i++)
+                    if (x.sekw != null)
                     {
+                        long długośćStart = 0;
+                        for (var i = 0; i < x.nuty.Count; i++)
+                        {
 
-                        if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
-                            długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
+                            if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
+                                długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
 
+                        }
+
+                        long długośćTeraz = x.sekw.symuluj(długośćStart);
+                        if (długośćTeraz > długość)
+                            długość = długośćTeraz;
                     }
-
-                    long długośćTeraz = x.sekw.symuluj(długośćStart);
-                    if (długośćTeraz > długość)
-                        długość = długośćTeraz;
                 }
-            }
-            granie.PlikDoZapisu=null;
-            granie.wynik = new float[2, długość];
-            foreach (var x in Statyczne.otwartyplik.sciezki)
-            {
-                x.działaj();
-                //akt(null);
-            }
+                granie.PlikDoZapisu = null;
+                granie.wynik = new float[2, długość];
+                foreach (var x in Statyczne.otwartyplik.sciezki)
+                {
+                    x.działaj();
+                    //akt(null);
+                }
 
-            var dialog = new SaveFileDialog();
-            dialog.Filter = "Plik muzyczny|*.wav;*.wave";
-            dialog.ShowDialog();
-            granie.PlikDoZapisu = dialog.FileName;
+                var dialog = new SaveFileDialog();
+                dialog.Filter = "Plik muzyczny|*.wav;*.wave";
+                dialog.ShowDialog();
+                granie.PlikDoZapisu = dialog.FileName;
+            }
+            catch (Exception e1) {MessageBox.Show("Błąd przy zapisie dźwięku",e1.ToString()); }
         }
 
         public void Window_KeyDown(object sender, KeyEventArgs e)

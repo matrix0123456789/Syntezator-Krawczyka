@@ -96,7 +96,7 @@ namespace Syntezator_Krawczyka.Synteza
                     return piłokształtna((float)ilePróbek, ilePróbek, gladkość);
                     break;
                 case typFali.prostokątka:
-                    return prostokątna((float)ilePróbek, ilePróbek, gladkość);
+                    return prostokątna(ilePróbek, gladkość);
                     break;
                 default:
                     return null;
@@ -126,14 +126,14 @@ namespace Syntezator_Krawczyka.Synteza
                         if (wyjście[0].DrógiModół != null && (D != 0 || S != 0))
                         {
                             object[] wy = new object[2];
-                            float[] jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
-                            if (jedenPrzebieg == null)
+                            float[] jedenPrzebieg;
+                            if (typ==typFali.niestandardowa)
                             {
                                 if (niestandardowa != null)
                                     jedenPrzebieg = niestandardowa.generujJedenPrzebieg((long)Math.Floor(input.ilepróbek));
                                 else
                                     jedenPrzebieg = new float[(long)Math.Floor(input.ilepróbek)];
-                            }
+                            } else jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
                             long długośćCała = (long)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz);
                             if (input.długość + R * plik.kHz - input.generujOd > 0)
                             {
@@ -301,16 +301,19 @@ namespace Syntezator_Krawczyka.Synteza
                 }
             }
         }
-        public static float[] prostokątna(float ilepróbek, long długość, float gladkosc)
+        public static float[] prostokątna(long długość, float gladkosc)
         {
             float[] ret = new float[długość];
             var wysoki = 2f - 2 * gladkosc;
             var niski = 0 - 2 * gladkosc;
-            for (long i = 0; i < długość; i++)
+            long i = 0;
+            var dłGl = długość * gladkosc;
+            for (; i < dłGl; i++)
             {
-                if (i % ilepróbek < ilepróbek * gladkosc)
                     ret[i] = wysoki;
-                else
+            }
+            for (; i < długość; i++)
+            {
                     ret[i] = niski;
             }
             return ret;
