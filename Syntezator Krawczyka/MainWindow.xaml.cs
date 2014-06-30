@@ -195,8 +195,8 @@ namespace Syntezator_Krawczyka
                     {
                         if (debugowanie)
                             Title = Statyczne.bufor.BufferedBytes.ToString();
-                        czas.Content = funkcje.sekundy(granie.graniePrzy) + '/' + funkcje.sekundy(granie.granieMax);
-                        suwak.Value = granie.graniePrzy;
+                        czas.Content = funkcje.sekundy(granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4) + '/' + funkcje.sekundy(granie.granieMax);
+                        suwak.Value = granie.graniePrzy-Statyczne.bufor.BufferedBytes/4;
                         suwak.Maximum = granie.granieMax;
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
@@ -321,6 +321,7 @@ namespace Syntezator_Krawczyka
                 }
             }
             granie.PlikDoZapisu = null;
+            granie.granieMax = (int)długość;
             granie.wynik = new float[2, długość];
             List<nuta> lista = new List<nuta>();
             foreach (var x in Statyczne.otwartyplik.sciezki)
@@ -349,7 +350,7 @@ namespace Syntezator_Krawczyka
                             {
                                 x.sekw.działaj(tabl);
                                 x.czyGotowe = true;
-                                granie.liveGraj();
+                               // granie.liveGraj();
                             }
 
                             lock (granie.liczbaGenerowanychBlokada)
@@ -360,6 +361,8 @@ namespace Syntezator_Krawczyka
                                     //granie.grajcale(false);
                             }
                         }, tabl);
+                        var watek = new Thread(() => { while (granie.liveGraj()) { Thread.Sleep(1000); } });
+                        watek.Start();
                     
                 }
             }
@@ -462,7 +465,10 @@ namespace Syntezator_Krawczyka
 
         private void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            granie.graniePrzy = (int)suwak.Value;
+            if (suwakdziala) { 
+            if (granie.graniePrzy != (int)suwak.Value)
+            Statyczne.bufor.ClearBuffer();
+            granie.graniePrzy = (int)suwak.Value;}
         }
 
         internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
@@ -499,10 +505,19 @@ namespace Syntezator_Krawczyka
             }*/
         }
     static public int hashCodeDragAndDrop=0;
-
-    private void Button_Click(object sender, RoutedEventArgs e)
+    Boolean suwakdziala = false;
+    private void suwakEnter(object sender, MouseEventArgs e)
     {
-
+        suwakdziala = true;
     }
+
+    private void suwakLeave(object sender, MouseEventArgs e)
+    {
+        suwakdziala = false;
+    }
+
+
+
+    
     }
 }

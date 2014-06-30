@@ -407,15 +407,18 @@ namespace Syntezator_Krawczyka.Synteza
             
             teraz = false;
         }
-        public static void liveGraj() { if(graniePlay)
-            {bool czyJeszczeRaz = false;
+        public static bool liveGraj() {bool czyJeszczeRaz = false; if(graniePlay)
+            {
                 lock (wynik)
                 {
                     long wygenerowanoDo = wynik.Length / 2;
                 foreach(var x in granieNuty)
                 {
-                    if (!x.czyGotowe&&x.sekw!=null && wygenerowanoDo > x.opuznienie)
+                    if (!x.czyGotowe && x.sekw != null && wygenerowanoDo > x.opuznienie)
+                    {
                         wygenerowanoDo = x.opuznienie;
+                        czyJeszczeRaz = true;
+                    }
 
                 }
                 var dl=wygenerowanoDo - graniePrzy;
@@ -442,14 +445,16 @@ namespace Syntezator_Krawczyka.Synteza
                     catch (FormatException a) { System.Windows.MessageBox.Show("błąd"); }
                         graniePrzy +=(int)dl;
                 }}
-            if(czyJeszczeRaz)
+            /*if(czyJeszczeRaz)
             {
                 //Thread.Sleep(100);
                 jedenTimer = new Timer((o) => { liveGraj(); }, null, 100, 0);
                 
-            }
+            }*/
 
-            }}
+            }
+        return czyJeszczeRaz;
+        }
         static Timer jedenTimer;
         public static void Działaj(nuta input)
         {
