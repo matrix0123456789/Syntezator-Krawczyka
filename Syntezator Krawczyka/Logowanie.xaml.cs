@@ -32,5 +32,12 @@ namespace Syntezator_Krawczyka
         {
             Statyczne.serwer.loguj(login.Text, haslo.Password);
         }
+
+        private void link_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://syntezator.aq.pl");
+        }
+
+       
     }
 }

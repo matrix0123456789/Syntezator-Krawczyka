@@ -29,7 +29,7 @@ namespace Syntezator_Krawczyka
                 {
                     WebClient polaczenie = new WebClient();
                     string kody = polaczenie.DownloadString("http://syntezator.aq.pl/json.php?kody");
-                    sesjaPHP = Regex.Match(polaczenie.ResponseHeaders["Set-cookie"], "PHPSESSID.*PHPSESSID=([a-zA-Z0-9]*);").Groups[1].Value;
+                    sesjaPHP = Regex.Match(polaczenie.ResponseHeaders["Set-cookie"], "PHPSESSID=([a-zA-Z0-9]*);").Groups[1].Value;
                     //sesjaPHP = polaczenie.ResponseHeaders["Set-cookie"];
                     var poRegExpie = Regex.Match(kody, "\\{\"publiczny\":([0-9]+),\"laczony\":([0-9]+)\\}");
                     publiczny = int.Parse(poRegExpie.Groups[1].Value);
@@ -66,11 +66,11 @@ namespace Syntezator_Krawczyka
                 // requested URI contains a query.
 
                 polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
-                polaczenie.Headers.Add("Cookie", "PHPSESSID=" + sesjaPHP);
+                //polaczenie.Headers.Add("Cookie", "PHPSESSID=" + sesjaPHP);
                 //polaczenie.Headers.Add("Cookie", sesjaPHP);
                 polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
 
-                var ret = polaczenie.UploadString("http://syntezator.aq.pl/json.php", "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
+                var ret = polaczenie.UploadString("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
                 /*polaczenie.Headers.Add("User-Agent", "SyntezatorKrawczyka");
                 polaczenie.Headers.Add("Cookie", "PHPSESSID=" + sesjaPHP);
                 //polaczenie.Headers.Add("Cookie", sesjaPHP);
