@@ -194,7 +194,7 @@ namespace Syntezator_Krawczyka
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {
                         if (debugowanie)
-                            Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString() + "; " + ileDoGC.ToString();
+                            Title = Statyczne.bufor.BufferedBytes.ToString();
                         czas.Content = funkcje.sekundy(granie.graniePrzy) + '/' + funkcje.sekundy(granie.granieMax);
                         suwak.Value = granie.graniePrzy;
                         suwak.Maximum = granie.granieMax;
@@ -276,7 +276,7 @@ namespace Syntezator_Krawczyka
         }
         private void button6_Click(object sender, RoutedEventArgs e)
         {
-            List<nuta> lista = new List<nuta>();
+            /*List<nuta> lista = new List<nuta>();
 
             foreach (var x in Statyczne.otwartyplik.sciezki)
             {
@@ -290,11 +290,79 @@ namespace Syntezator_Krawczyka
             granie.granieNuty = lista.ToArray();
             granie.granieMax = (int)granie.granieNuty[granie.granieNuty.Length - 1].sekw.symuluj(granie.granieNuty[granie.granieNuty.Length - 1].opuznienie + granie.granieNuty[granie.granieNuty.Length - 1].długość);
             granie.graniePlay = true;
-            /*foreach (var x in Statyczne.otwartyplik.sciezki)
+            foreach (var x in Statyczne.otwartyplik.sciezki)
             {
                 x.działaj();
                 //akt(null);
             }*/
+
+
+
+            granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
+            granie.można = false;
+            granie.grają.Clear();
+            long długość = 0;
+            foreach (var x in Statyczne.otwartyplik.sciezki)
+            {
+                if (x.sekw != null)
+                {
+                    long długośćStart = 0;
+                    for (var i = 0; i < x.nuty.Count; i++)
+                    {
+
+                        if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
+                            długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
+
+                    }
+
+                    long długośćTeraz = x.sekw.symuluj(długośćStart);
+                    if (długośćTeraz > długość)
+                        długość = długośćTeraz;
+                }
+            }
+            granie.PlikDoZapisu = null;
+            granie.wynik = new float[2, długość];
+            List<nuta> lista = new List<nuta>();
+            foreach (var x in Statyczne.otwartyplik.sciezki)
+            {
+                foreach (var nuta in x.nuty)
+                {
+                    nuta.sekw = x.sekw;
+                    lista.Add(nuta);
+                }
+            }
+            lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
+            granie.granieNuty = lista.ToArray();
+            granie.graniePlay = true;
+            granie.liczbaGenerowanych += granie.granieNuty.Length;
+            granie.liczbaGenerowanychMax += granie.granieNuty.Length;
+            foreach(var x in granie.granieNuty)
+            {
+                lock (granie.grają)
+                {
+                    
+                        var tabl = (nuta)x.Clone();
+                        tabl.grajDo = long.MaxValue;
+                        System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                        {
+                            if (x.sekw != null)
+                            {
+                                x.sekw.działaj(tabl);
+                                x.czyGotowe = true;
+                                granie.liveGraj();
+                            }
+
+                            lock (granie.liczbaGenerowanychBlokada)
+                            {
+                                granie.liczbaGenerowanych--;
+                                //if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                                    //granie.grajcale(false);
+                            }
+                        }, tabl);
+                    
+                }
+            }
         }
 
         private void button7_Click(object sender, RoutedEventArgs e)

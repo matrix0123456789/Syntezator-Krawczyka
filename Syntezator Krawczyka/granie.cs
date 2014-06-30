@@ -201,7 +201,7 @@ namespace Syntezator_Krawczyka.Synteza
             if (o > 10000)
                 o = 10000;
             data = dataTeraz;
-            if (można && liczbaGenerowanych == 0 && (klawiaturaKomputera.wszytskieNuty.Count > 0 || graniePlay))
+            if (można && liczbaGenerowanych == 0 && (klawiaturaKomputera.wszytskieNuty.Count > 0))
                 lock (grają)
                 {
                     teraz = true;
@@ -244,7 +244,7 @@ namespace Syntezator_Krawczyka.Synteza
                                     grajRaz();
                             }, wszystNuty[i]);
                         }
-                        if (graniePlay)
+                        /*if (graniePlay)
                         {
                             graniePrzy += o;
                             while (granieNuty.Length > granieI && granieNuty[granieI].opuznienie <= graniePrzy+2*o)
@@ -264,7 +264,7 @@ namespace Syntezator_Krawczyka.Synteza
                                 }, granieNuty[granieI]);
                                 granieI++;
                             }
-                        } lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
+                        }*/ lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
                         if (liczbaGenerowanych == 0)
 
                             grajRaz();
@@ -404,8 +404,53 @@ namespace Syntezator_Krawczyka.Synteza
                 catch (FormatException a) { funkcje.graj(fala); }
                 // grajRazCale();
             }
+            
             teraz = false;
         }
+        public static void liveGraj() { if(graniePlay)
+            {bool czyJeszczeRaz = false;
+                lock (wynik)
+                {
+                    long wygenerowanoDo = wynik.Length / 2;
+                foreach(var x in granieNuty)
+                {
+                    if (!x.czyGotowe&&x.sekw!=null && wygenerowanoDo > x.opuznienie)
+                        wygenerowanoDo = x.opuznienie;
+
+                }
+                var dl=wygenerowanoDo - graniePrzy;
+                
+                    
+                    if (dl>0)
+                {
+                    if ((Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes )/4< dl)
+                        {
+                            czyJeszczeRaz = true;
+                            dl = (Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4;
+                        }
+                    var falaT = new float[2, dl];
+                    for (var i = 0; i < dl;i++ )
+                    {
+                        falaT[0, i] = wynik[0, i + graniePrzy];
+                        falaT[1, i] = wynik[1, i + graniePrzy];
+                    }
+                    try
+                    {
+                            if (funkcje.graj(falaT))
+                            { }// goto dodatkowy;
+                    }
+                    catch (FormatException a) { System.Windows.MessageBox.Show("błąd"); }
+                        graniePrzy +=(int)dl;
+                }}
+            if(czyJeszczeRaz)
+            {
+                //Thread.Sleep(100);
+                jedenTimer = new Timer((o) => { liveGraj(); }, null, 100, 0);
+                
+            }
+
+            }}
+        static Timer jedenTimer;
         public static void Działaj(nuta input)
         {
             if (wynik == null)

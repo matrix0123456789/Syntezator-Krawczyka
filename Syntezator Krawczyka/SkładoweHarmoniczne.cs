@@ -78,7 +78,8 @@ namespace Syntezator_Krawczyka
                     ret[i2] += (float)Math.Sin(i2 * stała) * głośność;
                 }
             }
-            zapisanePojedyńczePrzebiegi.Add((short)długość, ret);
+            try { zapisanePojedyńczePrzebiegi.Add((short)długość, ret); }
+            catch { }
             return ret;
         }
 

@@ -60,6 +60,7 @@ namespace Syntezator_Krawczyka
        public byte kopiaInnaId = 0;///<summary>Zawiera liczbę jaka jest dodawana do id np. przy pogłosie</summary>
        public soundStart sekw;
        public Dictionary<long, gra> grająLokalne;
+       public Boolean czyGotowe = false;
         //public static 
        public nuta()
        {
