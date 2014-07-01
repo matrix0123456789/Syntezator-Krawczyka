@@ -46,7 +46,7 @@ namespace Syntezator_Krawczyka
         /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
         /// </summary>
         static public bool debugowanie = false;
-        klawiaturaKomputera klawiatkompa;
+       public klawiaturaKomputera klawiatkompa;
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {

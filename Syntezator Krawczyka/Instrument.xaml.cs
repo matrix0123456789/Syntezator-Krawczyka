@@ -57,5 +57,10 @@ namespace Syntezator_Krawczyka
             MainWindow.hashCodeDragAndDrop = obj.GetData("audio/x-syntezator-krawczyka-instrument").GetHashCode();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.thi.klawiatkompa.sekw = parent.sekw;
+        }
+
     }
 }

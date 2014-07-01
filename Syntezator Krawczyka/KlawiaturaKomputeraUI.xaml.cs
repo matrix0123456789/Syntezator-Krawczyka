@@ -24,6 +24,7 @@ namespace Syntezator_Krawczyka
     {
         klawiaturaKomputera parent;
         Timer akttimer;
+        
         public KlawiaturaKomputeraUI(klawiaturaKomputera thi)
         {
             parent = thi;
