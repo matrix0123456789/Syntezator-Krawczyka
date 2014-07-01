@@ -20,6 +20,9 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public partial class EdytorNut : Window
     {
+        /// <summary>
+        /// Główna ścierzka,na której pracujemy
+        /// </summary>
         sciezka main;
         const double skalaX = 20;
         const double skalaY = 20;
@@ -342,6 +345,17 @@ namespace Syntezator_Krawczyka
                                 prostokat_MouseClick(listaChildren[nr - 1], null);
 
                         }
+                    }
+                    break;
+                    
+                case Key.Delete:
+                    if (aktywna!=null)
+                    {
+                        var n = (nutaXml)aktywna.Tag;
+                        n.xml.ParentNode.RemoveChild(n.xml);
+                        main.nuty.Remove(n.nuta);
+                        panel.Children.Remove(aktywna);
+                        aktywna = null;
                     }
                     break;
             }
