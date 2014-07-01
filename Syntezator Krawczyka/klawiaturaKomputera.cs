@@ -32,6 +32,8 @@ namespace Syntezator_Krawczyka
 
         public klawiaturaKomputera()
         {
+            if (Statyczne.otwartyplik.moduły.Count>0)
+            sekw = Statyczne.otwartyplik.moduły.ElementAt(0).Value.sekw;
             UI = new KlawiaturaKomputeraUI(this);
             akttimer = new Timer((object o) =>
             {

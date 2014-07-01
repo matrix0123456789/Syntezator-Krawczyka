@@ -516,6 +516,12 @@ namespace Syntezator_Krawczyka
         suwakdziala = false;
     }
 
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        var oknoEN = new EdytorNut();
+        oknoEN.Show();
+    }
+
 
 
     

@@ -26,6 +26,7 @@
             <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" Name="LogowanieTxt">Zaloguj</Label>
         </Grid>
         <Button Content="Dodaj ścierzkę"  Height="23" HorizontalAlignment="Left" Margin="12,125,0,0" x:Name="buttonNowaScierzka" VerticalAlignment="Top" Width="92" Click="buttonNowaScierzka_Click" ToolTip="Dodaj scierzkę z nutami"/>
-        <Button Content="Metadane pliku" HorizontalAlignment="Left" Margin="12,153,0,0" VerticalAlignment="Top" Width="92"/>
+        <Button HorizontalAlignment="Left" Margin="12,153,0,0" VerticalAlignment="Top" Width="92" Height="19" Click="Button_Click">Edytor nut</Button>
+        <Button Content="Metadane pliku" HorizontalAlignment="Left" VerticalAlignment="Top" Width="92" Margin="12,177,0,0"/>
     </Grid>
 </Window>

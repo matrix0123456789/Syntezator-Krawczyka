@@ -24,15 +24,37 @@ namespace Syntezator_Krawczyka
         const double skalaX = 20;
         const double skalaY = 20;
         double tonMax;
+        static Brush[] kolory = {Brushes.Red,Brushes.Green,Brushes.SteelBlue,Brushes.Yellow,Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab,Brushes.Navy,Brushes.MediumTurquoise,Brushes.LightSalmon };
         double tonMin;
+        List<Rectangle> listaChildren = new List<Rectangle>();
+        void porListaChil() { }
+        public EdytorNut()
+        {
+            InitializeComponent();
+            rysujSkale(Statyczne.otwartyplik.sciezki);
+                for (int i=0;i<Statyczne.otwartyplik.sciezki.Count;i++)
+                    rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[i%kolory.Length], 0);
+        }
         public EdytorNut(sciezka input)
         {
             InitializeComponent();
             main = input;
             if (input.nuty.Count > 0)
             {
-                double ilepróbekMin, ilepróbekMax;
-                ilepróbekMax = ilepróbekMin = input.nuty[0].ilepróbekNaStarcie;
+                rysujSkale(new List<sciezka>() { input });
+                rysujNuty(input, Brushes.Red);
+
+            }
+        }
+        void rysujSkale(List<sciezka> inplist)
+        {
+            double ilepróbekMin, ilepróbekMax;//określenie przedziału tonów
+            try
+            {
+                ilepróbekMax = ilepróbekMin = inplist[0].nuty[0].ilepróbekNaStarcie;
+            }
+            catch { ilepróbekMax = ilepróbekMin = 100; }
+            foreach (var input in inplist)
                 foreach (var x in input.nuty)
                 {
                     if (x.ilepróbekNaStarcie > ilepróbekMax)
@@ -44,50 +66,55 @@ namespace Syntezator_Krawczyka
                         ilepróbekMin = x.ilepróbekNaStarcie;
                     }
                 }
-                // double tonMin=funkcje.ton(ilepróbekMin)-funkcje.ton(ilepróbekMax)
-                tonMin = funkcje.ton(ilepróbekMin) + 1;
-                tonMax = funkcje.ton(ilepróbekMax) - 1;
-                for (var i = tonMin; i >= tonMax; i = i - .5)
-                {
-                    var tonTeraz = Math.Round((i + 600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
-                    if (tonTeraz == .5 || tonTeraz == 1.5 || tonTeraz == 3 || tonTeraz == 4 || tonTeraz == 5)
-                    {
-                        var prostokat = new Rectangle();
-                        prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
-                        prostokat.Height = (skalaY / 2);
-                        prostokat.Fill = Brushes.Beige;
-                        prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-                        prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                        panel.Children.Add(prostokat);
-                    }
-                    else if (tonTeraz == 0)//oktawa
-                    {
-                        var prostokat = new Rectangle();
-                        prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
-                        prostokat.Height = (1);
-                        prostokat.Fill = Brushes.Black;
-                        prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-                        prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                        panel.Children.Add(prostokat);
-                    }
-                }
-                for (int i = 0; i < input.nuty.Count; i++)
+            // double tonMin=funkcje.ton(ilepróbekMin)-funkcje.ton(ilepróbekMax)
+            tonMin = funkcje.ton(ilepróbekMin) + 1;
+            tonMax = funkcje.ton(ilepróbekMax) - 1;
+            for (var i = tonMin; i >= tonMax; i = i - .5)//rysowanie pasów
+            {
+                var tonTeraz = Math.Round((i + 600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
+                if (tonTeraz == .5 || tonTeraz == 1.5 || tonTeraz == 3 || tonTeraz == 4 || tonTeraz == 5)
                 {
                     var prostokat = new Rectangle();
-                    prostokat.Margin = new Thickness((plik.tempo * (input.nuty[i].opuznienie - input.delay) / (60 * plik.Hz) * skalaX), (tonMin - funkcje.ton(input.nuty[i].ilepróbekNaStarcie)) * skalaY, 0, 0);
-
-                    prostokat.Width = plik.tempo * input.nuty[i].długość / (60 * plik.Hz) * skalaX;
+                    prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
                     prostokat.Height = (skalaY / 2);
-                    prostokat.Fill = Brushes.Red;
+                    prostokat.Fill = Brushes.Beige;
                     prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-                    prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                    prostokat.Tag = new nutaXml(input.nuty[i], input.xml.ChildNodes[i]);
-                    prostokat.MouseDown += prostokat_MouseClick;
+                    prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                    panel.Children.Add(prostokat);
+                }
+                else if (tonTeraz == 0)//oktawa
+                {
+                    var prostokat = new Rectangle();
+                    prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
+                    prostokat.Height = (1);
+                    prostokat.Fill = Brushes.Black;
+                    prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                    prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                     panel.Children.Add(prostokat);
                 }
             }
         }
+        void rysujNuty(sciezka input, Brush kolor)
+        {
+            rysujNuty(input, kolor, -input.delay);
+        }
+        void rysujNuty(sciezka input, Brush kolor, int delay)
+        {
+            for (int i = 0; i < input.nuty.Count; i++)//rysowanie nut
+            {
+                var prostokat = new Rectangle();
+                prostokat.Margin = new Thickness((plik.tempo * (input.nuty[i].opuznienie +delay) / (60 * plik.Hz) * skalaX), (tonMin - funkcje.ton(input.nuty[i].ilepróbekNaStarcie)) * skalaY, 0, 0);
 
+                prostokat.Width = plik.tempo * input.nuty[i].długość / (60 * plik.Hz) * skalaX;
+                prostokat.Height = (skalaY / 2);
+                prostokat.Fill = kolor;
+                prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                prostokat.Tag = new nutaXml(input.nuty[i], input.xml.ChildNodes[i]);
+                prostokat.MouseDown += prostokat_MouseClick;
+                panel.Children.Add(prostokat);
+            }
+        }
         void prostokat_MouseClick(object sender, MouseEventArgs e)
         {
             if (aktywna != null)
@@ -210,7 +237,7 @@ namespace Syntezator_Krawczyka
 
         private void usuńLitery(TextBox textBox)
         {
-            if (textBox.Text.Length>0&&((textBox.Text[0] >= 'a' && textBox.Text[0] <= 'z') || (textBox.Text[0] >= 'A' && textBox.Text[0] <= 'Z')))
+            if (textBox.Text.Length > 0 && ((textBox.Text[0] >= 'a' && textBox.Text[0] <= 'z') || (textBox.Text[0] >= 'A' && textBox.Text[0] <= 'Z')))
             {
                 textBox.Text = textBox.Text.Substring(1);
                 textBox.Select(textBox.Text.Length, 0);
@@ -252,6 +279,7 @@ namespace Syntezator_Krawczyka
             prostokat.Tag = new nutaXml(nuta, nutaXML);
             prostokat.MouseDown += prostokat_MouseClick;
             panel.Children.Add(prostokat);
+            listaChildren.Add(prostokat);
             prostokat_MouseClick(prostokat, null);
         }
 
@@ -265,7 +293,7 @@ namespace Syntezator_Krawczyka
                     break;
                 case Key.C:
                     czas.Focus();
-                    
+
                     break;
                 case Key.D:
                     dlugosc.Focus();
@@ -278,35 +306,48 @@ namespace Syntezator_Krawczyka
                     break;
                 case Key.Right:
                     if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                    {
+                        listaChildren.Sort(porListaChil);
                         if (aktywna == null)
                         {
-                            if (panel.Children.Count > 0)
-                                prostokat_MouseClick(panel.Children[0], null);
+                            if (listaChildren.Count > 0)
+                                prostokat_MouseClick(listaChildren[0], null);
                         }
                         else
                         {
-                            var nr = panel.Children.IndexOf(aktywna);
-                            if (panel.Children.Count > nr+1)
-                                prostokat_MouseClick(panel.Children[nr + 1], null);
+                            var nr = listaChildren.IndexOf(aktywna);
+                            if (listaChildren.Count > nr + 1)
+                                prostokat_MouseClick(listaChildren[nr + 1], null);
 
                         }
+                    }
                     break;
                 case Key.Left:
                     if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                    {
                         if (aktywna == null)
                         {
-                            if (panel.Children.Count > 0)
-                                prostokat_MouseClick(panel.Children[0], null);
+                            if (listaChildren.Count > 0)
+                                prostokat_MouseClick(listaChildren[0], null);
                         }
                         else
                         {
-                            var nr = panel.Children.IndexOf(aktywna);
+                            var nr = listaChildren.IndexOf(aktywna);
                             if (nr > 0)
-                                prostokat_MouseClick(panel.Children[nr - 1], null);
+                                prostokat_MouseClick(listaChildren[nr - 1], null);
 
                         }
+                    }
                     break;
             }
+        }
+
+        private int porListaChil(Rectangle x, Rectangle y)
+        {
+            if (y.Margin.Left > x.Margin.Left)
+                return 1;
+            else
+                return -1;
         }
     }
 }

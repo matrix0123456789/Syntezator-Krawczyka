@@ -329,7 +329,7 @@ namespace Syntezator_Krawczyka.Synteza
             float[] ret = new float[ilepróbek];
             long i = 0;
             var ilepróbekFloat = (float)ilepróbek;
-            var długość1 = ilepróbek ;
+            var długość1 = ilepróbek /4;
             var długość2 = długość1 * 3;
             for (; i < długość1; i++)
             {

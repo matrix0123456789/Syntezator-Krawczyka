@@ -49,7 +49,7 @@ namespace Syntezator_Krawczyka
         {
 
             this.xml = xml;
-            if (kopia)
+            if (kopia &&(Nazwa.Length<8|| Nazwa.Substring(Nazwa.Length - 8) != " (kopia)"))
                 nazwa = Nazwa + " (kopia)";
             else
                 nazwa = Nazwa;
