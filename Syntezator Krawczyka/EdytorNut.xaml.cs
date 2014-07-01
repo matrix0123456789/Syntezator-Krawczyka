@@ -24,7 +24,7 @@ namespace Syntezator_Krawczyka
         const double skalaX = 20;
         const double skalaY = 20;
         double tonMax;
-        static Brush[] kolory = {Brushes.Red,Brushes.Green,Brushes.SteelBlue,Brushes.Yellow,Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab,Brushes.Navy,Brushes.MediumTurquoise,Brushes.LightSalmon };
+        static Brush[] kolory = { Brushes.Red, Brushes.Green, Brushes.SteelBlue, Brushes.Yellow, Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab, Brushes.Navy, Brushes.MediumTurquoise, Brushes.LightSalmon };
         double tonMin;
         List<Rectangle> listaChildren = new List<Rectangle>();
         void porListaChil() { }
@@ -32,8 +32,13 @@ namespace Syntezator_Krawczyka
         {
             InitializeComponent();
             rysujSkale(Statyczne.otwartyplik.sciezki);
-                for (int i=0;i<Statyczne.otwartyplik.sciezki.Count;i++)
-                    rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[i%kolory.Length], 0);
+            for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
+            {
+                if (Statyczne.otwartyplik.sciezki[i].oryginał==null)
+                    rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[i % kolory.Length], 0);
+                else
+                    rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[Statyczne.otwartyplik.sciezki.IndexOf(Statyczne.otwartyplik.sciezki[i].oryginał) % kolory.Length], 0);
+            }
         }
         public EdytorNut(sciezka input)
         {
@@ -103,7 +108,7 @@ namespace Syntezator_Krawczyka
             for (int i = 0; i < input.nuty.Count; i++)//rysowanie nut
             {
                 var prostokat = new Rectangle();
-                prostokat.Margin = new Thickness((plik.tempo * (input.nuty[i].opuznienie +delay) / (60 * plik.Hz) * skalaX), (tonMin - funkcje.ton(input.nuty[i].ilepróbekNaStarcie)) * skalaY, 0, 0);
+                prostokat.Margin = new Thickness((plik.tempo * (input.nuty[i].opuznienie + delay) / (60 * plik.Hz) * skalaX), (tonMin - funkcje.ton(input.nuty[i].ilepróbekNaStarcie)) * skalaY, 0, 0);
 
                 prostokat.Width = plik.tempo * input.nuty[i].długość / (60 * plik.Hz) * skalaX;
                 prostokat.Height = (skalaY / 2);

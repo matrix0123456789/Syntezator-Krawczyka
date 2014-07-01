@@ -177,6 +177,7 @@ namespace Syntezator_Krawczyka
                             else
                                 delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
 
+                            (n[0] as sciezka).oryginał = scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value];
                             foreach (var x in scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].nuty)
                             {
                                 var xx = x.Clone() as nuta;
@@ -457,6 +458,7 @@ namespace Syntezator_Krawczyka
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(scierzkaXML);
 
             sciezka scie = new sciezka(id, scierzkaXML, true);
+            scie.oryginał = org;
             sciezki.Add(scie);
         }
     }

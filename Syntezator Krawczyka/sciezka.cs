@@ -92,5 +92,7 @@ sekw.działaj(tabl);
         {
             return delay - other.delay;
         }
+
+        public sciezka oryginał;
     }
 }
