@@ -45,8 +45,16 @@ namespace Syntezator_Krawczyka
             var bufor = new byte[fala.Length * 2];
             for (var i = 0; i < fala.Length/2; i++)
             {
+                if (fala[0, i] > 1)
+                    fala[0, i] = 1;
+                else if (fala[0, i] < -1)
+                    fala[0, i] = -1;
+                if (fala[1, i] > 1)
+                    fala[1, i] = 1;
+                else if (fala[1, i] < -1)
+                    fala[1, i] = -1;
                 short liczba;
-                liczba = (short)(fala[0,i] * short.MaxValue);
+                liczba = (short)(fala[0,i] * 32766);
                 bufor[4 * i + 1] = (byte)Math.Floor(liczba / 256f);
                 bufor[4 * i] = (byte)(liczba % 256);
                 liczba = (short)(fala[1,i] * short.MaxValue);
@@ -132,16 +140,16 @@ namespace Syntezator_Krawczyka
             for (int z = pus.Length + 2; z < pusteLength && fala.LongLength/2 > falai; z = z + 4)
             {
 
-                if (fala[0, falai] > .98f)
-                    fala[0, falai] = .98f;
-                else if (fala[0, falai] < -.98f)
-                    fala[0, falai] = -0.98f;
-                if (fala[1, falai] > .98f)
-                    fala[1, falai] = .98f;
-                else if (fala[1, falai] < -.98f)
-                    fala[1, falai] = -.98f;
+                if (fala[0, falai] > 1)
+                    fala[0, falai] = 1;
+                else if (fala[0, falai] < -1)
+                    fala[0, falai] = -1;
+                if (fala[1, falai] > 1)
+                    fala[1, falai] = 1;
+                else if (fala[1, falai] < -1)
+                    fala[1, falai] = -1;
 
-                writer.Write((byte)((fala[0, falai] * 128 * 256) % 256));
+               /* writer.Write((byte)((fala[0, falai] * 128 * 256) % 256));
                 if (fala[0, falai] >= 0)
                     writer.Write((byte)(fala[0, falai] * 128));
                 else
@@ -150,7 +158,9 @@ namespace Syntezator_Krawczyka
                 if (fala[1, falai] >= 0)
                     writer.Write((byte)(fala[1, falai] * 128));
                 else
-                    writer.Write((byte)((1 + fala[1, falai]) * 128 + 128));
+                    writer.Write((byte)((1 + fala[1, falai]) * 128 + 128));*/
+                writer.Write((short)(fala[0, falai] * 32767));
+                writer.Write((short)(fala[1, falai] * 32767));
                 //puste[z + 1] = 0;
                 falai++;
 

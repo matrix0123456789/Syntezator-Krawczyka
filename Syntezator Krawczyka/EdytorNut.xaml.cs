@@ -27,30 +27,52 @@ namespace Syntezator_Krawczyka
         const double skalaX = 20;
         const double skalaY = 20;
         double tonMax;
-        static Brush[] kolory = { Brushes.Red, Brushes.Green, Brushes.SteelBlue, Brushes.Yellow, Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab, Brushes.Navy, Brushes.MediumTurquoise, Brushes.LightSalmon };
+        static Brush[] kolory = { Brushes.Red, Brushes.Green, Brushes.SteelBlue, Brushes.Yellow, Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab, Brushes.Navy, Brushes.MediumTurquoise, Brushes.LightSalmon, Brushes.SlateGray, Brushes.YellowGreen };
         double tonMin;
         List<Rectangle> listaChildren = new List<Rectangle>();
         void porListaChil() { }
         public EdytorNut()
         {
             InitializeComponent();
+            prawyPanel.Visibility = Visibility.Collapsed;
+            PrawyScrool.Visibility = Visibility.Visible;
+            
             rysujSkale(Statyczne.otwartyplik.sciezki);
             for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
             {
-                if (Statyczne.otwartyplik.sciezki[i].oryginał==null)
+                if (Statyczne.otwartyplik.sciezki[i].oryginał == null)
+                {
                     rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[i % kolory.Length], 0);
+                    var gr=new Grid();
+                    gr.Tag = Statyczne.otwartyplik.sciezki[i];
+                    gr.MouseUp += gr_MouseUp;
+                    var nazwaSc=new Label();
+                    nazwaSc.Foreground = kolory[i % kolory.Length];
+                    nazwaSc.Content=Statyczne.otwartyplik.sciezki[i].nazwa;
+                    gr.Children.Add(nazwaSc);
+                    (PrawyScrool.Content as StackPanel).Children.Add(gr);
+                }
                 else
                     rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[Statyczne.otwartyplik.sciezki.IndexOf(Statyczne.otwartyplik.sciezki[i].oryginał) % kolory.Length], 0);
             }
         }
-        public EdytorNut(sciezka input)
+
+        void gr_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var okno = new EdytorNut((sender as Grid).Tag as sciezka, ((sender as Grid).Children[0] as Label).Foreground);
+            okno.Show();
+        }
+        Brush glownyKolor = Brushes.Red;
+        public EdytorNut(sciezka input) : this(input, Brushes.Red) { }
+
+        public EdytorNut(sciezka input, Brush kolor)
         {
             InitializeComponent();
             main = input;
             if (input.nuty.Count > 0)
             {
                 rysujSkale(new List<sciezka>() { input });
-                rysujNuty(input, Brushes.Red);
+                rysujNuty(input, kolor);
 
             }
         }
