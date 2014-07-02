@@ -82,4 +82,5 @@ namespace Syntezator_Krawczyka
 
         }
     }
+   public enum ModułyEnum { Sekwencer,Oscylator, Granie, cutoff, flanger}
 }

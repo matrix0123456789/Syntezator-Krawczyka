@@ -11,5 +11,6 @@ namespace Syntezator_Krawczyka
         float[] generujJedenPrzebieg(long długość);
         XmlNode xml{get;}
         string nazwa { get; set; }
+        List<int> gpgpu { get; }
     }
 }

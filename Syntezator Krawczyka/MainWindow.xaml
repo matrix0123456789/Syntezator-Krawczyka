@@ -12,7 +12,7 @@
         <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
         <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" />
         <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="12,96,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Dodaj wirtualny instrument"/>
-        <ProgressBar Visibility="Hidden" Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,172,0,0" VerticalAlignment="Top" Width="92"/>
+        <ProgressBar Visibility="Hidden" Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,202,0,0" VerticalAlignment="Top" Width="92"/>
         <Button Content="Czyść bufor" Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,0,0,131" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
         <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="109,12,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="button6_Click" />
         <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="150,12,0,0" Name="button8" VerticalAlignment="Top" Width="37" Click="button8_Click" />

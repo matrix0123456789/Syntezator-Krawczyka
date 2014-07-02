@@ -106,5 +106,18 @@ namespace Syntezator_Krawczyka.Synteza
             }
             return input;
         }
+        public List<int> gpgpuGeneruj()
+        {
+            if (wyjście[0].DrógiModół == null)
+            {
+                return null;
+            }
+            var dane = new List<int>();
+            dane.Add((int)ModułyEnum.cutoff);
+            dane.Add(3);
+            dane.Add(gladkosc.GetHashCode());
+            dane.Add(moc.GetHashCode());
+            return dane;
+        }
     }
 }

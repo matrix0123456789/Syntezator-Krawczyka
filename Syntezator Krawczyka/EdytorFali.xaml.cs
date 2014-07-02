@@ -83,6 +83,7 @@ namespace Syntezator_Krawczyka
         void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             (aktywne as SkładoweHarmoniczne).Składowe[(int)(sender as Slider).Tag-1] = (float)(sender as Slider).Value;
+            (aktywne as SkładoweHarmoniczne).czyść();
             rysujWykres();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -106,7 +107,8 @@ namespace Syntezator_Krawczyka
         {
            ( aktywne as SkładoweHarmoniczne).Składowe.Add(0);
            SkładoweHarmoniczneLista.Children.Insert((aktywne as SkładoweHarmoniczne).Składowe.Count - 1, pokarzSkładowąHarmoniczną((aktywne as SkładoweHarmoniczne).Składowe.Count, 0));
-           rysujWykres();
+           (aktywne as SkładoweHarmoniczne).czyść();
+            rysujWykres();
         }
         void rysujWykres()
         {

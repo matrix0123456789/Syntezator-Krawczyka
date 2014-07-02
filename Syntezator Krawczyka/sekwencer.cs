@@ -89,6 +89,14 @@ namespace Syntezator_Krawczyka.Synteza
                 }
             }
         }
+        public void gpgpuGeneruj()
+        {
+            var dane = new List<int>();
+            if(wyjście[0].DrógiModół != null)
+            {
+
+            }
+        }
         public long symuluj(long p)
         {
             return wyjście[0].DrógiModół.symuluj(p);

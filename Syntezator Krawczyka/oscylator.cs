@@ -378,5 +378,37 @@ namespace Syntezator_Krawczyka.Synteza
         const double piRazy2 = 2 * Math.PI;
         float Balans, A, D, S, R, gladkosc;
         typFali typ;
+        public List<int> gpgpuGeneruj()
+        {
+            if (wyjście[0].DrógiModół == null)
+            {
+                return null;
+            }
+            var dane = new List<int>();
+            dane.Add((int)ModułyEnum.Oscylator);
+            List<int> niest=null;
+            if(typ==typFali.niestandardowa)
+            {
+                niest = niestandardowa.gpgpu;
+                dane.Add(7+niest.Count);
+            }
+            else
+            {
+                dane.Add(7);
+            }
+                    dane.Add((int)typ);
+                    dane.Add(gladkosc.GetHashCode());
+                    dane.Add(A.GetHashCode());
+                    dane.Add(D.GetHashCode());
+                    dane.Add(S.GetHashCode());
+                    dane.Add(R.GetHashCode());
+                    if (typ == typFali.niestandardowa)
+                    {
+                        dane.AddRange(niest);
+                       /* for (var i = 0; i < niest.Count; i++)
+                            dane.Add(niest[i]);*/
+                    }
+            return dane;
+        }
     }
 }
