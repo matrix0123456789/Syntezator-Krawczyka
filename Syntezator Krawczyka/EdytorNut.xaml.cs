@@ -23,7 +23,7 @@ namespace Syntezator_Krawczyka
         /// <summary>
         /// Główna ścierzka,na której pracujemy
         /// </summary>
-        sciezka main;
+        sciezka main = null;
         const double skalaX = 20;
         const double skalaY = 20;
         double tonMax;
@@ -36,19 +36,19 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             prawyPanel.Visibility = Visibility.Collapsed;
             PrawyScrool.Visibility = Visibility.Visible;
-            
+
             rysujSkale(Statyczne.otwartyplik.sciezki);
             for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
             {
                 if (Statyczne.otwartyplik.sciezki[i].oryginał == null)
                 {
                     rysujNuty(Statyczne.otwartyplik.sciezki[i], kolory[i % kolory.Length], 0);
-                    var gr=new Grid();
+                    var gr = new Grid();
                     gr.Tag = Statyczne.otwartyplik.sciezki[i];
                     gr.MouseUp += gr_MouseUp;
-                    var nazwaSc=new Label();
+                    var nazwaSc = new Label();
                     nazwaSc.Foreground = kolory[i % kolory.Length];
-                    nazwaSc.Content=Statyczne.otwartyplik.sciezki[i].nazwa;
+                    nazwaSc.Content = Statyczne.otwartyplik.sciezki[i].nazwa;
                     gr.Children.Add(nazwaSc);
                     (PrawyScrool.Content as StackPanel).Children.Add(gr);
                 }
@@ -140,46 +140,52 @@ namespace Syntezator_Krawczyka
                 prostokat.Fill = kolor;
                 prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
                 prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                prostokat.Tag = new nutaXml(input.nuty[i], input.xml.ChildNodes[i]);
+                prostokat.Tag = new nutaXml(input.nuty[i], input.xml.ChildNodes[i], input);
                 prostokat.MouseDown += prostokat_MouseClick;
                 panel.Children.Add(prostokat);
                 listaChildren.Add(prostokat);
-                listaChildren.Sort();
             }
         }
         void prostokat_MouseClick(object sender, MouseEventArgs e)
         {
-            if (aktywna != null)
-                aktywna.Stroke = null;
-            aktywna = (Rectangle)sender;
+            if (main == null)
+            {
+                var okno = new EdytorNut(((nutaXml)((Rectangle)sender).Tag).sciezka);
+            }
+            else
+            {
+                if (aktywna != null)
+                    aktywna.Stroke = null;
+                aktywna = (Rectangle)sender;
 
-            var nuta = (nutaXml)((sender as Rectangle).Tag);
-            czas.IsEnabled = dlugosc.IsEnabled = ton.IsEnabled = true;
-            aktywna.Stroke = Brushes.Green;
+                var nuta = (nutaXml)((sender as Rectangle).Tag);
+                czas.IsEnabled = dlugosc.IsEnabled = ton.IsEnabled = true;
+                aktywna.Stroke = Brushes.Green;
 
-            try
-            {
-                czas.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture).ToString();
-            }
-            catch (NullReferenceException)
-            {
-                czas.Text = "0";
-            }
-            try
-            {
-                dlugosc.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture).ToString();
-            }
-            catch (NullReferenceException)
-            {
-                dlugosc.Text = "0";
-            }
-            try
-            {
-                ton.Text = (double.Parse(nuta.xml.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture) + 6 * double.Parse(nuta.xml.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture)).ToString();
-            }
-            catch (NullReferenceException)
-            {
-                ton.Text = "0";
+                try
+                {
+                    czas.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture).ToString();
+                }
+                catch (NullReferenceException)
+                {
+                    czas.Text = "0";
+                }
+                try
+                {
+                    dlugosc.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture).ToString();
+                }
+                catch (NullReferenceException)
+                {
+                    dlugosc.Text = "0";
+                }
+                try
+                {
+                    ton.Text = (double.Parse(nuta.xml.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture) + 6 * double.Parse(nuta.xml.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture)).ToString();
+                }
+                catch (NullReferenceException)
+                {
+                    ton.Text = "0";
+                }
             }
         }
 
@@ -234,10 +240,12 @@ namespace Syntezator_Krawczyka
         {
             public nuta nuta;
             public XmlNode xml;
-            public nutaXml(nuta a, XmlNode b)
+            public sciezka sciezka;
+            public nutaXml(nuta a, XmlNode b, sciezka c)
             {
                 nuta = a;
                 xml = b;
+                sciezka = c;
             }
         }
 
@@ -308,7 +316,7 @@ namespace Syntezator_Krawczyka
             prostokat.Fill = Brushes.Red;
             prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            prostokat.Tag = new nutaXml(nuta, nutaXML);
+            prostokat.Tag = new nutaXml(nuta, nutaXML, main);
             prostokat.MouseDown += prostokat_MouseClick;
             panel.Children.Add(prostokat);
             listaChildren.Add(prostokat);
@@ -371,9 +379,9 @@ namespace Syntezator_Krawczyka
                         }
                     }
                     break;
-                    
+
                 case Key.Delete:
-                    if (aktywna!=null)
+                    if (aktywna != null)
                     {
                         var n = (nutaXml)aktywna.Tag;
                         n.xml.ParentNode.RemoveChild(n.xml);

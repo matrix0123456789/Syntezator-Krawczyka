@@ -13,6 +13,7 @@ namespace Syntezator_Krawczyka.Synteza
 {
     public class granie : moduł
     {
+        public static bool[] generować = { true };
         public XmlNode XML { get; set; }
         static public int o = 4410;
         static System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();

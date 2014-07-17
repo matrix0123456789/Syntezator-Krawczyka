@@ -274,30 +274,15 @@ namespace Syntezator_Krawczyka
             aktualizacjaOkna.Abort();
             App.Current.Shutdown();
         }
-        private void button6_Click(object sender, RoutedEventArgs e)
+        private void buttonGraj_Click(object sender, RoutedEventArgs e)
         {
-            /*List<nuta> lista = new List<nuta>();
-
-            foreach (var x in Statyczne.otwartyplik.sciezki)
-            {
-                foreach (var nuta in x.nuty)
-                {
-                    nuta.sekw = x.sekw;
-                    lista.Add(nuta);
-                }
-            }
-            lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
-            granie.granieNuty = lista.ToArray();
-            granie.granieMax = (int)granie.granieNuty[granie.granieNuty.Length - 1].sekw.symuluj(granie.granieNuty[granie.granieNuty.Length - 1].opuznienie + granie.granieNuty[granie.granieNuty.Length - 1].długość);
-            granie.graniePlay = true;
-            foreach (var x in Statyczne.otwartyplik.sciezki)
-            {
-                x.działaj();
-                //akt(null);
-            }*/
+            granie.graniePrzy = 0;
+            
 
 
-
+            granie.generować[0] = false;
+            granie.generować = new bool[1];
+            granie.generować[0] = true;
             granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
             granie.można = false;
             granie.grają.Clear();
@@ -346,7 +331,8 @@ namespace Syntezator_Krawczyka
                         tabl.grajDo = long.MaxValue;
                         System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                         {
-                            if (x.sekw != null)
+                            
+                            if (((bool[])o)[0]&&x.sekw != null)
                             {
                                 x.sekw.działaj(tabl);
                                 x.czyGotowe = true;
@@ -360,8 +346,8 @@ namespace Syntezator_Krawczyka
 
                                     //granie.grajcale(false);
                             }
-                        }, tabl);
-                        var watek = new Thread(() => { while (granie.liveGraj()) { Thread.Sleep(1000); } });
+                        }, granie.generować);
+                        var watek = new Thread(() => { var gen = granie.generować; while (granie.liveGraj() && gen[0]) { Thread.Sleep(1000); } });
                         watek.Start();
                     
                 }
@@ -434,9 +420,22 @@ namespace Syntezator_Krawczyka
 
             klawiatkompa.klawisz(e, false);
         }
-        private void button8_Click(object sender, RoutedEventArgs e)
+        private void buttonStop_Click(object sender, RoutedEventArgs e)
         {
             granie.grają.Clear();
+            granie.można = true;
+            granie.graniePlay = false;
+
+            granie.generować[0] = false;
+            granie.generować = new bool[1];
+            granie.generować[0] = true;
+            granie.graniePrzy = 0;
+            granie.wynik = null;
+            granie.granieMax = 0;
+            granie.granieNuty = null;
+            granie.liczbaGenerowanych = 0;
+            granie.liczbaGenerowanychMax = 0;
+            Statyczne.bufor.ClearBuffer();
         }
 
 
