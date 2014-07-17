@@ -190,6 +190,11 @@ namespace Syntezator_Krawczyka
                 foreach (sound z in moduły.Values)
               {
                     z.UI = new Instrument(z.nazwa,z);
+                    if (z.sekw.GetType() == typeof(InstrumentMidi))
+                    {
+                        z.UI.wewnętrzny.Children.Add((z.sekw as InstrumentMidi).UI);
+                    }
+                    else
                     foreach (moduł zz in z.Values)
                     {
                         try
@@ -379,7 +384,7 @@ namespace Syntezator_Krawczyka
             }
             else if (n.Attributes.GetNamedItem("type").Value == "samples")
             {
-                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value,n));
+                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value, n));
                 moduły[n.Attributes.GetNamedItem("id").Value].sekw = new sampler();
                 if (n.Attributes.GetNamedItem("volume") != null)
                     (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
@@ -398,6 +403,14 @@ namespace Syntezator_Krawczyka
 
                     }
                 }
+            }
+            else if (n.Attributes.GetNamedItem("type").Value == "midi")
+            {
+                moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value, n));
+                moduły[n.Attributes.GetNamedItem("id").Value].sekw = new InstrumentMidi();
+                if (n.Attributes.GetNamedItem("volume") != null)
+                    (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
+                
             }
         }
         void dekoduj2(XmlNode n)

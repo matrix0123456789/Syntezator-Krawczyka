@@ -62,5 +62,18 @@ namespace Syntezator_Krawczyka
             MainWindow.thi.klawiatkompa.sekw = parent.sekw;
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (wewnętrzny.Visibility == Visibility.Collapsed)
+            {
+                wewnętrzny.Visibility = Visibility.Visible;
+                (sender as Button).Content = "Zwiń";
+            }else
+            {
+                wewnętrzny.Visibility = Visibility.Collapsed;
+                (sender as Button).Content = "Rozwiń";
+            }
+        }
+
     }
 }

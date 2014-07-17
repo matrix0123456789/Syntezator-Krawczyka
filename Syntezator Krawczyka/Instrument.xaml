@@ -13,5 +13,6 @@
         <WrapPanel Margin="5,26,5,5" Name="wewnętrzny"></WrapPanel>
         <Label Content="Instrument" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Margin="16,0,0,0" />
         <Button ToolTip="Ustawia klawiaturę na ten instrument" Content="" Click="Button_Click" HorizontalAlignment="Left" Margin="0,5,0,0" VerticalAlignment="Top" Width="16" Height="16"/>
+        <Button Content="Zwiń" Margin="0,0,5,277" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="64" Click="Button_Click_1"/>
     </Grid>
 </UserControl>

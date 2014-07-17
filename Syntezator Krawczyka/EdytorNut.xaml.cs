@@ -143,6 +143,8 @@ namespace Syntezator_Krawczyka
                 prostokat.Tag = new nutaXml(input.nuty[i], input.xml.ChildNodes[i]);
                 prostokat.MouseDown += prostokat_MouseClick;
                 panel.Children.Add(prostokat);
+                listaChildren.Add(prostokat);
+                listaChildren.Sort();
             }
         }
         void prostokat_MouseClick(object sender, MouseEventArgs e)

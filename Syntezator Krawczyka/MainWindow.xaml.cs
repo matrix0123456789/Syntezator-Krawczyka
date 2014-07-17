@@ -522,6 +522,23 @@ namespace Syntezator_Krawczyka
         oknoEN.Show();
     }
 
+    private void VST_Click(object sender, RoutedEventArgs e)
+    {
+
+        var dialog = new OpenFileDialog();
+        dialog.Filter = "Wtyczka VST|*.dll";
+            Jacobi.Vst.Core.VstCanDoHelper.ParseHostCanDo("S");
+            new Jacobi.Vst.Framework.VstMidiProgram();
+        dialog.ShowDialog();
+        if (dialog.FileName != null)
+        {
+            wtyczkaVST.test1(dialog.FileName);
+            wtyczkaVST.test2(dialog.FileName);
+            wtyczkaVST.test3(dialog.FileName);
+            new wtyczkaVST(dialog.FileName);
+        }
+    }
+
 
 
     

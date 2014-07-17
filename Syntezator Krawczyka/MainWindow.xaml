@@ -28,5 +28,6 @@
         <Button Content="Dodaj ścierzkę"  Height="23" HorizontalAlignment="Left" Margin="12,125,0,0" x:Name="buttonNowaScierzka" VerticalAlignment="Top" Width="92" Click="buttonNowaScierzka_Click" ToolTip="Dodaj scierzkę z nutami"/>
         <Button HorizontalAlignment="Left" Margin="12,153,0,0" VerticalAlignment="Top" Width="92" Height="19" Click="Button_Click">Edytor nut</Button>
         <Button Content="Metadane pliku" HorizontalAlignment="Left" VerticalAlignment="Top" Width="92" Margin="12,177,0,0"/>
+        <Button Content="Wtyczka VST" ToolTip="Otwiera wtyczkę (plugin) w formacie VST" Height="23" HorizontalAlignment="Left" Margin="10,202,0,0"  VerticalAlignment="Top" Width="92" Click="VST_Click" TextOptions.TextHintingMode="Animated" />
     </Grid>
 </Window>

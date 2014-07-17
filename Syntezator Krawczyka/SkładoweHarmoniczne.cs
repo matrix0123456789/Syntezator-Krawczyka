@@ -10,7 +10,7 @@ namespace Syntezator_Krawczyka
     public class SkładoweHarmoniczne : FalaNiestandardowa
     {
 
-        List<int> gpgpu
+        public List<int> gpgpu
         {
             get
             {

@@ -96,9 +96,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Jacobi.Vst.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x64\Debug\Jacobi.Vst.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Jacobi.Vst.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x64\Debug\Jacobi.Vst.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Jacobi.Vst.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x64\Debug\Jacobi.Vst.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="NAudio">
-      <HintPath>..\..\..\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Syntezator Krawczyka\bin\Debug\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Syntezator-Publish\Syntezator Krawczyka\bin\Debug\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -138,6 +151,10 @@
     <Compile Include="generatorObwiedniFiltruUI.xaml.cs">
       <DependentUpon>generatorObwiedniFiltruUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InstrumentMidi.cs" />
+    <Compile Include="InstrumentMidiUI.xaml.cs">
+      <DependentUpon>InstrumentMidiUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="klawiaturaMidi.cs" />
     <Compile Include="KlawiaturaMidiUI.xaml.cs">
       <DependentUpon>KlawiaturaMidiUI.xaml</DependentUpon>
@@ -158,6 +175,7 @@
     <Compile Include="suwak.xaml.cs">
       <DependentUpon>suwak.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wtyczkaVST.cs" />
     <Compile Include="zmianaWysokości.cs" />
     <Compile Include="zmianaWysokościUI.xaml.cs">
       <DependentUpon>zmianaWysokościUI.xaml</DependentUpon>
@@ -232,6 +250,10 @@
     <Page Include="generatorObwiedniFiltruUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="InstrumentMidiUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="KlawiaturaMidiUI.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -390,6 +412,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\przyklad21.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\przyklad211.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

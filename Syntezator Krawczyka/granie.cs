@@ -295,6 +295,9 @@ namespace Syntezator_Krawczyka.Synteza
                                 }
                                 else
                                     i2++;
+                            } else if (klawiaturaKomputera.wszytskieNuty[i2].sekw.GetType() ==typeof(InstrumentMidi))
+                            {
+                                klawiaturaKomputera.wszytskieNuty.RemoveAt(i2);
                             }
                             else
                                 i2++;
