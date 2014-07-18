@@ -187,9 +187,13 @@ namespace Syntezator_Krawczyka
                 ileDoKopii++;
                 if (ileDoKopii > 600)
                 {
-                    System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
-                    Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia" + DateTime.Now.ToFileTime() + ".synkra");
-                    ileDoKopii = 0;
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
+                        Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia" + DateTime.Now.ToFileTime() + ".synkra");
+                        ileDoKopii = 0;
+                    }
+                    catch { ileDoKopii = 300; }
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {
