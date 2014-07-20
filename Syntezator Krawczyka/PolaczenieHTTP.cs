@@ -45,6 +45,9 @@ namespace Syntezator_Krawczyka
                     suma = (int)(((long)laczony * (long)prywatny) % 16777216);
                     stan = stanSerwera.połączono;
 
+                    if (Syntezator_Krawczyka.Properties.Settings.Default.Login != "" && Syntezator_Krawczyka.Properties.Settings.Default.Haslo != "")
+                        loguj(Syntezator_Krawczyka.Properties.Settings.Default.Login, Syntezator_Krawczyka.Properties.Settings.Default.Haslo);
+
                 }
                 catch
                 {
@@ -90,8 +93,12 @@ namespace Syntezator_Krawczyka
                             var odp = Regexlogowanie.Match(ret);
                             if (odp.Groups[1].Value == "ok")
                             {
+                                Syntezator_Krawczyka.Properties.Settings.Default.Login = login;
+                                Syntezator_Krawczyka.Properties.Settings.Default.Haslo = haslo;
+                                Syntezator_Krawczyka.Properties.Settings.Default.Save();
                                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                                 {
+                                    if (MainWindow.oknoLogowanie!=null)
                                     MainWindow.oknoLogowanie.Close();
                                     zalogowano = true;
                                     MainWindow.thi.zmianaLogowania(this);
@@ -184,15 +191,15 @@ namespace Syntezator_Krawczyka
                     polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                     var json = polaczenie.UploadString("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + id + "\"}"));
                     var ret = new UtworySerwer();
-                    if(RegexUtwory.IsMatch(json))
+                    if (RegexUtwory.IsMatch(json))
                     {
                         var mat = RegexUtwory.Match(json);
                         var utwory = mat.Groups[1].Value.Split(',');
-                        for (int i = 0; i < utwory.Length;i+=4 )
-                            ret.Add(new UtwórSerwer(utwory[i] + ',' + utwory[i+1] + ',' + utwory[i+2] + ',' + utwory[i+3]));
+                        for (int i = 0; i < utwory.Length; i += 4)
+                            ret.Add(new UtwórSerwer(utwory[i] + ',' + utwory[i + 1] + ',' + utwory[i + 2] + ',' + utwory[i + 3]));
                     }
 
-                    MessageBox.Show(json);
+                   // MessageBox.Show(json);
                     return ret;
                 }
                 catch { return null; }
@@ -203,12 +210,94 @@ namespace Syntezator_Krawczyka
 
         internal void wyślij(plik plik)
         {
-            WebClient polaczenie = new WebClient();
-            polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
-            polaczenie.Headers.Add("Content-Type", "audio/x-syntezator-krawczyka");
+            var dane = new Dictionary<string, object>();
+            dane.Add("pliki[]", plik.zapiszDoZmiennej());
+            var ret=Submit("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, dane);
+
+           /* byte[] bu = new byte[1000];
+            ret.GetResponseStream().Read(bu, 0, 1000);
+            MessageBox.Show(System.Text.Encoding.UTF8.GetString(bu, 0, 1000));*/
+           /* WebClient polaczenie = new WebClient();
+           // polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
+           // polaczenie.Headers.Add("Content-Type", "audio/x-syntezator-krawczyka");
 
             polaczenie.UploadData("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, plik.zapiszDoZmiennej());
-                    
+
+
+
+
+
+
+
+            var bytes = plik.zapiszDoZmiennej();
+            var boundary = "-----------------------------99614912995";
+            var boundaryBytes=Encoding.UTF8.GetBytes(  boundary );
+            var dane = "Content-Disposition: form-data; name=\"pliki[]\"\r\n\r\n";
+            var dane2 = System.Text.Encoding.UTF8.GetBytes(dane);
+            HttpWebRequest request = HttpWebRequest.Create("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP) as HttpWebRequest;
+            request.ContentType = "multipart/form-data, boundary=" + boundary;
+            request.UserAgent = "SyntezatorKrawczyka";
+            request.Method = "POST";
+            request.ContentLength = bytes.Length + dane.Length + 2 * boundaryBytes.Length;
+            request.Timeout = (int)Math.Round((double)bytes.Length / 5120.0 * 1000.0, 0);
+            if (request.Timeout < 8000) request.Timeout = 8000;
+            using (Stream rStream = request.GetRequestStream())
+            {
+                rStream.Write(boundaryBytes, 0, boundaryBytes.Length);
+                rStream.Write(dane2, 0, dane2.Length);
+                rStream.Write(bytes, 0, bytes.Length);
+                rStream.Write(boundaryBytes, 0, boundaryBytes.Length);
+                rStream.Close();
+            }
+            byte[] bu = new byte[1000];
+            request.GetResponse().GetResponseStream().Read(bu, 0, 1000);
+            MessageBox.Show( System.Text.Encoding.UTF8.GetString(bu, 0, 1000));*/
+        }
+        internal static HttpWebResponse Submit(string url, Dictionary<string, object> values)
+        {
+            Stream requestStream = new MemoryStream();
+            string boundary = "---------------------846346834";
+            foreach (var value in values)
+            {
+                byte[] boundWrite = Encoding.UTF8.GetBytes("\r\n--" + boundary + "\r\n");
+                requestStream.Write(boundWrite, 0, boundWrite.Length);
+                if (value.Value is byte[])
+                {
+                    byte[] write = Encoding.UTF8.GetBytes(
+                        "Content-Disposition: form-data; name=\"" + value.Key + "\"; filename=\"" + value.Key + "\"\r\n" +
+                        "Content-Transfer-Encoding: binary\r\n" +
+                        "Content-Type: application/octet-stream\r\n\r\n"
+                    );
+                    requestStream.Write(write, 0, write.Length);
+                    requestStream.Write(value.Value as byte[], 0, (value.Value as byte[]).Length);
+                }
+                else
+                {
+                    byte[] write = Encoding.UTF8.GetBytes("Content-Disposition: form-data; name=\"" + value.Key + "\"\r\n\r\n" + value.Value.ToString());
+                    requestStream.Write(write, 0, write.Length);
+                }
+            }
+            byte[] footer = Encoding.UTF8.GetBytes("\r\n--" + boundary + "--\r\n");
+            requestStream.Write(footer, 0, footer.Length);
+            // Dane do wysłania też powinny być ok. Postarałem się, aby były zgodne ze specyfikacją. Powinny ;]
+            byte[] bytes = new byte[(int)requestStream.Length];
+            requestStream.Position = 0;
+            requestStream.Read(bytes, 0, bytes.Length);
+            requestStream.Dispose();
+            // Kopiowanie do tablicy bajtów działa znakomicie.
+            HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
+            request.ContentType = "multipart/form-data, boundary=" + boundary;
+            request.UserAgent = "Syntezator-krawczyka";
+            request.Method = "POST";
+            request.ContentLength = bytes.Length;
+            request.Timeout = (int)Math.Round((double)bytes.Length / 5120.0 * 1000.0, 0);
+            if (request.Timeout < 8000) request.Timeout = 8000;
+            using (Stream rStream = request.GetRequestStream())
+            {
+                rStream.Write(bytes, 0, bytes.Length);
+                rStream.Close();
+            }
+            return request.GetResponse() as HttpWebResponse;
         }
     }
 
