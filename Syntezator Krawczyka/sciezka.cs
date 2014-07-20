@@ -20,8 +20,8 @@ namespace Syntezator_Krawczyka
         /// <summary>
         /// sekwencer, do którego zostaną wysłane nuty
         /// </summary>
-        public soundStart sekw{get;set;}
-        public UIElement UI{get;set;}
+        public soundStart sekw { get; set; }
+        public UIElement UI { get; set; }
         /// <summary>
         /// nazwa
         /// </summary>
@@ -49,7 +49,7 @@ namespace Syntezator_Krawczyka
         {
 
             this.xml = xml;
-            if (kopia &&(Nazwa.Length<8|| Nazwa.Substring(Nazwa.Length - 8) != " (kopia)"))
+            if (kopia && (Nazwa.Length < 8 || Nazwa.Substring(Nazwa.Length - 8) != " (kopia)"))
                 nazwa = Nazwa + " (kopia)";
             else
                 nazwa = Nazwa;
@@ -61,36 +61,57 @@ namespace Syntezator_Krawczyka
         /// </summary>
         public void działaj()
         {
-           lock(granie.grają)
-           {
-               granie.liczbaGenerowanychMax+= nuty.Count;
-               granie.liczbaGenerowanych += nuty.Count;
-               foreach(var prz in nuty)
-            {var tabl = (nuta)prz.Clone();
-            tabl.grajDo = long.MaxValue;
-            System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+            lock (granie.grają)
             {
-                if(sekw!=null)
-                
-sekw.działaj(tabl);
-                lock (granie.liczbaGenerowanychBlokada)
+                granie.liczbaGenerowanychMax += nuty.Count;
+                granie.liczbaGenerowanych += nuty.Count;
+                foreach (var prz in nuty)
                 {
-                    granie.liczbaGenerowanych--;
-                    if(!granie.można&&granie.liczbaGenerowanych==0)
+                    var tabl = (nuta)prz.Clone();
+                    tabl.grajDo = long.MaxValue;
+                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                    {
+                        if (sekw != null)
 
-                        granie.grajcale(false);
+                            sekw.działaj(tabl);
+                        lock (granie.liczbaGenerowanychBlokada)
+                        {
+                            granie.liczbaGenerowanych--;
+                            if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                                granie.grajcale(false);
+                        }
+                    }, tabl);
                 }
-            }, tabl);
             }
-           }
         }
 
-        public int delay = 0;
-
+        private long? _delay = null;
+        public long delay
+        {
+            get { return (int)_delay; }
+            set
+            {
+                if (_delay == null)
+                    _delay = value;
+                else if (value != _delay)
+                {
+                    var roznica = (value - (long)_delay);
+                    foreach(var x in nuty)
+                    {
+                        x.opuznienie += roznica;
+                    }
+                    _delay = value;
+                }
+            }
+        }
 
         public int CompareTo(sciezka other)
         {
-            return delay - other.delay;
+            if (delay - other.delay > 0)
+                return 1;
+            else
+                return -1;
         }
 
         public sciezka oryginał;

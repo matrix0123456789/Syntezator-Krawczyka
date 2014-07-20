@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.Windows.Shell;
 using System.Xml;
 using Microsoft.Win32;
+using System.IO;
 namespace Syntezator_Krawczyka
 {
 
@@ -55,9 +56,14 @@ namespace Syntezator_Krawczyka
             {
                 new Statyczne();
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
                 MessageBox.Show("Brakuje pliku NAudio.dll, bez którego program nie może odtwarzać dźwięku.", "Brak pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd ładowania biblioteki NAudio.dll, bez której program nie może odtwarzać dźwięku.", "Błąd pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.ToString());
             }
             thi = this;
             InitializeComponent();
@@ -478,11 +484,13 @@ namespace Syntezator_Krawczyka
         {
             if (polaczenieHTTP.zalogowano)
             {
-                LogowanieTxt.Content = "zalogowano jako " + polaczenieHTTP.login;
+                LogowanieTxt.Content =  polaczenieHTTP.login;
+                LogowanieTxt.ToolTip="zalogowano jako "+polaczenieHTTP.login;
                 LogowanieTxt.FontSize = 8;
             }
             else
                 LogowanieTxt.Content = "Zaloguj";
+            LogowanieTxt.FontSize = 12;
         }
 
         private void Grid_Drop(object sender, DragEventArgs e)
@@ -528,18 +536,22 @@ namespace Syntezator_Krawczyka
     private void VST_Click(object sender, RoutedEventArgs e)
     {
 
-        var dialog = new OpenFileDialog();
-        dialog.Filter = "Wtyczka VST|*.dll";
+        try
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Wtyczka VST|*.dll";
             Jacobi.Vst.Core.VstCanDoHelper.ParseHostCanDo("S");
             new Jacobi.Vst.Framework.VstMidiProgram();
-        dialog.ShowDialog();
-        if (dialog.FileName != null)
-        {
-            wtyczkaVST.test1(dialog.FileName);
-            wtyczkaVST.test2(dialog.FileName);
-            wtyczkaVST.test3(dialog.FileName);
-            new wtyczkaVST(dialog.FileName);
+            dialog.ShowDialog();
+            if (dialog.FileName != null)
+            {
+                wtyczkaVST.test1(dialog.FileName);
+                wtyczkaVST.test2(dialog.FileName);
+                wtyczkaVST.test3(dialog.FileName);
+                new wtyczkaVST(dialog.FileName);
+            }
         }
+        catch(Exception e2) { MessageBox.Show(e2.ToString(), "Błąd ładowania wtyczki",MessageBoxButton.OK, MessageBoxImage.Error); }
     }
 
 

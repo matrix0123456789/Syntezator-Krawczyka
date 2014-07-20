@@ -171,9 +171,9 @@ namespace Syntezator_Krawczyka
                         if (scieżkiZId.ContainsKey((n[1] as XmlElement).Attributes.GetNamedItem("copy").Value))
                         {
                             (n[0] as sciezka).kopia = true;
-                            int delay;
+                            long delay;
                             if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
-                                delay = (int)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
+                                delay = (long)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
                             else
                                 delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
 
@@ -227,7 +227,10 @@ namespace Syntezator_Krawczyka
             xml = new XmlDocument();
             xml.LoadXml("<?xml version=\"1.0\" encoding=\"UTF-8\"?><file></file>");
         }
-        public void zapisz()
+        /// <summary>
+        /// Wykorzystywane w matodzie zapisz()
+        /// </summary>
+        void uaktualnij()
         {
             foreach (var x in moduły)
             {
@@ -236,15 +239,19 @@ namespace Syntezator_Krawczyka
                     modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
                 }
             }
-            var listaWave=xml.GetElementsByTagName("wave");
-            for(var i=listaWave.Count-1;i>=0;i--)
+            var listaWave = xml.GetElementsByTagName("wave");
+            for (var i = listaWave.Count - 1; i >= 0; i--)
             {
                 listaWave.Item(i).ParentNode.RemoveChild(listaWave.Item(i));
             }
-            foreach(var x in fale)
+            foreach (var x in fale)
             {
                 xml.DocumentElement.AppendChild(x.Value.xml);
             }
+        }
+        public void zapisz()
+        {
+            uaktualnij();
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.Filter = "Plik Syntezatora Krawczyka|*.synkra";
             dialog.ShowDialog();
@@ -257,19 +264,17 @@ namespace Syntezator_Krawczyka
         }
         public void zapisz(string path)
         {
-            foreach (var x in moduły)
-            {
-                foreach (var y in x.Value)
-                {
-                    modułFunkcje.zapiszXML(y.Value.ustawienia, y.Value.XML);
-                }
-            }
-
+            uaktualnij();
 
             System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
             zapis.Write(xml.OuterXml);
             zapis.Close();
 
+        }
+        public byte[] zapiszDoZmiennej()
+        {
+            uaktualnij();
+            return System.Text.Encoding.UTF8.GetBytes(xml.OuterXml);
         }
         public void dekoduj(XmlNodeList a)
         {

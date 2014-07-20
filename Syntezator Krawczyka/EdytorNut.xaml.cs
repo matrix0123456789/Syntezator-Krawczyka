@@ -137,7 +137,7 @@ namespace Syntezator_Krawczyka
         {
             rysujNuty(input, kolor, -input.delay);
         }
-        void rysujNuty(sciezka input, Brush kolor, int delay)
+        void rysujNuty(sciezka input, Brush kolor, long delay)
         {
             for (int i = 0; i < input.nuty.Count; i++)//rysowanie nut
             {
@@ -406,7 +406,7 @@ namespace Syntezator_Krawczyka
 
         private int porListaChil(Rectangle x, Rectangle y)
         {
-            if (y.Margin.Left > x.Margin.Left)
+            if (y.Margin.Left < x.Margin.Left)
                 return 1;
             else
                 return -1;

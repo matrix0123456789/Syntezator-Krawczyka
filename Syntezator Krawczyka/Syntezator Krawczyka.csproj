@@ -44,6 +44,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -98,15 +99,15 @@
     <Reference Include="Accessibility" />
     <Reference Include="Jacobi.Vst.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x64\Debug\Jacobi.Vst.Core.dll</HintPath>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\AnyCPU\Release\Jacobi.Vst.Core.dll</HintPath>
     </Reference>
     <Reference Include="Jacobi.Vst.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x64\Debug\Jacobi.Vst.Framework.dll</HintPath>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\AnyCPU\Release\Jacobi.Vst.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Jacobi.Vst.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x64\Debug\Jacobi.Vst.Interop.dll</HintPath>
+    <Reference Include="Jacobi.Vst.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x86\Release\Jacobi.Vst.Interop.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NAudio, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -175,6 +176,8 @@
     <Compile Include="suwak.xaml.cs">
       <DependentUpon>suwak.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UtworySerwer.cs" />
+    <Compile Include="UtwórSerwer.cs" />
     <Compile Include="wtyczkaVST.cs" />
     <Compile Include="zmianaWysokości.cs" />
     <Compile Include="zmianaWysokościUI.xaml.cs">

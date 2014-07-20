@@ -6,3 +6,14 @@ C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konso
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\obj\x86\Debug\Konsola.csprojResolveAssemblyReference.cache
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\obj\x86\Debug\benchmark1.exe
 C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\obj\x86\Debug\benchmark1.pdb
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\obj\x86\Debug\Konsola.csprojResolveAssemblyReference.cache
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\benchmark1.exe
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\benchmark1.pdb
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\Syntezator Krawczyka.exe
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\Jacobi.Vst.Core.dll
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\NAudio.dll
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\Jacobi.Vst.Interop.dll
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\Jacobi.Vst.Framework.dll
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\bin\Debug\Syntezator Krawczyka.pdb
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\obj\x86\Debug\benchmark1.exe
+C:\Users\Mateusz\Documents\Syntezator Krawczyka\Konsola\obj\x86\Debug\benchmark1.pdb
