@@ -13,7 +13,12 @@ namespace Syntezator_Krawczyka.Synteza
         public XmlNode XML { get; set; }
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new zmianaWysokościUI(this);
+                return _UI;
+            }
         }
         public void akt() { }
         public long symuluj(long p)
@@ -34,7 +39,6 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public zmianaWysokości()
         {
-            _UI = new zmianaWysokościUI(this);
             wejście = new List<Typ>();
             _wyjście = new Typ[1];
             _wyjście[0] = new Typ();
@@ -46,8 +50,8 @@ namespace Syntezator_Krawczyka.Synteza
         public void działaj(nuta o)
         {
             var oktawy = float.Parse(_ustawienia["oktawy"], CultureInfo.InvariantCulture);
-            var tony = float.Parse(_ustawienia["tony"], CultureInfo.InvariantCulture)+(float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture)/2);
-            o.ilepróbek=o.ilepróbek/Math.Pow(2, oktawy + (tony / 6));
+            var tony = float.Parse(_ustawienia["tony"], CultureInfo.InvariantCulture) + (float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) / 2);
+            o.ilepróbek = o.ilepróbek / Math.Pow(2, oktawy + (tony / 6));
 
             wyjście[0].DrógiModół.działaj(o);
         }

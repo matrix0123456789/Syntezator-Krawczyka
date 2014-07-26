@@ -27,7 +27,12 @@ namespace Syntezator_Krawczyka.Synteza
         public void akt() { }
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new GranieUI(this);
+                return _UI;
+            }
         }
         UserControl _UI;
         public long symuluj(long wej)
@@ -67,7 +72,7 @@ namespace Syntezator_Krawczyka.Synteza
                             oz = dospr.dźwięk.Length - dospr.zagrano;
                     }
                 }
-                fala = new float[2,oz];
+                fala = new float[2, oz];
                 for (int x = 0; x < zz.Length; x++)
                 {
 
@@ -87,8 +92,8 @@ namespace Syntezator_Krawczyka.Synteza
                         {
 
 
-                            fala[0,i] += zz[x].dźwięk[i + zz[x].zagrano];
-                            fala[1,i] += zz[x].dźwięk[i + zz[x].zagrano];
+                            fala[0, i] += zz[x].dźwięk[i + zz[x].zagrano];
+                            fala[1, i] += zz[x].dźwięk[i + zz[x].zagrano];
 
                         }
                     }
@@ -100,8 +105,8 @@ namespace Syntezator_Krawczyka.Synteza
                         {
 
 
-                            fala[0,i] += zz[x].dźwięk[i + zz[x].zagrano] * mn0;
-                            fala[1,i] += zz[x].dźwięk[i + zz[x].zagrano] * mn1;
+                            fala[0, i] += zz[x].dźwięk[i + zz[x].zagrano] * mn0;
+                            fala[1, i] += zz[x].dźwięk[i + zz[x].zagrano] * mn1;
 
                         }
                     }
@@ -133,7 +138,7 @@ namespace Syntezator_Krawczyka.Synteza
                 funkcje.graj(fala);
             else
             {
-                while(PlikDoZapisu==null)
+                while (PlikDoZapisu == null)
                 {
                     Thread.Sleep(50);
                 }
@@ -153,7 +158,6 @@ namespace Syntezator_Krawczyka.Synteza
         public granie()
         {
             graniestart();
-            _UI = new GranieUI(this);
             wejście = new List<Typ>();
             _wyjście = new Typ[0];
             _ustawienia = new Dictionary<string, string>();
@@ -265,7 +269,8 @@ namespace Syntezator_Krawczyka.Synteza
                                 }, granieNuty[granieI]);
                                 granieI++;
                             }
-                        }*/ lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
+                        }*/
+                        lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
                         if (liczbaGenerowanych == 0)
 
                             grajRaz();
@@ -296,7 +301,8 @@ namespace Syntezator_Krawczyka.Synteza
                                 }
                                 else
                                     i2++;
-                            } else if (klawiaturaKomputera.wszytskieNuty[i2].sekw.GetType() ==typeof(InstrumentMidi))
+                            }
+                            else if (klawiaturaKomputera.wszytskieNuty[i2].sekw.GetType() == typeof(InstrumentMidi))
                             {
                                 klawiaturaKomputera.wszytskieNuty.RemoveAt(i2);
                             }
@@ -310,8 +316,8 @@ namespace Syntezator_Krawczyka.Synteza
 
                     {
                     dodatkowy:
-                        fala = new float[2,o];
-                    var falaLength = o;
+                        fala = new float[2, o];
+                        var falaLength = o;
                         /*if (MainWindow.gpgpu)
                         {
                                     
@@ -364,8 +370,8 @@ namespace Syntezator_Krawczyka.Synteza
                                         {
 
                                             {
-                                                fala[0,i] += zz[x].dźwięk[i + opt1];
-                                                fala[1,i] += zz[x].dźwięk[i + opt1];
+                                                fala[0, i] += zz[x].dźwięk[i + opt1];
+                                                fala[1, i] += zz[x].dźwięk[i + opt1];
                                             }
 
                                         }
@@ -408,56 +414,59 @@ namespace Syntezator_Krawczyka.Synteza
                 catch (FormatException a) { funkcje.graj(fala); }
                 // grajRazCale();
             }
-            
+
             teraz = false;
         }
-        public static bool liveGraj() {bool czyJeszczeRaz = false; if(graniePlay)
+        public static bool liveGraj()
+        {
+            bool czyJeszczeRaz = false; if (graniePlay)
             {
                 lock (wynik)
                 {
                     long wygenerowanoDo = wynik.Length / 2;
-                foreach(var x in granieNuty)
-                {
-                    if (!x.czyGotowe && x.sekw != null && wygenerowanoDo > x.opuznienie)
+                    foreach (var x in granieNuty)
                     {
-                        wygenerowanoDo = x.opuznienie;
-                        czyJeszczeRaz = true;
-                    }
+                        if (!x.czyGotowe && x.sekw != null && wygenerowanoDo > x.opuznienie)
+                        {
+                            wygenerowanoDo = x.opuznienie;
+                            czyJeszczeRaz = true;
+                        }
 
-                }
-                var dl=wygenerowanoDo - graniePrzy;
-                
-                    
-                    if (dl>0)
-                {
-                    if ((Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes )/4< dl)
+                    }
+                    var dl = wygenerowanoDo - graniePrzy;
+
+
+                    if (dl > 0)
+                    {
+                        if ((Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4 < dl)
                         {
                             czyJeszczeRaz = true;
                             dl = (Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4;
                         }
-                    var falaT = new float[2, dl];
-                    for (var i = 0; i < dl;i++ )
-                    {
-                        falaT[0, i] = wynik[0, i + graniePrzy];
-                        falaT[1, i] = wynik[1, i + graniePrzy];
-                    }
-                    try
-                    {
+                        var falaT = new float[2, dl];
+                        for (var i = 0; i < dl; i++)
+                        {
+                            falaT[0, i] = wynik[0, i + graniePrzy];
+                            falaT[1, i] = wynik[1, i + graniePrzy];
+                        }
+                        try
+                        {
                             if (funkcje.graj(falaT))
                             { }// goto dodatkowy;
+                        }
+                        catch (FormatException a) { System.Windows.MessageBox.Show("błąd"); }
+                        graniePrzy += (int)dl;
                     }
-                    catch (FormatException a) { System.Windows.MessageBox.Show("błąd"); }
-                        graniePrzy +=(int)dl;
-                }}
-            /*if(czyJeszczeRaz)
-            {
-                //Thread.Sleep(100);
-                jedenTimer = new Timer((o) => { liveGraj(); }, null, 100, 0);
+                }
+                /*if(czyJeszczeRaz)
+                {
+                    //Thread.Sleep(100);
+                    jedenTimer = new Timer((o) => { liveGraj(); }, null, 100, 0);
                 
-            }*/
+                }*/
 
             }
-        return czyJeszczeRaz;
+            return czyJeszczeRaz;
         }
         static Timer jedenTimer;
         public static void Działaj(nuta input)
@@ -482,8 +491,9 @@ namespace Syntezator_Krawczyka.Synteza
 
                 var opt3 = input.dane.Length - opt1;
                 try
-                    {if (input.głośność == 1)
-                    
+                {
+                    if (input.głośność == 1)
+
                         if (input.balans0 == 1 && input.balans1 == 1)
                             for (; i < opt3; i++)
                             {
@@ -496,18 +506,18 @@ namespace Syntezator_Krawczyka.Synteza
                                 wynik[0, i] += input.dane[i + opt1] * input.balans0;
                                 wynik[1, i] += input.dane[i + opt1] * input.balans1;
                             }
-                else
-                {
-                    var mn0 = input.głośność * input.balans0;
-                    var mn1 = input.głośność * input.balans1;
-                    for (; i < opt3; i++)
+                    else
                     {
-                        wynik[0, i] += input.dane[i + opt1] * mn0;
-                        wynik[1, i] += input.dane[i + opt1] * mn1;
+                        var mn0 = input.głośność * input.balans0;
+                        var mn1 = input.głośność * input.balans1;
+                        for (; i < opt3; i++)
+                        {
+                            wynik[0, i] += input.dane[i + opt1] * mn0;
+                            wynik[1, i] += input.dane[i + opt1] * mn1;
+                        }
                     }
                 }
-                    }
-                    catch (IndexOutOfRangeException) { }
+                catch (IndexOutOfRangeException) { }
 
                 input.dane = null;
             }
@@ -613,6 +623,6 @@ namespace Syntezator_Krawczyka.Synteza
 
         public static object zmianaLiczGenLock = new object();
 
-        public static string PlikDoZapisu=null;
+        public static string PlikDoZapisu = null;
     }
 }

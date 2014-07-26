@@ -3,16 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" AllowDrop="True" MouseDown="UserControl_Drag">
+             mc:Ignorable="d" AllowDrop="True" MouseDown="UserControl_Drag">
     <Grid Background="#FF70CB85">
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Kopiuj" Click="MenuItem_Click"></MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
-        <WrapPanel Margin="5,26,5,5" Name="wewnętrzny"></WrapPanel>
+        <WrapPanel Margin="5,26,5,5" Name="wewnętrzny" Visibility="Collapsed"></WrapPanel>
         <Label Content="Instrument" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Margin="16,0,0,0" />
         <Button ToolTip="Ustawia klawiaturę na ten instrument" Content="" Click="Button_Click" HorizontalAlignment="Left" Margin="0,5,0,0" VerticalAlignment="Top" Width="16" Height="16"/>
-        <Button Content="Zwiń" Margin="0,0,5,277" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="64" Click="Button_Click_1"/>
+        <Button Content="Rozwiń" Margin="0,5,5,0" HorizontalAlignment="Right" Width="64" Click="Button_Click_1" Height="20" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

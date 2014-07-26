@@ -6,6 +6,8 @@ using System.Xml;
 using Syntezator_Krawczyka.Synteza;
 using System.Globalization;
 using System.Windows;
+using System.Threading;
+using System.Windows.Threading;
 namespace Syntezator_Krawczyka
 {
     public class plik
@@ -20,6 +22,7 @@ namespace Syntezator_Krawczyka
         public static float kHz = 48f;
         int pusteID = 0;
         public static float Hz = kHz * 1000;
+        public List<DrumJeden> DrumLista = new List<DrumJeden>();
         public Dictionary<string, FalaNiestandardowa> fale = new Dictionary<string, FalaNiestandardowa>();
         public plik(string a)
         {
@@ -91,14 +94,19 @@ namespace Syntezator_Krawczyka
                 moduły.Clear();
                 sciezki.Clear();
                 scieżkiZId.Clear();
-                for (var i = MainWindow.thi.pokaz.Children.Count-1; i>=0; i--)
-                {
-                    if (MainWindow.thi.pokaz.Children[i].GetType() != typeof(KlawiaturaKomputeraUI))
+                MainWindow.dispat.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate()
                     {
-                        MainWindow.thi.pokaz.Children.Remove((UIElement)MainWindow.thi.pokaz.Children[i]);
-                    }
-                }
+                        for (var i = MainWindow.thi.pokaz.Children.Count - 1; i >= 0; i--)
+                        {
+                            if (MainWindow.thi.pokaz.Children[i].GetType() != typeof(KlawiaturaKomputeraUI))
+                            {
+                                MainWindow.thi.pokaz.Children.Remove((UIElement)MainWindow.thi.pokaz.Children[i]);
+                            }
+                        }
+                    });
             }
+                MainWindow.ileScierzekWyswietla = 0;
+            lock (Statyczne.otwartyplik)           
             try
             {
                 var listaWave=xml.GetElementsByTagName("wave");
@@ -187,39 +195,55 @@ namespace Syntezator_Krawczyka
                             }
                         }
                 }
-                foreach (sound z in moduły.Values)
-              {
-                    z.UI = new Instrument(z.nazwa,z);
-                    if (z.sekw.GetType() == typeof(InstrumentMidi))
-                    {
-                        z.UI.wewnętrzny.Children.Add((z.sekw as InstrumentMidi).UI);
-                    }
-                    else
-                    foreach (moduł zz in z.Values)
-                    {
-                        try
-                        {
-                            z.UI.Children.Add(zz.UI);
-                        }
-                        catch (System.ArgumentException e)
-                        {
-
-                        }
-                    }
-                    if (!MainWindow.thi.pokaz.Children.Contains(z.UI))
+                MainWindow.dispat.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate()
+                {
+                    foreach (sound z in moduły.Values)
                     {
 
-                        MainWindow.thi.pokaz.Children.Add(z.UI);
+                        z.UI = new Instrument(z.nazwa, z);
+                        if (z.sekw.GetType() == typeof(InstrumentMidi))
+                        {
+                            z.UI.wewnętrzny.Children.Add((z.sekw as InstrumentMidi).UI);
+                        }
+                        else
+                            foreach (moduł zz in z.Values)
+                            {
+                                try
+                                {
+                                    z.UI.Children.Add(zz.UI);
+                                }
+                                catch (System.ArgumentException e)
+                                {
+
+                                }
+                            }
+                        if (!MainWindow.thi.pokaz.Children.Contains(z.UI))
+                        {
+
+                            MainWindow.thi.pokaz.Children.Add(z.UI);
+                        }
                     }
-                }
+                });
                 for (var i = 0; i < granieLista.Count; i++)
                     granieLista[i].analizujIleNutMusiByć();
+
+
+
+                
+                foreach (XmlNode n in xml.GetElementsByTagName("drum"))
+                {
+                    var dr = new DrumJeden(n);
+                    DrumLista.Add(dr);
+                }
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString(), "Błąd przy przetwarzaniu pliku", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            MainWindow.ileScierzekWyswietla = 0;
         }
+
 
         public plik()
         {

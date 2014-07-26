@@ -47,10 +47,11 @@ namespace Syntezator_Krawczyka
         /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
         /// </summary>
         static public bool debugowanie = false;
-       public klawiaturaKomputera klawiatkompa;
+        public klawiaturaKomputera klawiatkompa;
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
+            InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             try
             {
@@ -66,7 +67,6 @@ namespace Syntezator_Krawczyka
                 MessageBox.Show(ex.ToString());
             }
             thi = this;
-            InitializeComponent();
             dispat = Dispatcher;
             string[] parametry = Environment.GetCommandLineArgs();
             bool otwarto = false;
@@ -102,14 +102,19 @@ namespace Syntezator_Krawczyka
                 }
                 else if (!otwarto)
                 {
-                    Statyczne.otwartyplik = new plik(parametry[x]);
+                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                            { Statyczne.otwartyplik = new plik(parametry[x]); });
                     otwarto = true;
                 }
             }
 
             if (!otwarto)
-                Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
-
+            {
+                System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                           {
+                               Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
+                           });
+            }
             if (zamknij)
                 App.Current.Shutdown();
             else
@@ -206,7 +211,7 @@ namespace Syntezator_Krawczyka
                         if (debugowanie)
                             Title = Statyczne.bufor.BufferedBytes.ToString();
                         czas.Content = funkcje.sekundy(granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4) + '/' + funkcje.sekundy(granie.granieMax);
-                        suwak.Value = granie.graniePrzy-Statyczne.bufor.BufferedBytes/4;
+                        suwak.Value = granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4;
                         suwak.Maximum = granie.granieMax;
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
@@ -229,20 +234,37 @@ namespace Syntezator_Krawczyka
                             pasekZadań.ProgressState = TaskbarItemProgressState.None;
                             postęp.Visibility = System.Windows.Visibility.Collapsed;
                         }
-                        Statyczne.otwartyplik.sciezki.Sort();
-                        foreach (var x in Statyczne.otwartyplik.sciezki)
-                        {
-                            try
-                            {
-                                if (!pokaz.Children.Contains(x.UI))
-                                    pokaz.Children.Add(x.UI);
-                            }
-                            catch (ArgumentException) { }
-                        }
                     });
+
+                if (Statyczne.otwartyplik != null)
+                {
+                    var cou = Statyczne.otwartyplik.sciezki.Count;
+                    lock (Statyczne.otwartyplik)
+                    if ((ileDoKopii % 200 == 0 || ileScierzekWyswietla != cou))
+                    {
+                        MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                            {
+
+
+                                Statyczne.otwartyplik.sciezki.Sort();
+                                foreach (var x in Statyczne.otwartyplik.sciezki)
+                                {
+                                    try
+                                    {
+                                        if (!pokaz.Children.Contains(x.UI))
+                                            pokaz.Children.Add(x.UI);
+                                    }
+                                    catch (ArgumentException) { }
+                                }
+                                ileScierzekWyswietla = cou;
+
+                            });
+                    }
+                }
                 Thread.Sleep(100);
             }
         }
+        public static int ileScierzekWyswietla = 0;
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             GC.Collect(2, GCCollectionMode.Forced);
@@ -287,7 +309,7 @@ namespace Syntezator_Krawczyka
         private void buttonGraj_Click(object sender, RoutedEventArgs e)
         {
             granie.graniePrzy = 0;
-            
+
 
 
             granie.generować[0] = false;
@@ -332,34 +354,34 @@ namespace Syntezator_Krawczyka
             granie.graniePlay = true;
             granie.liczbaGenerowanych += granie.granieNuty.Length;
             granie.liczbaGenerowanychMax += granie.granieNuty.Length;
-            foreach(var x in granie.granieNuty)
+            foreach (var x in granie.granieNuty)
             {
                 lock (granie.grają)
                 {
-                    
-                        var tabl = (nuta)x.Clone();
-                        tabl.grajDo = long.MaxValue;
-                        System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+
+                    var tabl = (nuta)x.Clone();
+                    tabl.grajDo = long.MaxValue;
+                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                    {
+
+                        if (((bool[])o)[0] && x.sekw != null)
                         {
-                            
-                            if (((bool[])o)[0]&&x.sekw != null)
-                            {
-                                x.sekw.działaj(tabl);
-                                x.czyGotowe = true;
-                               // granie.liveGraj();
-                            }
+                            x.sekw.działaj(tabl);
+                            x.czyGotowe = true;
+                            // granie.liveGraj();
+                        }
 
-                            lock (granie.liczbaGenerowanychBlokada)
-                            {
-                                granie.liczbaGenerowanych--;
-                                //if (!granie.można && granie.liczbaGenerowanych == 0)
+                        lock (granie.liczbaGenerowanychBlokada)
+                        {
+                            granie.liczbaGenerowanych--;
+                            //if (!granie.można && granie.liczbaGenerowanych == 0)
 
-                                    //granie.grajcale(false);
-                            }
-                        }, granie.generować);
-                        var watek = new Thread(() => { var gen = granie.generować; while (granie.liveGraj() && gen[0]) { Thread.Sleep(1000); } });
-                        watek.Start();
-                    
+                            //granie.grajcale(false);
+                        }
+                    }, granie.generować);
+                    var watek = new Thread(() => { var gen = granie.generować; while (granie.liveGraj() && gen[0]) { Thread.Sleep(1000); } });
+                    watek.Start();
+
                 }
             }
         }
@@ -403,7 +425,7 @@ namespace Syntezator_Krawczyka
                 dialog.ShowDialog();
                 granie.PlikDoZapisu = dialog.FileName;
             }
-            catch (Exception e1) {MessageBox.Show("Błąd przy zapisie dźwięku",e1.ToString()); }
+            catch (Exception e1) { MessageBox.Show("Błąd przy zapisie dźwięku", e1.ToString()); }
         }
 
         public void Window_KeyDown(object sender, KeyEventArgs e)
@@ -474,18 +496,20 @@ namespace Syntezator_Krawczyka
 
         private void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (suwakdziala) { 
-            if (granie.graniePrzy != (int)suwak.Value)
-            Statyczne.bufor.ClearBuffer();
-            granie.graniePrzy = (int)suwak.Value;}
+            if (suwakdziala)
+            {
+                if (granie.graniePrzy != (int)suwak.Value)
+                    Statyczne.bufor.ClearBuffer();
+                granie.graniePrzy = (int)suwak.Value;
+            }
         }
 
         internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
         {
             if (polaczenieHTTP.zalogowano)
             {
-                LogowanieTxt.Content =  polaczenieHTTP.login;
-                LogowanieTxt.ToolTip="zalogowano jako "+polaczenieHTTP.login;
+                LogowanieTxt.Content = polaczenieHTTP.login;
+                LogowanieTxt.ToolTip = "zalogowano jako " + polaczenieHTTP.login;
                 LogowanieTxt.FontSize = 8;
             }
             else
@@ -515,47 +539,53 @@ namespace Syntezator_Krawczyka
                 e.Data.SetData(null);
             }*/
         }
-    static public int hashCodeDragAndDrop=0;
-    Boolean suwakdziala = false;
-    private void suwakEnter(object sender, MouseEventArgs e)
-    {
-        suwakdziala = true;
-    }
-
-    private void suwakLeave(object sender, MouseEventArgs e)
-    {
-        suwakdziala = false;
-    }
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-        var oknoEN = new EdytorNut();
-        oknoEN.Show();
-    }
-
-    private void VST_Click(object sender, RoutedEventArgs e)
-    {
-
-        try
+        static public int hashCodeDragAndDrop = 0;
+        Boolean suwakdziala = false;
+        private void suwakEnter(object sender, MouseEventArgs e)
         {
-            var dialog = new OpenFileDialog();
-            dialog.Filter = "Wtyczka VST|*.dll";
-            Jacobi.Vst.Core.VstCanDoHelper.ParseHostCanDo("S");
-            new Jacobi.Vst.Framework.VstMidiProgram();
-            dialog.ShowDialog();
-            if (dialog.FileName != null)
-            {
-                wtyczkaVST.test1(dialog.FileName);
-                wtyczkaVST.test2(dialog.FileName);
-                wtyczkaVST.test3(dialog.FileName);
-                new wtyczkaVST(dialog.FileName);
-            }
+            suwakdziala = true;
         }
-        catch(Exception e2) { MessageBox.Show(e2.ToString(), "Błąd ładowania wtyczki",MessageBoxButton.OK, MessageBoxImage.Error); }
-    }
+
+        private void suwakLeave(object sender, MouseEventArgs e)
+        {
+            suwakdziala = false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var oknoEN = new EdytorNut();
+            oknoEN.Show();
+        }
+
+        private void VST_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                var dialog = new OpenFileDialog();
+                dialog.Filter = "Wtyczka VST|*.dll";
+                Jacobi.Vst.Core.VstCanDoHelper.ParseHostCanDo("S");
+                new Jacobi.Vst.Framework.VstMidiProgram();
+                dialog.ShowDialog();
+                if (dialog.FileName != null)
+                {
+                    wtyczkaVST.test1(dialog.FileName);
+                    wtyczkaVST.test2(dialog.FileName);
+                    wtyczkaVST.test3(dialog.FileName);
+                    new wtyczkaVST(dialog.FileName);
+                }
+            }
+            catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd ładowania wtyczki", MessageBoxButton.OK, MessageBoxImage.Error); }
+        }
+
+        private void DrumPad_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new DrumPad();
+            okno.Show();
+        }
 
 
 
-    
+
     }
 }

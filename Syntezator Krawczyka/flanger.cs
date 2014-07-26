@@ -12,7 +12,13 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+
+                    _UI = new flangerUI(this);
+                return _UI;
+            }
         }
         float czestotliwosc, przesunięciea;
         public void akt()
@@ -58,7 +64,6 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia = new Dictionary<string, string>();
             _ustawienia.Add("czestotliwosc", (0).ToString());
             _ustawienia.Add("przesuniecie", (0).ToString());
-            _UI = new flangerUI(this);
             akt();
         }
         public float[] działaj(nuta input, float[] dane)
@@ -69,24 +74,24 @@ namespace Syntezator_Krawczyka.Synteza
             else
             {
                 var przesunięcie = przesunięciea * plik.kHz;
-                var ileNaCykl = 1 / czestotliwosc * plik.Hz/Math.PI/2;
+                var ileNaCykl = 1 / czestotliwosc * plik.Hz / Math.PI / 2;
                 var losIGenerujOd = input.los + input.generujOd;
                 double z;
                 for (int i = 0; i < dane.Length; i++)
                 {
-                    
-                        z = przesunięcie*Math.Sin((i + losIGenerujOd)  / ileNaCykl);
+
+                    z = przesunięcie * Math.Sin((i + losIGenerujOd) / ileNaCykl);
                     var x = i + (int)Math.Floor(z);
-                    
-                    
+
+
                     var proporcje = z - Math.Floor(z);
                     if (input.dane.Length > x + 1 && x >= 0)
                         dane[i] = ((float)(input.dane[x] * (1 - proporcje) + input.dane[x + 1] * proporcje) / 2) + dane[i];
-                   /* else { } if (i > 2000)
-                        if (dane[i] == 0 && dane[i - 1] == 0)
-                        { }*/
+                    /* else { } if (i > 2000)
+                         if (dane[i] == 0 && dane[i - 1] == 0)
+                         { }*/
 
-                    
+
                 }
                 return dane;
             }

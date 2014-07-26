@@ -12,7 +12,12 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new oscylatorUI(this);
+                return _UI;
+            }
         }
         UserControl _UI;
         public List<Typ> wejście { get; set; }
@@ -44,7 +49,6 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("S", "0.2");
             _ustawienia.Add("R", "0");
             akt();
-            _UI = new oscylatorUI(this);
         }
         public void akt()
         {
@@ -81,7 +85,7 @@ namespace Syntezator_Krawczyka.Synteza
         /// </summary>
         Dictionary<long, float[]> zapisanePojedyńczePrzebiegi = new Dictionary<long, float[]>();
         static Dictionary<short, float[]> zapisanePojedyńczePrzebiegiTrojkatna = new Dictionary<short, float[]>();
-        
+
         public static float[] generujJedenPrzebiegStatyczny(typFali typ, long ilePróbek, float gladkość)
         {
             switch (typ)
@@ -127,13 +131,14 @@ namespace Syntezator_Krawczyka.Synteza
                         {
                             object[] wy = new object[2];
                             float[] jedenPrzebieg;
-                            if (typ==typFali.niestandardowa)
+                            if (typ == typFali.niestandardowa)
                             {
                                 if (niestandardowa != null)
                                     jedenPrzebieg = niestandardowa.generujJedenPrzebieg((long)Math.Floor(input.ilepróbek));
                                 else
                                     jedenPrzebieg = new float[(long)Math.Floor(input.ilepróbek)];
-                            } else jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
+                            }
+                            else jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
                             long długośćCała = (long)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz);
                             if (input.długość + R * plik.kHz - input.generujOd > 0)
                             {
@@ -310,17 +315,17 @@ namespace Syntezator_Krawczyka.Synteza
             var dłGl = długość * gladkosc;
             for (; i < dłGl; i++)
             {
-                    ret[i] = wysoki;
+                ret[i] = wysoki;
             }
             for (; i < długość; i++)
             {
-                    ret[i] = niski;
+                ret[i] = niski;
             }
             return ret;
         }
         public static float[] trójkątna(long ilepróbek)
         {
-            if(ilepróbek>100)
+            if (ilepróbek > 100)
             {
                 if (zapisanePojedyńczePrzebiegiTrojkatna.ContainsKey((short)ilepróbek))
                     return zapisanePojedyńczePrzebiegiTrojkatna[(short)ilepróbek];
@@ -329,7 +334,7 @@ namespace Syntezator_Krawczyka.Synteza
             float[] ret = new float[ilepróbek];
             long i = 0;
             var ilepróbekFloat = (float)ilepróbek;
-            var długość1 = ilepróbek /4;
+            var długość1 = ilepróbek / 4;
             var długość2 = długość1 * 3;
             for (; i < długość1; i++)
             {
@@ -386,28 +391,28 @@ namespace Syntezator_Krawczyka.Synteza
             }
             var dane = new List<int>();
             dane.Add((int)ModułyEnum.Oscylator);
-            List<int> niest=null;
-            if(typ==typFali.niestandardowa)
+            List<int> niest = null;
+            if (typ == typFali.niestandardowa)
             {
                 niest = niestandardowa.gpgpu;
-                dane.Add(7+niest.Count);
+                dane.Add(7 + niest.Count);
             }
             else
             {
                 dane.Add(7);
             }
-                    dane.Add((int)typ);
-                    dane.Add(gladkosc.GetHashCode());
-                    dane.Add(A.GetHashCode());
-                    dane.Add(D.GetHashCode());
-                    dane.Add(S.GetHashCode());
-                    dane.Add(R.GetHashCode());
-                    if (typ == typFali.niestandardowa)
-                    {
-                        dane.AddRange(niest);
-                       /* for (var i = 0; i < niest.Count; i++)
-                            dane.Add(niest[i]);*/
-                    }
+            dane.Add((int)typ);
+            dane.Add(gladkosc.GetHashCode());
+            dane.Add(A.GetHashCode());
+            dane.Add(D.GetHashCode());
+            dane.Add(S.GetHashCode());
+            dane.Add(R.GetHashCode());
+            if (typ == typFali.niestandardowa)
+            {
+                dane.AddRange(niest);
+                /* for (var i = 0; i < niest.Count; i++)
+                     dane.Add(niest[i]);*/
+            }
             return dane;
         }
     }

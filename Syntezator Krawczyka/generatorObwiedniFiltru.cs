@@ -12,7 +12,12 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new generatorObwiedniFiltruUI(this);
+                return _UI;
+            }
         }
         public void akt() { }
         public long symuluj(long p)
@@ -43,7 +48,6 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("D", "0");
             _ustawienia.Add("S", (0.5).ToString());
             _ustawienia.Add("R", "1000");
-            _UI = new generatorObwiedniFiltruUI(this);
         }
         public void działaj(nuta input)
         {
@@ -56,7 +60,7 @@ namespace Syntezator_Krawczyka.Synteza
                 var aMax = float.Parse(_ustawienia["A"], CultureInfo.InvariantCulture) * plik.kHz;
                 var dMax = float.Parse(_ustawienia["D"], CultureInfo.InvariantCulture) * plik.kHz;
                 var rMax = float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz;
-                    var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
+                var s = float.Parse(_ustawienia["S"], CultureInfo.InvariantCulture);
                 if (aMax == 0 && dMax == 0 & rMax == 0)
                 {
                     jak = new float[1];
@@ -66,11 +70,11 @@ namespace Syntezator_Krawczyka.Synteza
                 {
                     if (input.dane == null)
                     {
-                        jak = new float[input.długość+(int)rMax];
-                    
+                        jak = new float[input.długość + (int)rMax];
+
                     }
                     else
-                    jak = new float[input.dane.Length];
+                        jak = new float[input.dane.Length];
                     aProcent = 1;
                     long długośćCała = (int)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz);
 

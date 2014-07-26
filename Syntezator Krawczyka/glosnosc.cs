@@ -12,7 +12,13 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+
+                    _UI = new glosnoscUI(this);
+                return _UI;
+            }
         }
         public void akt() { }
         public long symuluj(long p)
@@ -41,16 +47,15 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("głośność", "1.0");
             _ustawienia.Add("ucinanie", "false");
             _ustawienia.Add("ucinanieWartość", "1.0");
-            _UI = new glosnoscUI(this);
         }
         public void działaj(nuta input)
         {
             var głośność = float.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture);
-           // bool ucinanie;
+            // bool ucinanie;
             if (ustawienia["ucinanie"] == "true")//uważać, czy nie jest po pogłosie
             {
                 var ucinanieWartość = float.Parse(ustawienia["ucinanieWartość"], CultureInfo.InvariantCulture);
-                var ucinanieWartośćMinus=-ucinanieWartość;
+                var ucinanieWartośćMinus = -ucinanieWartość;
                 var ucinaniePomnożone = ucinanieWartość * głośność;
                 var ucinaniePomnożoneMinus = -ucinaniePomnożone;
                 for (var i = 0; i < input.dane.Length; i++)
@@ -63,7 +68,7 @@ namespace Syntezator_Krawczyka.Synteza
                         input.dane[i] = input.dane[i] * głośność;
                 }
             }
-            else if(głośność!=1)
+            else if (głośność != 1)
             {
                 if (wyjście[0].DrógiModół.GetType() == typeof(granie))
                 {
@@ -90,8 +95,8 @@ namespace Syntezator_Krawczyka.Synteza
             var iJak = input.generujOd;
             for (var i = 0; i < input.dane.Length; i++)
             {
-                input.dane[i] = input.dane[i] * głośność*jak[(iJak+i)%jak.Length];
-               
+                input.dane[i] = input.dane[i] * głośność * jak[(iJak + i) % jak.Length];
+
             }
 
             return input;

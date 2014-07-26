@@ -15,7 +15,11 @@ namespace Syntezator_Krawczyka.Synteza
         public void akt() { }
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new sekwencerUI(this);
+                return _UI; }
         }
         UserControl _UI;
         public List<Typ> wejście { get; set; }
@@ -31,7 +35,6 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public sekwencer()
         {
-            _UI = new sekwencerUI(this);
             wejście = new List<Typ>();
             _wyjście = new Typ[1];
             _wyjście[0] = new Typ();

@@ -44,28 +44,34 @@ namespace Syntezator_Krawczyka
             }); }, null, 0, 1000);
 
         }
+        int ilemod = 0;
         void aktModuły()
         {
             lock (comboBox1)
             {
-                comboBox1.Items.Clear();
+                var cou = Statyczne.otwartyplik.moduły.Count;
+                if (ilemod != cou)
+                {
+                    comboBox1.Items.Clear();
 
-                comboBox1.Items.Add(new ComboBoxItem());
-                (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = null;
-                (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = "(puste)";
-                if (parent.sekw == null)
-                {
-                    comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
-                }
-                foreach (var mod in Statyczne.otwartyplik.moduły)
-                {
                     comboBox1.Items.Add(new ComboBoxItem());
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
-                    if (parent.sekw == mod.Value.sekw)
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = null;
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = "(puste)";
+                    if (parent.sekw == null)
                     {
                         comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
                     }
+                    foreach (var mod in Statyczne.otwartyplik.moduły)
+                    {
+                        comboBox1.Items.Add(new ComboBoxItem());
+                        (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
+                        (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
+                        if (parent.sekw == mod.Value.sekw)
+                        {
+                            comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
+                        }
+                    }
+                    ilemod = cou;
                 }
             }
         }

@@ -12,7 +12,13 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+
+                    _UI = new lfoUI(this);
+                return _UI;
+            }
         }
         public float[] jedenPrzebieg = null;
         public long symuluj(long p)
@@ -66,7 +72,6 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("gladkosc", "0");
             _ustawienia.Add("kwantyzacja", "0");
             _ustawienia.Add("nowanuta", "false");
-            _UI = new lfoUI(this);
         }
         public void działaj(nuta input)
         {

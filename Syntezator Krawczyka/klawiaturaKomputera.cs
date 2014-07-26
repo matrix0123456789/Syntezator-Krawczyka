@@ -15,7 +15,17 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public class klawiaturaKomputera : wejście
     {
-        public UIElement UI { get; set; }
+        public UIElement UI
+        {
+            get
+            {
+                if (_UI == null)
+                    _UI = new KlawiaturaKomputeraUI(this);
+                return _UI;
+
+            }
+        }
+        UIElement _UI;
         public static long przetwarzaW = 0;
         /// <summary>
         /// Sekwencer, do którego mają być przekazywane grane nuty.
@@ -32,14 +42,18 @@ namespace Syntezator_Krawczyka
 
         public klawiaturaKomputera()
         {
-            if (Statyczne.otwartyplik.moduły.Count>0)
-            sekw = Statyczne.otwartyplik.moduły.ElementAt(0).Value.sekw;
-            UI = new KlawiaturaKomputeraUI(this);
-            akttimer = new Timer((object o) =>
+            System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                    {
+                        while (Statyczne.otwartyplik == null)
+                            Thread.Sleep(100);
+                        if (Statyczne.otwartyplik.moduły.Count > 0)
+                            sekw = Statyczne.otwartyplik.moduły.ElementAt(0).Value.sekw;
+                    });
+            /*akttimer = new Timer((object o) =>
             {
                 // akt();
                 //MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, (ThreadStart)delegate() { akt(); });
-            }, null, 10, 10);
+            }, null, 10, 10);*/
             //new Timer((object o) => { akt(); }, null, 0, 10);
         }
         public void działaj()

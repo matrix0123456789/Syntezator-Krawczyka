@@ -8,15 +8,21 @@ using System.Globalization;
 
 namespace Syntezator_Krawczyka.Synteza
 {
-    public class pogłos:moduł
+    public class pogłos : moduł
     {
-         public UserControl UI
+        public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+
+                    _UI = new pogłosUI(this);
+                return _UI;
+            }
         }
-         public XmlNode XML { get; set; }
-         UserControl _UI;
-         public List<Typ> wejście { get; set; }
+        public XmlNode XML { get; set; }
+        UserControl _UI;
+        public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
             get { return _wyjście; }
@@ -39,7 +45,6 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("glosnosc", "1");
             _ustawienia.Add("balans", "1");
             akt();
-            _UI = new pogłosUI(this);
         }
         public long symuluj(long wej)
         {
@@ -72,56 +77,57 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public void działaj(nuta input)
         {
-            
-                    if (wyjście[0].DrógiModół != null)
+
+            if (wyjście[0].DrógiModół != null)
+            {
+
+
+                var ilejest = głośność;
+
+                long czasjest = 0;
+                var ix = 0;
+                bool parzyste = false;
+                while (ilejest * zmniejszenie > 0.01)
+                {
+                    czasjest += czas2;
+                    ilejest *= zmniejszenie;
+                    var inp = (nuta)input.Clone();
+                    inp.id = inp.id * 256 + input.kopiaInnaId++;
+                    inp.opuznienie += czasjest;
+
+                    inp.generujOd = 0;
+                    inp.czyPogłos = true;
+                    if (wyjście[0].DrógiModół.GetType() == typeof(granie) || (wyjście[0].DrógiModół.GetType() == typeof(glosnosc) && wyjście[0].DrógiModół.wyjście[0].DrógiModół.GetType() == typeof(granie)))
                     {
-
-                        
-                        var ilejest = głośność;
-                        
-                        long czasjest = 0;
-                        var ix = 0;
-                        bool parzyste = false;
-                        while (ilejest * zmniejszenie > 0.01)
-                        {
-                            czasjest += czas2;
-                            ilejest *= zmniejszenie;
-                            var inp = (nuta)input.Clone();
-                            inp.id = inp.id * 256 + input.kopiaInnaId++;
-                            inp.opuznienie += czasjest;
-
-                            inp.generujOd = 0;
-                            inp.czyPogłos = true;
-                            if (wyjście[0].DrógiModół.GetType() == typeof(granie) || (wyjście[0].DrógiModół.GetType() == typeof(glosnosc) && wyjście[0].DrógiModół.wyjście[0].DrógiModół.GetType() == typeof(granie)))
-                            {
-                                inp.dane = input.dane;
-                                inp.głośność = inp.głośność * ilejest;
-                            }
-                            else{
-                            inp.dane=new float[input.dane.Length];
-                            int max; 
-                            if (inp.dane.Length < inp.grajDo)
-                                max = inp.dane.Length;
-                            else
-                                max = (int)inp.grajDo;
-                            for (int i = (int)inp.grajOd; max > i; i++)
-                            {
-                                inp.dane[i] = input.dane[i] * ilejest;
-                            }
-                            } 
-                            if (parzyste)
-                                inp.balans1 *= (1 - Balans);
-                            else
-                                inp.balans0 *= (1 - Balans);
-
-                            parzyste = !parzyste;
-                        wyjście[0].DrógiModół.działaj(inp);
-                        }
-                        wyjście[0].DrógiModół.działaj(input);
+                        inp.dane = input.dane;
+                        inp.głośność = inp.głośność * ilejest;
                     }
-                
-            
-           
+                    else
+                    {
+                        inp.dane = new float[input.dane.Length];
+                        int max;
+                        if (inp.dane.Length < inp.grajDo)
+                            max = inp.dane.Length;
+                        else
+                            max = (int)inp.grajDo;
+                        for (int i = (int)inp.grajOd; max > i; i++)
+                        {
+                            inp.dane[i] = input.dane[i] * ilejest;
+                        }
+                    }
+                    if (parzyste)
+                        inp.balans1 *= (1 - Balans);
+                    else
+                        inp.balans0 *= (1 - Balans);
+
+                    parzyste = !parzyste;
+                    wyjście[0].DrógiModół.działaj(inp);
+                }
+                wyjście[0].DrógiModół.działaj(input);
+            }
+
+
+
 
         }
     }

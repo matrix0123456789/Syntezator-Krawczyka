@@ -67,9 +67,9 @@ namespace Syntezator_Krawczyka
         Brush głównyKolor = Brushes.Red;
         public EdytorNut(sciezka input, Brush kolor)
         {
-            InitializeComponent();
             main = input;
             głównyKolor = kolor;
+            InitializeComponent();
             if (input.nuty.Count > 0)
             {
                 rysujSkale(new List<sciezka>() { input });
@@ -77,61 +77,62 @@ namespace Syntezator_Krawczyka
 
             }
         }
-        double ilepróbekMinOst=0, ilepróbekMaxOst=0;//określenie przedziału tonów
+        double ilepróbekMinOst=100, ilepróbekMaxOst=100;//określenie przedziału tonów
         bool rysujSkale(List<sciezka> inplist)
-        {
-            double ilepróbekMin, ilepróbekMax;//określenie przedziału tonów
-            try
+        
             {
-                ilepróbekMax = ilepróbekMin = inplist[0].nuty[0].ilepróbekNaStarcie;
-            }
-            catch { ilepróbekMax = ilepróbekMin = 100; }
-            foreach (var input in inplist)
-                foreach (var x in input.nuty)
+                double ilepróbekMin, ilepróbekMax;//określenie przedziału tonów
+                try
                 {
-                    if (x.ilepróbekNaStarcie > ilepróbekMax)
+                    ilepróbekMax = ilepróbekMin = inplist[0].nuty[0].ilepróbekNaStarcie;
+                }
+                catch { ilepróbekMax = ilepróbekMin = 100; }
+                foreach (var input in inplist)
+                   if(input!=null) foreach (var x in input.nuty)
                     {
-                        ilepróbekMax = x.ilepróbekNaStarcie;
+                        if (x.ilepróbekNaStarcie > ilepróbekMax)
+                        {
+                            ilepróbekMax = x.ilepróbekNaStarcie;
+                        }
+                        else if (x.ilepróbekNaStarcie < ilepróbekMin)
+                        {
+                            ilepróbekMin = x.ilepróbekNaStarcie;
+                        }
                     }
-                    else if (x.ilepróbekNaStarcie < ilepróbekMin)
+                var zmianaSkali = (ilepróbekMax != ilepróbekMaxOst || ilepróbekMin != ilepróbekMinOst);
+                if (zmianaSkali)
+                {
+                    ilepróbekMinOst = ilepróbekMin;
+                    ilepróbekMaxOst = ilepróbekMax;
+                    // double tonMin=funkcje.ton(ilepróbekMin)-funkcje.ton(ilepróbekMax)
+                    tonMin = funkcje.ton(ilepróbekMin) + 1;
+                    tonMax = funkcje.ton(ilepróbekMax) - 1;
+                    for (var i = tonMin; i >= tonMax; i = i - .5)//rysowanie pasów
                     {
-                        ilepróbekMin = x.ilepróbekNaStarcie;
+                        var tonTeraz = Math.Round((i + 600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
+                        if (tonTeraz == .5 || tonTeraz == 1.5 || tonTeraz == 3 || tonTeraz == 4 || tonTeraz == 5)
+                        {
+                            var prostokat = new Rectangle();
+                            prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
+                            prostokat.Height = (skalaY / 2);
+                            prostokat.Fill = Brushes.Beige;
+                            prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                            prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                            panel.Children.Add(prostokat);
+                        }
+                        else if (tonTeraz == 0)//oktawa
+                        {
+                            var prostokat = new Rectangle();
+                            prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
+                            prostokat.Height = (1);
+                            prostokat.Fill = Brushes.Black;
+                            prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                            prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+                            panel.Children.Add(prostokat);
+                        }
                     }
                 }
-            var zmianaSkali = (ilepróbekMax != ilepróbekMaxOst || ilepróbekMin != ilepróbekMinOst);
-            if (zmianaSkali)
-            {
-                ilepróbekMinOst = ilepróbekMin;
-                ilepróbekMaxOst = ilepróbekMax;
-                // double tonMin=funkcje.ton(ilepróbekMin)-funkcje.ton(ilepróbekMax)
-                tonMin = funkcje.ton(ilepróbekMin) + 1;
-                tonMax = funkcje.ton(ilepróbekMax) - 1;
-                for (var i = tonMin; i >= tonMax; i = i - .5)//rysowanie pasów
-                {
-                    var tonTeraz = Math.Round((i + 600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
-                    if (tonTeraz == .5 || tonTeraz == 1.5 || tonTeraz == 3 || tonTeraz == 4 || tonTeraz == 5)
-                    {
-                        var prostokat = new Rectangle();
-                        prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
-                        prostokat.Height = (skalaY / 2);
-                        prostokat.Fill = Brushes.Beige;
-                        prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-                        prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                        panel.Children.Add(prostokat);
-                    }
-                    else if (tonTeraz == 0)//oktawa
-                    {
-                        var prostokat = new Rectangle();
-                        prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
-                        prostokat.Height = (1);
-                        prostokat.Fill = Brushes.Black;
-                        prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-                        prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-                        panel.Children.Add(prostokat);
-                    }
-                }
-            }
-            return zmianaSkali;
+                return zmianaSkali;
         }
         void rysujNuty(sciezka input, Brush kolor)
         {

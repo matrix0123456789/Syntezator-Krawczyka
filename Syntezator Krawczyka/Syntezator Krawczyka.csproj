@@ -141,6 +141,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BladWPliku.cs" />
+    <Compile Include="DrumJeden.cs" />
+    <Compile Include="DrumPad.xaml.cs">
+      <DependentUpon>DrumPad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EdytorFali.xaml.cs">
       <DependentUpon>EdytorFali.xaml</DependentUpon>
     </Compile>
@@ -242,6 +246,10 @@
     <Compile Include="Statyczne.cs" />
     <Compile Include="Typ.cs" />
     <Compile Include="wejście.cs" />
+    <Page Include="DrumPad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EdytorFali.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -12,7 +12,12 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new UserControl();
+                return _UI;
+            }
         }
         public void akt() { }
         public XmlNode XML { get; set; }
@@ -42,11 +47,10 @@ namespace Syntezator_Krawczyka.Synteza
             _wyjście[6] = new Typ();
             _wyjście[7] = new Typ();
             _ustawienia = new Dictionary<string, string>();
-            _UI = new UserControl();
         }
         public long symuluj(long wej)
         {
-            long ret=0;
+            long ret = 0;
             for (var i = 0; i < 8; i++)
             {
                 if (wyjście[i].DrógiModół != null)
@@ -56,7 +60,7 @@ namespace Syntezator_Krawczyka.Synteza
                         ret = t;
                 }
             }
-                return ret;
+            return ret;
         }
         public void działaj(nuta input)
         {
@@ -119,10 +123,10 @@ namespace Syntezator_Krawczyka.Synteza
                     {
                         dane = (xx.DrógiModół as flanger).działaj(input, dane);
                     }
-                    input.dane=dane;
+                    input.dane = dane;
                     x.Key.działaj(input);
                 }
-                for (var i = 7; i >=0; i--)
+                for (var i = 7; i >= 0; i--)
                 {
                     if (wyjście[i].DrógiModół != null)
                     {

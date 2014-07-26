@@ -13,7 +13,13 @@ namespace Syntezator_Krawczyka.Synteza
 
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+
+                    _UI = new cutoffUI(this);
+                return _UI;
+            }
         }
         public long symuluj(long p)
         {
@@ -43,13 +49,12 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("moc", "1");
             _ustawienia.Add("gladkosc", "0");
             _ustawienia.Add("przesuniecie", (0).ToString());
-            _UI = new cutoffUI(this);
         }
         public void akt()
         {
-            
-                moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
-                gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
+
+            moc = float.Parse(_ustawienia["moc"], CultureInfo.InvariantCulture);
+            gladkosc = float.Parse(_ustawienia["gladkosc"], CultureInfo.InvariantCulture);
         }
         public void działaj(nuta input)
         {
@@ -77,10 +82,10 @@ namespace Syntezator_Krawczyka.Synteza
                     {
                         input.dane[1] = (input.dane[1] - input.dane[0]) * moc + input.dane[0];
                     }
-                    i=2;
+                    i = 2;
                     for (; i < input.dane.Length; i++)
                     {
-                        input.dane[i] = ((input.dane[i] - input.dane[i - 1]) * moc) * (1 - gladkosc) + (input.dane[i - 1]-input.dane[i - 2]) * gladkosc + input.dane[i - 1];
+                        input.dane[i] = ((input.dane[i] - input.dane[i - 1]) * moc) * (1 - gladkosc) + (input.dane[i - 1] - input.dane[i - 2]) * gladkosc + input.dane[i - 1];
                     }
 
                     if (wyjście[0].DrógiModół != null)
@@ -89,20 +94,20 @@ namespace Syntezator_Krawczyka.Synteza
                     }
                 }
             }
-            
+
         }
         public nuta działaj(nuta input, float[] jak)
         {
 
-            if(jak.Length>0&&input.dane.Length>0)
+            if (jak.Length > 0 && input.dane.Length > 0)
             {
-            input.dane[0] = moc * jak[0] * input.dane[0];
-            var iJak = input.generujOd % jak.Length;
-            for (var i = 1; i < input.dane.Length; i++)
-            {
-                input.dane[i] = (input.dane[i] - input.dane[i - 1]) * (moc+jak[iJak%jak.Length]) + input.dane[i - 1];
-                iJak++;
-            }
+                input.dane[0] = moc * jak[0] * input.dane[0];
+                var iJak = input.generujOd % jak.Length;
+                for (var i = 1; i < input.dane.Length; i++)
+                {
+                    input.dane[i] = (input.dane[i] - input.dane[i - 1]) * (moc + jak[iJak % jak.Length]) + input.dane[i - 1];
+                    iJak++;
+                }
             }
             return input;
         }
