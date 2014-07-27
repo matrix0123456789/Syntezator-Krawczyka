@@ -102,8 +102,9 @@ namespace Syntezator_Krawczyka
                 }
                 else if (!otwarto)
                 {
+                    var xKopia = x;
                     System.Threading.ThreadPool.QueueUserWorkItem((o) =>
-                            { Statyczne.otwartyplik = new plik(parametry[x]); });
+                            { Statyczne.otwartyplik = new plik(parametry[xKopia]); });
                     otwarto = true;
                 }
             }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Background="LightGoldenrodYellow"
              d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
-    <Grid><Slider Height="23" HorizontalAlignment="Left" Margin="0,22,0,0" Name="sliderA" ToolTip="czas między następnymi „odbiciami”" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="4" Minimum="-4" ValueChanged="slider1_ValueChanged" />
+    <Grid><Slider Height="23" HorizontalAlignment="Left" Margin="0,22,0,0" Name="sliderA" ToolTip="czas między następnymi „odbiciami”" VerticalAlignment="Top" Width="100" SelectionStart="-4" Maximum="0" Minimum="-6" ValueChanged="slider1_ValueChanged" />
     <Slider Height="23" HorizontalAlignment="Left" Margin="0,51,0,0" Name="sliderB" ToolTip="O ile następne „odbicie” ma być cichrze od poprzedniego" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="0.99" ValueChanged="slider2_ValueChanged" />
         <Label Content="Pogłos" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
         <Slider Height="23" HorizontalAlignment="Left" Margin="0,74,0,0" ToolTip="głośność echa" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" Name="sliderC" ValueChanged="slider3_ValueChanged" />

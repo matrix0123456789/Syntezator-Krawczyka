@@ -21,7 +21,16 @@ namespace Syntezator_Krawczyka
         /// sekwencer, do którego zostaną wysłane nuty
         /// </summary>
         public soundStart sekw { get; set; }
-        public UIElement UI { get; set; }
+        UIElement _UI=null;
+        public UIElement UI
+        {
+            get
+            {
+                if (_UI == null)
+                    _UI = new sciezkaUI(this);
+                return _UI;
+            }
+        }
         /// <summary>
         /// nazwa
         /// </summary>
@@ -37,13 +46,11 @@ namespace Syntezator_Krawczyka
         public bool kopia = false;
         public sciezka()
         {
-            UI = new sciezkaUI(this);
         }
         public sciezka(string Nazwa, XmlNode xml)
         {
             nazwa = Nazwa;
             this.xml = xml;
-            UI = new sciezkaUI(this);
         }
         public sciezka(string Nazwa, XmlNode xml, bool kopia)
         {
@@ -54,7 +61,6 @@ namespace Syntezator_Krawczyka
             else
                 nazwa = Nazwa;
             this.kopia = kopia;
-            UI = new sciezkaUI(this);
         }
         /// <summary>
         /// przesyła nuty do sekwencera
