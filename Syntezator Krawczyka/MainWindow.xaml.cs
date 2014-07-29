@@ -47,7 +47,7 @@ namespace Syntezator_Krawczyka
         /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
         /// </summary>
         static public bool debugowanie = false;
-        public klawiaturaKomputera klawiatkompa;
+        public klawiaturaKomputera klawiatkompa1, klawiatkompa2;
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
@@ -120,7 +120,8 @@ namespace Syntezator_Krawczyka
                 App.Current.Shutdown();
             else
             {
-                klawiatkompa = new klawiaturaKomputera();
+                klawiatkompa1 = new klawiaturaKomputera(typKlawiaturyKomputera.dolna);
+                klawiatkompa2 = new klawiaturaKomputera(typKlawiaturyKomputera.górna);
                 for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
                 {
                     var k = new KlawiaturaMidi(i);
@@ -133,7 +134,8 @@ namespace Syntezator_Krawczyka
                     klawiatMidi.Add(k);
                     pokaz.Children.Add(k.UI);
                 }
-                pokaz.Children.Add(klawiatkompa.UI);
+                pokaz.Children.Add(klawiatkompa1.UI);
+                pokaz.Children.Add(klawiatkompa2.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
                 aktualizacjaOkna.Start();
@@ -445,13 +447,18 @@ namespace Syntezator_Krawczyka
                 if (e.Key == Key.O)
                     button3_Click(null, null);
             }
-            else klawiatkompa.klawisz(e, true);
+            else
+            {
+                klawiatkompa1.klawisz(e, true);
+                klawiatkompa2.klawisz(e, true);
+            }
         }
 
         public void Window_KeyUp(object sender, KeyEventArgs e)
         {
 
-            klawiatkompa.klawisz(e, false);
+            klawiatkompa1.klawisz(e, false);
+            klawiatkompa2.klawisz(e, false);
         }
         private void buttonStop_Click(object sender, RoutedEventArgs e)
         {

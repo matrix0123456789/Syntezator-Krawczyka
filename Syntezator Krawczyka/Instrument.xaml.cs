@@ -59,7 +59,7 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.thi.klawiatkompa.sekw = parent.sekw;
+            MainWindow.thi.klawiatkompa1.sekw = parent.sekw;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
