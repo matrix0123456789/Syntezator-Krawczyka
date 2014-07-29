@@ -584,6 +584,11 @@ namespace Syntezator_Krawczyka
             var okno = new DrumPad();
             okno.Show();
         }
+        private void Kopia_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new Backup();
+            okno.Show();
+        }
 
 
 
