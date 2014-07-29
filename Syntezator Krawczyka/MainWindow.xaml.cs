@@ -591,6 +591,14 @@ namespace Syntezator_Krawczyka
         }
 
 
+        private void Metadane_click(object sender, RoutedEventArgs e)
+        {
+
+            var okno = new Metadane();
+            okno.Show();
+        }
+
+
 
 
     }

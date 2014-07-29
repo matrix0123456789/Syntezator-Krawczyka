@@ -170,6 +170,9 @@
     <Compile Include="Logowanie.xaml.cs">
       <DependentUpon>Logowanie.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Metadane.xaml.cs">
+      <DependentUpon>Metadane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MidiIn.cs" />
     <Compile Include="nowyInstrument.xaml.cs">
       <DependentUpon>nowyInstrument.xaml</DependentUpon>
@@ -278,6 +281,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Logowanie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Metadane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
