@@ -21,7 +21,7 @@ namespace Syntezator_Krawczyka
         /// sekwencer, do którego zostaną wysłane nuty
         /// </summary>
         public soundStart sekw { get; set; }
-        UIElement _UI=null;
+        UIElement _UI = null;
         public UIElement UI
         {
             get
@@ -99,7 +99,8 @@ namespace Syntezator_Krawczyka
             {
                 if (_delay == null)
                     _delay = 0;
-                return (long)_delay; }
+                return (long)_delay;
+            }
             set
             {
                 if (_delay == null)
@@ -107,7 +108,7 @@ namespace Syntezator_Krawczyka
                 else if (value != _delay)
                 {
                     var roznica = (value - (long)_delay);
-                    foreach(var x in nuty)
+                    foreach (var x in nuty)
                     {
                         x.opuznienie += roznica;
                     }
@@ -125,5 +126,18 @@ namespace Syntezator_Krawczyka
         }
 
         public sciezka oryginał;
+        public double dlugosc
+        {
+            get
+            {
+                double akt = 0;
+                foreach (var x in nuty)
+                {
+                    if (x.opuznienie + x.ilepróbekNaStarcie > akt)
+                        akt = (double)x.opuznienie + x.długość;
+                }
+                return akt-delay;
+            }
+        }
     }
 }

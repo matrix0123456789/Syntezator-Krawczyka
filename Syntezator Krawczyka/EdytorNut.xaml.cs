@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 
@@ -27,7 +22,7 @@ namespace Syntezator_Krawczyka
         const double skalaX = 20;
         const double skalaY = 20;
         double tonMax;
-        static Brush[] kolory = { Brushes.Red, Brushes.Green, Brushes.SteelBlue, Brushes.Yellow, Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab, Brushes.Navy, Brushes.MediumTurquoise, Brushes.LightSalmon, Brushes.SlateGray, Brushes.YellowGreen };
+        public static Brush[] kolory = { Brushes.Red, Brushes.Green, Brushes.SteelBlue, Brushes.Yellow, Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab, Brushes.Navy, Brushes.MediumTurquoise, Brushes.LightSalmon, Brushes.SlateGray, Brushes.YellowGreen };
         double tonMin;
         List<Rectangle> listaChildren = new List<Rectangle>();
         void porListaChil() { }
