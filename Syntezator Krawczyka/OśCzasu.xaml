@@ -6,10 +6,17 @@
         <ScrollViewer Margin="0,0,119,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid Name="panel" ></Grid>
         </ScrollViewer>
-        <Label Name="nazwa" Content="Label" HorizontalAlignment="Right" Margin="0,0,81,0" VerticalAlignment="Top" RenderTransformOrigin="-0.867,-0.686" Name="Nazwa"/>
-        <Grid Margin="0,31,0,0" HorizontalAlignment="Right" Width="119">
+        <Grid Margin="0,0,0,338" HorizontalAlignment="Right" Width="114">
+            <Label Name="nazwa" Content="Label"  VerticalAlignment="Top" RenderTransformOrigin="-0.867,-0.686" />
+        </Grid>
+        <Grid Margin="0,31,0,35" HorizontalAlignment="Right" Width="119" Name="edytSciezka">
             <Button Content="Edytuj nuty" Margin="10,10,10,0" VerticalAlignment="Top" Click="edytujNuty_click"/>
         </Grid>
+
+        <Grid Margin="0,31,0,35" HorizontalAlignment="Right" Width="119" Name="edytSample">
+            <TextBox Name="SampleDelay" TextChanged="SampleDelay_TextChanged" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="99"/>
+        </Grid>
+        <Button Content="Nowa próbka" ToolTip="Wczytuje plik typu wawe zawierający próbkę dźwięku" Margin="0,339,10,0" VerticalAlignment="Top" Click="nowaPróbka_click" HorizontalAlignment="Right" Width="99"/>
 
     </Grid>
 </Window>

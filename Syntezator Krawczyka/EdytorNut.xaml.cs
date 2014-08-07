@@ -286,7 +286,7 @@ namespace Syntezator_Krawczyka
             }
         }
 
-        private void usuńLitery(TextBox textBox)
+        public static void usuńLitery(TextBox textBox)
         {
             if (textBox.Text.Length > 0 && ((textBox.Text[0] >= 'a' && textBox.Text[0] <= 'z') || (textBox.Text[0] >= 'A' && textBox.Text[0] <= 'Z')))
             {

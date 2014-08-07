@@ -22,10 +22,11 @@ namespace Syntezator_Krawczyka
         public static float tempo = 120;
         public static float kHz = 48f;
         int pusteID = 0;
+        public Dictionary<string, sample> wszytskieSamplePliki = new Dictionary<string, sample>();
         public static float Hz = kHz * 1000;
         public List<DrumJeden> DrumLista = new List<DrumJeden>();
         public Dictionary<string, FalaNiestandardowa> fale = new Dictionary<string, FalaNiestandardowa>();
-        private List<jedenSample> sameSample = new List<jedenSample>();
+        public List<jedenSample> sameSample = new List<jedenSample>();
         public plik(string a)
         {
             if (a != "")
@@ -423,14 +424,22 @@ namespace Syntezator_Krawczyka
                 {
                     if (nn.Name == "sample")
                     {
-                        var sam = new sample();
+                        sample sam;
                         if (nn.Attributes.GetNamedItem("file") != null)
-                            sam.plik = nn.Attributes.GetNamedItem("file").Value;
-                        if (nn.Attributes.GetNamedItem("note") != null)
-                            sam.note = float.Parse(nn.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture);
-                        if (nn.Attributes.GetNamedItem("accept") != null)
-                            sam.accept = float.Parse(nn.Attributes.GetNamedItem("accept").Value, CultureInfo.InvariantCulture);
-                        (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).sample.Add(sam);
+                        {
+                            if (wszytskieSamplePliki.ContainsKey(nn.Attributes.GetNamedItem("file").Value))
+                                sam = wszytskieSamplePliki[nn.Attributes.GetNamedItem("file").Value];
+                            else
+                            {
+                                sam = new sample(nn.Attributes.GetNamedItem("file").Value);
+                                wszytskieSamplePliki.Add(nn.Attributes.GetNamedItem("file").Value,sam);
+                            }
+                            if (nn.Attributes.GetNamedItem("note") != null)
+                                sam.note = float.Parse(nn.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture);
+                            if (nn.Attributes.GetNamedItem("accept") != null)
+                                sam.accept = float.Parse(nn.Attributes.GetNamedItem("accept").Value, CultureInfo.InvariantCulture);
+                            (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).sample.Add(sam);
+                        }
 
                     }
                 }

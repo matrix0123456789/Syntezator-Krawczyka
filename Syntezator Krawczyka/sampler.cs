@@ -17,25 +17,25 @@ namespace Syntezator_Krawczyka
                 if (funkcje.ilepróbek(0, sample[i].accept) == input.ilepróbek)
                 {
                     var zmianaCzęstotliwości = plik.Hz/sample[i].częstotliwość ;
-                    if (zmianaCzęstotliwości == 1)
+                    /*if (zmianaCzęstotliwości == 1)
                         input.dane = sample[i].fala;
-                    else if((int)Math.Ceiling(sample[i].fala.Count() / zmianaCzęstotliwości) - input.generujOd>0)
+                    else */if ((int)Math.Ceiling(sample[i].fala.GetLength(1) / zmianaCzęstotliwości) - input.generujOd > 0)
                     {
-                        input.dane = new float[(int)Math.Ceiling(sample[i].fala.Count() * zmianaCzęstotliwości) - input.generujOd+256];
+                        input.dane = new float[(int)Math.Ceiling(sample[i].fala.GetLength(1) * zmianaCzęstotliwości) - input.generujOd + 256];
                         for (var i2 = 0; input.dane.Count() > i2 - input.generujOd; i2++)
-                    {
-                        var dz = (i2+input.generujOd) / zmianaCzęstotliwości;
-                        if (dz+1 < sample[i].fala.Length)
-                            input.dane[i2] = ((sample[i].fala[(int)Math.Floor(dz)] * ((i2 / zmianaCzęstotliwości) % 1)) + (sample[i].fala[(int)Math.Ceiling(dz)] * (1 - (i2 / zmianaCzęstotliwości) % 1)))*głośność;
-
-                        else if((int)Math.Floor(dz)+1<sample[i].fala.Length)
                         {
-                            input.dane[i2] = (sample[i].fala[(int)Math.Floor(dz)])*głośność;
-                        }
+                            var dz = (i2 + input.generujOd) / zmianaCzęstotliwości;
+                            if (dz + 1 < sample[i].fala.Length)
+                                input.dane[i2] = ((sample[i].fala[0,(int)Math.Floor(dz)] * ((i2 / zmianaCzęstotliwości) % 1)) + (sample[i].fala[0,(int)Math.Ceiling(dz)] * (1 - (i2 / zmianaCzęstotliwości) % 1))) * głośność;
+
+                            else if ((int)Math.Floor(dz) + 1 < sample[i].fala.Length)
+                            {
+                                input.dane[i2] = (sample[i].fala[0,(int)Math.Floor(dz)]) * głośność;
+                            }
                             //debugowanie
-                        
-                        
-                    }
+
+
+                        }
                     }
                     else
                     {

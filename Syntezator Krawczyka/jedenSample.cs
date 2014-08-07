@@ -3,17 +3,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Syntezator_Krawczyka
 {
-    class jedenSample
+    public class jedenSample
     {
         public sample sample;
         public float głośność = 1;
-        long opuznienie;
+        public long delay = 0;
         public jedenSample()
         {
             granie.graniestart();
+        }
+
+        public jedenSample(string x)
+        {
+            if (Statyczne.otwartyplik.wszytskieSamplePliki.ContainsKey(x))
+                sample = Statyczne.otwartyplik.wszytskieSamplePliki[x];
+            else
+            {
+                sample = new sample(x);
+                Statyczne.otwartyplik.wszytskieSamplePliki.Add(x, sample);
+            }
         }
 
         internal void działaj()
@@ -21,6 +33,8 @@ namespace Syntezator_Krawczyka
 
             float[,] dane;
             int dl;
+            while (sample.fala == null)
+                Thread.Sleep(100);
             var l = sample.fala.GetLength(1);
             var zmianaCzęstotliwości = plik.Hz / sample.częstotliwość;
             if (zmianaCzęstotliwości == 1)
@@ -65,8 +79,8 @@ namespace Syntezator_Krawczyka
             {
 
 
-                long i = opuznienie;
-                var opt1 = -opuznienie;
+                long i = delay;
+                var opt1 = -delay;
 
                 var opt3 = dl - opt1;
                 try
@@ -119,5 +133,15 @@ namespace Syntezator_Krawczyka
 
         }
 
+
+        public long dlugosc
+        {
+            get
+            {
+                if (sample.fala == null)
+                    return 0;
+                return sample.fala.GetLongLength(1);
+            }
+        }
     }
 }
