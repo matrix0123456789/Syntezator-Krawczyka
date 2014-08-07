@@ -606,6 +606,13 @@ namespace Syntezator_Krawczyka
         }
 
 
+        private void OśCzasu_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new OśCzasu();
+            okno.Show();
+        }
+
+
 
 
     }

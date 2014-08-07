@@ -102,6 +102,7 @@ namespace Syntezator_Krawczyka
                 var zmianaSkali = (ilepróbekMax != ilepróbekMaxOst || ilepróbekMin != ilepróbekMinOst);
                 if (zmianaSkali)
                 {
+                    panel.Children.Clear();
                     ilepróbekMinOst = ilepróbekMin;
                     ilepróbekMaxOst = ilepróbekMax;
                     // double tonMin=funkcje.ton(ilepróbekMin)-funkcje.ton(ilepróbekMax)
@@ -283,8 +284,11 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
-            if(rysujSkale(new List<sciezka>() { main }))
-            rysujNuty(main, głównyKolor);
+            if (rysujSkale(new List<sciezka>() { main }))
+            {
+                listaChildren.Clear();
+                rysujNuty(main, głównyKolor);
+            }
         }
 
         private void usuńLitery(TextBox textBox)
@@ -407,10 +411,14 @@ namespace Syntezator_Krawczyka
 
         private int porListaChil(Rectangle x, Rectangle y)
         {
-            if (y.Margin.Left < x.Margin.Left)
-                return 1;
-            else
-                return -1;
+            try
+            {
+                if (y.Margin.Left < x.Margin.Left)
+                    return 1;
+                else
+                    return -1;
+            }
+            catch { return 0; }
         }
     }
 }

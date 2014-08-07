@@ -95,7 +95,11 @@ namespace Syntezator_Krawczyka
         private long? _delay = null;
         public long delay
         {
-            get { return (int)_delay; }
+            get
+            {
+                if (_delay == null)
+                    _delay = 0;
+                return (long)_delay; }
             set
             {
                 if (_delay == null)

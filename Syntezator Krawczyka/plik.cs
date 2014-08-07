@@ -60,7 +60,7 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-                this.URL = URLStatyczne = URL = a;
+                this.URL = URLStatyczne  = a;
                 xml = new XmlDocument();
                 try
                 {

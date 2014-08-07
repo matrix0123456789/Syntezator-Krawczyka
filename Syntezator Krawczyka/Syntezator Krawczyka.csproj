@@ -154,6 +154,9 @@
     <Compile Include="EdytorNut.xaml.cs">
       <DependentUpon>EdytorNut.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OśCzasu.xaml.cs">
+      <DependentUpon>OśCzasu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FalaNiestandardowa.cs" />
     <Compile Include="generatorObwiedniFiltru.cs" />
     <Compile Include="generatorObwiedniFiltruUI.xaml.cs">
@@ -183,8 +186,9 @@
     <Compile Include="SkładoweHarmoniczne.cs" />
     <Compile Include="sound.cs" />
     <Compile Include="soundStart.cs" />
-    <Compile Include="suwak.xaml.cs">
-      <DependentUpon>suwak.xaml</DependentUpon>
+    <Compile Include="suwak.cs" />
+    <Compile Include="suwakOkno.xaml.cs">
+      <DependentUpon>suwakOkno.xaml</DependentUpon>
     </Compile>
     <Compile Include="UtworySerwer.cs" />
     <Compile Include="UtwórSerwer.cs" />
@@ -268,6 +272,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="OśCzasu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="generatorObwiedniFiltruUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -292,7 +300,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="suwak.xaml">
+    <Page Include="suwakOkno.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
