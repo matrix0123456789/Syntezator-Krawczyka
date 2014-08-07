@@ -11,7 +11,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// prezentuje ścieszkę dźwiękową (linię melodyczną) w celu odtworzenia automatycznie (bez grania na żywo z klawiatury)
     /// </summary>
-    public class sciezka : wejście, IComparable<sciezka>
+    public class sciezka : wejście, IComparable<sciezka>, IodDo
     {
         /// <summary>
         /// Lista nut
@@ -126,15 +126,15 @@ namespace Syntezator_Krawczyka
         }
 
         public sciezka oryginał;
-        public double dlugosc
+        public long dlugosc
         {
             get
             {
-                double akt = 0;
+                long akt = 0;
                 foreach (var x in nuty)
                 {
                     if (x.opuznienie + x.ilepróbekNaStarcie > akt)
-                        akt = (double)x.opuznienie + x.długość;
+                        akt = x.opuznienie + x.długość;
                 }
                 return akt-delay;
             }

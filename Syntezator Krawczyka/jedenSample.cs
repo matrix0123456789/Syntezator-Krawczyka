@@ -1,23 +1,30 @@
 ﻿using Syntezator_Krawczyka.Synteza;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Xml;
 
 namespace Syntezator_Krawczyka
 {
-    public class jedenSample
+    public class jedenSample:IodDo
     {
         public sample sample;
         public float głośność = 1;
-        public long delay = 0;
+        public long delay { get; set; }
+        public XmlNode xml;
+
         public jedenSample()
         {
             granie.graniestart();
+            xml = Statyczne.otwartyplik.xml.CreateElement("sample");
+            Statyczne.otwartyplik.xml.DocumentElement.AppendChild(xml);
         }
 
         public jedenSample(string x)
+            : this()
         {
             if (Statyczne.otwartyplik.wszytskieSamplePliki.ContainsKey(x))
                 sample = Statyczne.otwartyplik.wszytskieSamplePliki[x];
@@ -26,8 +33,32 @@ namespace Syntezator_Krawczyka
                 sample = new sample(x);
                 Statyczne.otwartyplik.wszytskieSamplePliki.Add(x, sample);
             }
-        }
 
+            var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("file");
+            atrybut.Value = x;
+            xml.Attributes.SetNamedItem(atrybut);
+        }
+        
+        public jedenSample(XmlNode xml)
+            : this()
+        {
+
+            granie.graniestart();
+            this.xml = xml;
+
+            if (xml.Attributes["delay"] != null)
+            {
+                delay = (long)(float.Parse((xml.Attributes["delay"].Value), CultureInfo.InvariantCulture) * plik.Hz * 60 / plik.tempo);
+            }
+
+            if (Statyczne.otwartyplik.wszytskieSamplePliki.ContainsKey(xml.Attributes["file"].Value))
+                sample = Statyczne.otwartyplik.wszytskieSamplePliki[xml.Attributes["file"].Value];
+            else
+            {
+                sample = new sample(xml.Attributes["file"].Value);
+                Statyczne.otwartyplik.wszytskieSamplePliki.Add(xml.Attributes["file"].Value, sample);
+            }
+        }
         internal void działaj()
         {
 

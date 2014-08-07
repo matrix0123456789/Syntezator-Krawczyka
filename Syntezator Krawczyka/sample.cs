@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
-    public class sample
+    public class sample:IPostep
     {
         public string plik;
         public float note;
@@ -49,7 +49,7 @@ namespace Syntezator_Krawczyka
                     if (bitrate == 32)
                     {
                         fala = new float[1, (zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 4];
-                        for (var i = 0; i < fala.Length; i++)
+                        for (i = 0; i < fala.Length; i++)
                         {
                             fala[0, i] = zawartość.ReadInt32() / (256f * 256f * 128f);
                         }
@@ -57,7 +57,7 @@ namespace Syntezator_Krawczyka
                     if (bitrate == 16)
                     {
                         fala = new float[1, (zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 2];
-                        for (var i = 0; i < fala.Length; i++)
+                        for (i = 0; i < fala.Length; i++)
                         {
                             fala[0, i] = zawartość.ReadInt16() / 32768f;
                         }
@@ -65,7 +65,7 @@ namespace Syntezator_Krawczyka
                     if (bitrate == 8)
                     {
                         fala = new float[1, zawartość.BaseStream.Length - zawartość.BaseStream.Position];
-                        for (var i = 0; i < fala.Length; i++)
+                        for (i = 0; i < fala.Length; i++)
                         {
                             fala[0, i] = zawartość.ReadSByte() / 128f;
                         }
@@ -73,6 +73,23 @@ namespace Syntezator_Krawczyka
                 });
             }  
         }
+        long i = 0;
         public int bitrate { get; set; }
+        public long value
+        {
+            get
+            {
+                return i;
+            }
+        }
+        public long max
+        {
+            get
+            {
+                if (fala == null)
+                    return 0;
+                return fala.GetLongLength(1);
+            }
+        }
     }
 }

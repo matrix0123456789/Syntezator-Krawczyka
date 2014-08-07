@@ -112,6 +112,15 @@ namespace Syntezator_Krawczyka
             lock (Statyczne.otwartyplik)
                 try
                 {
+                    var listaSameSample = xml.GetElementsByTagName("sample");
+                    for(int i=0;i<listaSameSample.Count;i++)
+                    {
+                        if(listaSameSample[i].Attributes["file"]!=null)
+                        {
+                            var a = new jedenSample(listaSameSample[i]);
+                        Statyczne.otwartyplik.sameSample.Add(a);
+                        }
+                    }
                     var listaWave = xml.GetElementsByTagName("wave");
                     for (var i = 0; i < listaWave.Count; i++)
                     {
@@ -432,7 +441,7 @@ namespace Syntezator_Krawczyka
                             else
                             {
                                 sam = new sample(nn.Attributes.GetNamedItem("file").Value);
-                                wszytskieSamplePliki.Add(nn.Attributes.GetNamedItem("file").Value,sam);
+                                wszytskieSamplePliki.Add(nn.Attributes.GetNamedItem("file").Value, sam);
                             }
                             if (nn.Attributes.GetNamedItem("note") != null)
                                 sam.note = float.Parse(nn.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture);
@@ -621,6 +630,11 @@ namespace Syntezator_Krawczyka
                             długość = długośćTeraz;
                     }
                 }
+                foreach (var x in Statyczne.otwartyplik.sameSample)
+                {
+                    if (x.delay + x.dlugosc > długość)
+                        długość = x.delay + x.dlugosc;
+                }
                 granie.PlikDoZapisu = null;
                 granie.wynik = new float[2, długość];
                 foreach (var x in Statyczne.otwartyplik.sciezki)
@@ -631,7 +645,7 @@ namespace Syntezator_Krawczyka
                 foreach (var x in Statyczne.otwartyplik.sameSample)
                 {
                     x.działaj();
-                
+
                 }
                 var dialog = new SaveFileDialog();
                 dialog.Filter = "Plik muzyczny|*.wav;*.wave";

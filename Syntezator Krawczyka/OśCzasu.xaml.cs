@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -83,11 +84,11 @@ namespace Syntezator_Krawczyka
                 {
                     znaleniono = true;
                     elementy[i2].Add(akt);
-                    if (Statyczne.otwartyplik.sciezki[i].oryginał == null)
-                        rysuj(akt, i2, EdytorNut.kolory[i % EdytorNut.kolory.Length]);
-                    else
-
+                    if (Statyczne.otwartyplik.sciezki.Count>i&& Statyczne.otwartyplik.sciezki[i].oryginał != null)
                         rysuj(akt, i2, EdytorNut.kolory[Statyczne.otwartyplik.sciezki.IndexOf(Statyczne.otwartyplik.sciezki[i].oryginał) % EdytorNut.kolory.Length]);
+                    else  rysuj(akt, i2, EdytorNut.kolory[i % EdytorNut.kolory.Length]);
+                    
+
                     break;
                 }
             }
@@ -131,7 +132,7 @@ namespace Syntezator_Krawczyka
         }
         struct odDo
         {
-            public object sciezka;
+            public IodDo sciezka;
             public long start;
             public long dlugosc;
             public odDo(sciezka s)
@@ -145,6 +146,12 @@ namespace Syntezator_Krawczyka
                 sciezka = s;
                 start = s.delay;
                 dlugosc = s.dlugosc;
+            }
+            public void odsw()
+            {
+
+                start = sciezka.delay;
+                dlugosc = sciezka.dlugosc;
             }
             public long end
             {
@@ -177,7 +184,10 @@ namespace Syntezator_Krawczyka
             {
                 var a = new jedenSample(x);
                 Statyczne.otwartyplik.sameSample.Add(a);
+                while (a.dlugosc == 0)
+                    Thread.Sleep(10);
                 var akt = new odDo(a);
+                
                 //szukaj miejsca na wyświetlenie
                 szukaj(akt, 0);
             }
@@ -187,14 +197,14 @@ namespace Syntezator_Krawczyka
         {
             EdytorNut.usuńLitery((TextBox)sender);
             if (aktywna != null)
-            {
+            { 
                 try
                 {
-                    //var n = (nutaXml)aktywna.Tag;
+                    var n = (((odDo)aktywna.Tag).sciezka as jedenSample);
                     var cz = double.Parse(SampleDelay.Text);
                     var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
-                    // n.xml.Attributes.SetNamedItem(atrybut);
+                    n.xml.Attributes.SetNamedItem(atrybut);
                     aktywna.Margin = new Thickness((cz * skalaX), aktywna.Margin.Top, 0, 0);
                     (((odDo)aktywna.Tag).sciezka as jedenSample).delay = (long)(plik.Hz * 60 / plik.tempo * cz);
                     //n.nuta.opuznienie = (long)(plik.Hz * 60 / plik.tempo * cz);
@@ -206,5 +216,10 @@ namespace Syntezator_Krawczyka
                 }
             }
         }
+    }
+    interface IodDo
+    {
+        long delay { get; }
+        long dlugosc { get; }
     }
 }
