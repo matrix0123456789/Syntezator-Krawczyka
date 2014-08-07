@@ -154,6 +154,7 @@
     <Compile Include="EdytorNut.xaml.cs">
       <DependentUpon>EdytorNut.xaml</DependentUpon>
     </Compile>
+    <Compile Include="jedenSample.cs" />
     <Compile Include="OśCzasu.xaml.cs">
       <DependentUpon>OśCzasu.xaml</DependentUpon>
     </Compile>

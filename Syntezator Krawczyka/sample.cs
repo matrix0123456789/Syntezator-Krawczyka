@@ -66,7 +66,8 @@ namespace Syntezator_Krawczyka
         public float note;
         public int częstotliwość;
         public float accept;
-        public float[] fala;
+        public float[,] fala;
+        public byte kanały = 1;
         public int bitrate { get; set; }
     }
 }

@@ -99,6 +99,7 @@ namespace Syntezator_Krawczyka
                 aktywna = (Rectangle)sender;
 
                 aktywna.Stroke = Brushes.Green;
+                Nazwa.Content = ((odDo)aktywna.Tag).sciezka.nazwa;
             
         }
         struct odDo

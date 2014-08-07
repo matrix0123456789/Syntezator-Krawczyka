@@ -624,5 +624,6 @@ namespace Syntezator_Krawczyka.Synteza
         public static object zmianaLiczGenLock = new object();
 
         public static string PlikDoZapisu = null;
-    }
+
+        }
 }

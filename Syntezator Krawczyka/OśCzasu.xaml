@@ -6,7 +6,7 @@
         <ScrollViewer Margin="0,0,119,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid Name="panel" ></Grid>
         </ScrollViewer>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="323,0,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.867,-0.686" Name="Nazwa"/>
+        <Label Name="nazwa" Content="Label" HorizontalAlignment="Right" Margin="0,0,81,0" VerticalAlignment="Top" RenderTransformOrigin="-0.867,-0.686" Name="Nazwa"/>
         <Grid Margin="0,31,0,0" HorizontalAlignment="Right" Width="119">
             <Button Content="Edytuj nuty" Margin="10,10,10,0" VerticalAlignment="Top" Click="edytujNuty_click"/>
         </Grid>
