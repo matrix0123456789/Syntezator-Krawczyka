@@ -11,17 +11,17 @@
         <RadioButton Content="prostokątna" HorizontalAlignment="Left" Margin="0,69,0,0" Name="prostokątny" Height="16" VerticalAlignment="Top" Checked="prostokątny_Checked" />
         <RadioButton Content="piłokształtna" HorizontalAlignment="Left" Margin="0,91,0,0" Name="piłokształtny" Height="16" VerticalAlignment="Top" Checked="piłokształtny_Checked" />
         <RadioButton Content="niestandardowa" Height="16" HorizontalAlignment="Left" Margin="0,113,0,0" Name="niestandard" VerticalAlignment="Top" Checked="radioButton1_Checked" />
-        <Slider ToolTip="Kształt fali" Height="23" HorizontalAlignment="Left" Margin="130,25,0,0" x:Name="slider1" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" />
-        <Slider ToolTip="Attack — Wejście" Height="23" HorizontalAlignment="Left" Margin="130,50,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderA_ValueChanged" />
-        <Slider ToolTip="Delay — Długość maksymalnej głośności" Height="23" HorizontalAlignment="Left" Margin="130,69,0,0" x:Name="sliderD" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderD_ValueChanged" />
-        <Slider ToolTip="Suspens — głośność podtrzymania" Height="23" HorizontalAlignment="Left" Margin="130,91,0,0" x:Name="sliderS" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderS_ValueChanged" />
-        <Slider ToolTip="Release — czas zanikania" Height="23" HorizontalAlignment="Left" Margin="130,113,0,0" x:Name="sliderR" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderR_ValueChanged" />
+        <l:suwak Opis="Kształt fali" Height="23" HorizontalAlignment="Left" Margin="130,25,0,0" x:Name="slider1" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" />
+        <l:suwak Opis="Attack — Wejście" Height="23" HorizontalAlignment="Left" Margin="130,50,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderA_ValueChanged" />
+        <l:suwak Opis="Delay — Długość maksymalnej głośności" Height="23" HorizontalAlignment="Left" Margin="130,69,0,0" x:Name="sliderD" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderD_ValueChanged" />
+        <l:suwak Opis="Suspens — głośność podtrzymania" Height="23" HorizontalAlignment="Left" Margin="130,91,0,0" x:Name="sliderS" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderS_ValueChanged" />
+        <l:suwak Opis="Release — czas zanikania" Height="23" HorizontalAlignment="Left" Margin="130,113,0,0" x:Name="sliderR" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderR_ValueChanged" />
+        <l:suwak Opis="Balans" Height="23" HorizontalAlignment="Left" Margin="130,134,0,0" x:Name="sliderBalans" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Minimum="-1" Maximum="1" ValueChanged="sliderBalans_ValueChanged" />
         <Label Content="A" HorizontalAlignment="Left" Margin="111,47,0,0" VerticalAlignment="Top" />
         <Label Content="D" HorizontalAlignment="Left" Margin="111,69,0,0" VerticalAlignment="Top" />
         <Label Content="R" HorizontalAlignment="Left" Margin="110,107,0,0" VerticalAlignment="Top" />
         <Label Content="S" HorizontalAlignment="Left" Margin="111,88,0,0" VerticalAlignment="Top" />
         <Label Content="Oscylator" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
         <Button Content="edytuj" HorizontalAlignment="Left" Margin="7,134,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Slider ToolTip="Balans" Height="23" HorizontalAlignment="Left" Margin="130,134,0,0" x:Name="sliderBalans" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Minimum="-1" Maximum="1" ValueChanged="sliderBalans_ValueChanged" />
     </Grid>
 </UserControl>

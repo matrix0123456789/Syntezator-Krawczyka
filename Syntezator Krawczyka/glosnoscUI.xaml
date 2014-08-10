@@ -6,9 +6,9 @@
              xmlns:a="clr-namespace:Syntezator_Krawczyka"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"  MouseMove="UserControl_MouseMove">
-    <Grid Background="Purple">
+    <Grid Background="PaleTurquoise">
         <Label VerticalAlignment="Top" HorizontalAlignment="Left" Margin="12,12,0,0">Głośność</Label>
-        <a:suwak Height="23" HorizontalAlignment="Left" Margin="10,32,0,0" x:Name="slider1" VerticalAlignment="Top"  Width="100" Maximum="1" ValueChanged="slider1_ValueChanged" />
+        <a:suwak Height="23" HorizontalAlignment="Left" Margin="10,32,0,0" x:Name="slider1" VerticalAlignment="Top"  Width="111" Maximum="1" ValueChanged="slider1_ValueChanged" />
         <a:suwak Visibility="Collapsed" Height="23" HorizontalAlignment="Left" Margin="12,84,0,0" x:Name="slider2" Opis="Przy jakiej głośności ucinać dźwięk" VerticalAlignment="Top" Width="100" Maximum="1" ValueChanged="slider2_ValueChanged" />
         <CheckBox Visibility="Collapsed" Content="Ucinanie dźwięku" HorizontalAlignment="Left" Margin="12,60,0,0" VerticalAlignment="Top" Checked="CheckBox_Unchecked" Unchecked="CheckBox_Unchecked"/>
         

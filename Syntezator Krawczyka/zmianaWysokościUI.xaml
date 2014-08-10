@@ -6,8 +6,8 @@
              xmlns:l="clr-namespace:Syntezator_Krawczyka"
              mc:Ignorable="d" d:DesignHeight="86" d:DesignWidth="163" MouseMove="UserControl_MouseMove">
     <Grid Background="#aa8">
-        <l:suwak ValueChanged="slider1_ValueChanged" x:Name="slider1" Opis="Zmiana oktawy" Minimum="-5" Maximum="5" Value="0" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="100" SmallChange="1"/>
-        <l:suwak ValueChanged="slider2_ValueChanged" x:Name="slider2" Opis="Zmiana tonu" Minimum="0" Maximum="6" Value="0" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top" Height="20" Width="100" SmallChange="0.5"/>
-        <l:suwak ValueChanged="slider3_ValueChanged" x:Name="slider3" Opis="Zmiana częstotliwości o mniej niż ton" Minimum="-1" Maximum="1" Value="0" HorizontalAlignment="Left" Margin="0,50,0,0" VerticalAlignment="Top" Height="20" Width="100"/>
+        <l:suwak ValueChanged="slider1_ValueChanged" x:Name="slider1" Opis="Zmiana oktawy" Minimum="-5" Maximum="5" Value="0" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="111" SmallChange="1"/>
+        <l:suwak ValueChanged="slider2_ValueChanged" x:Name="slider2" Opis="Zmiana tonu" Minimum="0" Maximum="6" Value="0" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top" Height="20" Width="111" SmallChange="0.5"/>
+        <l:suwak ValueChanged="slider3_ValueChanged" x:Name="slider3" Opis="Zmiana częstotliwości o mniej niż ton" Minimum="-1" Maximum="1" Value="0" HorizontalAlignment="Left" Margin="0,50,0,0" VerticalAlignment="Top" Height="20" Width="111"/>
     </Grid>
 </UserControl>

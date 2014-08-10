@@ -8,9 +8,9 @@
              mc:Ignorable="d" Background="Chartreuse"
              d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
     <Grid>
-        <l:suwak Height="23"  HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" Opis="Moc" />
-        <l:suwak Height="23"  HorizontalAlignment="Left" Margin="0,50,0,0" x:Name="sliderB" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider2_ValueChanged" Opis="Gładkość" />
-        <Label Content="Cutoff" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
+        <l:suwak Height="23"  HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" Opis="Moc" />
+        <l:suwak Height="23"  HorizontalAlignment="Left" Margin="0,50,0,0" x:Name="sliderB" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="slider2_ValueChanged" Opis="Gładkość" />
+        <Label Content="Filtr" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
     </Grid>
 
 </UserControl>

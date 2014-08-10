@@ -6,14 +6,14 @@
              xmlns:l="clr-namespace:Syntezator_Krawczyka"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
     <Grid Background="#FFFFcc55">
-        <Slider ToolTip="Attack — Wejście" Height="23" HorizontalAlignment="Left" Margin="29,35,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderA_ValueChanged" />
-        <Slider ToolTip="Delay — Długość maksymalnej głośności" Height="23" HorizontalAlignment="Left" Margin="29,54,0,0" x:Name="sliderD" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderD_ValueChanged" />
-        <Slider ToolTip="Suspens — głośność podtrzymania" Height="23" HorizontalAlignment="Left" Margin="29,76,0,0" x:Name="sliderS" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderS_ValueChanged" />
-        <Slider ToolTip="Release — czas zanikania" Height="23" HorizontalAlignment="Left" Margin="29,98,0,0" x:Name="sliderR" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="sliderR_ValueChanged" />
+        <l:suwak Opis="Attack — Wejście" Height="23" HorizontalAlignment="Left" Margin="29,35,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderA_ValueChanged" />
+        <l:suwak Opis="Delay — Długość maksymalnej głośności" Height="23" HorizontalAlignment="Left" Margin="29,54,0,0" x:Name="sliderD" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderD_ValueChanged" />
+        <l:suwak Opis="Suspens — głośność podtrzymania" Height="23" HorizontalAlignment="Left" Margin="29,76,0,0" x:Name="sliderS" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderS_ValueChanged" />
+        <l:suwak Opis="Release — czas zanikania" Height="23" HorizontalAlignment="Left" Margin="29,98,0,0" x:Name="sliderR" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="sliderR_ValueChanged" />
         <Label Content="A" HorizontalAlignment="Left" Margin="10,32,0,0" VerticalAlignment="Top" />
         <Label Content="D" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" />
         <Label Content="R" HorizontalAlignment="Left" Margin="9,92,0,0" VerticalAlignment="Top" />
         <Label Content="S" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" />
-        <Label VerticalAlignment="Top" HorizontalAlignment="Left" Margin="12,12,0,0" Content="Generator Obwiedni Filtru"/>
+        <Label VerticalAlignment="Top" HorizontalAlignment="Left" Content="Generator Obwiedni Filtru"/>
     </Grid>
 </UserControl>

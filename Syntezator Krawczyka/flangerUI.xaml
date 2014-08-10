@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:l="clr-namespace:Syntezator_Krawczyka"
              mc:Ignorable="d" Background="DarkTurquoise"
              d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
-    <Grid><Slider ToolTip="Przesunięcie" Height="23"  HorizontalAlignment="Left" Margin="0,22,0,0" Name="sliderA" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" />
-    <Slider Height="23" HorizontalAlignment="Left" ToolTip="Częstotliwość" Margin="0,51,0,0" Name="sliderB" VerticalAlignment="Top" Width="100" SelectionStart="0.5" Maximum="3" ValueChanged="slider2_ValueChanged" />
+    <Grid><l:suwak Opis="Przesunięcie" Height="23"  HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" ValueChanged="slider1_ValueChanged" />
+    <l:suwak Height="23" HorizontalAlignment="Left" Opis="Częstotliwość" Margin="0,51,0,0" x:Name="sliderB" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="3" ValueChanged="slider2_ValueChanged" />
         <Label Content="Flanger" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
     </Grid>
 
