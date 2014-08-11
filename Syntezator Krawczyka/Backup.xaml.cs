@@ -30,8 +30,9 @@ namespace Syntezator_Krawczyka
         {
             var p = pliki;
             lista.Children.Clear();
-            foreach(var x in p)
+                for(int i=p.Length-1;i>=0;i--)
             {
+                var x = p[i];
                 var grid = new Grid();
                 var lab = new Label();
                 var data = DateTime.FromFileTime(long.Parse(szukajDaty.Match(x.Name).Groups[1].Value));

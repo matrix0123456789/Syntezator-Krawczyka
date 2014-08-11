@@ -137,6 +137,8 @@ namespace Syntezator_Krawczyka
                         if (n.Attributes.GetNamedItem("copy") != null)
                         {
                             kopia = true;
+                            if (n.Attributes.GetNamedItem("copy").Value.IndexOf(" (kopia)") > 0)
+                                n.Attributes.GetNamedItem("copy").Value = n.Attributes.GetNamedItem("copy").Value.Substring(0, n.Attributes.GetNamedItem("copy").Value.IndexOf(" (kopia)"));
                             id = n.Attributes.GetNamedItem("copy").Value;
                         }
                         else if (n.Attributes.GetNamedItem("id") == null)
