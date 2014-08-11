@@ -528,6 +528,7 @@ namespace Syntezator_Krawczyka
         }
         internal void grajStart()
         {
+            
             granie.graniePrzy = 0;
 
 
@@ -557,6 +558,17 @@ namespace Syntezator_Krawczyka
                         długość = długośćTeraz;
                 }
             }
+
+
+            foreach (var x in Statyczne.otwartyplik.sameSample)
+            {
+                
+                    
+                    if (x.dlugosc+x.delay > długość)
+                        długość = x.dlugosc + x.delay;
+               
+            }
+
             granie.PlikDoZapisu = null;
             granie.granieMax = (int)długość;
             granie.wynik = new float[2, długość];
@@ -599,7 +611,8 @@ namespace Syntezator_Krawczyka
                             //granie.grajcale(false);
                         }
                     }, granie.generować);
-                    var watek = new Thread(() => { var gen = granie.generować; while (granie.liveGraj() && gen[0]) { Thread.Sleep(1000); } });
+                    var watek = new Thread(() => { var gen = granie.generować; Thread.Sleep(1000); while (granie.liveGraj() && gen[0]) { Thread.Sleep(100); } });
+                    watek.Priority = ThreadPriority.Highest;
                     watek.Start();
 
                 }

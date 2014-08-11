@@ -281,8 +281,15 @@ namespace Syntezator_Krawczyka
             }
             if (rysujSkale(new List<sciezka>() { main }))
             {
+                int nr=0;
+                if(aktywna!=null)
+                    nr = listaChildren.IndexOf(aktywna);
+
                 listaChildren.Clear();
                 rysujNuty(main, głównyKolor);
+                listaChildren.Sort();
+                if (listaChildren.Count > nr)
+                    prostokat_MouseClick(listaChildren[nr], null);
             }
         }
 
