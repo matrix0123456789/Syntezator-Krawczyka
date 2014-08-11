@@ -139,5 +139,9 @@ namespace Syntezator_Krawczyka
                 return akt-delay;
             }
         }
+        public override string ToString()
+        {
+            return nazwa;
+        }
     }
 }

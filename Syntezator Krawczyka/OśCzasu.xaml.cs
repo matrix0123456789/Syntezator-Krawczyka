@@ -45,19 +45,25 @@ namespace Syntezator_Krawczyka
         private void rysuj(odDo akt, int i2, Brush kolor)
         {
             var prostokat = new Rectangle();
-            prostokat.Margin = new Thickness((plik.tempo * (akt.start) / (60 * plik.Hz) * skalaX), i2 * skalaY, 0, 0);
+            var gr = new Grid();
+            gr.Margin = new Thickness((plik.tempo * (akt.start) / (60 * plik.Hz) * skalaX), i2 * skalaY, 0, 0);
             var wid = plik.tempo * akt.dlugosc / (60 * plik.Hz) * skalaX;
             if (wid < 0)
                 wid = 0;
-            prostokat.Width = wid;
-            prostokat.Height = (skalaY);
+            gr.Width = wid;
+            gr.Height = (skalaY);
             prostokat.Fill = kolor;
             prostokat.Stroke = strokeNormal;
-            prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            prostokat.Tag = akt;
-            prostokat.MouseDown += prostokat_MouseClick;
-            panel.Children.Add(prostokat);
+            gr.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            gr.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            gr.Tag = akt;
+            gr.MouseDown += prostokat_MouseClick;
+            gr.Children.Add(prostokat);
+
+            var lab = new Label();
+            lab.Content = akt.sciezka.ToString();
+            gr.Children.Add(lab);
+            panel.Children.Add(gr);
         }
         static Brush strokeNormal = new SolidColorBrush(Color.FromArgb(50, 0, 0, 0));
         void szukaj(odDo akt, int i)
@@ -107,14 +113,14 @@ namespace Syntezator_Krawczyka
         {
             if (aktywna != null)
             {
-                aktywna.Stroke = strokeNormal;
+                (aktywna.Children[0] as Rectangle).Stroke = strokeNormal;
 
-                aktywna.StrokeThickness = 1;
+                (aktywna.Children[0] as Rectangle).StrokeThickness = 1;
             }
-            aktywna = (Rectangle)sender;
+            aktywna = (Grid)sender;
 
-            aktywna.Stroke = Brushes.Black;
-            aktywna.StrokeThickness = 2;
+            (aktywna.Children[0] as Rectangle).Stroke = Brushes.Black;
+            (aktywna.Children[0] as Rectangle).StrokeThickness = 2;
             if (((odDo)aktywna.Tag).sciezka.GetType() == typeof(sciezka))
             {
                 nazwa.Content = ((sciezka)((odDo)aktywna.Tag).sciezka).nazwa;
@@ -162,7 +168,7 @@ namespace Syntezator_Krawczyka
             }
         }
 
-        public Rectangle aktywna { get; set; }
+        public Grid aktywna { get; set; }
 
         private void edytujNuty_click(object sender, RoutedEventArgs e)
         {

@@ -174,5 +174,9 @@ namespace Syntezator_Krawczyka
                 return sample.fala.GetLongLength(1);
             }
         }
+        public override string ToString()
+        {
+            return sample.plik.Substring(sample.plik.LastIndexOfAny(new char[] {'\\','/'})+1);
+        }
     }
 }
