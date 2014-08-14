@@ -26,7 +26,7 @@ namespace Syntezator_Krawczyka
         public OśCzasu()
         {
             InitializeComponent();
-            for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
+            /*for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
             {
                 var akt = new odDo(Statyczne.otwartyplik.sciezki[i]);
                 //szukaj miejsca na wyświetlenie
@@ -37,7 +37,7 @@ namespace Syntezator_Krawczyka
                 var akt = new odDo(Statyczne.otwartyplik.sameSample[i]);
                 //szukaj miejsca na wyświetlenie
                 szukaj(akt, i);
-            }
+            }*/
         }
 
         const double skalaX = 20;
@@ -126,6 +126,7 @@ namespace Syntezator_Krawczyka
                 nazwa.Content = ((sciezka)((odDo)aktywna.Tag).sciezka).nazwa;
                 edytSciezka.Visibility = Visibility.Visible;
                 edytSample.Visibility = Visibility.Collapsed;
+                aktModuły();
             }
             else
             {
@@ -219,6 +220,67 @@ namespace Syntezator_Krawczyka
                 catch (FormatException)
                 {
                     (sender as TextBox).Background = Brushes.Red;
+                }
+            }
+        }
+
+        private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (comboBox1.SelectedItem != null)
+                {
+                    (aktywna.Tag as sciezka).sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
+                    var atr = (aktywna.Tag as sciezka).xml.OwnerDocument.CreateAttribute("sound");
+                    atr.Value = (string)(comboBox1.SelectedItem as ComboBoxItem).Content;
+                    (aktywna.Tag as sciezka).xml.Attributes.Append(atr);
+                }
+            }
+            catch (NullReferenceException) { }
+        }
+        private void delay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+           // if ((aktywna.Tag as sciezka).gotowe)
+            {
+                try
+                {
+                    (aktywna.Tag as sciezka).xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
+                    (aktywna.Tag as sciezka).delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
+                }
+                catch (System.FormatException)
+                {
+                    (sender as TextBox).Background = Brushes.Red;
+                }
+            }
+        }
+        //int ilemod = 0;
+        void aktModuły()
+        {
+            lock (comboBox1)
+            {
+                //var cou = Statyczne.otwartyplik.moduły.Count;
+                //if (ilemod != cou)
+                {
+                    comboBox1.Items.Clear();
+
+                    comboBox1.Items.Add(new ComboBoxItem());
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = null;
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = "(puste)";
+                    if ((aktywna.Tag as sciezka).sekw == null)
+                    {
+                        comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
+                    }
+                    foreach (var mod in Statyczne.otwartyplik.moduły)
+                    {
+                        comboBox1.Items.Add(new ComboBoxItem());
+                        (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
+                        (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
+                        if ((aktywna.Tag as sciezka).sekw == mod.Value.sekw)
+                        {
+                            comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
+                        }
+                    }
+                   // ilemod = cou;
                 }
             }
         }

@@ -15,10 +15,10 @@
                 <MenuItem Header="Usuń"></MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
-        <ComboBox ToolTip="Wybierz na czym ma ta ścierzka być odegrana" Height="23" HorizontalAlignment="Left" Margin="0,23,0,0" x:Name="comboBox1" VerticalAlignment="Top" Width="136" SelectionChanged="comboBox1_SelectionChanged"/>
         <Label Content="Ścieżka" Height="28" HorizontalAlignment="Left" x:Name="nazwa" VerticalAlignment="Top" />
-        <Button Content="Edytuj" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" x:Name="przyciskEdytuj"/>
+        <ComboBox ToolTip="Wybierz na czym ma ta ścierzka być odegrana" Height="23" HorizontalAlignment="Left" Margin="0,23,0,0" x:Name="comboBox1" VerticalAlignment="Top" Width="136" SelectionChanged="comboBox1_SelectionChanged"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="75,51,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="61" x:Name="delay" TextChanged="delay_TextChanged"/>
         <Label Content="Przesunięcie" Height="28" HorizontalAlignment="Left" x:Name="nazwa_Copy" VerticalAlignment="Top" Margin="0,51,0,0" />
-    </Grid>
+   <Button Content="Edytuj" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" x:Name="przyciskEdytuj"/>
+         </Grid>
 </UserControl>
