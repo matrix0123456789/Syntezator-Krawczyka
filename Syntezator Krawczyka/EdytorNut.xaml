@@ -14,9 +14,9 @@
 
             <Label Content="długość" HorizontalAlignment="Right" Margin="0,54,61,0" VerticalAlignment="Top"/>
             <Label Content="wysokość" HorizontalAlignment="Right" Margin="0,107,53,0" VerticalAlignment="Top"/>
-            <TextBox KeyDown="Window_KeyDown" HorizontalAlignment="Right" Height="23" Margin="0,26,10,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="czas" TextChanged="czas_TextChanged"/>
-            <TextBox KeyDown="Window_KeyDown" HorizontalAlignment="Right" Height="23" Margin="0,79,10,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="dlugosc" TextChanged="dlugosc_TextChanged"/>
-            <TextBox KeyDown="Window_KeyDown" HorizontalAlignment="Right" Height="23" Margin="0,133,10,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="ton" TextChanged="ton_TextChanged"/>
+            <TextBox KeyDown="Window_KeyDown" HorizontalAlignment="Right" Height="23" Margin="0,26,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="98" IsEnabled="False" Name="czas" TextChanged="czas_TextChanged"/>
+            <TextBox KeyDown="Window_KeyDown" HorizontalAlignment="Right" Height="23" Margin="0,79,10,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="98" IsEnabled="False" Name="dlugosc" TextChanged="dlugosc_TextChanged"/>
+            <TextBox KeyDown="Window_KeyDown" HorizontalAlignment="Right" Height="23" Margin="0,133,10,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="98" IsEnabled="False" Name="ton" TextChanged="ton_TextChanged"/>
             <Button Content="Nowa nuta" Margin="0,161,10,0" Name="nowaNuta" VerticalAlignment="Top" HorizontalAlignment="Right" Width="98" Click="Button_Click"/>
             <Label Margin="0,186,5,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="108">Skróty klawiszowe:</Label>
             <Label Margin="0,217,57,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="51">C - czas</Label>

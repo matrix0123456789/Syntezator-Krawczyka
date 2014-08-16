@@ -22,11 +22,26 @@ namespace Syntezator_Krawczyka
     public partial class OśCzasu : Window
     {
         List<List<odDo>> elementy = new List<List<odDo>>();
-
+        float dlugosc
+        {
+            get
+            {
+                float ret = 0;
+                foreach (var x in elementy)
+                {
+                    foreach (var y in x)
+                    {
+                        if (y.start + y.dlugosc > ret)
+                            ret = y.start + y.dlugosc;
+                    }
+                }
+                return ret;
+            }
+        }
         public OśCzasu()
         {
             InitializeComponent();
-            /*for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
+            for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
             {
                 var akt = new odDo(Statyczne.otwartyplik.sciezki[i]);
                 //szukaj miejsca na wyświetlenie
@@ -37,7 +52,21 @@ namespace Syntezator_Krawczyka
                 var akt = new odDo(Statyczne.otwartyplik.sameSample[i]);
                 //szukaj miejsca na wyświetlenie
                 szukaj(akt, i);
-            }*/
+            }
+            rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
+        }
+        float iRysujSkala = 0;
+        private void rysujSkala(double p)
+        {
+            for (; iRysujSkala < p; iRysujSkala += 4)
+            {
+                var lab = new Label();
+                lab.Content = iRysujSkala;
+                lab.Margin = new Thickness(iRysujSkala * skalaX, 0, 0, 0);
+                lab.HorizontalAlignment = HorizontalAlignment.Left;
+                lab.VerticalAlignment = VerticalAlignment.Top;
+                panel.Children.Add(lab);
+            }
         }
 
         const double skalaX = 20;
@@ -46,7 +75,7 @@ namespace Syntezator_Krawczyka
         {
             var prostokat = new Rectangle();
             var gr = new Grid();
-            gr.Margin = new Thickness((plik.tempo * (akt.start) / (60 * plik.Hz) * skalaX), i2 * skalaY, 0, 0);
+            gr.Margin = new Thickness((plik.tempo * (akt.start) / (60 * plik.Hz) * skalaX), i2 * skalaY + 25, 0, 0);
             var wid = plik.tempo * akt.dlugosc / (60 * plik.Hz) * skalaX;
             if (wid < 0)
                 wid = 0;
@@ -90,10 +119,10 @@ namespace Syntezator_Krawczyka
                 {
                     znaleniono = true;
                     elementy[i2].Add(akt);
-                    if (Statyczne.otwartyplik.sciezki.Count>i&& Statyczne.otwartyplik.sciezki[i].oryginał != null)
+                    if (Statyczne.otwartyplik.sciezki.Count > i && Statyczne.otwartyplik.sciezki[i].oryginał != null)
                         rysuj(akt, i2, EdytorNut.kolory[Statyczne.otwartyplik.sciezki.IndexOf(Statyczne.otwartyplik.sciezki[i].oryginał) % EdytorNut.kolory.Length]);
-                    else  rysuj(akt, i2, EdytorNut.kolory[i % EdytorNut.kolory.Length]);
-                    
+                    else rysuj(akt, i2, EdytorNut.kolory[i % EdytorNut.kolory.Length]);
+
 
                     break;
                 }
@@ -126,6 +155,7 @@ namespace Syntezator_Krawczyka
                 nazwa.Content = ((sciezka)((odDo)aktywna.Tag).sciezka).nazwa;
                 edytSciezka.Visibility = Visibility.Visible;
                 edytSample.Visibility = Visibility.Collapsed;
+                delay.Text = (plik.tempo * ((sciezka)((odDo)aktywna.Tag).sciezka).delay / (60 * plik.Hz)).ToString();
                 aktModuły();
             }
             else
@@ -137,7 +167,7 @@ namespace Syntezator_Krawczyka
             }
 
         }
-        struct odDo
+        class odDo
         {
             public IodDo sciezka;
             public long start;
@@ -175,7 +205,11 @@ namespace Syntezator_Krawczyka
         {
             if (((odDo)aktywna.Tag).sciezka.GetType() == typeof(sciezka))
             {
-                var okno = new EdytorNut((sciezka)((odDo)aktywna.Tag).sciezka);
+                EdytorNut okno;
+                if (((sciezka)((odDo)aktywna.Tag).sciezka).oryginał != null)
+                    okno = new EdytorNut(((sciezka)((odDo)aktywna.Tag).sciezka).oryginał, aktywna.Background);
+                else
+                    okno = new EdytorNut((sciezka)((odDo)aktywna.Tag).sciezka, aktywna.Background);
                 okno.Show();
             }
 
@@ -194,7 +228,7 @@ namespace Syntezator_Krawczyka
                 while (a.dlugosc == 0)
                     Thread.Sleep(10);
                 var akt = new odDo(a);
-                
+
                 //szukaj miejsca na wyświetlenie
                 szukaj(akt, 0);
             }
@@ -204,7 +238,7 @@ namespace Syntezator_Krawczyka
         {
             EdytorNut.usuńLitery((TextBox)sender);
             if (aktywna != null)
-            { 
+            {
                 try
                 {
                     var n = (((odDo)aktywna.Tag).sciezka as jedenSample);
@@ -216,6 +250,8 @@ namespace Syntezator_Krawczyka
                     (((odDo)aktywna.Tag).sciezka as jedenSample).delay = (long)(plik.Hz * 60 / plik.tempo * cz);
                     //n.nuta.opuznienie = (long)(plik.Hz * 60 / plik.tempo * cz);
                     (sender as TextBox).Background = Brushes.White;
+                    ((odDo)aktywna.Tag).start = (long)(plik.Hz * 60 / plik.tempo * cz);
+                    rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
                 }
                 catch (FormatException)
                 {
@@ -238,14 +274,18 @@ namespace Syntezator_Krawczyka
             }
             catch (NullReferenceException) { }
         }
-        private void delay_TextChanged(object sender, TextChangedEventArgs e)
+        private void delay__TextChanged(object sender, TextChangedEventArgs e)
         {
-           // if ((aktywna.Tag as sciezka).gotowe)
+            // if ((aktywna.Tag as sciezka).gotowe)
             {
                 try
                 {
-                    (aktywna.Tag as sciezka).xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
-                    (aktywna.Tag as sciezka).delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
+                    ((sciezka)((odDo)aktywna.Tag).sciezka).xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
+                    ((sciezka)((odDo)aktywna.Tag).sciezka).delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
+                    aktywna.Margin = new Thickness(((float.Parse(delay.Text)) * skalaX), aktywna.Margin.Top, 0, 0);
+                    ((odDo)aktywna.Tag).start = ((sciezka)((odDo)aktywna.Tag).sciezka).delay;
+
+                    rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
                 }
                 catch (System.FormatException)
                 {
@@ -266,7 +306,7 @@ namespace Syntezator_Krawczyka
                     comboBox1.Items.Add(new ComboBoxItem());
                     (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = null;
                     (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = "(puste)";
-                    if ((aktywna.Tag as sciezka).sekw == null)
+                    if ((((odDo)aktywna.Tag).sciezka as sciezka).sekw == null)
                     {
                         comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
                     }
@@ -275,14 +315,33 @@ namespace Syntezator_Krawczyka
                         comboBox1.Items.Add(new ComboBoxItem());
                         (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
                         (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
-                        if ((aktywna.Tag as sciezka).sekw == mod.Value.sekw)
+                        if ((((odDo)aktywna.Tag).sciezka as sciezka).sekw == mod.Value.sekw)
                         {
                             comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
                         }
                     }
-                   // ilemod = cou;
+                    // ilemod = cou;
                 }
             }
+        }
+
+        private void duplikuj_click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void usuń_click(object sender, RoutedEventArgs e)
+        {
+
+            Statyczne.otwartyplik.sciezki.Remove((((odDo)aktywna.Tag).sciezka as sciezka));
+            if (Statyczne.otwartyplik.scieżkiZId.ContainsKey((((odDo)aktywna.Tag).sciezka as sciezka).nazwa))
+                Statyczne.otwartyplik.scieżkiZId.Remove((((odDo)aktywna.Tag).sciezka as sciezka).nazwa);
+            (((odDo)aktywna.Tag).sciezka as sciezka).xml.ParentNode.RemoveChild((((odDo)aktywna.Tag).sciezka as sciezka).xml);
+            ((((((odDo)aktywna.Tag).sciezka as sciezka).UI as sciezkaUI).Parent) as WrapPanel).Children.Remove((((odDo)aktywna.Tag).sciezka as sciezka).UI);
+            panel.Children.Remove(aktywna);
+            aktywna = null;
+            edytSciezka.Visibility = Visibility.Collapsed;
+            edytSample.Visibility = Visibility.Collapsed;
         }
     }
     interface IodDo

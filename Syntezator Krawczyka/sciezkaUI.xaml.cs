@@ -122,5 +122,15 @@ namespace Syntezator_Krawczyka
         {
             Clipboard.SetData("audio/x-syntezator-krawczyka-track",parent.xml.OuterXml);
         }
+
+
+        private void MenuItem_Click_usuń(object sender, RoutedEventArgs e)
+        {
+            Statyczne.otwartyplik.sciezki.Remove(parent);
+            if (Statyczne.otwartyplik.scieżkiZId.ContainsKey(parent.nazwa))
+                Statyczne.otwartyplik.scieżkiZId.Remove(parent.nazwa);
+            parent.xml.ParentNode.RemoveChild(parent.xml);
+            (Parent as WrapPanel).Children.Remove(this);
+        }
     }
 }

@@ -12,7 +12,7 @@
                 <MenuItem Header="Edytuj" Click="Button_Click"></MenuItem>
                 <MenuItem Header="Duplikuj" Click="MenuItem_Click"></MenuItem>
                 <MenuItem Header="Kopiuj" Click="MenuItem_Click_1"></MenuItem>
-                <MenuItem Header="Usuń"></MenuItem>
+                <MenuItem Header="Usuń" Click="MenuItem_Click_usuń"></MenuItem>
             </ContextMenu>
         </Grid.ContextMenu>
         <Label Content="Ścieżka" Height="28" HorizontalAlignment="Left" x:Name="nazwa" VerticalAlignment="Top" />
