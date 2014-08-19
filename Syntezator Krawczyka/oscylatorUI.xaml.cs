@@ -112,6 +112,9 @@ namespace Syntezator_Krawczyka.Synteza
                 case ("piłokształtna"):
                     piłokształtny.IsChecked = true;
                     break;
+                case ("szum"):
+                    szum.IsChecked = true;
+                    break;
                 default:
                     niestandard.IsChecked = true;
                     break;
@@ -140,6 +143,13 @@ namespace Syntezator_Krawczyka.Synteza
             else
                 okno = new EdytorFali(parentNode);
             okno.Show();
+        }
+
+        private void szum_Checked(object sender, RoutedEventArgs e)
+        {
+            parentNode.ustawienia["typ"] = "szum";
+            parentNode.akt();
+
         }
     }
 }

@@ -103,9 +103,15 @@ namespace Syntezator_Krawczyka.Synteza
             {
                 input.dane[0] = moc * jak[0] * input.dane[0];
                 var iJak = input.generujOd % jak.Length;
-                for (var i = 1; i < input.dane.Length; i++)
+                var i = 1;
+                for (; i < input.dane.Length && i < jak.Length; i++)
                 {
-                    input.dane[i] = (input.dane[i] - input.dane[i - 1]) * (moc + jak[iJak % jak.Length]) + input.dane[i - 1];
+                    input.dane[i] = (input.dane[i] - input.dane[i - 1]) * (moc + jak[iJak%jak.Length]) + input.dane[i - 1];
+                    iJak++;
+                }
+                for (; i < input.dane.Length; i++)
+                {
+                    input.dane[i] = (input.dane[i] - input.dane[i - 1]) * (moc ) + input.dane[i - 1];
                     iJak++;
                 }
             }

@@ -33,7 +33,7 @@ namespace Syntezator_Krawczyka.Synteza
         Dictionary<string, string> _ustawienia;
         public XmlNode XML { get; set; }
         public FalaNiestandardowa niestandardowa = null;
-        public enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna, niestandardowa }
+        public enum typFali : byte { sinusoidalna, trójkątna, prostokątka, piłokształtna, niestandardowa, szum }
         public oscylator()
         {
             wejście = new List<Typ>();
@@ -73,6 +73,9 @@ namespace Syntezator_Krawczyka.Synteza
                 case "prostokątna":
                     typ = typFali.prostokątka;
                     break;
+                case "szum":
+                    typ = typFali.szum;
+                    break;
                 default:
                     typ = typFali.niestandardowa;
                     if (Statyczne.otwartyplik.fale.ContainsKey(_ustawienia["typ"]))
@@ -102,13 +105,19 @@ namespace Syntezator_Krawczyka.Synteza
                 case typFali.prostokątka:
                     return prostokątna(ilePróbek, gladkość);
                     break;
+                case typFali.szum:
+                var ret=new float[ilePróbek];
+                    for(long i=0;i<ilePróbek;i++)
+                        ret[i]=(float)los.NextDouble();
+                    return ret;
+                    break;
                 default:
                     return null;
                     break;
             }
 
         }
-
+        static Random los=new Random();
         public long symuluj(long p)
         {
             return wyjście[0].DrógiModół.symuluj(p + (long)(float.Parse(_ustawienia["R"], CultureInfo.InvariantCulture) * plik.kHz));
@@ -131,14 +140,7 @@ namespace Syntezator_Krawczyka.Synteza
                         {
                             object[] wy = new object[2];
                             float[] jedenPrzebieg;
-                            if (typ == typFali.niestandardowa)
-                            {
-                                if (niestandardowa != null)
-                                    jedenPrzebieg = niestandardowa.generujJedenPrzebieg((long)Math.Floor(input.ilepróbek));
-                                else
-                                    jedenPrzebieg = new float[(long)Math.Floor(input.ilepróbek)];
-                            }
-                            else jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
+                           
                             long długośćCała = (long)(Math.Floor((input.długość) / input.ilepróbek) * input.ilepróbek + R * plik.kHz);
                             if (input.długość + R * plik.kHz - input.generujOd > 0)
                             {
@@ -153,6 +155,21 @@ namespace Syntezator_Krawczyka.Synteza
                             }
                             else
                                 input.dane = new float[0];//koniec wykonywania
+                             if (typ == typFali.szum)
+                            {
+                                jedenPrzebieg = new float[input.dane.Length];
+                                for (long i = 0; i < input.dane.Length; i++)
+                                    jedenPrzebieg[i] = (float)los.NextDouble();
+                            }
+                            else  if (typ == typFali.niestandardowa)
+                            {
+                                if (niestandardowa != null)
+                                    jedenPrzebieg = niestandardowa.generujJedenPrzebieg((long)Math.Floor(input.ilepróbek));
+                                else
+                                    jedenPrzebieg = new float[(long)Math.Floor(input.ilepróbek)];
+                            }
+                             else jedenPrzebieg = generujJedenPrzebiegStatyczny(typ, (long)Math.Floor(input.ilepróbek), gladkosc);
+                            
                             float aProcent, dProcent;
                             float rProcent = 1;
                             aProcent = 0;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml;
 
 namespace Syntezator_Krawczyka
@@ -84,9 +85,22 @@ namespace Syntezator_Krawczyka
         /// <param name="plik">ścierzka do pliku</param>
         static public void zapisz(float[,] fala, string plik)
         {
+            try
+            {
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
                 System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
                 wave(fala, write);
+            }catch(Exception e)
+            {
+                MessageBox.Show(e.ToString(), "Błąd podczas zapisu", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                try
+                {
+                    System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
+                    System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
+                    wave(fala, write);
+                }
+                catch { }
+            }
                
 
 
