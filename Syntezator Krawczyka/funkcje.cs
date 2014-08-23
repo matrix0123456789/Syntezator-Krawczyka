@@ -43,6 +43,8 @@ namespace Syntezator_Krawczyka
         }
         static public bool graj(float[,] fala)
         {
+            if (Oscyloskop.oscyl != null)
+                Oscyloskop.dane.Enqueue(fala);
             var bufor = new byte[fala.Length * 2];
             for (var i = 0; i < fala.Length/2; i++)
             {
@@ -183,6 +185,9 @@ namespace Syntezator_Krawczyka
             writer.Close();
             //return puste;
         }
+
+       // const double bazowa = 130.812783;
+        const double bazowa = 130;
         /// <summary>
         /// Wylicza częstotliwość nuty na podstawie oktawy i tonu
         /// </summary>
@@ -191,15 +196,15 @@ namespace Syntezator_Krawczyka
         /// <returns>Częstotliwość w hercach</returns>
         public static double częstotliwość(short oktawa, float ton)
         {
-            return 130.812783 * Math.Pow(2, (oktawa) + (ton / 6));
+            return bazowa * Math.Pow(2, (oktawa) + (ton / 6));
         }
         public static double ilepróbek(short oktawa, float ton)
         {
-            return plik.Hz/(130.812783 * Math.Pow(2, (oktawa) + (ton / 6)));
+            return plik.Hz / (bazowa * Math.Pow(2, (oktawa) + (ton / 6)));
         }
         public static double ton(double ileprobek)
         {
-            return Math.Log(plik.Hz/(130.812783*ileprobek),2)*6;
+            return Math.Log(plik.Hz / (bazowa * ileprobek), 2) * 6;
         }
 
         public static XmlNode klonujXML(XmlDocument doc, System.Xml.XmlNode wej)

@@ -498,6 +498,11 @@ namespace Syntezator_Krawczyka
             okno.Show();
         }
 
+        private void Oscyloskop_Click(object sender, RoutedEventArgs e)
+        {
+            Oscyloskop.pokarz();
+        }
+
 
 
 

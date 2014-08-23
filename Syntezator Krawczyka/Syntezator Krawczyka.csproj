@@ -156,6 +156,9 @@
     </Compile>
     <Compile Include="IPostep.cs" />
     <Compile Include="jedenSample.cs" />
+    <Compile Include="Oscyloskop.xaml.cs">
+      <DependentUpon>Oscyloskop.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OśCzasu.xaml.cs">
       <DependentUpon>OśCzasu.xaml</DependentUpon>
     </Compile>
@@ -271,6 +274,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EdytorNut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Oscyloskop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
