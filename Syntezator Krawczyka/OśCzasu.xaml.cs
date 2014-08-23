@@ -51,7 +51,7 @@ namespace Syntezator_Krawczyka
             {
                 var akt = new odDo(Statyczne.otwartyplik.sameSample[i]);
                 //szukaj miejsca na wyświetlenie
-                szukaj(akt, i);
+                szukaj(akt, i + Statyczne.otwartyplik.sciezki.Count);
             }
             rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
         }
@@ -104,11 +104,11 @@ namespace Syntezator_Krawczyka
                 foreach (var x in elementy[i2])
                 {
                     if (
-                       (x.start > akt.start && x.end < akt.end)
+                       (x.start >= akt.start && x.end <= akt.end)
                         ||
-                        (x.start < akt.start && x.end > akt.start)
+                        (x.start <= akt.start && x.end > akt.start)
                         ||
-                        (x.start < akt.end && x.end > akt.end)
+                        (x.start <= akt.end && x.end > akt.end)
                         )
                     {
                         znTera = false;
@@ -230,7 +230,9 @@ namespace Syntezator_Krawczyka
                 var akt = new odDo(a);
 
                 //szukaj miejsca na wyświetlenie
-                szukaj(akt, 0);
+                szukaj(akt, Statyczne.otwartyplik.sciezki.Count + Statyczne.otwartyplik.sameSample.Count-1);
+
+                rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
             }
         }
 
