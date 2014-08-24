@@ -7,10 +7,19 @@
 
         </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
+
     <Grid Drop="Grid_Drop" DragOver="Grid_DragOver" AllowDrop="True">
         <Button Content="Otwórz plik"  Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button3" VerticalAlignment="Top" Width="92" Click="button3_Click" ToolTip="Otwórz plik zawierający nuty"></Button>
         <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
-        <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" />
+        <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="12,68,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" >
+        <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="słaba jakość (8 bit)" Click="J8_click" ToolTip="Przy tej jakości mogą być słyszalne zakłócenia"></MenuItem>
+                    <MenuItem Header="wysoka jakość (16 bit)" Click="J16_click" ToolTip="Większość domowego sprzętu nie da rady obsłurzyć wyższej jakości"></MenuItem>
+                    <MenuItem Header="ekstremalnie wysoka jakość (32 bit)" Click="J32_click" ToolTip="Powoduje 2 razy większe pliki niż 16 bit, a i tak nikt nie zauwarzy różnicy. Jakość przeznaczona do dalszej obróbki."></MenuItem>
+                </ContextMenu>
+        </Button.ContextMenu>
+        </Button>
         <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="12,96,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Dodaj wirtualny instrument"/>
         <ProgressBar Visibility="Hidden" Name="postęp" HorizontalAlignment="Left" Height="13" Margin="12,316,0,0" VerticalAlignment="Top" Width="92"/>
         <Button Content="Czyść bufor" Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,0,0,131" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />

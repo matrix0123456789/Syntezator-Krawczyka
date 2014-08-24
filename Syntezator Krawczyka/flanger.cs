@@ -70,7 +70,11 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             if (przesunięciea == 0 || czestotliwosc == 0)
-                return dane;
+            {
+                for (int i = 0; i < dane.Length; i++)
+                    dane[i] += input.dane[i];
+                    return dane;
+            }
             else
             {
                 var przesunięcie = przesunięciea * plik.kHz;

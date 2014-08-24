@@ -625,5 +625,7 @@ namespace Syntezator_Krawczyka.Synteza
 
         public static string PlikDoZapisu = null;
 
-        }
+
+        public static byte bity = 16;
+    }
 }

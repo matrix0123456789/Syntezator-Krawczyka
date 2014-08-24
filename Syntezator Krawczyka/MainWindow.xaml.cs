@@ -314,6 +314,7 @@ namespace Syntezator_Krawczyka
 
         private void button7_Click(object sender, RoutedEventArgs e)
         {
+            granie.bity = 16;
             Statyczne.otwartyplik.generuj();
         }
 
@@ -501,6 +502,25 @@ namespace Syntezator_Krawczyka
         private void Oscyloskop_Click(object sender, RoutedEventArgs e)
         {
             Oscyloskop.pokarz();
+        }
+
+        private void J8_click(object sender, RoutedEventArgs e)
+        {
+            granie.bity = 8;
+            Statyczne.otwartyplik.generuj();
+        }
+
+        private void J16_click(object sender, RoutedEventArgs e)
+        {
+
+            granie.bity = 16;
+            Statyczne.otwartyplik.generuj();
+        }
+        private void J32_click(object sender, RoutedEventArgs e)
+        {
+
+            granie.bity = 32;
+            Statyczne.otwartyplik.generuj();
         }
 
 

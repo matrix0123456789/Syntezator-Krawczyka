@@ -46,7 +46,7 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia = new Dictionary<string, string>();
             _ustawienia.Add("A", "200");
             _ustawienia.Add("D", "0");
-            _ustawienia.Add("S", (0.5).ToString());
+            _ustawienia.Add("S", "0.5");
             _ustawienia.Add("R", "1000");
         }
         public void działaj(nuta input)

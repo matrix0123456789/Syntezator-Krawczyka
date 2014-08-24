@@ -19,7 +19,6 @@ namespace Syntezator_Krawczyka.Synteza
                 return _UI;
             }
         }
-        public void akt() { }
         public XmlNode XML { get; set; }
         UserControl _UI;
         public List<Typ> wejście { get; set; }
@@ -34,6 +33,32 @@ namespace Syntezator_Krawczyka.Synteza
         }
         Dictionary<string, string> _ustawienia;
         Dictionary<nuta, nuta[]> referencjeNut = new Dictionary<nuta, nuta[]>();
+        Dictionary<moduł, List<Typ>> flangery=null;
+        public void akt(){}
+             public void aktt()
+        {flangery = new Dictionary<moduł, List<Typ>>();
+            for (var i = 0; i < 8; i++)
+            {
+                if (wyjście[i].DrógiModół != null)
+                {
+                    if (wyjście[i].DrógiModół.GetType() == typeof(flanger))
+                    {
+                        if (flangery.ContainsKey(wyjście[i].DrógiModół.wyjście[0].DrógiModół))
+                        {
+                            flangery[wyjście[i].DrógiModół.wyjście[0].DrógiModół].Add(wyjście[i]);
+                        }
+                        else
+                        {
+                            var lista = new List<Typ>();
+                            lista.Add(wyjście[i]);
+                            flangery.Add(wyjście[i].DrógiModół.wyjście[0].DrógiModół, lista);
+                        }
+
+                    }
+
+                }
+            }
+        }
         public rozdzielacz()
         {
             wejście = new List<Typ>();
@@ -94,30 +119,11 @@ namespace Syntezator_Krawczyka.Synteza
             }*/
             //lock (granie.obLock)
             {
-                Dictionary<moduł, List<Typ>> flangery = new Dictionary<moduł, List<Typ>>();
-                for (var i = 0; i < 8; i++)
-                {
-                    if (wyjście[i].DrógiModół != null)
-                    {
-                        if (wyjście[i].DrógiModół.GetType() == typeof(flanger))
-                        {
-                            if (flangery.ContainsKey(wyjście[i].DrógiModół.wyjście[0].DrógiModół))
-                            {
-                                flangery[wyjście[i].DrógiModół.wyjście[0].DrógiModół].Add(wyjście[i]);
-                            }
-                            else
-                            {
-                                var lista = new List<Typ>();
-                                lista.Add(wyjście[i]);
-                                flangery.Add(wyjście[i].DrógiModół.wyjście[0].DrógiModół, lista);
-                            }
-
-                        }
-
-                    }
-                }
+                if (flangery == null)
+                    aktt();
                 foreach (var x in flangery)
                 {
+                    //var dane = input.dane;
                     var dane = new float[input.dane.Length];
                     foreach (var xx in x.Value)
                     {

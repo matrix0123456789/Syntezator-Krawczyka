@@ -165,7 +165,7 @@ namespace Syntezator_Krawczyka
                 }
                 if (filtr.IsChecked.Value)
                 {
-                    sound.AppendChild(mod("generatorObwiedniFiltru", "P" + P + "nr" + i, "K" + K));
+                    sound.AppendChild(mod("cutoff", "P" + P + "nr" + i, "K" + K));
                     P++;
                 }
 
@@ -175,7 +175,7 @@ namespace Syntezator_Krawczyka
             {
                 sound.AppendChild(mod("rozdzielacz", "K" + K, "Fl1 Fl2 Fl3 Fl4 Fl5 Fl6 Fl7 Fl8"));
                 for (byte i2 = 1; i2 <= 8; i2++)
-                    sound.AppendChild(mod("flanger", "F2" + i2, "K" + (K + 1)));
+                    sound.AppendChild(mod("flanger", "Fl" + i2, "K" + (K + 1)));
                 K++;
             }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syntezator_Krawczyka.Synteza;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -118,7 +119,7 @@ namespace Syntezator_Krawczyka
         {
             char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
             byte[] puste = new byte[pus.Length-1];
-            var pusteLength = pus.Length + fala.Length * 2 - 2;
+            var pusteLength = pus.Length + fala.Length * (granie.bity/8) - 2;
             for (int i = 0; i < pus.Length && i < puste.Length; i++)
             {
                 puste[i] = (byte)pus[i];
@@ -128,7 +129,7 @@ namespace Syntezator_Krawczyka
             puste[5] = rozmiar[1];
             puste[6] = rozmiar[2];
             puste[7] = rozmiar[3];
-            byte[] rozmiar2 = BitConverter.GetBytes(fala.Length * 2);
+            byte[] rozmiar2 = BitConverter.GetBytes(fala.Length * granie.bity/8);
             puste[40] = rozmiar2[0];
             puste[41] = rozmiar2[1];
             puste[42] = rozmiar2[2];
@@ -140,20 +141,21 @@ namespace Syntezator_Krawczyka
             puste[25] = czestotliwosc[1];
             puste[26] = czestotliwosc[2];
             puste[27] = czestotliwosc[3];
-            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 4);
+            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 2*granie.bity/8);
             puste[28] = czestotliwosc2[0];
             puste[29] = czestotliwosc2[1];
             puste[30] = czestotliwosc2[2];
             puste[31] = czestotliwosc2[3];
-            puste[32] = 4;
+            puste[32] = (byte)(2 * granie.bity / 8);
+            puste[34] = granie.bity;
 
 
 
             puste[22] = 2;
 
             writer.Write(puste);
-            long falai = 0;
-            for (int z = pus.Length + 2; z < pusteLength && fala.LongLength/2 > falai; z = z + 4)
+            
+            for (long falai = 0;fala.LongLength/2 > falai; falai++)
             {
 
                 if (fala[0, falai] > 1)
@@ -175,10 +177,23 @@ namespace Syntezator_Krawczyka
                     writer.Write((byte)(fala[1, falai] * 128));
                 else
                     writer.Write((byte)((1 + fala[1, falai]) * 128 + 128));*/
-                writer.Write((short)(fala[0, falai] * 32767));
-                writer.Write((short)(fala[1, falai] * 32767));
+                if (granie.bity == 8)
+                {
+                    writer.Write((byte)(fala[0, falai] * 127+127));
+                    writer.Write((byte)(fala[1, falai] * 127+127));
+                }
+                else if (granie.bity == 16)
+                {
+                    writer.Write((short)(fala[0, falai] * 32767));
+                    writer.Write((short)(fala[1, falai] * 32767));
+                }
+                else if (granie.bity == 32)
+                {
+                    writer.Write((int)(fala[0, falai] * (32767)));
+                    writer.Write((int)(fala[1, falai] * (32767)));
+                }
                 //puste[z + 1] = 0;
-                falai++;
+                
 
             }
             writer.Flush();
@@ -188,6 +203,8 @@ namespace Syntezator_Krawczyka
 
        // const double bazowa = 130.812783;
         const double bazowa = 130;
+        
+        
         /// <summary>
         /// Wylicza częstotliwość nuty na podstawie oktawy i tonu
         /// </summary>
