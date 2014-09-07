@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -175,8 +176,16 @@ namespace Syntezator_Krawczyka
             {
                 sound.AppendChild(mod("rozdzielacz", "K" + K, "Fl1 Fl2 Fl3 Fl4 Fl5 Fl6 Fl7 Fl8"));
                 for (byte i2 = 1; i2 <= 8; i2++)
-                    sound.AppendChild(mod("flanger", "Fl" + i2, "K" + (K + 1)));
-                K++;
+                {
+                    var flang = mod("flanger", "Fl" + i2, "K" + (K + 1));
+                    var atr1 = Statyczne.otwartyplik.xml.CreateAttribute("przesuniecie");
+                    atr1.Value = (rand.NextDouble() * 2).ToString(CultureInfo.InvariantCulture);
+                    flang.Attributes.SetNamedItem(atr1);
+                    var atr2 = Statyczne.otwartyplik.xml.CreateAttribute("czestotliwosc");
+                    atr2.Value = (rand.NextDouble() * 2).ToString(CultureInfo.InvariantCulture);
+                    flang.Attributes.SetNamedItem(atr2);
+                    sound.AppendChild(flang);
+                } K++;
             }
 
             sound.AppendChild(mod("glosnosc", "K" + K, "K" + (K + 1)));
@@ -188,7 +197,7 @@ namespace Syntezator_Krawczyka
             Statyczne.otwartyplik.dekoduj();//poprawić na nową referencję
             Close();
         }
-
+        Random rand = new Random();
         private static XmlNode mod(string p1, string p2, string p3)
         {
             var ret = Statyczne.otwartyplik.xml.CreateElement("module");
