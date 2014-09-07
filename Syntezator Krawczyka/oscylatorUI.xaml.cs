@@ -63,13 +63,13 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void sliderA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["A"] = (sliderA.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["A"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
 
         private void sliderD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["D"] = (sliderD.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["D"] = (sliderD.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
 
@@ -81,7 +81,7 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void sliderR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["R"] = (sliderR.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["R"] = (sliderR.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
         private void sliderBalans_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -93,10 +93,10 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             slider1.Value = double.Parse(parentNode.ustawienia["gladkosc"], CultureInfo.InvariantCulture);
-            sliderA.Value = double.Parse(parentNode.ustawienia["A"], CultureInfo.InvariantCulture) / 2000;
-            sliderD.Value = double.Parse(parentNode.ustawienia["D"], CultureInfo.InvariantCulture) / 2000;
+            sliderA.Value = double.Parse(parentNode.ustawienia["A"], CultureInfo.InvariantCulture);
+            sliderD.Value = double.Parse(parentNode.ustawienia["D"], CultureInfo.InvariantCulture);
             sliderS.Value = double.Parse(parentNode.ustawienia["S"], CultureInfo.InvariantCulture);
-            sliderR.Value = double.Parse(parentNode.ustawienia["R"], CultureInfo.InvariantCulture) / 2000;
+            sliderR.Value = double.Parse(parentNode.ustawienia["R"], CultureInfo.InvariantCulture);
             sliderBalans.Value = double.Parse(parentNode.ustawienia["balans"], CultureInfo.InvariantCulture);
             switch(parentNode.ustawienia["typ"])
             {

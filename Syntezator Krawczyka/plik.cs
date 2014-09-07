@@ -15,6 +15,7 @@ namespace Syntezator_Krawczyka
     {
         public static string URLStatyczne;
         public string URL;
+        public event Action zapis;
         public XmlDocument xml;
         public Dictionary<string, sound> moduły = new Dictionary<string, sound>();
         public List<sciezka> sciezki = new List<sciezka>();
@@ -270,6 +271,7 @@ namespace Syntezator_Krawczyka
         /// </summary>
         void uaktualnij()
         {
+            zapis();
             foreach (var x in moduły)
             {
                 foreach (var y in x.Value)
@@ -458,6 +460,7 @@ namespace Syntezator_Krawczyka
             else if (n.Attributes.GetNamedItem("type").Value == "midi")
             {
                 moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value, n));
+               
                 moduły[n.Attributes.GetNamedItem("id").Value].sekw = new InstrumentMidi();
                 if (n.Attributes.GetNamedItem("volume") != null)
                     (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);

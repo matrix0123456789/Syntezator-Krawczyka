@@ -243,26 +243,26 @@ namespace Syntezator_Krawczyka
                 {
                     var cou = Statyczne.otwartyplik.sciezki.Count;
                     lock (Statyczne.otwartyplik)
-                    if ((ileDoKopii % 200 == 0 || ileScierzekWyswietla != cou))
-                    {
-                        MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
-                            {
-
-
-                                Statyczne.otwartyplik.sciezki.Sort();
-                                foreach (var x in Statyczne.otwartyplik.sciezki)
+                        if ((ileDoKopii % 200 == 0 || ileScierzekWyswietla != cou))
+                        {
+                            MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                                 {
-                                    try
-                                    {
-                                        if (!pokaz.Children.Contains(x.UI))
-                                            pokaz.Children.Add(x.UI);
-                                    }
-                                    catch (ArgumentException) { }
-                                }
-                                ileScierzekWyswietla = cou;
 
-                            });
-                    }
+
+                                    Statyczne.otwartyplik.sciezki.Sort();
+                                    foreach (var x in Statyczne.otwartyplik.sciezki)
+                                    {
+                                        try
+                                        {
+                                            if (!pokaz.Children.Contains(x.UI))
+                                                pokaz.Children.Add(x.UI);
+                                        }
+                                        catch (ArgumentException) { }
+                                    }
+                                    ileScierzekWyswietla = cou;
+
+                                });
+                        }
                 }
                 Thread.Sleep(100);
             }
@@ -464,10 +464,31 @@ namespace Syntezator_Krawczyka
                 dialog.ShowDialog();
                 if (dialog.FileName != null)
                 {
-                    wtyczkaVST.test1(dialog.FileName);
-                    wtyczkaVST.test2(dialog.FileName);
-                    wtyczkaVST.test3(dialog.FileName);
-                    new wtyczkaVST(dialog.FileName);
+                    //wtyczkaVST.test1(dialog.FileName);
+                    //wtyczkaVST.test2(dialog.FileName);
+                    //wtyczkaVST.test3(dialog.FileName);
+                    // var b = new HostCommandStub();
+                    var a = new wtyczkaVST(dialog.FileName);
+                    var sou = new sound();
+                    Statyczne.otwartyplik.moduły.Add(a.Nazwa, sou);
+                    sou.nazwa = a.Nazwa;
+                    sou.sekw = a;
+                    sou.xml = a.xml = Statyczne.otwartyplik.xml.CreateElement("sound");
+                    var type = Statyczne.otwartyplik.xml.CreateAttribute("type");
+                    type.Value = "VST";
+                    sou.xml.Attributes.Append(type);
+                    var url = Statyczne.otwartyplik.xml.CreateAttribute("url");
+                    url.Value = dialog.FileName;
+                    sou.xml.Attributes.Append(url);
+                    sou.UI = new Instrument(sou.nazwa, sou);
+                    Statyczne.otwartyplik.zapis += a.actionZapis;
+                    sou.UI.wewnętrzny.Children.Add((a).UI);
+
+                    if (!MainWindow.thi.pokaz.Children.Contains(sou.UI))
+                    {
+
+                        MainWindow.thi.pokaz.Children.Add(sou.UI);
+                    }
                 }
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd ładowania wtyczki", MessageBoxButton.OK, MessageBoxImage.Error); }

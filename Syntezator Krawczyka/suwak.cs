@@ -20,8 +20,23 @@ namespace Syntezator_Krawczyka
             }
             set
             {
-                ToolTip = value + "\r\n" + this.Value;
+                ToolTip = value + "\r\n" + this.Value+_jednostka;
                 _opis = value;
+            }
+        }
+        String _jednostka = "";
+        [Bindable(true)]
+        [Category("Własne")]
+        public string Jednostka
+        {
+            get
+            {
+                return _jednostka;
+            }
+            set
+            {
+                ToolTip = _opis + "\r\n" + this.Value+value;
+                _jednostka = value;
             }
         }
         string _opis;
@@ -40,7 +55,7 @@ namespace Syntezator_Krawczyka
         void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var test = sender == this;
-            ToolTip = _opis + "\r\n" + base.Value;
+            ToolTip = _opis + "\r\n" + base.Value+Jednostka;
 
 
         }

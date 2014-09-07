@@ -121,6 +121,7 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -197,6 +198,9 @@
     </Compile>
     <Compile Include="UtworySerwer.cs" />
     <Compile Include="UtwórSerwer.cs" />
+    <Compile Include="VstUI.xaml.cs">
+      <DependentUpon>VstUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="wtyczkaVST.cs" />
     <Compile Include="zmianaWysokości.cs" />
     <Compile Include="zmianaWysokościUI.xaml.cs">
@@ -310,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="suwakOkno.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VstUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
