@@ -271,6 +271,7 @@ namespace Syntezator_Krawczyka
         /// </summary>
         void uaktualnij()
         {
+            if(zapis!=null)
             zapis();
             foreach (var x in moduły)
             {

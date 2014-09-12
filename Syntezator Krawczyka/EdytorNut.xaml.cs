@@ -287,7 +287,7 @@ namespace Syntezator_Krawczyka
 
                 listaChildren.Clear();
                 rysujNuty(main, głównyKolor);
-                listaChildren.Sort();
+                listaChildren.Sort(porListaChil);
                 if (listaChildren.Count > nr)
                     prostokat_MouseClick(listaChildren[nr], null);
             }
