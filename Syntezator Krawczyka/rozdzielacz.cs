@@ -33,29 +33,34 @@ namespace Syntezator_Krawczyka.Synteza
         }
         Dictionary<string, string> _ustawienia;
         Dictionary<nuta, nuta[]> referencjeNut = new Dictionary<nuta, nuta[]>();
-        Dictionary<moduł, List<Typ>> flangery=null;
-        public void akt(){}
-             public void aktt()
-        {flangery = new Dictionary<moduł, List<Typ>>();
-            for (var i = 0; i < 8; i++)
+        Dictionary<moduł, List<Typ>> flangery = null;
+        Object flangeryBlock = new object();
+        public void akt() { }
+        public void aktt()
+        {
+            lock (flangeryBlock)
             {
-                if (wyjście[i].DrógiModół != null)
+                flangery = new Dictionary<moduł, List<Typ>>();
+                for (var i = 0; i < 8; i++)
                 {
-                    if (wyjście[i].DrógiModół.GetType() == typeof(flanger))
+                    if (wyjście[i].DrógiModół != null)
                     {
-                        if (flangery.ContainsKey(wyjście[i].DrógiModół.wyjście[0].DrógiModół))
+                        if (wyjście[i].DrógiModół.GetType() == typeof(flanger))
                         {
-                            flangery[wyjście[i].DrógiModół.wyjście[0].DrógiModół].Add(wyjście[i]);
-                        }
-                        else
-                        {
-                            var lista = new List<Typ>();
-                            lista.Add(wyjście[i]);
-                            flangery.Add(wyjście[i].DrógiModół.wyjście[0].DrógiModół, lista);
+                            if (flangery.ContainsKey(wyjście[i].DrógiModół.wyjście[0].DrógiModół))
+                            {
+                                flangery[wyjście[i].DrógiModół.wyjście[0].DrógiModół].Add(wyjście[i]);
+                            }
+                            else
+                            {
+                                var lista = new List<Typ>();
+                                lista.Add(wyjście[i]);
+                                flangery.Add(wyjście[i].DrógiModół.wyjście[0].DrógiModół, lista);
+                            }
+
                         }
 
                     }
-
                 }
             }
         }
@@ -125,7 +130,12 @@ namespace Syntezator_Krawczyka.Synteza
                 {
                     //var dane = input.dane;
                     var dane = new float[input.dane.Length];
-                    foreach (var xx in x.Value)
+                    List<Typ> xval;
+                    lock (flangeryBlock)
+                    {
+                        xval = x.Value;
+                    }
+                    foreach (var xx in xval)
                     {
                         dane = (xx.DrógiModół as flanger).działaj(input, dane);
                     }

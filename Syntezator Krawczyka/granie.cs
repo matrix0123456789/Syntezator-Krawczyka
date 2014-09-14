@@ -177,11 +177,21 @@ namespace Syntezator_Krawczyka.Synteza
 
                 data = DateTime.Now;
 
-                //System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
-                t = new System.Threading.Timer((action) =>
+
+
+                t = new Thread(() =>
                 {
-                    grajRazCale();
-                }, data, 10, 10);
+                    while (true)
+                    {
+                        while (((DateTime.Now - data).TotalSeconds * plik.Hz) < 480)
+                            Thread.Sleep(1);
+                        grajRazCale();
+                    }
+                });
+                t.Priority = ThreadPriority.Normal;
+                t.Start();
+                
+
             }
         }
         public static object grajRazLock = new object();
@@ -242,6 +252,7 @@ namespace Syntezator_Krawczyka.Synteza
                             wszystNuty[i].ilepróbek = wszystNuty[i].ilepróbekNaStarcie;
                             System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
                             {
+                                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                                 (Action as nuta).sekw.działaj((Action as nuta));
                                 lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
                                 if (liczbaGenerowanych == 0)
@@ -524,7 +535,7 @@ namespace Syntezator_Krawczyka.Synteza
             //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }
             //catch { }
         }
-        public static System.Threading.Timer t;
+        public static System.Threading.Thread t;
         short ileNutMusiByć = 0;
         static short analizujIleNutMusiByć(moduł wej)
         {

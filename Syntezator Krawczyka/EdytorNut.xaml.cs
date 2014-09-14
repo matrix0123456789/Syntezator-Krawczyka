@@ -94,7 +94,7 @@ namespace Syntezator_Krawczyka
                             ilepróbekMin = x.ilepróbekNaStarcie;
                         }
                     }
-                var zmianaSkali = (ilepróbekMax != ilepróbekMaxOst || ilepróbekMin != ilepróbekMinOst);
+                var zmianaSkali = (ilepróbekMax > ilepróbekMaxOst || ilepróbekMin < ilepróbekMinOst);
                 if (zmianaSkali)
                 {
                     panel.Children.Clear();

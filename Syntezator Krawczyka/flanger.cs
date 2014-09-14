@@ -102,8 +102,6 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public void działaj(nuta input)
         {
-            var przesunięciea = float.Parse(_ustawienia["przesuniecie"], CultureInfo.InvariantCulture);
-            var czestotliwosc = float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture);
 
             if (przesunięciea == 0 || czestotliwosc == 0)
             {

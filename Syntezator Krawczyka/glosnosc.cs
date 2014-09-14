@@ -20,7 +20,10 @@ namespace Syntezator_Krawczyka.Synteza
                 return _UI;
             }
         }
-        public void akt() { }
+        public void akt()
+        {
+             głośność = float.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture);
+        }
         public long symuluj(long p)
         {
             return wyjście[0].DrógiModół.symuluj(p);
@@ -50,7 +53,7 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public void działaj(nuta input)
         {
-            var głośność = float.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture);
+            
             // bool ucinanie;
             if (ustawienia["ucinanie"] == "true")//uważać, czy nie jest po pogłosie
             {
@@ -91,7 +94,6 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public nuta działaj(nuta input, float[] jak)
         {
-            var głośność = float.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture);
             var iJak = input.generujOd;
             for (var i = 0; i < input.dane.Length; i++)
             {
@@ -101,5 +103,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             return input;
         }
+
+        public float głośność { get; set; }
     }
 }

@@ -20,7 +20,11 @@ namespace Syntezator_Krawczyka.Synteza
                 return _UI;
             }
         }
-        public void akt() { }
+        public void akt()
+        {
+             oktawy = float.Parse(_ustawienia["oktawy"], CultureInfo.InvariantCulture);
+             tony = float.Parse(_ustawienia["tony"], CultureInfo.InvariantCulture) + (float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) / 2);
+        }
         public long symuluj(long p)
         {
             return wyjście[0].DrógiModół.symuluj(p);
@@ -37,6 +41,8 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _ustawienia; }
         }
         Dictionary<string, string> _ustawienia;
+        private float oktawy;
+        private float tony;
         public zmianaWysokości()
         {
             wejście = new List<Typ>();
@@ -49,8 +55,6 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public void działaj(nuta o)
         {
-            var oktawy = float.Parse(_ustawienia["oktawy"], CultureInfo.InvariantCulture);
-            var tony = float.Parse(_ustawienia["tony"], CultureInfo.InvariantCulture) + (float.Parse(_ustawienia["czestotliwosc"], CultureInfo.InvariantCulture) / 2);
             o.ilepróbek = o.ilepróbek / Math.Pow(2, oktawy + (tony / 6));
 
             wyjście[0].DrógiModół.działaj(o);
