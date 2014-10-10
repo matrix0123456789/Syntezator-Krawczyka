@@ -190,7 +190,7 @@ namespace Syntezator_Krawczyka.Synteza
                 });
                 t.Priority = ThreadPriority.Normal;
                 t.Start();
-                
+
 
             }
         }
@@ -327,89 +327,93 @@ namespace Syntezator_Krawczyka.Synteza
 
                     {
                     dodatkowy:
-                        fala = new float[2, o];
-                        var falaLength = o;
-                        /*if (MainWindow.gpgpu)
+                        try
                         {
+                            
+                            var falaLength = o;
+                            fala = new float[2, falaLength];
+                            /*if (MainWindow.gpgpu)
+                            {
                                     
 
-                                fixed (float* _fala = &fala[0])
-                                {
-                                    square_array(_fala, fala.Length);
-                                }
+                                    fixed (float* _fala = &fala[0])
+                                    {
+                                        square_array(_fala, fala.Length);
+                                    }
                                     
-                        }
-                        else*/
-                        {
-
-                            gra[] zz = grają.Values.ToArray();
-                            var liczIle = 0;
-                            for (int x = 0; x < zz.Length; x++)
+                            }
+                            else*/
                             {
 
-                                if (zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
+                                gra[] zz = grają.Values.ToArray();
+                                var liczIle = 0;
+                                for (int x = 0; x < zz.Length; x++)
                                 {
-                                    zz[x].nuta.dane = null;
-                                    zz[x].dźwięk = null;
-                                    grają.Remove(zz[x].nuta.id);
-                                }
 
-                                else
-                                {
-                                    liczIle++;
-                                    long i = 0;
-                                    if (zz[x].zagrano < 0 && -zz[x].zagrano < o)
-                                        i = -zz[x].zagrano;
-                                    else if (zz[x].zagrano < 0)
-                                        i = o;
-                                    //else
-                                    // i = zz[x].zagrano - zz[x].nuta.generujOd;
-                                    var opt1 = zz[x].zagrano - zz[x].nuta.generujOd;
-                                    var opt2 = zz[x].dźwięk.LongLength - opt1;
-                                    long opt3;
-                                    if (o < opt2 && o < falaLength)
-                                        opt3 = o;
-                                    else if (opt2 < falaLength)
-                                        opt3 = opt2;
-                                    else
-                                        opt3 = falaLength;
-                                    if (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1)
+                                    if (zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
                                     {
-                                        if (i < -opt1)
-                                            i = -opt1;
-                                        for (; i < opt3; i++)
-                                        {
-
-                                            {
-                                                fala[0, i] += zz[x].dźwięk[i + opt1];
-                                                fala[1, i] += zz[x].dźwięk[i + opt1];
-                                            }
-
-                                        }
+                                        zz[x].nuta.dane = null;
+                                        zz[x].dźwięk = null;
+                                        grają.Remove(zz[x].nuta.id);
                                     }
+
                                     else
                                     {
-                                        if (i < -opt1)
-                                            i = -opt1;
-                                        var mn0 = zz[x].nuta.głośność * zz[x].nuta.balans0;
-                                        var mn1 = zz[x].nuta.głośność * zz[x].nuta.balans1;
-                                        for (; i < opt3; i++)
+                                        liczIle++;
+                                        long i = 0;
+                                        if (zz[x].zagrano < 0 && -zz[x].zagrano < o)
+                                            i = -zz[x].zagrano;
+                                        else if (zz[x].zagrano < 0)
+                                            i = o;
+                                        //else
+                                        // i = zz[x].zagrano - zz[x].nuta.generujOd;
+                                        var opt1 = zz[x].zagrano - zz[x].nuta.generujOd;
+                                        var opt2 = zz[x].dźwięk.LongLength - opt1;
+                                        long opt3;
+                                        if (o < opt2 && o < falaLength)
+                                            opt3 = o;
+                                        else if (opt2 < falaLength)
+                                            opt3 = opt2;
+                                        else
+                                            opt3 = falaLength;
+                                        if (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1)
                                         {
-
+                                            if (i < -opt1)
+                                                i = -opt1;
+                                            for (; i < opt3; i++)
                                             {
-                                                fala[0, i] += zz[x].dźwięk[i + opt1] * mn0;
-                                                fala[1, i] += zz[x].dźwięk[i + opt1] * mn1;
+
+                                                {
+                                                    fala[0, i] += zz[x].dźwięk[i + opt1];
+                                                    fala[1, i] += zz[x].dźwięk[i + opt1];
+                                                }
+
                                             }
-
                                         }
+                                        else
+                                        {
+                                            if (i < -opt1)
+                                                i = -opt1;
+                                            var mn0 = zz[x].nuta.głośność * zz[x].nuta.balans0;
+                                            var mn1 = zz[x].nuta.głośność * zz[x].nuta.balans1;
+                                            for (; i < opt3; i++)
+                                            {
+
+                                                {
+                                                    fala[0, i] += zz[x].dźwięk[i + opt1] * mn0;
+                                                    fala[1, i] += zz[x].dźwięk[i + opt1] * mn1;
+                                                }
+
+                                            }
+                                        }
+                                        zz[x].zagrano += o;
                                     }
-                                    zz[x].zagrano += o;
+
+
                                 }
-
-
                             }
                         }
-
+                        catch { fala = new float[0, 0]; }
                         //System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
                         //{
                         //});
@@ -638,5 +642,6 @@ namespace Syntezator_Krawczyka.Synteza
 
 
         public static byte bity = 16;
+        public static System.Net.Sockets.TcpListener LANSocket;
     }
 }

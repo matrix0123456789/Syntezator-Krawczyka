@@ -51,6 +51,8 @@ namespace Syntezator_Krawczyka
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
+           // var test = new Test();
+           // test.Show();
             InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             try
@@ -307,6 +309,7 @@ namespace Syntezator_Krawczyka
         {
 
             aktualizacjaOkna.Abort();
+            Environment.Exit(0);
             App.Current.Shutdown();
         }
         private void buttonGraj_Click(object sender, RoutedEventArgs e)
@@ -542,6 +545,11 @@ namespace Syntezator_Krawczyka
 
             granie.bity = 32;
             Statyczne.otwartyplik.generuj();
+        }
+
+        private void WyjDzwieku_Click(object sender, RoutedEventArgs e)
+        {
+            WyjścieDzwieku.pokarz();
         }
 
 

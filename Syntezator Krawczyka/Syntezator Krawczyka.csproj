@@ -196,12 +196,19 @@
     <Compile Include="suwakOkno.xaml.cs">
       <DependentUpon>suwakOkno.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Test.xaml.cs">
+      <DependentUpon>Test.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UtworySerwer.cs" />
     <Compile Include="UtwórSerwer.cs" />
     <Compile Include="VstUI.xaml.cs">
       <DependentUpon>VstUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wstążka.cs" />
     <Compile Include="wtyczkaVST.cs" />
+    <Compile Include="WyjścieDzwieku.xaml.cs">
+      <DependentUpon>WyjścieDzwieku.xaml</DependentUpon>
+    </Compile>
     <Compile Include="zmianaWysokości.cs" />
     <Compile Include="zmianaWysokościUI.xaml.cs">
       <DependentUpon>zmianaWysokościUI.xaml</DependentUpon>
@@ -317,7 +324,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VstUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WyjścieDzwieku.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

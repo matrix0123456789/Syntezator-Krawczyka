@@ -73,7 +73,7 @@ namespace Syntezator_Krawczyka.Synteza
             }
             else if (głośność != 1)
             {
-                if (wyjście[0].DrógiModół.GetType() == typeof(granie))
+                if (wyjście[0].DrógiModół.GetType() == typeof(granie) || (wyjście[0].DrógiModół.GetType() == typeof(pogłos) && wyjście[0].DrógiModół.wyjście[0].DrógiModół.GetType() == typeof(granie)))
                 {
                     input.głośność = input.głośność * głośność;
                     /*for (var i = 0; i < input.dane.Length; i++)
