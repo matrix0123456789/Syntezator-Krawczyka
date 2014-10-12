@@ -22,6 +22,13 @@ namespace Syntezator_Krawczyka
             ch = new chil(this);
             //VerticalAlignment = VerticalAlignment.Top;
             SizeChanged += Wstążka_SizeChanged;
+            this.Loaded += Wstążka_Loaded;
+        }
+
+        void Wstążka_Loaded(object sender, RoutedEventArgs e)
+        {
+            Wstążka_SizeChanged(null, null);
+           // ch.
         }
         public void Wstążka_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -71,7 +78,10 @@ namespace Syntezator_Krawczyka
             {
                 x.Key.Content = x.Value.ToString();
             }
+            poprawPrzyciski();
+            
         }
+        static Brush Tło = new SolidColorBrush(Color.FromRgb(235, 253, 230));
         Wstążka parent;
         public WrapPanel gora = new WrapPanel();
         public Grid dol = new Grid();
@@ -79,12 +89,12 @@ namespace Syntezator_Krawczyka
             : base(a, a)
         {
             parent = a;
-            gora.Background = Brushes.Red;
+            gora.Background = Brushes.White;
             gora.VerticalAlignment = VerticalAlignment.Top;
-            gora.MinHeight = 25;
+           // gora.MinHeight = 25;
 
             (parent as Grid).Children.Add(gora);
-            dol.Background = Brushes.Blue;
+            dol.Background = Tło;
             dol.VerticalAlignment = VerticalAlignment.Top;
 
             (parent as Grid).Children.Add(dol);
@@ -98,15 +108,19 @@ namespace Syntezator_Krawczyka
         public override int Add(UIElement element)
         {
             var but = new Button();
+            but.Padding = new Thickness(5, 2, 5, 2);
+            but.Background = Brushes.White;
             but.Click += but_Click;
             but.Tag = element;
+            but.Margin = new Thickness(0, 3, 0, 0);
+            but.BorderThickness = new Thickness(0, 0, 1, 0);
             but.VerticalAlignment = VerticalAlignment.Top;
             but.HorizontalAlignment = HorizontalAlignment.Left;
             gora.Children.Add(but);
             dol.Children.Add(element);
             karty.Add(but, element);
             //but.Content = element;
-
+            poprawPrzyciski();
             return 10;
 
         }
@@ -119,7 +133,7 @@ namespace Syntezator_Krawczyka
                     (x as UIElement).Visibility = Visibility.Visible;
                 else
                     (x as UIElement).Visibility = Visibility.Collapsed;
-            }
+            } poprawPrzyciski();
             if (parent.PodSpodem != null)
             {
                 var tah = ((sender as Button).Tag as FrameworkElement).ActualHeight;
@@ -129,6 +143,17 @@ namespace Syntezator_Krawczyka
                     parent.PodSpodem.Margin = new Thickness(0, gora.ActualHeight + tah, 0, 0);
                 else
                     parent.PodSpodem.Margin = new Thickness(parent.PodSpodem.Margin.Left, gora.ActualHeight + tah, parent.PodSpodem.Margin.Left, parent.PodSpodem.Margin.Bottom);
+            }
+        }
+
+        private void poprawPrzyciski()
+        {
+            foreach (var x in gora.Children)
+            {
+                if (((x as Button).Tag as UIElement).Visibility == Visibility.Visible)
+                    (x as Button).Background = Tło;
+                else
+                    (x as Button).Background = Brushes.White;
             }
         }
         public override void Remove(UIElement element)
@@ -263,7 +288,7 @@ namespace Syntezator_Krawczyka
             _podpis.VerticalAlignment = VerticalAlignment.Bottom;
             Children.Add(_podpis);
             Rozmiar = PrzyciskRozmiar.Duży;
-
+            Margin = new Thickness(1);
         }
 
         public UIElementCollection Children;
