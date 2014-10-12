@@ -187,6 +187,11 @@ namespace Syntezator_Krawczyka
                     writer.Write((short)(fala[0, falai] * 32767));
                     writer.Write((short)(fala[1, falai] * 32767));
                 }
+                /*else if (granie.bity == 24)
+                {
+                    writer.Write((int)(fala[0, falai] * (32767)));
+                    writer.Write((int)(fala[1, falai] * (32767)));
+                }*/
                 else if (granie.bity == 32)
                 {
                     writer.Write((int)(fala[0, falai] * (32767)));

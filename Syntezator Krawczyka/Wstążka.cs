@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.ComponentModel;
 using System.Windows.Shapes;
+using System.Windows.Controls.Primitives;
 
 namespace Syntezator_Krawczyka
 {
@@ -22,14 +23,14 @@ namespace Syntezator_Krawczyka
             //VerticalAlignment = VerticalAlignment.Top;
             SizeChanged += Wstążka_SizeChanged;
         }
-       public void Wstążka_SizeChanged(object sender, SizeChangedEventArgs e)
+        public void Wstążka_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (PodSpodem != null)
             {
                 if (PodSpodem.Margin == null)
                     PodSpodem.Margin = new Thickness(0, ActualHeight, 0, 0);
                 else
-                    PodSpodem.Margin = new Thickness(PodSpodem.Margin.Left, ch.gora.ActualHeight+ch.dol.ActualHeight, PodSpodem.Margin.Right, PodSpodem.Margin.Bottom);
+                    PodSpodem.Margin = new Thickness(PodSpodem.Margin.Left, ch.gora.ActualHeight + ch.dol.ActualHeight, PodSpodem.Margin.Right, PodSpodem.Margin.Bottom);
             }
             ch.load();
         }
@@ -66,14 +67,14 @@ namespace Syntezator_Krawczyka
     {
         public void load()
         {
-            foreach(var x in karty)
+            foreach (var x in karty)
             {
                 x.Key.Content = x.Value.ToString();
             }
         }
         Wstążka parent;
         public WrapPanel gora = new WrapPanel();
-       public  Grid dol = new Grid();
+        public Grid dol = new Grid();
         public chil(Wstążka a)
             : base(a, a)
         {
@@ -105,7 +106,7 @@ namespace Syntezator_Krawczyka
             dol.Children.Add(element);
             karty.Add(but, element);
             //but.Content = element;
-           
+
             return 10;
 
         }
@@ -161,5 +162,110 @@ namespace Syntezator_Krawczyka
             dol.Children.Clear();
             gora.Children.Clear();
         }
+    }
+    enum PrzyciskRozmiar { Duży, Średni, Mały }
+    class Przycisk : Button
+    {
+
+        [Bindable(true)]
+        public PrzyciskRozmiar Rozmiar
+        {
+            get { return _Rozmiar; }
+            set
+            {
+                _Rozmiar = value;
+                if (_Obrazek != null)
+                {
+                    przerysuj();
+                }
+            }
+        }
+        PrzyciskRozmiar _Rozmiar = PrzyciskRozmiar.Duży;
+        static Thickness marginesyDuży = new Thickness(0);
+        void przerysuj()
+        {
+            switch (_Rozmiar)
+            {
+                case PrzyciskRozmiar.Duży:
+                    _Obrazek.Width = 32;
+                    _Obrazek.Height = 32;
+                    _Obrazek.Margin = marginesyDuży;
+                    _Obrazek.HorizontalAlignment = HorizontalAlignment.Center;
+                    MinWidth = 40;
+                    MinHeight = 60;
+                    _podpis.HorizontalAlignment = HorizontalAlignment.Center;
+                    _podpis.VerticalAlignment = VerticalAlignment.Bottom;
+                    _podpis.Margin = new Thickness(0, 38, 0, 0);
+                    break;
+                case PrzyciskRozmiar.Średni:
+                    MinWidth = 80;
+                    _Obrazek.Width = 16;
+                    _Obrazek.Height = 16;
+                    _Obrazek.HorizontalAlignment = HorizontalAlignment.Center;
+                    _podpis.HorizontalAlignment = HorizontalAlignment.Center;
+                    _podpis.VerticalAlignment = VerticalAlignment.Bottom;
+                    MinHeight = 30;
+                    break;
+                case PrzyciskRozmiar.Mały:
+                    MinWidth = 30;
+                    _Obrazek.Width = 16;
+                    _Obrazek.Height = 16;
+                    _podpis.HorizontalAlignment = HorizontalAlignment.Center;
+                    _podpis.VerticalAlignment = VerticalAlignment.Bottom;
+                    MinHeight = 30;
+                    break;
+            }
+        }
+
+        [Bindable(true)]
+        public string Podpis
+        {
+            get { return _Podpis; }
+            set
+            {
+                try
+                {
+                    _podpis.Content = value;
+                }
+                catch { }
+                _Podpis = value;
+            }
+        }
+        public string _Podpis = "Podpis";
+
+        [Bindable(true)]
+        public Canvas Obrazek
+        {
+            get { return _Obrazek; }
+            set
+            {
+                lock (Children)
+                {
+                    if (_Obrazek != null)
+                        Children.Remove(_Obrazek);
+                    Children.Add(value);
+                    _Obrazek = value;
+                    przerysuj();
+                }
+
+            }
+        }
+        Canvas _Obrazek = null;
+        Label _podpis = new Label();
+        Grid wew=new Grid();
+        public Przycisk()
+        {
+            Children = wew.Children;
+            AddChild(wew);
+            //Rozmiar = PrzyciskRozmiar.Duży;
+            Background = Brushes.Azure.Clone();
+            Background.Opacity = 0.5;
+            _podpis.VerticalAlignment = VerticalAlignment.Bottom;
+            Children.Add(_podpis);
+            Rozmiar = PrzyciskRozmiar.Duży;
+
+        }
+
+        public UIElementCollection Children;
     }
 }

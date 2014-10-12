@@ -64,7 +64,7 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-                this.URL = URLStatyczne = a;
+               // this.URL = URLStatyczne = a;
                 xml = new XmlDocument();
                 try
                 {
@@ -99,14 +99,20 @@ namespace Syntezator_Krawczyka
                 sciezki.Clear();
                 scieżkiZId.Clear();
                 MainWindow.dispat.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate()
+                {
+                    for (var i = MainWindow.thi.pokazŚcie.Children.Count - 1; i >= 0; i--)
                     {
-                        for (var i = MainWindow.thi.pokaz.Children.Count - 1; i >= 0; i--)
+                        if (MainWindow.thi.pokazŚcie.Children[i].GetType() != typeof(KlawiaturaKomputeraUI))
                         {
-                            if (MainWindow.thi.pokaz.Children[i].GetType() != typeof(KlawiaturaKomputeraUI))
-                            {
-                                MainWindow.thi.pokaz.Children.Remove((UIElement)MainWindow.thi.pokaz.Children[i]);
-                            }
+                            MainWindow.thi.pokazŚcie.Children.Remove((UIElement)MainWindow.thi.pokazŚcie.Children[i]);
                         }
+                    }
+                    for (var i = MainWindow.thi.pokazInstr.Children.Count - 1; i >= 0; i--)
+                    {
+
+                        MainWindow.thi.pokazInstr.Children.Remove((UIElement)MainWindow.thi.pokazInstr.Children[i]);
+                        
+                    }
                     });
             }
             MainWindow.ileScierzekWyswietla = 0;
@@ -232,10 +238,10 @@ namespace Syntezator_Krawczyka
 
                                     }
                                 }
-                            if (!MainWindow.thi.pokaz.Children.Contains(z.UI))
+                            if (!MainWindow.thi.pokazInstr.Children.Contains(z.UI))
                             {
 
-                                MainWindow.thi.pokaz.Children.Add(z.UI);
+                                MainWindow.thi.pokazInstr.Children.Add(z.UI);
                             }
                         }
                     });
@@ -298,6 +304,7 @@ namespace Syntezator_Krawczyka
             dialog.ShowDialog();
             if (dialog.FileName != "")
             {
+                URL = dialog.FileName;
                 System.IO.StreamWriter zapis = new System.IO.StreamWriter(dialog.FileName);
                 zapis.Write(xml.OuterXml);
                 zapis.Close();
@@ -306,7 +313,7 @@ namespace Syntezator_Krawczyka
         public void zapisz(string path)
         {
             uaktualnij();
-
+            URL = path;
             System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
             zapis.Write(xml.OuterXml);
             zapis.Close();

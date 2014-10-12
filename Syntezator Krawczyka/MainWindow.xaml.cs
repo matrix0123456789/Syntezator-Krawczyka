@@ -128,16 +128,16 @@ namespace Syntezator_Krawczyka
                 {
                     var k = new KlawiaturaMidi(i);
                     klawiatMidi.Add(k);
-                    pokaz.Children.Add(k.UI);
+                    pokazŚcie.Children.Add(k.UI);
                 }
                 if (debugowanie)
                 {
                     var k = new KlawiaturaMidi();
                     klawiatMidi.Add(k);
-                    pokaz.Children.Add(k.UI);
+                    pokazŚcie.Children.Add(k.UI);
                 }
-                pokaz.Children.Add(klawiatkompa1.UI);
-                pokaz.Children.Add(klawiatkompa2.UI);
+                pokazŚcie.Children.Add(klawiatkompa1.UI);
+                pokazŚcie.Children.Add(klawiatkompa2.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
                 aktualizacjaOkna.Start();
@@ -256,8 +256,8 @@ namespace Syntezator_Krawczyka
                                     {
                                         try
                                         {
-                                            if (!pokaz.Children.Contains(x.UI))
-                                                pokaz.Children.Add(x.UI);
+                                            if (!pokazŚcie.Children.Contains(x.UI))
+                                                pokazŚcie.Children.Add(x.UI);
                                         }
                                         catch (ArgumentException) { }
                                     }
@@ -298,6 +298,13 @@ namespace Syntezator_Krawczyka
         private void button4_Click(object sender, RoutedEventArgs e)
         {
             Statyczne.otwartyplik.zapisz();
+        }
+        private void button4b_Click(object sender, RoutedEventArgs e)
+        {
+            if (Statyczne.otwartyplik.URL!=null)
+                Statyczne.otwartyplik.zapisz(Statyczne.otwartyplik.URL);
+            else
+                Statyczne.otwartyplik.zapisz();
         }
         private void button5_Click(object sender, RoutedEventArgs e)
         {
@@ -487,10 +494,10 @@ namespace Syntezator_Krawczyka
                     Statyczne.otwartyplik.zapis += a.actionZapis;
                     sou.UI.wewnętrzny.Children.Add((a).UI);
 
-                    if (!MainWindow.thi.pokaz.Children.Contains(sou.UI))
+                    if (!MainWindow.thi.pokazInstr.Children.Contains(sou.UI))
                     {
 
-                        MainWindow.thi.pokaz.Children.Add(sou.UI);
+                        MainWindow.thi.pokazInstr.Children.Add(sou.UI);
                     }
                 }
             }

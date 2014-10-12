@@ -11,34 +11,218 @@
     <Grid>
         <s:Wstążka>
             <s:WstążkaKarta Tytuł="Plik" Visibility="Visible" Height="70">
-                <Button Content="Otwórz plik"  Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="button3" VerticalAlignment="Top" Width="92" Click="button3_Click" ToolTip="Otwórz plik zawierający nuty">
+                <WrapPanel>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Otwórz plik" Click="button3_Click"  ToolTip="Otwórz plik zawierający nuty">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                    <Polygon.Points>
+                                        <Point X="5" Y="2"></Point>
+                                        <Point X="30" Y="2"></Point>
+                                        <Point X="30" Y="25"></Point>
+                                        <Point X="5" Y="25"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
 
-                </Button>
-                <Button Content="Zapisz plik" ToolTip="Zapisz plik zawierający nuty" Height="23" HorizontalAlignment="Left" Margin="12,40,0,0" Name="button4" VerticalAlignment="Top" Width="92" Click="button4_Click" />
-                <Button Content="Zapisz dźwięk" ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp)." Height="23" HorizontalAlignment="Left" Margin="109,10,0,0" Name="button7" VerticalAlignment="Top" Width="92" Click="button7_Click" TextOptions.TextHintingMode="Animated" >
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="słaba jakość (8 bit)" Click="J8_click" ToolTip="Przy tej jakości mogą być słyszalne zakłócenia"></MenuItem>
-                            <MenuItem Header="wysoka jakość (16 bit)" Click="J16_click" ToolTip="Większość domowego sprzętu nie da rady obsłurzyć wyższej jakości"></MenuItem>
-                            <MenuItem Header="ekstremalnie wysoka jakość (32 bit)" Click="J32_click" ToolTip="Powoduje 2 razy większe pliki niż 16 bit, a i tak nikt nie zauwarzy różnicy. Jakość przeznaczona do dalszej obróbki."></MenuItem>
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </Button>
-                <Button HorizontalAlignment="Left" Margin="109,40,0,0" VerticalAlignment="Top" Width="92" Height="23" Click="Button_Click">Edytor nut</Button>
-                <Button Click="Metadane_click" Content="Metadane pliku" HorizontalAlignment="Left" VerticalAlignment="Top" Width="92" Margin="206,12,0,0"/>
-                <Button Content="Wtyczka VST" ToolTip="Otwiera wtyczkę (plugin) w formacie VST" Height="23" HorizontalAlignment="Left" Margin="303,12,0,0"  VerticalAlignment="Top" Width="92" Click="VST_Click"/>
-                <Button Content="Odzyskiwanie" ToolTip="Zarządza tworzeniem kopii zapasowej" Height="23" HorizontalAlignment="Left" Margin="206,40,0,0"  VerticalAlignment="Top" Width="92" Click="Kopia_Click" TextOptions.TextHintingMode="Animated" />
+                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                    <Polygon.Points>
+                                        <Point X="5" Y="2"></Point>
+                                        <Point X="20" Y="7"></Point>
+                                        <Point X="20" Y="30"></Point>
+                                        <Point X="5" Y="25"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Zapisz" Click="button4b_Click"  ToolTip="Zapisz plik zawierający nuty">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                    <Polygon.Points>
+                                        <Point X="5" Y="2"></Point>
+                                        <Point X="30" Y="2"></Point>
+                                        <Point X="30" Y="25"></Point>
+                                        <Point X="5" Y="25"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="White">
+                                    <Polygon.Points>
+                                        <Point X="10" Y="2"></Point>
+                                        <Point X="25" Y="2"></Point>
+                                        <Point X="25" Y="15"></Point>
+                                        <Point X="10" Y="15"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
 
+                                <Polygon Fill="White">
+                                    <Polygon.Points>
+                                        <Point X="11" Y="25"></Point>
+                                        <Point X="24" Y="25"></Point>
+                                        <Point X="24" Y="18"></Point>
+                                        <Point X="11" Y="18"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="Black">
+                                    <Polygon.Points>
+                                        <Point X="13" Y="24"></Point>
+                                        <Point X="16" Y="24"></Point>
+                                        <Point X="16" Y="20"></Point>
+                                        <Point X="13" Y="20"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Zapisz jako" Click="button4_Click"  ToolTip="Zapisz plik zawierający nuty">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                    <Polygon.Points>
+                                        <Point X="3" Y="0"></Point>
+                                        <Point X="27" Y="0"></Point>
+                                        <Point X="27" Y="23"></Point>
+                                        <Point X="3" Y="23"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="White">
+                                    <Polygon.Points>
+                                        <Point X="8" Y="0"></Point>
+                                        <Point X="23" Y="0"></Point>
+                                        <Point X="23" Y="13"></Point>
+                                        <Point X="8" Y="13"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                    <Polygon.Points>
+                                        <Point X="7" Y="4"></Point>
+                                        <Point X="32" Y="4"></Point>
+                                        <Point X="32" Y="27"></Point>
+                                        <Point X="7" Y="27"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="White">
+                                    <Polygon.Points>
+                                        <Point X="12" Y="4"></Point>
+                                        <Point X="27" Y="4"></Point>
+                                        <Point X="27" Y="17"></Point>
+                                        <Point X="12" Y="17"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="White">
+                                    <Polygon.Points>
+                                        <Point X="13" Y="27"></Point>
+                                        <Point X="26" Y="27"></Point>
+                                        <Point X="26" Y="20"></Point>
+                                        <Point X="13" Y="20"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                                <Polygon Fill="Black">
+                                    <Polygon.Points>
+                                        <Point X="15" Y="26"></Point>
+                                        <Point X="18" Y="26"></Point>
+                                        <Point X="18" Y="22"></Point>
+                                        <Point X="15" Y="22"></Point>
+                                    </Polygon.Points>
+                                </Polygon>
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Generuj dźwięk" Click="button7_Click"  ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp).">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="słaba jakość (8 bit)" Click="J8_click" ToolTip="Przy tej jakości mogą być słyszalne zakłócenia"></MenuItem>
+                                <MenuItem Header="wysoka jakość (16 bit)" Click="J16_click" ToolTip="Większość domowego sprzętu nie da rady obsłurzyć wyższej jakości"></MenuItem>
+                                <MenuItem Header="ekstremalnie wysoka jakość (32 bit)" Click="J32_click" ToolTip="Powoduje 2 razy większe pliki niż 16 bit, a i tak nikt nie zauwarzy różnicy. Jakość przeznaczona do dalszej obróbki."></MenuItem>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Metadane" Click="Metadane_click"  ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp).">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Kopia zapasowa" Click="Kopia_Click"  ToolTip="Zarządza tworzeniem kopii zapasowej i odzyskiwaniem jej.">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                </WrapPanel>
+            </s:WstążkaKarta>
+            <s:WstążkaKarta Tytuł="Melodia" Visibility="Collapsed" Height="70">
+                <WrapPanel>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Edytor nut"  Click="Button_Click" ToolTip="Umożliwia przeglądanie całego zapisu nutowego.">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Dodaj instrument"  Click="buttonNowyInstrument_Click"  ToolTip="Dodaj wirtualny instrument">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Dodaj ścierzkę"  Click="buttonNowaScierzka_Click"  ToolTip="Dodaj scierzkę z nutami">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Oś czasu"  Click="OśCzasu_Click"  ToolTip="Pokazuje wszystkie ścierzki w formie osi czasu">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                </WrapPanel>
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Muzyka" Visibility="Collapsed" Height="70">
-                <Button Content="Dodaj instrument"  Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" x:Name="buttonNowyInstrument" VerticalAlignment="Top" Width="92" Click="buttonNowyInstrument_Click" ToolTip="Dodaj wirtualny instrument"/>
-                <Button Content="Dodaj ścierzkę"  Height="23" HorizontalAlignment="Left" Margin="12,38,0,0" x:Name="buttonNowaScierzka" VerticalAlignment="Top" Width="92" Click="buttonNowaScierzka_Click" ToolTip="Dodaj scierzkę z nutami"/>
-                <Button Content="Oscyloskop" ToolTip="Pokazuje aktualnie odgrywaną falę" Height="23" HorizontalAlignment="Left" Margin="204,10,0,0"  VerticalAlignment="Top" Width="92" Click="Oscyloskop_Click" TextOptions.TextHintingMode="Animated" />
-                <Button Content="Wyjście dźwięku" ToolTip="Wybiera na jakie porty wysyłać dźwięk" Height="23" HorizontalAlignment="Left" Margin="204,38,0,0"  VerticalAlignment="Top" Width="92" Click="WyjDzwieku_Click"/>
-                <Button Content="Oś czasu" ToolTip="Otwiera oś czasu" Height="23" HorizontalAlignment="Left" Margin="107,10,0,0"  VerticalAlignment="Top" Width="92" Click="OśCzasu_Click"  />
-                <Button Content="Drum Pad" Height="23" HorizontalAlignment="Left" Margin="107,38,0,0"  VerticalAlignment="Top" Width="92" Click="DrumPad_Click" TextOptions.TextHintingMode="Animated" />
+                <WrapPanel>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wtyczka VST"  Click="VST_Click"  ToolTip="Otwiera wtyczkę (plugin) w formacie VST">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Oscyloskop"  Click="Oscyloskop_Click"  ToolTip="Pokazuje aktualnie odgrywaną falę dźwiękową na wykresie">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wyjście dźwięku"  Click="WyjDzwieku_Click"  ToolTip="Wybiera na jakie porty wysyłać dźwięk">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Drum Pad"  Click="DrumPad_Click">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                </WrapPanel>
             </s:WstążkaKarta>
-            <s:WstążkaKarta Tytuł="Inne" Height="70"></s:WstążkaKarta>
             <s:Wstążka.PodSpodem>
                 <Grid Drop="Grid_Drop" DragOver="Grid_DragOver" AllowDrop="True">
 
@@ -50,9 +234,18 @@
                     <Slider Margin="87,7,196,0" VerticalAlignment="Top" Name="suwak" MouseEnter="suwakEnter" MouseLeave="suwakLeave" ValueChanged="suwak_ValueChanged"/>
                     <Slider Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
                     <Label Content="00:00/00:00" Margin="0,5,124,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                    <ScrollViewer Margin="12,43,12,12" CanContentScroll="True" VerticalScrollBarVisibility="Auto">
-                        <WrapPanel Name="pokaz" />
-                    </ScrollViewer>
+                    <TabControl Margin="0,35,0,0">
+                        <TabItem Header="Instrumenty">
+                            <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
+                                <WrapPanel Name="pokazInstr" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Scieżki">
+                            <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
+                                <WrapPanel Name="pokazŚcie" />
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
                     <Grid Height="26" Margin="0,5,10,0" VerticalAlignment="Top" Background="#223" MouseDown="Grid_MouseEnter" HorizontalAlignment="Right" Width="114">
                         <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" Name="LogowanieTxt">Zaloguj</Label>
                     </Grid>

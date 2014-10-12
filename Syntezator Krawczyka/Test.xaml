@@ -4,15 +4,24 @@
         xmlns:s="clr-namespace:Syntezator_Krawczyka"
         Title="Test" Height="300" Width="300">
     <Grid>
-        <s:Wstążka>
-            <s:Wstążka.PodSpodem>
-                <Ellipse Fill="Red" Name="aazz"></Ellipse>
-            </s:Wstążka.PodSpodem>
-            <Button>esd</Button>
-            <Button Height="50" VerticalAlignment="Top">esd</Button>
-            <Button>esd</Button>
-            
-        </s:Wstążka>
-        
+        <Canvas Background="Red" Width="64" Height="64">
+            <Polygon Fill="Black" Stroke="White" Canvas.Left="4">
+                <Polygon.Points>
+                    <Point X="10" Y="5"></Point>
+                    <Point X="49" Y="5"></Point>
+                    <Point X="49" Y="49"></Point>
+                    <Point X="10" Y="49"></Point>
+                </Polygon.Points>
+            </Polygon>
+
+            <Polygon Fill="Black" Stroke="White" Canvas.Left="4">
+                <Polygon.Points>
+                    <Point X="10" Y="5"></Point>
+                    <Point X="40" Y="15"></Point>
+                    <Point X="40" Y="59"></Point>
+                    <Point X="10" Y="49"></Point>
+                </Polygon.Points>
+            </Polygon>
+        </Canvas>
     </Grid>
 </Window>
