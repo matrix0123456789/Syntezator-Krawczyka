@@ -159,7 +159,7 @@ namespace Syntezator_Krawczyka.Synteza
                             {
                                 jedenPrzebieg = new float[input.dane.Length];
                                 for (long i = 0; i < input.dane.Length; i++)
-                                    jedenPrzebieg[i] = (float)los.NextDouble();
+                                    jedenPrzebieg[i] = (float)(los.NextDouble()*2d-1d);
                             }
                             else  if (typ == typFali.niestandardowa)
                             {

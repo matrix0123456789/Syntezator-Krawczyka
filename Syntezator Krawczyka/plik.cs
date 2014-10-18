@@ -525,7 +525,7 @@ namespace Syntezator_Krawczyka
             sciezki.Add(scie);
             scieżkiZId.Add(id, scie);
         }
-        internal void duplikujScierzke(sciezka org)
+        internal sciezka duplikujScierzke(sciezka org)
         {
             var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
             var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("copy");
@@ -539,6 +539,7 @@ namespace Syntezator_Krawczyka
             sciezka scie = new sciezka(id, scierzkaXML, true);
             scie.oryginał = org;
             sciezki.Add(scie);
+            return scie;
         }
         internal void grajStart()
         {

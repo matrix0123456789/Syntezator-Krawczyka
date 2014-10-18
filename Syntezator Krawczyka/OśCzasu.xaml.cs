@@ -269,10 +269,10 @@ namespace Syntezator_Krawczyka
             {
                 if (comboBox1.SelectedItem != null)
                 {
-                    (aktywna.Tag as sciezka).sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
-                    var atr = (aktywna.Tag as sciezka).xml.OwnerDocument.CreateAttribute("sound");
+                    ((aktywna.Tag as odDo).sciezka as sciezka).sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
+                    var atr = ((aktywna.Tag as odDo).sciezka as sciezka).xml.OwnerDocument.CreateAttribute("sound");
                     atr.Value = (string)(comboBox1.SelectedItem as ComboBoxItem).Content;
-                    (aktywna.Tag as sciezka).xml.Attributes.Append(atr);
+                    ((aktywna.Tag as odDo).sciezka as sciezka).xml.Attributes.Append(atr);
                 }
             }
             catch (NullReferenceException) { }
@@ -331,7 +331,15 @@ namespace Syntezator_Krawczyka
 
         private void duplikuj_click(object sender, RoutedEventArgs e)
         {
-
+            var scorg = (aktywna.Tag as odDo).sciezka as sciezka;
+           var sc= Statyczne.otwartyplik.duplikujScierzke(scorg);
+           sc.delayUstawione = scorg.delayUstawione;
+           sc.delay = scorg.delay;
+           var akt = new odDo(sc);
+           akt.dlugosc = scorg.dlugosc;
+           akt.start = scorg.delay;
+            //szukaj miejsca na wyświetlenie
+           szukaj(akt, Statyczne.otwartyplik.sciezki.IndexOf(scorg));
         }
 
         private void usuń_click(object sender, RoutedEventArgs e)
