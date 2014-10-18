@@ -49,6 +49,7 @@ namespace Syntezator_Krawczyka
             if (xml.Attributes["delay"] != null)
             {
                 delay = (long)(float.Parse((xml.Attributes["delay"].Value), CultureInfo.InvariantCulture) * plik.Hz * 60 / plik.tempo);
+                delayUstawione = double.Parse((xml.Attributes["delay"].Value), CultureInfo.InvariantCulture);
             }
 
             if (Statyczne.otwartyplik.wszytskieSamplePliki.ContainsKey(xml.Attributes["file"].Value))
@@ -178,5 +179,7 @@ namespace Syntezator_Krawczyka
         {
             return sample.plik.Substring(sample.plik.LastIndexOfAny(new char[] {'\\','/'})+1);
         }
+
+        public double delayUstawione;
     }
 }

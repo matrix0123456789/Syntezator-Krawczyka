@@ -155,7 +155,7 @@ namespace Syntezator_Krawczyka
                 nazwa.Content = ((sciezka)((odDo)aktywna.Tag).sciezka).nazwa;
                 edytSciezka.Visibility = Visibility.Visible;
                 edytSample.Visibility = Visibility.Collapsed;
-                delay.Text = (plik.tempo * ((sciezka)((odDo)aktywna.Tag).sciezka).delay / (60 * plik.Hz)).ToString();
+                delay.Text = ( ((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione).ToString();
                 aktModuły();
             }
             else
@@ -163,7 +163,7 @@ namespace Syntezator_Krawczyka
                 nazwa.Content = ((jedenSample)((odDo)aktywna.Tag).sciezka).sample.plik;
                 edytSciezka.Visibility = Visibility.Collapsed;
                 edytSample.Visibility = Visibility.Visible;
-                SampleDelay.Text = (((jedenSample)((odDo)aktywna.Tag).sciezka).delay * plik.tempo / plik.Hz / 60f).ToString();
+                SampleDelay.Text = (((jedenSample)((odDo)aktywna.Tag).sciezka).delayUstawione).ToString();
             }
 
         }
@@ -250,6 +250,7 @@ namespace Syntezator_Krawczyka
                     n.xml.Attributes.SetNamedItem(atrybut);
                     aktywna.Margin = new Thickness((cz * skalaX), aktywna.Margin.Top, 0, 0);
                     (((odDo)aktywna.Tag).sciezka as jedenSample).delay = (long)(plik.Hz * 60 / plik.tempo * cz);
+                    (((odDo)aktywna.Tag).sciezka as jedenSample).delayUstawione = cz;
                     //n.nuta.opuznienie = (long)(plik.Hz * 60 / plik.tempo * cz);
                     (sender as TextBox).Background = Brushes.White;
                     ((odDo)aktywna.Tag).start = (long)(plik.Hz * 60 / plik.tempo * cz);
@@ -282,7 +283,8 @@ namespace Syntezator_Krawczyka
             {
                 try
                 {
-                    ((sciezka)((odDo)aktywna.Tag).sciezka).xml.Attributes.GetNamedItem("delay").Value = (float.Parse(delay.Text).ToString(CultureInfo.InvariantCulture));
+                    ((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione = double.Parse(delay.Text);
+                    ((sciezka)((odDo)aktywna.Tag).sciezka).xml.Attributes.GetNamedItem("delay").Value = (((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione.ToString(CultureInfo.InvariantCulture));
                     ((sciezka)((odDo)aktywna.Tag).sciezka).delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
                     aktywna.Margin = new Thickness(((float.Parse(delay.Text)) * skalaX), aktywna.Margin.Top, 0, 0);
                     ((odDo)aktywna.Tag).start = ((sciezka)((odDo)aktywna.Tag).sciezka).delay;

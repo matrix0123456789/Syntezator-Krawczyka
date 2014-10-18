@@ -108,7 +108,7 @@ namespace Syntezator_Krawczyka.Synteza
                 case typFali.szum:
                 var ret=new float[ilePróbek];
                     for(long i=0;i<ilePróbek;i++)
-                        ret[i]=(float)los.NextDouble();
+                        ret[i]=(float)(los.NextDouble()*2d-1d);
                     return ret;
                     break;
                 default:

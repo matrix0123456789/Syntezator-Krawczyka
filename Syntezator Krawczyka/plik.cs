@@ -157,7 +157,10 @@ namespace Syntezator_Krawczyka
                         sciezka scie = new sciezka(id, n, kopia);
                         sciezki.Add(scie);
                         if (n.Attributes.GetNamedItem("delay") != null)
+                        {
                             scie.delay = (int)(float.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo);
+                            scie.delayUstawione = (double.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)) ;
+                        }
                         if (kopia)
                         {
                             var ob = new object[2];

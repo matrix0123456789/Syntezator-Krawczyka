@@ -19,8 +19,8 @@ namespace Syntezator_Krawczyka
         /// Główna ścierzka,na której pracujemy
         /// </summary>
         sciezka main = null;
-        const double skalaX = 20;
-        const double skalaY = 20;
+        double skalaX = 20;
+        double skalaY = 20;
         double tonMax;
         public static Brush[] kolory = { Brushes.Red, Brushes.Green, Brushes.SteelBlue, Brushes.Yellow, Brushes.Violet, Brushes.SaddleBrown, Brushes.OliveDrab, Brushes.Navy, Brushes.MediumTurquoise, Brushes.LightSalmon, Brushes.SlateGray, Brushes.YellowGreen };
         double tonMin;
@@ -32,7 +32,7 @@ namespace Syntezator_Krawczyka
             prawyPanel.Visibility = Visibility.Collapsed;
             PrawyScrool.Visibility = Visibility.Visible;
 
-            rysujSkale(Statyczne.otwartyplik.sciezki);
+            rysujSkale(Statyczne.otwartyplik.sciezki, false);
             for (int i = 0; i < Statyczne.otwartyplik.sciezki.Count; i++)
             {
                 if (Statyczne.otwartyplik.sciezki[i].oryginał == null)
@@ -67,13 +67,13 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             if (input.nuty.Count > 0)
             {
-                rysujSkale(new List<sciezka>() { input });
+                rysujSkale(new List<sciezka>() { input }, false);
                 rysujNuty(input, kolor);
 
             }
         }
         double ilepróbekMinOst = 100, ilepróbekMaxOst = 100;//określenie przedziału tonów
-        bool rysujSkale(List<sciezka> inplist)
+        bool rysujSkale(List<sciezka> inplist, bool wymuś)
         {
             double ilepróbekMin, ilepróbekMax;//określenie przedziału tonów
             try
@@ -94,7 +94,7 @@ namespace Syntezator_Krawczyka
                         }
                     }
             var zmianaSkali = (ilepróbekMax > ilepróbekMaxOst || ilepróbekMin < ilepróbekMinOst);
-            if (zmianaSkali)
+            if (zmianaSkali || wymuś)
             {
                 panel.Children.Clear();
                 ilepróbekMinOst = ilepróbekMin;
@@ -118,7 +118,7 @@ namespace Syntezator_Krawczyka
                     else if (tonTeraz == 0)//oktawa
                     {
                         var prostokat = new Rectangle();
-                        prostokat.Margin = new Thickness(0, (tonMin - i+0.5) * skalaY, 0, 0);
+                        prostokat.Margin = new Thickness(0, (tonMin - i + 0.5) * skalaY, 0, 0);
                         prostokat.Height = (1);
                         prostokat.Fill = Brushes.Black;
                         prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
@@ -291,7 +291,16 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
-            if (rysujSkale(new List<sciezka>() { main }))
+            refresh(true);
+        }
+        void refresh(bool wymus)
+        {
+            bool aa;
+            if (prawyPanel.Visibility == Visibility.Visible)
+                aa = rysujSkale(new List<sciezka>() { main }, wymus);
+            else
+                aa = rysujSkale(Statyczne.otwartyplik.sciezki, wymus);
+            if (aa || wymus)
             {
                 int nr = 0;
                 if (aktywna != null)
@@ -300,11 +309,10 @@ namespace Syntezator_Krawczyka
                 listaChildren.Clear();
                 rysujNuty(main, głównyKolor);
                 listaChildren.Sort(porListaChil);
-                if (listaChildren.Count > nr)
+                if (listaChildren.Count > nr && nr >= 0)
                     prostokat_MouseClick(listaChildren[nr], null);
             }
         }
-
         public static void usuńLitery(TextBox textBox)
         {
             if (textBox.Text.Length > 0 && ((textBox.Text[0] >= 'a' && textBox.Text[0] <= 'z') || (textBox.Text[0] >= 'A' && textBox.Text[0] <= 'Z')))
@@ -420,6 +428,42 @@ namespace Syntezator_Krawczyka
                         aktywna = null;
                     }
                     break;
+                case Key.OemPlus:
+                case Key.Add:
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    {
+
+                        if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                        {
+
+                            skalaX *= Math.Sqrt(2);
+                        }
+                        else
+                        {
+                            skalaY *= Math.Sqrt(2);
+
+                        }
+                    }
+                    refresh(true);
+                    break;
+                case Key.OemMinus:
+                case Key.Subtract:
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    {
+
+                        if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                        {
+
+                            skalaX /= Math.Sqrt(2);
+                        }
+                        else
+                        {
+                            skalaY /= Math.Sqrt(2);
+
+                        }
+                    }
+                    refresh(true);
+                    break;
             }
         }
 
@@ -433,6 +477,25 @@ namespace Syntezator_Krawczyka
                     return -1;
             }
             catch { return 0; }
+        }
+
+        private void zoom(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+
+                if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                {
+
+                    skalaX *= Math.Pow(2, (double)e.Delta / 600);
+                }
+                else
+                {
+                    skalaY *= Math.Pow(2, (double)e.Delta / 600);
+
+                }
+            }
+            refresh(true);
         }
     }
 }

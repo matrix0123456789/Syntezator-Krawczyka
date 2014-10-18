@@ -4,7 +4,7 @@
         Title="EdytorNut — Syntezator Krawczyka" Height="445" Width="588" KeyDown="Window_KeyDown">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Margin="0,0,113,0">
-            <Grid Name="panel"></Grid>
+            <Grid Name="panel" MouseWheel="zoom"></Grid>
         </ScrollViewer>
         <ScrollViewer HorizontalAlignment="Right" Margin="467,0,0,0" Visibility="Collapsed" Name="PrawyScrool">
             <StackPanel></StackPanel>
