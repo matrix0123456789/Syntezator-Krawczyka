@@ -118,7 +118,7 @@ namespace Syntezator_Krawczyka
                     else if (tonTeraz == 0)//oktawa
                     {
                         var prostokat = new Rectangle();
-                        prostokat.Margin = new Thickness(0, (tonMin - i) * skalaY, 0, 0);
+                        prostokat.Margin = new Thickness(0, (tonMin - i+0.5) * skalaY, 0, 0);
                         prostokat.Height = (1);
                         prostokat.Fill = Brushes.Black;
                         prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;

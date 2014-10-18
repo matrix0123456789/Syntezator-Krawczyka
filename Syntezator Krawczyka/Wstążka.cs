@@ -28,7 +28,7 @@ namespace Syntezator_Krawczyka
         void Wstążka_Loaded(object sender, RoutedEventArgs e)
         {
             Wstążka_SizeChanged(null, null);
-           // ch.
+            // ch.
         }
         public void Wstążka_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -79,7 +79,7 @@ namespace Syntezator_Krawczyka
                 x.Key.Content = x.Value.ToString();
             }
             poprawPrzyciski();
-            
+
         }
         static Brush Tło = new SolidColorBrush(Color.FromRgb(235, 253, 230));
         Wstążka parent;
@@ -91,7 +91,7 @@ namespace Syntezator_Krawczyka
             parent = a;
             gora.Background = Brushes.White;
             gora.VerticalAlignment = VerticalAlignment.Top;
-           // gora.MinHeight = 25;
+            // gora.MinHeight = 25;
 
             (parent as Grid).Children.Add(gora);
             dol.Background = Tło;
@@ -127,23 +127,33 @@ namespace Syntezator_Krawczyka
         Dictionary<Button, UIElement> karty = new Dictionary<Button, UIElement>();
         void but_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var x in dol.Children)
+            if (((sender as Button).Tag as UIElement).Visibility == Visibility.Visible)
             {
-                if (x == (sender as Button).Tag)
-                    (x as UIElement).Visibility = Visibility.Visible;
-                else
-                    (x as UIElement).Visibility = Visibility.Collapsed;
-            } poprawPrzyciski();
-            if (parent.PodSpodem != null)
-            {
-                var tah = ((sender as Button).Tag as FrameworkElement).ActualHeight;
-                if (tah < ((sender as Button).Tag as FrameworkElement).Height)
-                    tah = ((sender as Button).Tag as FrameworkElement).Height;
-                if (parent.PodSpodem.Margin == null)
-                    parent.PodSpodem.Margin = new Thickness(0, gora.ActualHeight + tah, 0, 0);
-                else
-                    parent.PodSpodem.Margin = new Thickness(parent.PodSpodem.Margin.Left, gora.ActualHeight + tah, parent.PodSpodem.Margin.Left, parent.PodSpodem.Margin.Bottom);
+                ((sender as Button).Tag as UIElement).Visibility = Visibility.Collapsed;
+                
             }
+            else
+            {
+                foreach (var x in dol.Children)
+                {
+                    if (x == (sender as Button).Tag)
+                        (x as UIElement).Visibility = Visibility.Visible;
+                    else
+                        (x as UIElement).Visibility = Visibility.Collapsed;
+                }} poprawPrzyciski();
+                if (parent.PodSpodem != null)
+                {
+                    var tah = ((sender as Button).Tag as FrameworkElement).ActualHeight;
+                    if (tah < ((sender as Button).Tag as FrameworkElement).Height)
+                        tah = ((sender as Button).Tag as FrameworkElement).Height;
+                    if (((sender as Button).Tag as FrameworkElement).Visibility != Visibility.Visible)
+                        tah = 0;
+                    if (parent.PodSpodem.Margin == null)
+                        parent.PodSpodem.Margin = new Thickness(0, gora.ActualHeight + tah, 0, 0);
+                    else
+                        parent.PodSpodem.Margin = new Thickness(parent.PodSpodem.Margin.Left, gora.ActualHeight + tah, parent.PodSpodem.Margin.Left, parent.PodSpodem.Margin.Bottom);
+                }
+            
         }
 
         private void poprawPrzyciski()
@@ -277,7 +287,7 @@ namespace Syntezator_Krawczyka
         }
         Canvas _Obrazek = null;
         Label _podpis = new Label();
-        Grid wew=new Grid();
+        Grid wew = new Grid();
         public Przycisk()
         {
             Children = wew.Children;

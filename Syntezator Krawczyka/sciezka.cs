@@ -92,6 +92,7 @@ namespace Syntezator_Krawczyka
             }
         }
 
+        private double delayUstawione;
         private long? _delay = null;
         public long delay
         {
