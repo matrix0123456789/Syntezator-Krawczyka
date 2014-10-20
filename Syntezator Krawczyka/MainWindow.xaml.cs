@@ -147,9 +147,9 @@ namespace Syntezator_Krawczyka
                 //System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
                 //sinus = read.ReadBytes((int)read.BaseStream.Length);
 
-                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".synkra", false) == null)
+                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) == null)
                 {
-                    if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .synkra z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
+                    if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .jms z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
                     {
                         if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
                             Statyczne.skojarzPliki();
@@ -206,7 +206,7 @@ namespace Syntezator_Krawczyka
                     try
                     {
                         System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
-                        Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia" + DateTime.Now.ToFileTime() + ".synkra");
+                        Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia" + DateTime.Now.ToFileTime() + ".jms");
                         ileDoKopii = 0;
                     }
                     catch { ileDoKopii = 300; }
@@ -286,7 +286,7 @@ namespace Syntezator_Krawczyka
         private void button3_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.synkra|Plik XML|*.xml|Plik Syntezatora Krawczyka|*.synkra|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
+            dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.jms|Plik XML|*.xml|Plik Jaebe Music Studio|*.jms|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
             dialog.ShowDialog();
             string[] explode = dialog.FileName.Split('.');
             if (explode.Last() == "mid" || explode.Last() == "midi")

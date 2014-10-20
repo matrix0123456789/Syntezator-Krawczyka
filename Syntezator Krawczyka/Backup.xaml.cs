@@ -25,7 +25,7 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             rysuj();
         }
-        static Regex szukajDaty=new Regex("kopia([0-9]+)\\.synkra");
+        static Regex szukajDaty = new Regex("kopia([0-9]+)\\.jms");
         void rysuj()
         {
             var p = pliki;

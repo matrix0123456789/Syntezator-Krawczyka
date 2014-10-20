@@ -303,7 +303,7 @@ namespace Syntezator_Krawczyka
         {
             uaktualnij();
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.Filter = "Plik Syntezatora Krawczyka|*.synkra";
+            dialog.Filter = "Plik Jaebe Music Studio|*.jms";
             dialog.ShowDialog();
             if (dialog.FileName != "")
             {
