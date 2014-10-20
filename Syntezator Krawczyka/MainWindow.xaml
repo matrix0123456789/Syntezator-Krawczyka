@@ -223,6 +223,32 @@
                     </s:Przycisk>
                 </WrapPanel>
             </s:WstążkaKarta>
+            <s:WstążkaKarta Tytuł="Pomoc" Visibility="Collapsed" Height="78">
+                <WrapPanel Margin="5">
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wiki">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="WWW"  Click="WWW_Click">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="O Programie"  Click="About_Click">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                </WrapPanel>
+            </s:WstążkaKarta>
             <s:Wstążka.PodSpodem>
                 <Grid Drop="Grid_Drop" DragOver="Grid_DragOver" AllowDrop="True">
 

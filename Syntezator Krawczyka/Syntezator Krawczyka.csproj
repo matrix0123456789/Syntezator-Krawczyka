@@ -141,6 +141,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Backup.xaml.cs">
       <DependentUpon>Backup.xaml</DependentUpon>
     </Compile>
@@ -272,6 +275,10 @@
     <Compile Include="Statyczne.cs" />
     <Compile Include="Typ.cs" />
     <Compile Include="wejście.cs" />
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Backup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

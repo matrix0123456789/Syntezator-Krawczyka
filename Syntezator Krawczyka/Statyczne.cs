@@ -66,8 +66,8 @@ namespace Syntezator_Krawczyka
             //{cd3afa76-b84f-48f0-9393-7edc34128127} sprawdzić
 
             Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka", "", "Plik programu SYntezator Krawczyka");
-            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka", "FriendlyTypeName", "Plik programu SYntezator Krawczyka");
+            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka", "", "Plik programu Jaebe Music Studio");
+            Microsoft.Win32.Registry.SetValue("HKEY_CLASSES_ROOT\\PlikSyntezatoraKrawczyka", "FriendlyTypeName", "Plik programu Jaebe Music Studio");
 
             Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka\\open");
             Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("PlikSyntezatoraKrawczyka\\open\\command");

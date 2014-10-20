@@ -559,6 +559,17 @@ namespace Syntezator_Krawczyka
             WyjścieDzwieku.pokarz();
         }
 
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new About();
+            okno.Show();
+        }
+
+        private void WWW_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://jaebe.za.pl");
+        }
+
 
 
 
