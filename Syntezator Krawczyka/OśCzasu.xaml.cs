@@ -355,6 +355,18 @@ namespace Syntezator_Krawczyka
             edytSciezka.Visibility = Visibility.Collapsed;
             edytSample.Visibility = Visibility.Collapsed;
         }
+
+        private void przytnij_click(object sender, RoutedEventArgs e)
+        {
+            var scorg = (aktywna.Tag as odDo).sciezka as jedenSample;
+            var okno = new EdytujWave(scorg);
+            okno.Show();
+        }
+
+        private void graj_click(object sender, RoutedEventArgs e)
+        {
+            Statyczne.otwartyplik.grajStart(new List<sciezka>(){(((odDo)aktywna.Tag).sciezka as sciezka)});
+        }
     }
     interface IodDo
     {

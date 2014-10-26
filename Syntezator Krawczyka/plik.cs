@@ -543,6 +543,10 @@ namespace Syntezator_Krawczyka
         }
         internal void grajStart()
         {
+            grajStart(Statyczne.otwartyplik.sciezki);
+        }
+        internal void grajStart(List<sciezka> a)
+        {
             
             granie.graniePrzy = 0;
 
@@ -555,7 +559,7 @@ namespace Syntezator_Krawczyka
             granie.można = false;
             granie.grają.Clear();
             long długość = 0;
-            foreach (var x in Statyczne.otwartyplik.sciezki)
+            foreach (var x in a)
             {
                 if (x.sekw != null)
                 {
@@ -588,7 +592,7 @@ namespace Syntezator_Krawczyka
             granie.granieMax = (int)długość;
             granie.wynik = new float[2, długość];
             List<nuta> lista = new List<nuta>();
-            foreach (var x in Statyczne.otwartyplik.sciezki)
+            foreach (var x in a)
             {
                 foreach (var nuta in x.nuty)
                 {

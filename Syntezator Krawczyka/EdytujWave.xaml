@@ -1,0 +1,12 @@
+﻿<Window x:Class="Syntezator_Krawczyka.EdytujWave"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="EdytujWave" Height="300" Width="300" SizeChanged="Window_SizeChanged">
+    <Grid>
+        <Button Content="Play" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <Canvas Name="Fala" Margin="10,35,10,10" MouseMove="Fala_MouseMove" MouseDown="Fala_MouseDown" MouseUp="Fala_MouseUp"/>
+        <Polygon></Polygon>
+        <Button Content="+" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="33" Click="plus_click"/>
+        <Button Content="-" HorizontalAlignment="Left" Margin="128,10,0,0" VerticalAlignment="Top" Width="33" Click="minus_click"/>
+    </Grid>
+</Window>

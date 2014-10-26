@@ -11,15 +11,18 @@
         </Grid>
         <Grid Margin="0,31,0,35" HorizontalAlignment="Right" Width="119" Name="edytSample" Visibility="Collapsed">
             <TextBox Name="SampleDelay" TextChanged="SampleDelay_TextChanged" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="99"/>
+            <Button Content="Przytnij" Margin="10,38,10,0" VerticalAlignment="Top" Click="przytnij_click"/>
+
         </Grid>
-        <Grid Margin="0,31,0,35" HorizontalAlignment="Right" Width="119" Name="edytSciezka" Visibility="Collapsed">
+        <Grid Margin="0,31,0,35" HorizontalAlignment="Right" Width="119" Name="edytSciezka" Visibility="Visible">
             <Button Content="Edytuj nuty" Margin="10,10,10,0" VerticalAlignment="Top" Click="edytujNuty_click"/>
             <ComboBox ToolTip="Wybierz na czym ma ta ścierzka być odegrana" Height="23" HorizontalAlignment="Left" Margin="0,35,0,0" x:Name="comboBox1" VerticalAlignment="Top" Width="119" SelectionChanged="comboBox1_SelectionChanged"/>
             <TextBox HorizontalAlignment="Left" Height="23" Margin="75,68,0,0"  VerticalAlignment="Top" Width="44" Name="delay" TextChanged="delay__TextChanged" />
            <Label Content="Przesunięcie" Height="28" HorizontalAlignment="Left" x:Name="nazwa_Copy" VerticalAlignment="Top" Margin="0,63,0,0" />
-            <Button Content="Duplikuj" Margin="10,96,10,0" VerticalAlignment="Top" Click="duplikuj_click"/>
-
-            <Button Content="Usuń" Margin="10,121,10,0" VerticalAlignment="Top" Click="usuń_click"/>
+            <Button Content="Duplikuj" Margin="10,126,10,0" VerticalAlignment="Top" Click="duplikuj_click"/>
+            
+            <Button Content="Usuń" Margin="10,151,10,0" VerticalAlignment="Top" Click="usuń_click"/>
+            <Button Content="Graj" Margin="10,101,10,0" VerticalAlignment="Top" Click="graj_click"/>
         </Grid>
 
 

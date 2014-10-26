@@ -158,6 +158,9 @@
     <Compile Include="EdytorNut.xaml.cs">
       <DependentUpon>EdytorNut.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EdytujWave.xaml.cs">
+      <DependentUpon>EdytujWave.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IPostep.cs" />
     <Compile Include="jedenSample.cs" />
     <Compile Include="Oscyloskop.xaml.cs">
@@ -292,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EdytorNut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EdytujWave.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

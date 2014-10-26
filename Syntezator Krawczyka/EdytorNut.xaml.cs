@@ -173,7 +173,7 @@ namespace Syntezator_Krawczyka
                 }
                 if (aktywna != null)
                     aktywna.Stroke = null;
-
+                aktywna = null;
                 var nuta = (nutaXml)((sender as Rectangle).Tag);
                 czas.IsEnabled = dlugosc.IsEnabled = ton.IsEnabled = true;
                 ((Rectangle)sender).Stroke = Brushes.Green;
@@ -290,8 +290,8 @@ namespace Syntezator_Krawczyka
                 {
                     (sender as TextBox).Background = Brushes.Red;
                 }
-            }
             refresh(true);
+            }
         }
         void refresh(bool wymus)
         {
