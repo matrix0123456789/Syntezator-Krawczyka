@@ -217,7 +217,10 @@ namespace Syntezator_Krawczyka
                         if (debugowanie)
                             Title = Statyczne.bufor.BufferedBytes.ToString();
                         czas.Content = funkcje.sekundy(granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4) + '/' + funkcje.sekundy(granie.granieMax);
-                        suwak.Value = granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4;
+                        var pozycjaSuwaka = granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4;
+
+                        suwak.Tag = pozycjaSuwaka;
+                        suwak.Value = pozycjaSuwaka;
                         suwak.Maximum = granie.granieMax;
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
@@ -402,7 +405,10 @@ namespace Syntezator_Krawczyka
 
         private void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (suwakdziala)
+            // if (suwakdziala&&e.NewValue!=e.OldValue)
+            //if(((System.Windows.RoutedEventArgs)(e)).UserInitiated)
+            //if(((System.Windows.RoutedEventArgs)(e)).Handled)
+            if (e.NewValue != (int)suwak.Tag)
             {
                 if (granie.graniePrzy != (int)suwak.Value)
                     Statyczne.bufor.ClearBuffer();

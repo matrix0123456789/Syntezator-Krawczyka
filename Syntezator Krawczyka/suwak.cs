@@ -11,6 +11,7 @@ namespace Syntezator_Krawczyka
     public enum Przelicznik : byte { Liniowo, Logarytmicznie, Kwadratowo }
     public class suwak : Slider
     {
+        public suwak splecione = null;
         [Bindable(true)]
         [Category("Własne")]
         public string Opis
@@ -64,15 +65,22 @@ namespace Syntezator_Krawczyka
 
         void suwak_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var okno = new suwakOkno();
-            okno.Show();
+            if (splecione == null)
+            {
+                var okno = new suwakOkno(this);
+                okno.Show();
+            }
         }
 
         void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var test = sender == this;
             ToolTip = _opis + "\r\n" + Value + Jednostka;
-
+            if (splecione != null)
+            {
+                if (splecione.Value != Value)
+                    splecione.Value = Value;
+            }
 
         }
         public double Value

@@ -18,9 +18,28 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public partial class suwakOkno : Window
     {
-        public suwakOkno()
+        private suwak suwak;
+
+       
+
+        public suwakOkno(suwak suwak)
         {
+            // TODO: Complete member initialization
+            this.suwak = suwak;
             InitializeComponent();
+            el.Max = suwak.Max;
+            el.Opis = suwak.Opis;
+            el.Jednostka = suwak.Jednostka;
+            el.przelicznik = suwak.przelicznik;
+            el.Value = suwak.Value;
+            el.splecione = suwak;
+            suwak.splecione = el;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            suwak.splecione = null;
+            el.splecione = null;
         }
     }
 }
