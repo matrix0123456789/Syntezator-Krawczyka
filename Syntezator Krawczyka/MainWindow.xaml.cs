@@ -51,8 +51,9 @@ namespace Syntezator_Krawczyka
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
-           // var test = new Test();
-           // test.Show();
+            ThreadPool.QueueUserWorkItem((a) => { Backup.czyśćStare(new TimeSpan(14, 0, 0, 0)); });//czyści backup starszy niż 14 dni
+            // var test = new Test();
+            // test.Show();
             InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             try
@@ -301,7 +302,7 @@ namespace Syntezator_Krawczyka
         }
         private void button4b_Click(object sender, RoutedEventArgs e)
         {
-            if (Statyczne.otwartyplik.URL!=null)
+            if (Statyczne.otwartyplik.URL != null)
                 Statyczne.otwartyplik.zapisz(Statyczne.otwartyplik.URL);
             else
                 Statyczne.otwartyplik.zapisz();

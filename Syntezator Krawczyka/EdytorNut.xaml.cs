@@ -104,7 +104,7 @@ namespace Syntezator_Krawczyka
                 tonMax = funkcje.ton(ilepróbekMax) - 1;
                 for (var i = tonMin; i >= tonMax; i = i - .5)//rysowanie pasów
                 {
-                    var tonTeraz = Math.Round((i + 600) % 6, 2);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
+                    var tonTeraz = Math.Round((i + 600) % 6, 1);//+600 żeby dla ujemnych nie sprawdzał w odwrotnej kolejności
                     if (tonTeraz == .5 || tonTeraz == 1.5 || tonTeraz == 3 || tonTeraz == 4 || tonTeraz == 5)
                     {
                         var prostokat = new Rectangle();
@@ -276,6 +276,8 @@ namespace Syntezator_Krawczyka
                 {
                     var n = (nutaXml)aktywna.Tag;
                     var cz = float.Parse(ton.Text);
+                    if (funkcje.ilepróbek(0, cz) == n.nuta.ilepróbekNaStarcie)
+                        return;
                     var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
                     n.xml.Attributes.SetNamedItem(atrybut);
@@ -285,12 +287,12 @@ namespace Syntezator_Krawczyka
                     aktywna.Margin = new Thickness(aktywna.Margin.Left, (tonMin - cz) * skalaY, 0, 0);
                     (sender as TextBox).Background = Brushes.White;
                     n.nuta.ilepróbekNaStarcie = n.nuta.ilepróbek = funkcje.ilepróbek(0, cz);
+                    refresh(false);
                 }
                 catch (FormatException)
                 {
                     (sender as TextBox).Background = Brushes.Red;
                 }
-            refresh(true);
             }
         }
         void refresh(bool wymus)
@@ -303,6 +305,7 @@ namespace Syntezator_Krawczyka
             if (aa || wymus)
             {
                 int nr = 0;
+                listaChildren.Sort(porListaChil);
                 if (aktywna != null)
                     nr = listaChildren.IndexOf(aktywna);
 

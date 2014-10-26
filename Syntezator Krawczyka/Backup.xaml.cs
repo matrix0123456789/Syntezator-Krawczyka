@@ -25,37 +25,41 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             rysuj();
         }
-        static Regex szukajDaty = new Regex("kopia([0-9]+)\\.jms");
+        static Regex szukajDaty = new Regex("kopia([0-9]+)\\.(jms|synkra)");
         void rysuj()
         {
             var p = pliki;
             lista.Children.Clear();
-                for(int i=p.Length-1;i>=0;i--)
+            for (int i = p.Length - 1; i >= 0; i--)
             {
                 var x = p[i];
                 var grid = new Grid();
-                var lab = new Label();
-                var data = DateTime.FromFileTime(long.Parse(szukajDaty.Match(x.Name).Groups[1].Value));
-                lab.Content = data.ToShortDateString() + " " + data.ToShortTimeString();
-                grid.Children.Add(lab);
+                var lab = new Label(); try
+                {
+                    var data = DateTime.FromFileTime(long.Parse(szukajDaty.Match(x.Name).Groups[1].Value));
 
-                var but1 = new Button();
-                but1.Content = "otwórz";
-                but1.HorizontalAlignment = HorizontalAlignment.Right;
-                but1.Click += but1_Click;
-                but1.Tag = x;
-                but1.Margin = new Thickness(0, 2, 45, 2);
-                grid.Children.Add(but1);
+                    lab.Content = data.ToShortDateString() + " " + data.ToShortTimeString();
+                    grid.Children.Add(lab);
 
-                var but2 = new Button();
-                but2.Content = "usuń";
-                but2.HorizontalAlignment = HorizontalAlignment.Right;
-                but2.Click += but2_Click;
-                but2.Tag = x;
-                but2.Margin = new Thickness(0, 2, 5, 2);
-                grid.Children.Add(but2);
+                    var but1 = new Button();
+                    but1.Content = "otwórz";
+                    but1.HorizontalAlignment = HorizontalAlignment.Right;
+                    but1.Click += but1_Click;
+                    but1.Tag = x;
+                    but1.Margin = new Thickness(0, 2, 45, 2);
+                    grid.Children.Add(but1);
 
-                lista.Children.Add(grid);
+                    var but2 = new Button();
+                    but2.Content = "usuń";
+                    but2.HorizontalAlignment = HorizontalAlignment.Right;
+                    but2.Click += but2_Click;
+                    but2.Tag = x;
+                    but2.Margin = new Thickness(0, 2, 5, 2);
+                    grid.Children.Add(but2);
+
+                    lista.Children.Add(grid);
+                }
+                catch { continue; }
             }
         }
 
@@ -73,18 +77,33 @@ namespace Syntezator_Krawczyka
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var p = pliki;
-            foreach(var x in p)
+            foreach (var x in p)
             {
                 x.Delete();
             }
             rysuj();
         }
-        FileInfo[] pliki
+        static public void czyśćStare(TimeSpan czas)
+        {
+            var p = pliki;
+            for (int i = p.Length - 1; i >= 0; i--)
+            {
+                var x = p[i];
+                try
+                {
+                    var data = DateTime.FromFileTime(long.Parse(szukajDaty.Match(x.Name).Groups[1].Value));
+                    if (DateTime.Now - data > czas)
+                        x.Delete();
+                }
+                catch { }
+            }
+        }
+        static FileInfo[] pliki
         {
             get
             {
                 var fold = new DirectoryInfo(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
-               return fold.GetFiles("kopia*");
+                return fold.GetFiles("kopia*");
             }
         }
     }
