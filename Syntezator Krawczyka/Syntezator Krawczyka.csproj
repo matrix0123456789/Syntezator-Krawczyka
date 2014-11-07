@@ -28,7 +28,11 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://syntezator.aq.pl/</InstallUrl>
     <TargetCulture>pl-PL</TargetCulture>
+<<<<<<< HEAD
     <ApplicationRevision>4</ApplicationRevision>
+=======
+    <ApplicationRevision>2</ApplicationRevision>
+>>>>>>> master
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -461,8 +465,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+<<<<<<< HEAD
     <None Include="app.config" />
     <None Include="packages.config" />
+=======
+>>>>>>> master
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

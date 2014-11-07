@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <file tempo="120">
+<<<<<<< HEAD
+=======
+  <name lang="pl">Przykład</name>
+  <name lang="en">Example</name>
+>>>>>>> master
   <sound type="syntezator-krawczyka" id="pad">
     <module type="sekwencer" id="player1" output="rozd1" />
     <module type="rozdzielacz" id="rozd1" output="zmianawys1 zmianawys2 zmianawys3 zmianawys4" />

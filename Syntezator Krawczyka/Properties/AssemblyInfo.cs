@@ -10,9 +10,15 @@ using System.Windows;
 [assembly: AssemblyTitle("Jaebe Music Studio")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
+<<<<<<< HEAD
 [assembly: AssemblyCompany("Jaebe Studio")]
 [assembly: AssemblyProduct("Jaebe Music Studio")]
 [assembly: AssemblyCopyright("Copyright © 2014")]
+=======
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Syntezator Krawczyka")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
+>>>>>>> master
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
