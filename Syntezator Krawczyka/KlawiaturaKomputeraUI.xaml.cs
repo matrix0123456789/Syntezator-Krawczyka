@@ -24,12 +24,31 @@ namespace Syntezator_Krawczyka
     {
         klawiaturaKomputera parent;
         Timer akttimer;
+
         public KlawiaturaKomputeraUI(klawiaturaKomputera thi)
         {
             parent = thi;
             InitializeComponent();
             akttimer = new Timer((object o) => { MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, (ThreadStart)delegate() { aktModuły(); ; }); }, null, 0, 1000);
+            if (thi.typ == typKlawiaturyKomputera.dolna)
+                (label1.Content) = "Klawiatura komputera dolna";
+            else
+                (label1.Content) = "Klawiatura komputera górna";
+            slider1.Value = thi.oktawy;
+            slider2.Value = thi.tony;
 
+        }
+        private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+            parent.oktawy = ((short)slider1.Value);
+            slider1.Value = parent.oktawy;
+        }
+
+        private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            parent.tony = (Math.Floor(slider2.Value * 2) / 2);
+            slider2.Value = parent.tony;
         }
         void aktModuły()
         {
@@ -51,7 +70,7 @@ namespace Syntezator_Krawczyka
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(comboBox1.SelectedItem!=null)
+            if (comboBox1.SelectedItem != null)
             {
                 parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
             }

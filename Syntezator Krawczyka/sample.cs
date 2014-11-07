@@ -8,65 +8,122 @@ using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
-    public class sample
+    public class sample:IPostep
     {
-        public string plik
-        {
-            get
-            {
-                return _plik;
-            }
-            set
-            {
-                _plik = value;
-                System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
-            {
-                BinaryReader zawartość;
-                try
-                {
-                    zawartość = new BinaryReader((new StreamReader((new Regex("\\\\([^\\\\]*)$")).Replace(Syntezator_Krawczyka.plik.URLStatyczne, "\\" + _plik), Encoding.ASCII)).BaseStream);
-                }
-                catch (Exception e)
-                {
-                    try
-                    {
-                        zawartość = new BinaryReader((new StreamReader(_plik, Encoding.ASCII)).BaseStream);
-                    }
-                    catch (Exception e2)
-                    {
-                        MessageBox.Show(e2.ToString(),"Błąd",MessageBoxButton.OK,MessageBoxImage.Error);
-                        return;
-                    }
-                }
-                zawartość.BaseStream.Position = 24;
-                częstotliwość = zawartość.ReadInt32();
-                bitrate = 8 * zawartość.ReadInt32() / częstotliwość;
-
-                zawartość.BaseStream.Position = 44;
-                if (bitrate == 16)
-                {
-                    fala = new float[(zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 2];
-                    for (var i = 0; i < fala.Length; i++)
-                    {
-                        fala[i] = zawartość.ReadInt16() / 32768f;
-                    }
-                }
-                if (bitrate == 8)
-                {
-                    fala = new float[zawartość.BaseStream.Length - zawartość.BaseStream.Position];
-                    for (var i = 0; i < fala.Length; i++)
-                    {
-                        fala[i] = zawartość.ReadSByte() / 128f;
-                    }
-                }
-            });
-            }
-        }
-        string _plik;
+        public string plik;
         public float note;
         public int częstotliwość;
         public float accept;
-        public float[] fala;
+        public float[,] fala;
+        public ushort kanały = 1;
+        private string p;
+
+        public sample(string p)
+        {
+            {
+                plik = p;
+                System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
+                {
+                    BinaryReader zawartość;
+                    try
+                    {
+                        zawartość = new BinaryReader((new StreamReader((new Regex("\\\\([^\\\\]*)$")).Replace(Syntezator_Krawczyka.plik.URLStatyczne, "\\" + plik), Encoding.ASCII)).BaseStream);
+                    }
+                    catch (Exception e)
+                    {
+                        try
+                        {
+                            zawartość = new BinaryReader((new StreamReader(plik, Encoding.ASCII)).BaseStream);
+                        }
+                        catch (Exception e2)
+                        {
+                            MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                    }
+                    zawartość.BaseStream.Position = 22;
+                    kanały = zawartość.ReadUInt16();
+                    częstotliwość = zawartość.ReadInt32();
+                    bitrate = 8 * zawartość.ReadInt32() / częstotliwość/kanały;
+
+                    zawartość.BaseStream.Position = 44;
+                    if (kanały == 1)
+                    {
+                        if (bitrate == 32)
+                        {
+                            fala = new float[1, (zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 4];
+                            for (i = 0; i < fala.Length; i++)
+                            {
+                                fala[0, i] = zawartość.ReadInt32() / (256f * 256f * 128f);
+                            }
+                        }
+                        if (bitrate == 16)
+                        {
+                            fala = new float[1, (zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 2];
+                            for (i = 0; i < fala.Length; i++)
+                            {
+                                fala[0, i] = zawartość.ReadInt16() / 32768f;
+                            }
+                        }
+                        if (bitrate == 8)
+                        {
+                            fala = new float[1, zawartość.BaseStream.Length - zawartość.BaseStream.Position];
+                            for (i = 0; i < fala.Length; i++)
+                            {
+                                fala[0, i] = zawartość.ReadSByte() / 128f;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (bitrate == 32)
+                        {
+                            fala = new float[kanały, (zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 4/kanały];
+                            for (i = 0; i < fala.Length / kanały; i++)
+                            {
+                                for (byte k = 0; k < kanały;k++ )
+                                    fala[k, i] = zawartość.ReadInt32() / (256f * 256f * 128f);
+                            }
+                        }
+                        if (bitrate == 16)
+                        {
+                            fala = new float[kanały, (zawartość.BaseStream.Length - zawartość.BaseStream.Position) / 2/kanały];
+                            for (i = 0; i < fala.Length/kanały; i++)
+                            {
+                                for (byte k = 0; k < kanały; k++)
+                                fala[k, i] = zawartość.ReadInt16() / 32768f;
+                            }
+                        }
+                        if (bitrate == 8)
+                        {
+                            fala = new float[kanały,( zawartość.BaseStream.Length - zawartość.BaseStream.Position)/kanały];
+                            for (i = 0; i < fala.Length / kanały; i++)
+                            {
+                                for (byte k = 0; k < kanały; k++)
+                                fala[k, i] = zawartość.ReadSByte() / 128f;
+                            }
+                        }
+                    }
+                });
+            }  
+        }
+        long i = 0;
         public int bitrate { get; set; }
+        public long value
+        {
+            get
+            {
+                return i;
+            }
+        }
+        public long max
+        {
+            get
+            {
+                if (fala == null)
+                    return 0;
+                return fala.GetLongLength(1);
+            }
+        }
     }
 }

@@ -30,17 +30,18 @@ namespace Syntezator_Krawczyka.Synteza
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["czas"] = (Math.Pow(2, Math.Round(sliderA.Value)) * (plik.tempo / 60)).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
             
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["zmniejszenie"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
-
+            parentNode.akt();
         }
         private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["glosnosc"] = (sliderC.Value).ToString(CultureInfo.InvariantCulture);
-            
+            parentNode.akt();
         }
         void ustawSuwaki()
         {
@@ -49,6 +50,7 @@ namespace Syntezator_Krawczyka.Synteza
                 sliderA.Value = Math.Log(60 * double.Parse(parentNode.ustawienia["czas"], CultureInfo.InvariantCulture) / plik.tempo, 2);
             sliderB.Value = double.Parse(parentNode.ustawienia["zmniejszenie"], CultureInfo.InvariantCulture);
             sliderC.Value = double.Parse(parentNode.ustawienia["glosnosc"], CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)

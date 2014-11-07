@@ -44,28 +44,34 @@ namespace Syntezator_Krawczyka
             }); }, null, 0, 1000);
 
         }
+        int ilemod = 0;
         void aktModuły()
         {
             lock (comboBox1)
             {
-                comboBox1.Items.Clear();
+                var cou = Statyczne.otwartyplik.moduły.Count;
+                if (ilemod != cou)
+                {
+                    comboBox1.Items.Clear();
 
-                comboBox1.Items.Add(new ComboBoxItem());
-                (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = null;
-                (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = "(puste)";
-                if (parent.sekw == null)
-                {
-                    comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
-                }
-                foreach (var mod in Statyczne.otwartyplik.moduły)
-                {
                     comboBox1.Items.Add(new ComboBoxItem());
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
-                    if (parent.sekw == mod.Value.sekw)
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = null;
+                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = "(puste)";
+                    if (parent.sekw == null)
                     {
                         comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
                     }
+                    foreach (var mod in Statyczne.otwartyplik.moduły)
+                    {
+                        comboBox1.Items.Add(new ComboBoxItem());
+                        (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
+                        (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
+                        if (parent.sekw == mod.Value.sekw)
+                        {
+                            comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
+                        }
+                    }
+                    ilemod = cou;
                 }
             }
         }
@@ -74,8 +80,13 @@ namespace Syntezator_Krawczyka
         {
             try
             {
-                if(comboBox1.SelectedItem!=null)
-                parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
+                if (comboBox1.SelectedItem != null)
+                {
+                    parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
+                    var atr = parent.xml.OwnerDocument.CreateAttribute("sound");
+                    atr.Value = (string)(comboBox1.SelectedItem as ComboBoxItem).Content;
+                    parent.xml.Attributes.Append(atr);
+                }
             }
             catch (NullReferenceException) { }
         }
@@ -105,6 +116,21 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetData("audio/x-syntezator-krawczyka-track",parent.xml.OuterXml);
+        }
+
+
+        private void MenuItem_Click_usuń(object sender, RoutedEventArgs e)
+        {
+            Statyczne.otwartyplik.sciezki.Remove(parent);
+            if (Statyczne.otwartyplik.scieżkiZId.ContainsKey(parent.nazwa))
+                Statyczne.otwartyplik.scieżkiZId.Remove(parent.nazwa);
+            parent.xml.ParentNode.RemoveChild(parent.xml);
+            (Parent as WrapPanel).Children.Remove(this);
         }
     }
 }

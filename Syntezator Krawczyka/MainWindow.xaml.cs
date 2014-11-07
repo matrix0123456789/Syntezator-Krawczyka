@@ -18,6 +18,8 @@ using System.Security.Principal;
 using System.Diagnostics;
 using System.Windows.Shell;
 using System.Xml;
+using Microsoft.Win32;
+using System.IO;
 namespace Syntezator_Krawczyka
 {
 
@@ -45,20 +47,17 @@ namespace Syntezator_Krawczyka
         /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
         /// </summary>
         static public bool debugowanie = false;
-        klawiaturaKomputera klawiatkompa;
-        List<KlawiaturaMidi> klawiatMidi=new List<KlawiaturaMidi>();
+        public klawiaturaKomputera klawiatkompa1, klawiatkompa2;
+        List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
-            try
-            {
-                new Statyczne();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Brakuje pliku NAudio.dll, bez którego program nie może odtwarzać dźwięku.", "Brak pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            thi = this;
+            ThreadPool.QueueUserWorkItem((a) => { Backup.czyśćStare(new TimeSpan(14, 0, 0, 0)); });//czyści backup starszy niż 14 dni
+            // var test = new Test();
+            // test.Show();
             InitializeComponent();
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            
+            thi = this;
             dispat = Dispatcher;
             string[] parametry = Environment.GetCommandLineArgs();
             bool otwarto = false;
@@ -94,32 +93,40 @@ namespace Syntezator_Krawczyka
                 }
                 else if (!otwarto)
                 {
-                    Statyczne.otwartyplik = new plik(parametry[x]);
+                    var xKopia = x;
+                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                            { Statyczne.otwartyplik = new plik(parametry[xKopia]); });
                     otwarto = true;
                 }
             }
 
-            if(!otwarto)
-                Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
-
+            if (!otwarto)
+            {
+                System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                           {
+                               Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
+                           });
+            }
             if (zamknij)
                 App.Current.Shutdown();
             else
             {
-                klawiatkompa = new klawiaturaKomputera();
-                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices;i++ )
+                klawiatkompa1 = new klawiaturaKomputera(typKlawiaturyKomputera.dolna);
+                klawiatkompa2 = new klawiaturaKomputera(typKlawiaturyKomputera.górna);
+                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
                 {
                     var k = new KlawiaturaMidi(i);
                     klawiatMidi.Add(k);
-                    pokaz.Children.Add(k.UI);
+                    pokazŚcie.Children.Add(k.UI);
                 }
-                if(debugowanie)
+                if (debugowanie)
                 {
                     var k = new KlawiaturaMidi();
                     klawiatMidi.Add(k);
-                    pokaz.Children.Add(k.UI);
+                    pokazŚcie.Children.Add(k.UI);
                 }
-                    pokaz.Children.Add(klawiatkompa.UI);
+                pokazŚcie.Children.Add(klawiatkompa1.UI);
+                pokazŚcie.Children.Add(klawiatkompa2.UI);
                 //aktualizacjaOkna = new Timer(akt, null, 10, 100);
                 aktualizacjaOkna = new Thread(akt);
                 aktualizacjaOkna.Start();
@@ -129,9 +136,9 @@ namespace Syntezator_Krawczyka
                 //System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
                 //sinus = read.ReadBytes((int)read.BaseStream.Length);
 
-                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".synkra", false) == null)
+                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) == null)
                 {
-                    if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .synkra z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
+                    if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .jms z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
                     {
                         if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
                             Statyczne.skojarzPliki();
@@ -164,7 +171,7 @@ namespace Syntezator_Krawczyka
         }
         void akt(object o)
         {
-            ushort ileDoGC = 0,ileDoKopii=0;
+            ushort ileDoGC = 0, ileDoKopii = 0;
             while (true)
             {
                 ileDoGC++;
@@ -174,7 +181,8 @@ namespace Syntezator_Krawczyka
 
                     GC.Collect(20, GCCollectionMode.Forced);
                     ileDoGC = 0;
-                }else if( ileDoGC > 300)
+                }
+                else if (ileDoGC > 300)
                 {
 
 
@@ -182,18 +190,25 @@ namespace Syntezator_Krawczyka
                     ileDoGC = 0;
                 }
                 ileDoKopii++;
-                if(ileDoKopii>600)
+                if (ileDoKopii > 600)
                 {
-                    System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
-                    Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia"+DateTime.Now.ToFileTime()+".synkra");
-                    ileDoKopii = 0;
+                    try
+                    {
+                        System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
+                        Statyczne.otwartyplik.zapisz(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka\\kopia" + DateTime.Now.ToFileTime() + ".jms");
+                        ileDoKopii = 0;
+                    }
+                    catch { ileDoKopii = 300; }
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {
                         if (debugowanie)
-                            Title = granie.liczbaGenerowanych.ToString() + " > " + granie.grają.Count.ToString() + " o=" + granie.o.ToString() + "; " + ileDoGC.ToString();
-                        czas.Content = funkcje.sekundy(granie.graniePrzy) + '/' + funkcje.sekundy(granie.granieMax);
-                        suwak.Value = granie.graniePrzy;
+                            Title = Statyczne.bufor.BufferedBytes.ToString();
+                        czas.Content = funkcje.sekundy(granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4) + '/' + funkcje.sekundy(granie.granieMax);
+                        var pozycjaSuwaka = granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4;
+
+                        suwak.Tag = pozycjaSuwaka;
+                        suwak.Value = pozycjaSuwaka;
                         suwak.Maximum = granie.granieMax;
                         postęp.Value = granie.liczbaGenerowanychMax - granie.liczbaGenerowanych;
                         postęp.Maximum = granie.liczbaGenerowanychMax;
@@ -202,12 +217,12 @@ namespace Syntezator_Krawczyka
                             if (postęp.Value / (double)granie.liczbaGenerowanychMax < 1)
                             {
                                 pasekZadań.ProgressState = TaskbarItemProgressState.Normal;
-                            postęp.Visibility = System.Windows.Visibility.Visible;
+                                postęp.Visibility = System.Windows.Visibility.Visible;
                             }
                             else
                             {
                                 pasekZadań.ProgressState = TaskbarItemProgressState.None;
-                            postęp.Visibility = System.Windows.Visibility.Collapsed;
+                                postęp.Visibility = System.Windows.Visibility.Collapsed;
                             }
                             pasekZadań.ProgressValue = postęp.Value / (double)granie.liczbaGenerowanychMax;
                         }
@@ -216,26 +231,44 @@ namespace Syntezator_Krawczyka
                             pasekZadań.ProgressState = TaskbarItemProgressState.None;
                             postęp.Visibility = System.Windows.Visibility.Collapsed;
                         }
-                        foreach (var x in Statyczne.otwartyplik.sciezki)
-                        {
-                            try
-                            {
-                                if (!pokaz.Children.Contains(x.UI))
-                                    pokaz.Children.Add(x.UI);
-                            }
-                            catch (ArgumentException) { }
-                        }
                     });
+
+                if (Statyczne.otwartyplik != null)
+                {
+                    var cou = Statyczne.otwartyplik.sciezki.Count;
+                    lock (Statyczne.otwartyplik)
+                        if ((ileDoKopii % 200 == 0 || ileScierzekWyswietla != cou))
+                        {
+                            MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                                {
+
+
+                                    Statyczne.otwartyplik.sciezki.Sort();
+                                    foreach (var x in Statyczne.otwartyplik.sciezki)
+                                    {
+                                        try
+                                        {
+                                            if (!pokazŚcie.Children.Contains(x.UI))
+                                                pokazŚcie.Children.Add(x.UI);
+                                        }
+                                        catch (ArgumentException) { }
+                                    }
+                                    ileScierzekWyswietla = cou;
+
+                                });
+                        }
+                }
                 Thread.Sleep(100);
             }
         }
+        public static int ileScierzekWyswietla = 0;
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             GC.Collect(2, GCCollectionMode.Forced);
 
         }
 
-       
+
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             try { granie.o = int.Parse(((TextBox)sender).Text); }
@@ -245,7 +278,7 @@ namespace Syntezator_Krawczyka
         private void button3_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.synkra|Plik XML|*.xml|Plik Syntezatora Krawczyka|*.synkra|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
+            dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.jms|Plik XML|*.xml|Plik Jaebe Music Studio|*.jms|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
             dialog.ShowDialog();
             string[] explode = dialog.FileName.Split('.');
             if (explode.Last() == "mid" || explode.Last() == "midi")
@@ -258,6 +291,13 @@ namespace Syntezator_Krawczyka
         {
             Statyczne.otwartyplik.zapisz();
         }
+        private void button4b_Click(object sender, RoutedEventArgs e)
+        {
+            if (Statyczne.otwartyplik.URL != null)
+                Statyczne.otwartyplik.zapisz(Statyczne.otwartyplik.URL);
+            else
+                Statyczne.otwartyplik.zapisz();
+        }
         private void button5_Click(object sender, RoutedEventArgs e)
         {
 
@@ -268,84 +308,63 @@ namespace Syntezator_Krawczyka
         {
 
             aktualizacjaOkna.Abort();
+            Environment.Exit(0);
             App.Current.Shutdown();
         }
-        private void button6_Click(object sender, RoutedEventArgs e)
-        {
-            List<nuta> lista=new List<nuta>();
-            
-                foreach (var x in Statyczne.otwartyplik.sciezki)
-                {
-                    foreach (var nuta in x.nuty)
-                    {
-                        nuta.sekw = x.sekw;
-                        lista.Add(nuta);
-                    }
-                }
-            lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
-            granie.granieNuty=lista.ToArray();
-            granie.granieMax=(int)granie.granieNuty[granie.granieNuty.Length-1].sekw.symuluj(granie.granieNuty[granie.granieNuty.Length-1].opuznienie + granie.granieNuty[granie.granieNuty.Length-1].długość);
-            granie.graniePlay = true;
-            /*foreach (var x in Statyczne.otwartyplik.sciezki)
-            {
-                x.działaj();
-                //akt(null);
-            }*/
-        }
+        private void buttonGraj_Click(object sender, RoutedEventArgs e)
+        { Statyczne.otwartyplik.grajStart(); }
 
         private void button7_Click(object sender, RoutedEventArgs e)
         {
-            granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
-            granie.można = false;
-            granie.grają.Clear();
-            long długość = 0;
-            foreach (var x in Statyczne.otwartyplik.sciezki)
-            {
-                if (x.sekw != null)
-                {
-                    long długośćStart = 0;
-                    for (var i = 0; i < x.nuty.Count; i++)
-                    {
-
-                        if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
-                            długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
-
-                    }
-
-                    long długośćTeraz = x.sekw.symuluj(długośćStart);
-                    if (długośćTeraz > długość)
-                        długość = długośćTeraz;
-                }
-            }
-            granie.wynik = new float[2,długość];
-            foreach (var x in Statyczne.otwartyplik.sciezki)
-            {
-                x.działaj();
-                //akt(null);
-            }
+            granie.bity = 16;
+            Statyczne.otwartyplik.generuj();
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        public void Window_KeyDown(object sender, KeyEventArgs e)
         {
             //MessageBox.Show(((System.Windows.Input.KeyboardEventArgs)(e)).KeyboardDevice.GetHashCode().ToString() + "\n" + e.Device.GetHashCode().ToString() + "\n" + e.InputSource.GetHashCode().ToString());
             if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
                 if (e.Key == Key.S)
                     button4_Click(null, null);
+                if (e.Key == Key.V)
+                {
+                    if (Clipboard.ContainsData("audio/x-syntezator-krawczyka-instrument"))
+                        nowyInstrument.laduj((string)Clipboard.GetData("audio/x-syntezator-krawczyka-instrument"));
+
+                }
                 if (e.Key == Key.O)
                     button3_Click(null, null);
             }
-            else klawiatkompa.klawisz(e, true);
+            else
+            {
+                klawiatkompa1.klawisz(e, true);
+                klawiatkompa2.klawisz(e, true);
+            }
         }
-        
-        private void Window_KeyUp(object sender, KeyEventArgs e)
+
+        public void Window_KeyUp(object sender, KeyEventArgs e)
         {
-            
-             klawiatkompa.klawisz(e,false);
+
+            klawiatkompa1.klawisz(e, false);
+            klawiatkompa2.klawisz(e, false);
         }
-        private void button8_Click(object sender, RoutedEventArgs e)
+        private void buttonStop_Click(object sender, RoutedEventArgs e)
         {
             granie.grają.Clear();
+            granie.można = true;
+            granie.graniePlay = false;
+
+            granie.generować[0] = false;
+            granie.generować = new bool[1];
+            granie.generować[0] = true;
+            granie.graniePrzy = 0;
+            granie.wynik = null;
+            granie.granieMax = 0;
+            granie.granieNuty = null;
+            granie.liczbaGenerowanych = 0;
+            granie.liczbaGenerowanychMax = 0;
+            Statyczne.bufor.ClearBuffer();
         }
 
 
@@ -374,8 +393,180 @@ namespace Syntezator_Krawczyka
 
         private void suwak_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            granie.graniePrzy = (int)suwak.Value;
+            // if (suwakdziala&&e.NewValue!=e.OldValue)
+            //if(((System.Windows.RoutedEventArgs)(e)).UserInitiated)
+            //if(((System.Windows.RoutedEventArgs)(e)).Handled)
+            if (e.NewValue != (int)suwak.Tag)
+            {
+                if (granie.graniePrzy != (int)suwak.Value)
+                    Statyczne.bufor.ClearBuffer();
+                granie.graniePrzy = (int)suwak.Value;
+            }
         }
+
+        internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
+        {
+            if (polaczenieHTTP.zalogowano)
+            {
+                LogowanieTxt.Content = polaczenieHTTP.login;
+                LogowanieTxt.ToolTip = "zalogowano jako " + polaczenieHTTP.login;
+                LogowanieTxt.FontSize = 8;
+            }
+            else
+                LogowanieTxt.Content = "Zaloguj";
+            LogowanieTxt.FontSize = 12;
+        }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+
+            //if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument")!=null)
+            //            nowyInstrument.laduj((string)e.Data.GetData("audio/x-syntezator-krawczyka-instrument"));
+
+        }
+
+        private void Grid_DragOver(object sender, DragEventArgs e)
+        {
+            /*if(e.Data.GetData("audio/x-syntezator-krawczyka-instrument")==null)
+            {
+                e.Effects = DragDropEffects.None;
+                
+
+            }
+            else if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument").GetHashCode() == hashCodeDragAndDrop)
+            {
+                e.Effects = DragDropEffects.None;
+                e.Data.SetData(null);
+            }*/
+        }
+        static public int hashCodeDragAndDrop = 0;
+        Boolean suwakdziala = false;
+        private void suwakEnter(object sender, MouseEventArgs e)
+        {
+            suwakdziala = true;
+        }
+
+        private void suwakLeave(object sender, MouseEventArgs e)
+        {
+            suwakdziala = false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var oknoEN = new EdytorNut();
+            oknoEN.Show();
+        }
+
+        private void VST_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                var dialog = new OpenFileDialog();
+                dialog.Filter = "Wtyczka VST|*.dll";
+                Jacobi.Vst.Core.VstCanDoHelper.ParseHostCanDo("S");
+                new Jacobi.Vst.Framework.VstMidiProgram();
+                dialog.ShowDialog();
+                if (dialog.FileName != null)
+                {
+                    //wtyczkaVST.test1(dialog.FileName);
+                    //wtyczkaVST.test2(dialog.FileName);
+                    //wtyczkaVST.test3(dialog.FileName);
+                    // var b = new HostCommandStub();
+                    var a = new wtyczkaVST(dialog.FileName);
+                    var sou = new sound();
+                    Statyczne.otwartyplik.moduły.Add(a.Nazwa, sou);
+                    sou.nazwa = a.Nazwa;
+                    sou.sekw = a;
+                    sou.xml = a.xml = Statyczne.otwartyplik.xml.CreateElement("sound");
+                    var type = Statyczne.otwartyplik.xml.CreateAttribute("type");
+                    type.Value = "VST";
+                    sou.xml.Attributes.Append(type);
+                    var url = Statyczne.otwartyplik.xml.CreateAttribute("url");
+                    url.Value = dialog.FileName;
+                    sou.xml.Attributes.Append(url);
+                    sou.UI = new Instrument(sou.nazwa, sou);
+                    Statyczne.otwartyplik.zapis += a.actionZapis;
+                    sou.UI.wewnętrzny.Children.Add((a).UI);
+
+                    if (!MainWindow.thi.pokazInstr.Children.Contains(sou.UI))
+                    {
+
+                        MainWindow.thi.pokazInstr.Children.Add(sou.UI);
+                    }
+                }
+            }
+            catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd ładowania wtyczki", MessageBoxButton.OK, MessageBoxImage.Error); }
+        }
+
+        private void DrumPad_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new DrumPad();
+            okno.Show();
+        }
+        private void Kopia_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new Backup();
+            okno.Show();
+        }
+
+
+        private void Metadane_click(object sender, RoutedEventArgs e)
+        {
+
+            var okno = new Metadane();
+            okno.Show();
+        }
+
+
+        private void OśCzasu_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new OśCzasu();
+            okno.Show();
+        }
+
+        private void Oscyloskop_Click(object sender, RoutedEventArgs e)
+        {
+            Oscyloskop.pokarz();
+        }
+
+        private void J8_click(object sender, RoutedEventArgs e)
+        {
+            granie.bity = 8;
+            Statyczne.otwartyplik.generuj();
+        }
+
+        private void J16_click(object sender, RoutedEventArgs e)
+        {
+
+            granie.bity = 16;
+            Statyczne.otwartyplik.generuj();
+        }
+        private void J32_click(object sender, RoutedEventArgs e)
+        {
+
+            granie.bity = 32;
+            Statyczne.otwartyplik.generuj();
+        }
+
+        private void WyjDzwieku_Click(object sender, RoutedEventArgs e)
+        {
+            WyjścieDzwieku.pokarz();
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            var okno = new About();
+            okno.Show();
+        }
+
+        private void WWW_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://jaebe.za.pl");
+        }
+
+
+
 
     }
 }

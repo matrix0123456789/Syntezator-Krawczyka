@@ -1,0 +1,11 @@
+﻿<Window x:Class="Syntezator_Krawczyka.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About" MinHeight="182" Width="370" MinWidth="370" MaxWidth="370" Height="228.233">
+    <Grid>
+        <Label Content="Jaebe" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" />
+        <Label Content="Music Studio" HorizontalAlignment="Left" Margin="0,33,0,0" VerticalAlignment="Top" FontSize="60"/>
+        <Label Content="Wersja 0.9.1" HorizontalAlignment="Left" Margin="0,110,0,0" VerticalAlignment="Top" FontSize="20"/>
+
+    </Grid>
+</Window>

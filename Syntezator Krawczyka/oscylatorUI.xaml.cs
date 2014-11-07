@@ -63,13 +63,13 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void sliderA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["A"] = (sliderA.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["A"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
 
         private void sliderD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["D"] = (sliderD.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["D"] = (sliderD.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
 
@@ -81,17 +81,23 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void sliderR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["R"] = (sliderR.Value * 2000).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["R"] = (sliderR.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
+        }
+        private void sliderBalans_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            parentNode.ustawienia["balans"] = (sliderBalans.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
         }
         void ustawSuwaki()
         {
 
             slider1.Value = double.Parse(parentNode.ustawienia["gladkosc"], CultureInfo.InvariantCulture);
-            sliderA.Value = double.Parse(parentNode.ustawienia["A"], CultureInfo.InvariantCulture) / 2000;
-            sliderD.Value = double.Parse(parentNode.ustawienia["D"], CultureInfo.InvariantCulture) / 2000;
+            sliderA.Value = double.Parse(parentNode.ustawienia["A"], CultureInfo.InvariantCulture);
+            sliderD.Value = double.Parse(parentNode.ustawienia["D"], CultureInfo.InvariantCulture);
             sliderS.Value = double.Parse(parentNode.ustawienia["S"], CultureInfo.InvariantCulture);
-            sliderR.Value = double.Parse(parentNode.ustawienia["R"], CultureInfo.InvariantCulture) / 2000;
+            sliderR.Value = double.Parse(parentNode.ustawienia["R"], CultureInfo.InvariantCulture);
+            sliderBalans.Value = double.Parse(parentNode.ustawienia["balans"], CultureInfo.InvariantCulture);
             switch(parentNode.ustawienia["typ"])
             {
                 case ("sinusoidalna"):
@@ -106,6 +112,12 @@ namespace Syntezator_Krawczyka.Synteza
                 case ("piłokształtna"):
                     piłokształtny.IsChecked = true;
                     break;
+                case ("szum"):
+                    szum.IsChecked = true;
+                    break;
+                default:
+                    niestandard.IsChecked = true;
+                    break;
             }
         }
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
@@ -115,15 +127,29 @@ namespace Syntezator_Krawczyka.Synteza
         }
         private void radioButton1_Checked(object sender, RoutedEventArgs e)
         {
+            if (parentNode.niestandardowa!=null)
+            {
+                parentNode.ustawienia["typ"] = parentNode.niestandardowa.nazwa;
 
-            parentNode.ustawienia["typ"] = "piłokształtna2x";
+            parentNode.akt();
+        }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-            var okno = new EdytorFali();
+            EdytorFali okno;
+            if(parentNode==null)
+                okno = new EdytorFali();
+            else
+                okno = new EdytorFali(parentNode);
             okno.Show();
+        }
+
+        private void szum_Checked(object sender, RoutedEventArgs e)
+        {
+            parentNode.ustawienia["typ"] = "szum";
+            parentNode.akt();
+
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿<Window x:Class="Syntezator_Krawczyka.Metadane"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Metadane" Height="300" Width="300">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Grid>
+                <Label Content="Tytuł" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+
+                <Label Content="Album" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                <Label Content="Rok" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top"/>
+                <Label Content="Opis" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
+                <Label Content="Autor" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <TextBox Height="23" Margin="68,14,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Name="tytul"/>
+                <TextBox Height="23" Margin="68,40,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Name="autor"/>
+                <TextBox Height="23" Margin="68,66,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Name="album"/>
+                <TextBox Height="23" Margin="68,92,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Name="rok"/>
+                <TextBox Margin="68,118,10,44" TextWrapping="Wrap" Text="" Name="opis"/>
+                <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="26" Width="53" Margin="0,0,10,10" Click="Zapisz_click" >Zapisz</Button>
+                <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="26" Width="53" Margin="0,0,68,10" Click="Ok_click">Ok</Button>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

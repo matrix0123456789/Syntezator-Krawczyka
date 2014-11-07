@@ -12,9 +12,13 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get
+            {
+                if (_UI == null)
+                    _UI = new UserControl();
+                return _UI;
+            }
         }
-        public void akt() { }
         public XmlNode XML { get; set; }
         UserControl _UI;
         public List<Typ> wejście { get; set; }
@@ -29,6 +33,37 @@ namespace Syntezator_Krawczyka.Synteza
         }
         Dictionary<string, string> _ustawienia;
         Dictionary<nuta, nuta[]> referencjeNut = new Dictionary<nuta, nuta[]>();
+        Dictionary<moduł, List<Typ>> flangery = null;
+        Object flangeryBlock = new object();
+        public void akt() { }
+        public void aktt()
+        {
+            lock (flangeryBlock)
+            {
+                flangery = new Dictionary<moduł, List<Typ>>();
+                for (var i = 0; i < 8; i++)
+                {
+                    if (wyjście[i].DrógiModół != null)
+                    {
+                        if (wyjście[i].DrógiModół.GetType() == typeof(flanger))
+                        {
+                            if (flangery.ContainsKey(wyjście[i].DrógiModół.wyjście[0].DrógiModół))
+                            {
+                                flangery[wyjście[i].DrógiModół.wyjście[0].DrógiModół].Add(wyjście[i]);
+                            }
+                            else
+                            {
+                                var lista = new List<Typ>();
+                                lista.Add(wyjście[i]);
+                                flangery.Add(wyjście[i].DrógiModół.wyjście[0].DrógiModół, lista);
+                            }
+
+                        }
+
+                    }
+                }
+            }
+        }
         public rozdzielacz()
         {
             wejście = new List<Typ>();
@@ -42,11 +77,10 @@ namespace Syntezator_Krawczyka.Synteza
             _wyjście[6] = new Typ();
             _wyjście[7] = new Typ();
             _ustawienia = new Dictionary<string, string>();
-            _UI = new UserControl();
         }
         public long symuluj(long wej)
         {
-            long ret=0;
+            long ret = 0;
             for (var i = 0; i < 8; i++)
             {
                 if (wyjście[i].DrógiModół != null)
@@ -56,7 +90,7 @@ namespace Syntezator_Krawczyka.Synteza
                         ret = t;
                 }
             }
-                return ret;
+            return ret;
         }
         public void działaj(nuta input)
         {
@@ -90,39 +124,25 @@ namespace Syntezator_Krawczyka.Synteza
             }*/
             //lock (granie.obLock)
             {
-                Dictionary<moduł, List<Typ>> flangery = new Dictionary<moduł, List<Typ>>();
-                for (var i = 0; i < 8; i++)
-                {
-                    if (wyjście[i].DrógiModół != null)
-                    {
-                        if (wyjście[i].DrógiModół.GetType() == typeof(flanger))
-                        {
-                            if (flangery.ContainsKey(wyjście[i].DrógiModół.wyjście[0].DrógiModół))
-                            {
-                                flangery[wyjście[i].DrógiModół.wyjście[0].DrógiModół].Add(wyjście[i]);
-                            }
-                            else
-                            {
-                                var lista = new List<Typ>();
-                                lista.Add(wyjście[i]);
-                                flangery.Add(wyjście[i].DrógiModół.wyjście[0].DrógiModół, lista);
-                            }
-
-                        }
-
-                    }
-                }
+                if (flangery == null)
+                    aktt();
                 foreach (var x in flangery)
                 {
+                    //var dane = input.dane;
                     var dane = new float[input.dane.Length];
-                    foreach (var xx in x.Value)
+                    List<Typ> xval;
+                    lock (flangeryBlock)
+                    {
+                        xval = x.Value;
+                    }
+                    foreach (var xx in xval)
                     {
                         dane = (xx.DrógiModół as flanger).działaj(input, dane);
                     }
-                    input.dane=dane;
+                    input.dane = dane;
                     x.Key.działaj(input);
                 }
-                for (var i = 7; i >=0; i--)
+                for (var i = 7; i >= 0; i--)
                 {
                     if (wyjście[i].DrógiModół != null)
                     {

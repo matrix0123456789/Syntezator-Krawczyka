@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <file tempo="120">
-  <name lang="pl">Przykład</name>
-  <name lang="en">Example</name>
   <sound type="syntezator-krawczyka" id="proste">
     <module type="sekwencer" id="player1" output="oscylator1"></module>
     <module type="oscylator" id="oscylator1" output="granie1"></module>

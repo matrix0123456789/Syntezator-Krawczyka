@@ -10,7 +10,7 @@ namespace Syntezator_Krawczyka
 {
     interface wejście
     {
-        UIElement UI{get;set;}
+        UIElement UI{get;}
         soundStart sekw {get;set;}
         void działaj();
     }

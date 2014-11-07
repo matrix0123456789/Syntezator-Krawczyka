@@ -29,18 +29,21 @@ namespace Syntezator_Krawczyka.Synteza
 
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            parentNode.ustawienia["przesuniecie"] = (sliderA.Value * 5).ToString(CultureInfo.InvariantCulture);
+            parentNode.ustawienia["przesuniecie"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["czestotliwosc"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
             
         }
         void ustawSuwaki()
         {
 
-            sliderA.Value = double.Parse(parentNode.ustawienia["przesuniecie"], CultureInfo.InvariantCulture) / 5;
+            sliderA.Value = double.Parse(parentNode.ustawienia["przesuniecie"], CultureInfo.InvariantCulture);
             sliderB.Value = double.Parse(parentNode.ustawienia["czestotliwosc"], CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)

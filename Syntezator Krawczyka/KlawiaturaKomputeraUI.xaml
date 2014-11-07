@@ -3,16 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ooo="clr-namespace:Syntezator_Krawczyka"
+             xmlns:l="clr-namespace:Syntezator_Krawczyka"
              xmlns:oop="clr-namespace:Syntezator_Krawczyka.Synteza"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="#FF0081FF">
-        <ComboBox ToolTip="Wybierz" Height="23" HorizontalAlignment="Left" Margin="0,25,0,0" Name="comboBox1" VerticalAlignment="Top" Width="127" SelectionChanged="comboBox1_SelectionChanged">
+        <ComboBox ToolTip="Wybierz" Height="23" HorizontalAlignment="Left" Margin="0,25,0,0" Name="comboBox1" VerticalAlignment="Top" Width="141" SelectionChanged="comboBox1_SelectionChanged">
             <ComboBoxItem>22</ComboBoxItem>
             <ComboBoxItem>22</ComboBoxItem>
             <ComboBoxItem>22</ComboBoxItem>
         </ComboBox>
         <Label Content="Klawiatura Komputera" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
-        </Grid>
+        <l:suwak ValueChanged="slider1_ValueChanged" x:Name="slider1" Opis="Zmiana oktawy" Minimum="-5" Maximum="5" Value="0" HorizontalAlignment="Left" Margin="0,53,0,0" VerticalAlignment="Top" Height="20" Width="141" SmallChange="1"/>
+        <l:suwak ValueChanged="slider2_ValueChanged" x:Name="slider2" Opis="Zmiana tonu" Minimum="0" Maximum="6" Value="0" HorizontalAlignment="Left" Margin="0,78,0,0" VerticalAlignment="Top" Height="20" Width="141" SmallChange="0.5"/>
+    </Grid>
 </UserControl>

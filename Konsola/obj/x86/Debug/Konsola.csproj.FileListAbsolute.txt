@@ -1,8 +1,0 @@
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\bin\Debug\benchmark1.exe
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\bin\Debug\benchmark1.pdb
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\bin\Debug\Syntezator Krawczyka.exe
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\bin\Debug\NAudio.dll
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\bin\Debug\Syntezator Krawczyka.pdb
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\obj\x86\Debug\Konsola.csprojResolveAssemblyReference.cache
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\obj\x86\Debug\benchmark1.exe
-C:\Users\Mateusz\SkyDrive\Visual Studio 2010\Projects\Syntezator Krawczyka\Konsola\obj\x86\Debug\benchmark1.pdb

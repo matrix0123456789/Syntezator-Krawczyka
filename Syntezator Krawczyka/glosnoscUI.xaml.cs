@@ -30,10 +30,12 @@ namespace Syntezator_Krawczyka.Synteza
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["głośność"] = ((Slider)sender).Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["ucinanieWartość"] = ((Slider)sender).Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
         }
 
         void ustawSuwaki()
@@ -49,10 +51,12 @@ namespace Syntezator_Krawczyka.Synteza
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["ucinanie"] = "false";
+            parentNode.akt();
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["ucinanie"] = "true";
+            parentNode.akt();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 
 namespace Syntezator_Krawczyka
 {
@@ -11,6 +12,11 @@ namespace Syntezator_Krawczyka
         public string nazwa;
         public Instrument UI;
         public sound() { }
-        public sound(string nazwa) { this.nazwa = nazwa; }
+        public XmlNode xml;
+        public sound(string nazwa, XmlNode n)
+        {
+            this.nazwa = nazwa;
+            xml = n;
+        }
     }
 }

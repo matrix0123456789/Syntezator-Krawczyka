@@ -1,14 +1,7 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.Logowanie"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="clr-namespace:Syntezator_Krawczyka"
         Title="Logowanie" Height="300" Width="300" Closed="Window_Closed" MinHeight="159" MinWidth="250">
-    <Grid Background="#112">
-        <Label Margin="10,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="1,0.5" >Zaloguj się do syntezator.aq.pl</Label>
-        <PasswordBox Margin="55,59,10,0" VerticalAlignment="Top" Height="23" ></PasswordBox>
-        <TextBox Height="23" Margin="55,31,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Name="login"/>
-        <Button Content="Loguj" Margin="10,87,10,0" VerticalAlignment="Top" Height="30" Click="Button_Click" Name="haslo"/>
-        <Label Margin="10,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Content="Login" />
-        <Label Margin="10,56,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Content="Hasło" />
-
-    </Grid>
+   <Grid> <s:LogowanieUC x:Name="UserCon"></s:LogowanieUC></Grid>
 </Window>

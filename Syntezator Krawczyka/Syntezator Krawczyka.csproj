@@ -28,7 +28,11 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://syntezator.aq.pl/</InstallUrl>
     <TargetCulture>pl-PL</TargetCulture>
+<<<<<<< HEAD
+    <ApplicationRevision>4</ApplicationRevision>
+=======
     <ApplicationRevision>2</ApplicationRevision>
+>>>>>>> master
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -44,6 +48,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -60,6 +65,7 @@
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -96,9 +102,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Jacobi.Vst.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\AnyCPU\Release\Jacobi.Vst.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Jacobi.Vst.Framework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=fa678e13c1efc859, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\AnyCPU\Release\Jacobi.Vst.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Jacobi.Vst.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\..\..\Downloads\VST.NET RTM\Code\CLR4\x86\Release\Jacobi.Vst.Interop.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="NAudio">
-      <HintPath>..\..\..\..\NAudio-Release\NAudio.dll</HintPath>
+    <Reference Include="NAudio, Version=1.7.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NAudio.1.7\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Lame">
+      <HintPath>..\packages\NAudio.Lame.1.0.2\lib\net20\NAudio.Lame.dll</HintPath>
     </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -107,6 +129,8 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -126,16 +150,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Backup.xaml.cs">
+      <DependentUpon>Backup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BladWPliku.cs" />
+    <Compile Include="DrumJeden.cs" />
+    <Compile Include="DrumPad.xaml.cs">
+      <DependentUpon>DrumPad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EdytorFali.xaml.cs">
       <DependentUpon>EdytorFali.xaml</DependentUpon>
     </Compile>
     <Compile Include="EdytorNut.xaml.cs">
       <DependentUpon>EdytorNut.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EdytujWave.xaml.cs">
+      <DependentUpon>EdytujWave.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IPostep.cs" />
+    <Compile Include="jedenSample.cs" />
+    <Compile Include="LogowanieUC.xaml.cs">
+      <DependentUpon>LogowanieUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Oscyloskop.xaml.cs">
+      <DependentUpon>Oscyloskop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OśCzasu.xaml.cs">
+      <DependentUpon>OśCzasu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FalaNiestandardowa.cs" />
     <Compile Include="generatorObwiedniFiltru.cs" />
     <Compile Include="generatorObwiedniFiltruUI.xaml.cs">
       <DependentUpon>generatorObwiedniFiltruUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InstrumentMidi.cs" />
+    <Compile Include="InstrumentMidiUI.xaml.cs">
+      <DependentUpon>InstrumentMidiUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="klawiaturaMidi.cs" />
     <Compile Include="KlawiaturaMidiUI.xaml.cs">
@@ -144,6 +197,9 @@
     <Compile Include="Logowanie.xaml.cs">
       <DependentUpon>Logowanie.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Metadane.xaml.cs">
+      <DependentUpon>Metadane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MidiIn.cs" />
     <Compile Include="nowyInstrument.xaml.cs">
       <DependentUpon>nowyInstrument.xaml</DependentUpon>
@@ -151,10 +207,29 @@
     <Compile Include="PolaczenieHTTP.cs" />
     <Compile Include="sample.cs" />
     <Compile Include="sampler.cs" />
+    <Compile Include="SkładoweHarmoniczne.cs" />
     <Compile Include="sound.cs" />
     <Compile Include="soundStart.cs" />
-    <Compile Include="suwak.xaml.cs">
-      <DependentUpon>suwak.xaml</DependentUpon>
+    <Compile Include="Start.xaml.cs">
+      <DependentUpon>Start.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="suwak.cs" />
+    <Compile Include="suwakOkno.xaml.cs">
+      <DependentUpon>suwakOkno.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Test.xaml.cs">
+      <DependentUpon>Test.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UtworySerwer.cs" />
+    <Compile Include="UtwórSerwer.cs" />
+    <Compile Include="vorbisInterop.cs" />
+    <Compile Include="VstUI.xaml.cs">
+      <DependentUpon>VstUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wstążka.cs" />
+    <Compile Include="wtyczkaVST.cs" />
+    <Compile Include="WyjścieDzwieku.xaml.cs">
+      <DependentUpon>WyjścieDzwieku.xaml</DependentUpon>
     </Compile>
     <Compile Include="zmianaWysokości.cs" />
     <Compile Include="zmianaWysokościUI.xaml.cs">
@@ -219,6 +294,18 @@
     <Compile Include="Statyczne.cs" />
     <Compile Include="Typ.cs" />
     <Compile Include="wejście.cs" />
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Backup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DrumPad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EdytorFali.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -227,9 +314,29 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EdytujWave.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogowanieUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Oscyloskop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OśCzasu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="generatorObwiedniFiltruUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="InstrumentMidiUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="KlawiaturaMidiUI.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -239,11 +346,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Metadane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="nowyInstrument.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="suwak.xaml">
+    <Page Include="Start.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="suwakOkno.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VstUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WyjścieDzwieku.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -338,6 +465,11 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+<<<<<<< HEAD
+    <None Include="app.config" />
+    <None Include="packages.config" />
+=======
+>>>>>>> master
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -384,6 +516,20 @@
     <None Include="Resources\przyklad2.xml">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\przyklad21.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\przyklad211.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="libmp3lame.32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libmp3lame.64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
