@@ -7,9 +7,13 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 
+//reference Nuget Package NAudio.Lame
+using NAudio.Wave;
+using NAudio.Lame;
+
 namespace Syntezator_Krawczyka
 {
-    
+
     static class funkcje
     {
 
@@ -47,7 +51,7 @@ namespace Syntezator_Krawczyka
             if (Oscyloskop.oscyl != null)
                 Oscyloskop.dane.Enqueue(fala);
             var bufor = new byte[fala.Length * 2];
-            for (var i = 0; i < fala.Length/2; i++)
+            for (var i = 0; i < fala.Length / 2; i++)
             {
                 if (fala[0, i] > 1)
                     fala[0, i] = 1;
@@ -58,12 +62,12 @@ namespace Syntezator_Krawczyka
                 else if (fala[1, i] < -1)
                     fala[1, i] = -1;
                 short liczba;
-                liczba = (short)(fala[0,i] * 32766);
+                liczba = (short)(fala[0, i] * 32766);
                 bufor[4 * i + 1] = (byte)Math.Floor(liczba / 256f);
                 bufor[4 * i] = (byte)(liczba % 256);
-                liczba = (short)(fala[1,i] * short.MaxValue);
+                liczba = (short)(fala[1, i] * short.MaxValue);
                 bufor[4 * i + 3] = (byte)Math.Floor(liczba / 256f);
-                bufor[4 * i+2] = (byte)(liczba % 256);
+                bufor[4 * i + 2] = (byte)(liczba % 256);
             }
         bufordodaj:
             try
@@ -92,8 +96,15 @@ namespace Syntezator_Krawczyka
             {
                 System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
                 System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
-                wave(fala, write);
-            }catch(Exception e)
+                if (plik.Substring(plik.Length - 4) == ".mp3")
+                    mp3(fala, write);
+                else
+                    wave(fala, write);
+
+                write.Flush();
+                write.Close();
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.ToString(), "Błąd podczas zapisu", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
                 try
@@ -101,12 +112,25 @@ namespace Syntezator_Krawczyka
                     System.IO.StreamWriter sw = new System.IO.StreamWriter(plik, false);
                     System.IO.BinaryWriter write = new System.IO.BinaryWriter(sw.BaseStream);
                     wave(fala, write);
+                    write.Flush();
+                    write.Close();
                 }
                 catch { }
             }
-               
 
 
+
+        }
+
+        static public void mp3(float[,] fala, BinaryWriter writer)
+        {
+           
+            var format = new WaveFormat(48000, 16, 2);
+           Stream str = new MemoryStream();
+            wave(fala, new BinaryWriter(str));
+           using(  var mp3 = new LameMP3FileWriter(writer.BaseStream, format, 128000))
+           using( var wav = WaveFormatConversionStream.CreatePcmStream(new RawSourceWaveStream(str, format)))
+            wav.CopyTo(mp3);
         }
         /// <summary>
         /// Tworzy plik wave
@@ -114,12 +138,15 @@ namespace Syntezator_Krawczyka
         /// <param name="writer">Strumień do zapisu</param>
         /// <param name="fala">fala dżwiękowa stereo</param>
         /// <returns>Tablica odpowiadająca plikowi wave</returns>
-        
+
         static public void wave(float[,] fala, BinaryWriter writer)
         {
+
+
+
             char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
-            byte[] puste = new byte[pus.Length-1];
-            var pusteLength = pus.Length + fala.Length * (granie.bity/8) - 2;
+            byte[] puste = new byte[pus.Length - 1];
+            var pusteLength = pus.Length + fala.Length * (granie.bity / 8) - 2;
             for (int i = 0; i < pus.Length && i < puste.Length; i++)
             {
                 puste[i] = (byte)pus[i];
@@ -129,7 +156,7 @@ namespace Syntezator_Krawczyka
             puste[5] = rozmiar[1];
             puste[6] = rozmiar[2];
             puste[7] = rozmiar[3];
-            byte[] rozmiar2 = BitConverter.GetBytes(fala.Length * granie.bity/8);
+            byte[] rozmiar2 = BitConverter.GetBytes(fala.Length * granie.bity / 8);
             puste[40] = rozmiar2[0];
             puste[41] = rozmiar2[1];
             puste[42] = rozmiar2[2];
@@ -141,7 +168,7 @@ namespace Syntezator_Krawczyka
             puste[25] = czestotliwosc[1];
             puste[26] = czestotliwosc[2];
             puste[27] = czestotliwosc[3];
-            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 2*granie.bity/8);
+            byte[] czestotliwosc2 = BitConverter.GetBytes((int)plik.Hz * 2 * granie.bity / 8);
             puste[28] = czestotliwosc2[0];
             puste[29] = czestotliwosc2[1];
             puste[30] = czestotliwosc2[2];
@@ -154,8 +181,8 @@ namespace Syntezator_Krawczyka
             puste[22] = 2;
 
             writer.Write(puste);
-            
-            for (long falai = 0;fala.LongLength/2 > falai; falai++)
+
+            for (long falai = 0; fala.LongLength / 2 > falai; falai++)
             {
 
                 if (fala[0, falai] > 1)
@@ -167,20 +194,20 @@ namespace Syntezator_Krawczyka
                 else if (fala[1, falai] < -1)
                     fala[1, falai] = -1;
 
-               /* writer.Write((byte)((fala[0, falai] * 128 * 256) % 256));
-                if (fala[0, falai] >= 0)
-                    writer.Write((byte)(fala[0, falai] * 128));
-                else
-                    writer.Write((byte)((1 + fala[0, falai]) * 128 + 128));
-                writer.Write((byte)((fala[1, falai] * 128 * 256) % 256));
-                if (fala[1, falai] >= 0)
-                    writer.Write((byte)(fala[1, falai] * 128));
-                else
-                    writer.Write((byte)((1 + fala[1, falai]) * 128 + 128));*/
+                /* writer.Write((byte)((fala[0, falai] * 128 * 256) % 256));
+                 if (fala[0, falai] >= 0)
+                     writer.Write((byte)(fala[0, falai] * 128));
+                 else
+                     writer.Write((byte)((1 + fala[0, falai]) * 128 + 128));
+                 writer.Write((byte)((fala[1, falai] * 128 * 256) % 256));
+                 if (fala[1, falai] >= 0)
+                     writer.Write((byte)(fala[1, falai] * 128));
+                 else
+                     writer.Write((byte)((1 + fala[1, falai]) * 128 + 128));*/
                 if (granie.bity == 8)
                 {
-                    writer.Write((byte)(fala[0, falai] * 127+127));
-                    writer.Write((byte)(fala[1, falai] * 127+127));
+                    writer.Write((byte)(fala[0, falai] * 127 + 127));
+                    writer.Write((byte)(fala[1, falai] * 127 + 127));
                 }
                 else if (granie.bity == 16)
                 {
@@ -198,18 +225,16 @@ namespace Syntezator_Krawczyka
                     writer.Write((int)(fala[1, falai] * (32767)));
                 }
                 //puste[z + 1] = 0;
-                
+
 
             }
-            writer.Flush();
-            writer.Close();
             //return puste;
         }
 
-       // const double bazowa = 130.812783;
+        // const double bazowa = 130.812783;
         const double bazowa = 130;
-        
-        
+
+
         /// <summary>
         /// Wylicza częstotliwość nuty na podstawie oktawy i tonu
         /// </summary>
@@ -231,13 +256,13 @@ namespace Syntezator_Krawczyka
 
         public static XmlNode klonujXML(XmlDocument doc, System.Xml.XmlNode wej)
         {
-            if(wej.NodeType==XmlNodeType.Element)
+            if (wej.NodeType == XmlNodeType.Element)
             {
                 var ret = doc.CreateElement(wej.Name);
                 foreach (XmlAttribute x in wej.Attributes)
                 {
-                    XmlAttribute nowyAtr=doc.CreateAttribute(x.Name);
-                    nowyAtr.Value=x.Value;
+                    XmlAttribute nowyAtr = doc.CreateAttribute(x.Name);
+                    nowyAtr.Value = x.Value;
                     ret.Attributes.Append(nowyAtr);
                 }
                 foreach (XmlNode x in wej.ChildNodes)
@@ -251,7 +276,7 @@ namespace Syntezator_Krawczyka
 
         internal static string sekundy(int p)
         {
-            string ret="";
+            string ret = "";
             var sek = (int)(p / plik.Hz);
             var min = sek / 60;
             sek = sek % 60;
@@ -270,6 +295,12 @@ namespace Syntezator_Krawczyka
             else
                 ret += '0' + sek.ToString();
             return ret;
+
+        }
+
+
+        public static void ConvertWavStreamToMp3File(ref MemoryStream ms, string savetofilename)
+        {
 
         }
     }

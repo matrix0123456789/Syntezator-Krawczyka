@@ -56,19 +56,7 @@ namespace Syntezator_Krawczyka
             // test.Show();
             InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            try
-            {
-                new Statyczne();
-            }
-            catch (FileNotFoundException ex)
-            {
-                MessageBox.Show("Brakuje pliku NAudio.dll, bez którego program nie może odtwarzać dźwięku.", "Brak pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Błąd ładowania biblioteki NAudio.dll, bez której program nie może odtwarzać dźwięku.", "Błąd pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
-                MessageBox.Show(ex.ToString());
-            }
+            
             thi = this;
             dispat = Dispatcher;
             string[] parametry = Environment.GetCommandLineArgs();

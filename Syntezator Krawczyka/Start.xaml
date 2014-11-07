@@ -1,0 +1,55 @@
+﻿<Window x:Class="Syntezator_Krawczyka.Start"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Start" Height="390" Width="640">
+    <Grid>
+        <Label Content="Jaebe Music Studio" VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="30"/>
+        <Grid Margin="0,55,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.ColumnSpan="1" Grid.RowSpan="2" Background="#880804">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0"/>
+                <Button Margin="0" Content="Pusty" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="1" Grid.ColumnSpan="3" Background="#ff7760" Click="Pusty_Click" BorderThickness="0" />
+                <Button Margin="0" Content="Przykładowy Ambient" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dd2222"/>
+                <Button Margin="0" Content="Przykładowy Dubstep" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#cc3333"/>
+                <Button Margin="0" Content="Przykładowy Techno" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dd2222"/>
+            </Grid>
+            <Grid Grid.Column="2" Background="Beige">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Ostatnio otwierane" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="1" Grid.ColumnSpan="3"/>
+                <ScrollViewer Grid.Row="1"></ScrollViewer>
+            </Grid>
+            <Grid Grid.Column="2" Grid.Row="1" Background="ForestGreen" xmlns:s="clr-namespace:Syntezator_Krawczyka">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Twoje pliki na jaebe.za.pl/musicstudio" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.ColumnSpan="3"/>
+                <ScrollViewer Grid.Row="3"></ScrollViewer>
+                <s:LogowanieUC Grid.RowSpan="2" ></s:LogowanieUC>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>

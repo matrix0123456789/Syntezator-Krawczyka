@@ -171,7 +171,7 @@ namespace Syntezator_Krawczyka
             if (Statyczne.serwer.utworyZalogowanego == null)
                 MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (MainWindow.oknoLogowanie != null)
-                MainWindow.oknoLogowanie.wyswietlUtwory(Statyczne.serwer.utworyZalogowanego);
+                wyswietlUtworyZ(Statyczne.serwer.utworyZalogowanego);
             // });
         }
         public UtworySerwer pobierzUtwory(string autor)
@@ -208,6 +208,8 @@ namespace Syntezator_Krawczyka
         }
 
         internal UtworySerwer utworyZalogowanego;
+        public delegate void WyswietlUtworyZ(UtworySerwer utworySerwer);
+        public static WyswietlUtworyZ wyswietlUtworyZ;
 
         internal void wyślij(plik plik)
         {

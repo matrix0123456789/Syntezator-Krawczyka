@@ -61,6 +61,7 @@
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -110,9 +111,12 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="NAudio, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NAudio, Version=1.7.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Syntezator-Publish\Syntezator Krawczyka\bin\Debug\NAudio.dll</HintPath>
+      <HintPath>..\packages\NAudio.1.7\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Lame">
+      <HintPath>..\packages\NAudio.Lame.1.0.2\lib\net20\NAudio.Lame.dll</HintPath>
     </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -121,6 +125,7 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -163,6 +168,9 @@
     </Compile>
     <Compile Include="IPostep.cs" />
     <Compile Include="jedenSample.cs" />
+    <Compile Include="LogowanieUC.xaml.cs">
+      <DependentUpon>LogowanieUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Oscyloskop.xaml.cs">
       <DependentUpon>Oscyloskop.xaml</DependentUpon>
     </Compile>
@@ -198,6 +206,9 @@
     <Compile Include="SkładoweHarmoniczne.cs" />
     <Compile Include="sound.cs" />
     <Compile Include="soundStart.cs" />
+    <Compile Include="Start.xaml.cs">
+      <DependentUpon>Start.xaml</DependentUpon>
+    </Compile>
     <Compile Include="suwak.cs" />
     <Compile Include="suwakOkno.xaml.cs">
       <DependentUpon>suwakOkno.xaml</DependentUpon>
@@ -207,6 +218,7 @@
     </Compile>
     <Compile Include="UtworySerwer.cs" />
     <Compile Include="UtwórSerwer.cs" />
+    <Compile Include="vorbisInterop.cs" />
     <Compile Include="VstUI.xaml.cs">
       <DependentUpon>VstUI.xaml</DependentUpon>
     </Compile>
@@ -302,6 +314,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LogowanieUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Oscyloskop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -331,6 +347,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="nowyInstrument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Start.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -442,6 +462,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -494,6 +515,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\przyklad211.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="libmp3lame.32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libmp3lame.64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
