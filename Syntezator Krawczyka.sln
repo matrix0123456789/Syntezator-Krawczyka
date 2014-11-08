@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.20827.3
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syntezator Krawczyka", "Syntezator Krawczyka\Syntezator Krawczyka.csproj", "{3F97A8A6-9873-4827-A7A1-B0108A01E81A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Konsola", "Konsola\Konsola.csproj", "{42812872-2AF1-4118-98C5-36627E3F939A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,22 +39,6 @@ Global
 		{3F97A8A6-9873-4827-A7A1-B0108A01E81A}.Release|x64.Build.0 = Release|x64
 		{3F97A8A6-9873-4827-A7A1-B0108A01E81A}.Release|x86.ActiveCfg = Release|x86
 		{3F97A8A6-9873-4827-A7A1-B0108A01E81A}.Release|x86.Build.0 = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|Win32.ActiveCfg = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|Win32.Build.0 = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|x64.ActiveCfg = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|x86.ActiveCfg = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Debug|x86.Build.0 = Debug|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|Any CPU.ActiveCfg = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|Mixed Platforms.Build.0 = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|Win32.ActiveCfg = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|Win32.Build.0 = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|x64.ActiveCfg = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|x86.ActiveCfg = Release|x86
-		{42812872-2AF1-4118-98C5-36627E3F939A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

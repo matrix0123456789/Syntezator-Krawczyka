@@ -102,8 +102,12 @@ namespace Syntezator_Krawczyka
         {
             get
             {
-                var fold = new DirectoryInfo(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
-                return fold.GetFiles("kopia*");
+                try
+                {
+                    var fold = new DirectoryInfo(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + "\\SyntezatorKrawczyka");
+                    return fold.GetFiles("kopia*");
+                }
+                catch { return new FileInfo[0]; }
             }
         }
     }
