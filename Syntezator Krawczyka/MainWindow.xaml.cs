@@ -367,8 +367,6 @@ namespace Syntezator_Krawczyka
             {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = "Wtyczka VST|*.dll";
-                Jacobi.Vst.Core.VstCanDoHelper.ParseHostCanDo("S");
-                new Jacobi.Vst.Framework.VstMidiProgram();
                 dialog.ShowDialog();
                 if (dialog.FileName != null)
                 {

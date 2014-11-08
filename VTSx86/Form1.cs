@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Jacobi.Vst.Core.Host;
+using Jacobi.Vst.Interop.Host;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +17,13 @@ namespace VTSx86
         public Form1()
         {
             InitializeComponent();
+
+            try
+            {
+                HostCommandStub cmdstub = new HostCommandStub(); //Code for this class is in the VSTHost Sample code
+                cont = VstPluginContext.Create(Environment.GetCommandLineArgs()[1], cmdstub);
+            }
+            catch { }
         }
 
         protected override void WndProc(ref Message message)
@@ -22,7 +31,23 @@ namespace VTSx86
             //filter the RF_TESTMESSAGE
             if (message.Msg == 8753)
             {
-                object o=message.GetLParam(typeof(dane));
+                try
+                {
+                    try
+                    {
+                    MessageBox.Show(message.LParam.ToString(), message.WParam.ToString());
+                        var o = (dane)message.GetLParam(typeof(dane));
+                        MessageBox.Show(o.z.ToString(), "dane");
+                    }
+                    catch (Exception e) { MessageBox.Show(e.ToString(),"dd"); }
+                    try
+                    {
+                        var o = (string)message.GetLParam(typeof(string));
+                        MessageBox.Show(o.ToString(), "st");
+                    }
+                    catch (Exception e) { MessageBox.Show(e.ToString(), "dd"); }
+                }
+                catch { }
             }
             //be sure to pass along all messages to the base also
             base.WndProc(ref message);
@@ -30,8 +55,6 @@ namespace VTSx86
         VstPluginContext cont;
         void pokarzOkno()
         {
-            HostCommandStub cmdstub = new HostCommandStub(); //Code for this class is in the VSTHost Sample code
-            cont = VstPluginContext.Create(path, cmdstub);
 
             cont.PluginCommandStub.Open();
             var okno = new System.Windows.Forms.Form();
@@ -40,7 +63,7 @@ namespace VTSx86
             cont.PluginCommandStub.EditorOpen(okno.Handle);
         }
     }
-    abstract class dane { public int z = 5; }
+    struct dane { public int z; }
     /// <summary>
     /// The HostCommandStub class represents the part of the host that a plugin can call.
     /// </summary>

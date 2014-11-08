@@ -1,6 +1,4 @@
-﻿using Jacobi.Vst.Core;
-using Jacobi.Vst.Core.Host;
-using Jacobi.Vst.Interop.Host;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,9 +30,9 @@ namespace Syntezator_Krawczyka
         public wtyczkaVST(string path)
         {
          proces= Process.Start("VTSx86.exe", path);
-           var zm=new danePokarzOkno();
-          
-         SendMessage(proces.MainWindowHandle, 8753, IntPtr.Zero, (IntPtr) GCHandle.Alloc(zm));
+         var zm = new dane();
+
+         SendMessage(proces.MainWindowHandle, 8753, (IntPtr)74, System.Runtime.InteropServices.Marshal.StringToCoTaskMemUni("wsxz"));
             
            /* HostCommandStub cmdstub = new HostCommandStub(); //Code for this class is in the VSTHost Sample code
             cont = VstPluginContext.Create(path, cmdstub);
@@ -51,14 +49,16 @@ namespace Syntezator_Krawczyka
         {
             get
             {
-                return cont.PluginCommandStub.GetEffectName();
+                return "vst";
+                //return cont.PluginCommandStub.GetEffectName();
             }
         }
         public string Nazwa23
         {
             get
             {
-                return cont.PluginCommandStub.GetParameterName(0);
+                return "vst";
+                //return cont.PluginCommandStub.GetParameterName(0);
             }
         }
         /*static public void test1(string p) { }
@@ -98,8 +98,7 @@ namespace Syntezator_Krawczyka
         }
     }
 
-       
-        abstract class dane { public int z = 5; }
-        class danePokarzOkno : dane { public int a = 5;}
+
+    struct dane { public int z; }
     }
 
