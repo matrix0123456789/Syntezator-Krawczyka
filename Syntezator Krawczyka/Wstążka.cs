@@ -314,6 +314,7 @@ namespace Syntezator_Krawczyka
             this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
             Children = wew.Children;
             AddChild(wew);
+            this.BorderThickness = new Thickness(0);
             //wew.Background = Brushes.Red;
             //Rozmiar = PrzyciskRozmiar.Duży;
             Background = Brushes.Azure.Clone();
