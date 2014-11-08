@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,28 +27,31 @@ namespace VTSx86
             catch { }
         }
 
+        [MarshalAs(UnmanagedType.LPStr)]
+        string zzzz;
         protected override void WndProc(ref Message message)
         {
             //filter the RF_TESTMESSAGE
+            if (message.Msg == 0x4A)
+            {
+                
+
+                     //   MessageBox.Show(message.LParam.ToString(), message.WParam.ToString());
+                        if ((int)message.WParam == 3)
+                        {
+                            var o = (COPYDATASTRUCT)message.GetLParam(typeof(COPYDATASTRUCT));
+                            MessageBox.Show(o.lpData, "Wiadomość");
+                        } if ((int)message.WParam == 80)
+                        {
+                            var o = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
+                            MessageBox.Show(o.lpData[0].ToString(), "dane");
+                        }
+                   
+            }
             if (message.Msg == 8753)
             {
-                try
-                {
-                    try
-                    {
-                    MessageBox.Show(message.LParam.ToString(), message.WParam.ToString());
-                        var o = (dane)message.GetLParam(typeof(dane));
-                        MessageBox.Show(o.z.ToString(), "dane");
-                    }
-                    catch (Exception e) { MessageBox.Show(e.ToString(),"dd"); }
-                    try
-                    {
-                        var o = (string)message.GetLParam(typeof(string));
-                        MessageBox.Show(o.ToString(), "st");
-                    }
-                    catch (Exception e) { MessageBox.Show(e.ToString(), "dd"); }
-                }
-                catch { }
+                if ((int)message.WParam == polecenia.pokarzOkno.GetHashCode())
+                    pokarzOkno();
             }
             //be sure to pass along all messages to the base also
             base.WndProc(ref message);
@@ -63,7 +67,21 @@ namespace VTSx86
             cont.PluginCommandStub.EditorOpen(okno.Handle);
         }
     }
-    struct dane { public int z; }
+    public struct COPYDATASTRUCT
+    {
+        public IntPtr dwData;
+        public int cbData;
+        //[MarshalAs(UnmanagedType.LPStr)]
+        public string lpData;
+    }
+    public struct COPYBYTESTRUCT
+    {
+        public IntPtr dwData;
+        public int cbData;
+        [MarshalAs(UnmanagedType.SafeArray, SafeArraySubType =VarEnum. VT_UI1)]
+        public byte[] lpData;
+    }
+    enum polecenia { pokarzOkno, ukryjOkno }
     /// <summary>
     /// The HostCommandStub class represents the part of the host that a plugin can call.
     /// </summary>
