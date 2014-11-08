@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,16 +17,25 @@ namespace VTSx86
 {
     public partial class Form1 : Form
     {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int SendMessage(IntPtr hwnd, [MarshalAs(UnmanagedType.U4)] int Msg, IntPtr wParam, IntPtr lParam);
+        Process host;
         public Form1()
         {
             InitializeComponent();
-
+            Hide();
             try
             {
                 HostCommandStub cmdstub = new HostCommandStub(); //Code for this class is in the VSTHost Sample code
                 cont = VstPluginContext.Create(Environment.GetCommandLineArgs()[1], cmdstub);
             }
             catch { }
+            host = Process.GetProcessById(int.Parse(Environment.GetCommandLineArgs()[2]));
+            pokarzOkno();
+            //ThreadPool.QueueUserWorkItem((a) =>
+            //    {
+                    SendMessage(host.MainWindowHandle, 8753, (IntPtr)polecenia.załadowano.GetHashCode(), (IntPtr)Process.GetCurrentProcess().Id);
+               // });
         }
 
         [MarshalAs(UnmanagedType.LPStr)]
@@ -59,12 +70,12 @@ namespace VTSx86
         VstPluginContext cont;
         void pokarzOkno()
         {
-
+            var okno = new Form();
             cont.PluginCommandStub.Open();
-            var okno = new System.Windows.Forms.Form();
-            okno.Text = cont.PluginCommandStub.GetEffectName();
-            okno.Show();
             cont.PluginCommandStub.EditorOpen(okno.Handle);
+            okno.Show();
+            Hide();
+            Opacity = 0;
         }
     }
     public struct COPYDATASTRUCT
@@ -81,7 +92,7 @@ namespace VTSx86
         [MarshalAs(UnmanagedType.SafeArray, SafeArraySubType =VarEnum. VT_UI1)]
         public byte[] lpData;
     }
-    enum polecenia { pokarzOkno, ukryjOkno }
+    enum polecenia { pokarzOkno, ukryjOkno,załadowano }
     /// <summary>
     /// The HostCommandStub class represents the part of the host that a plugin can call.
     /// </summary>

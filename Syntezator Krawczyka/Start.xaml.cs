@@ -153,6 +153,7 @@ namespace Syntezator_Krawczyka
                 main.Show();
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
+            Close();
             
         }
     }

@@ -55,6 +55,7 @@ namespace Syntezator_Krawczyka
             lock (comboBox1)
             {
                 comboBox1.Items.Clear();
+                if(Statyczne.otwartyplik!=null)
                 foreach (var mod in Statyczne.otwartyplik.moduły)
                 {
                     comboBox1.Items.Add(new ComboBoxItem());

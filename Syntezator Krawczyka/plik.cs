@@ -45,7 +45,7 @@ namespace Syntezator_Krawczyka
                 }
                 catch (System.IO.FileNotFoundException e)
                 {
-                    System.Windows.MessageBox.Show("Plik nie istnieje\n" + e.ToString(), "Błąd", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Plik nie istnieje", "Błąd", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
                 catch (Exception e)
                 {
@@ -476,6 +476,24 @@ namespace Syntezator_Krawczyka
                 if (n.Attributes.GetNamedItem("volume") != null)
                     (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
 
+            }
+            else if (n.Attributes.GetNamedItem("type").Value == "VST")
+            {
+                try
+                {
+                    var a = new wtyczkaVST(n.Attributes.GetNamedItem("url").Value);
+                    var sou = new sound();
+                    sou.UI = new Instrument(sou.nazwa, sou);
+                    Statyczne.otwartyplik.zapis += a.actionZapis;
+                    sou.UI.wewnętrzny.Children.Add((a).UI);
+
+                    if (!MainWindow.thi.pokazInstr.Children.Contains(sou.UI))
+                    {
+
+                        MainWindow.thi.pokazInstr.Children.Add(sou.UI);
+                    }
+                }
+                catch { }
             }
         }
         void dekoduj2(XmlNode n)

@@ -161,7 +161,7 @@
                     </StackPanel>
                 </WrapPanel>
             </s:WstążkaKarta>
-            <s:WstążkaKarta Tytuł="Melodia" Visibility="Visible" Height="78">
+            <s:WstążkaKarta Tytuł="Melodia" Visibility="Collapsed" Height="78">
                 <WrapPanel Margin="3">
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Edytor nut"  Click="Button_Click" ToolTip="Umożliwia przeglądanie całego zapisu nutowego." Width="34">
                         <s:Przycisk.Obrazek>
@@ -300,9 +300,9 @@
                     </s:Przycisk>
                 </WrapPanel>
             </s:WstążkaKarta>
-            <s:WstążkaKarta Tytuł="Muzyka" Visibility="Collapsed" Height="78">
+            <s:WstążkaKarta Tytuł="Muzyka" Visibility="Visible" Height="78">
                 <WrapPanel Margin="3">
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wtyczka VST"  Click="VST_Click"  ToolTip="Otwiera wtyczkę (plugin) w formacie VST">
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wtyczka VST"  Click="VST_Click"  ToolTip="Otwiera wtyczkę (plugin) w formacie VST" Width="52">
                         <s:Przycisk.Obrazek>
                             <Canvas>
                                 <Canvas.RenderTransform>
@@ -376,7 +376,18 @@
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Drum Pad"  Click="DrumPad_Click">
                         <s:Przycisk.Obrazek>
                             <Canvas>
-
+                                <Canvas.RenderTransform>
+                                <TranslateTransform X="-170.90113" Y="-587.89291"/>
+                            </Canvas.RenderTransform>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="611" Width="9" Height="9" Name="rect3899" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="611" Width="9" Height="9" Name="rect38992" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="611" Width="9" Height="9" Name="rect389923" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="600" Width="9" Height="9" Name="rect38991" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="600" Width="9" Height="9" Name="rect389926" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="600" Width="9" Height="9" Name="rect3899238" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="589" Width="9" Height="9" Name="rect38998" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="589" Width="9" Height="9" Name="rect389922" Fill="#FF000000"/>
+                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="589" Width="9" Height="9" Name="rect3899237" Fill="#FF000000"/>
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>

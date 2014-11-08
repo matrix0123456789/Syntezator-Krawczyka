@@ -144,6 +144,9 @@
     </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "C:\Users\Mateusz\Source\Repos\Syntezator-Krawczyka\VTSx86\bin\x86\Debug\VTSx86.exe" "C:\Users\Mateusz\Source\Repos\Syntezator-Krawczyka\Syntezator Krawczyka\bin\Debug\VTSx86.exe"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

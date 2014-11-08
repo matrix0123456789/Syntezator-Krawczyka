@@ -367,25 +367,37 @@ namespace Syntezator_Krawczyka
             {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = "Wtyczka VST|*.dll";
+
+                dialog.Multiselect = true;
                 dialog.ShowDialog();
-                if (dialog.FileName != null)
+                foreach(var x in dialog.FileNames)
                 {
                     //wtyczkaVST.test1(dialog.FileName);
                     //wtyczkaVST.test2(dialog.FileName);
                     //wtyczkaVST.test3(dialog.FileName);
                     // var b = new HostCommandStub();
-                    var a = new wtyczkaVST(dialog.FileName);
+                    var a = new wtyczkaVST(x);
                     var sou = new sound();
-                    Statyczne.otwartyplik.moduły.Add(a.Nazwa, sou);
                     sou.nazwa = a.Nazwa;
+                    for (var i = 1; true; i++)
+                    {
+                        if (!Statyczne.otwartyplik.moduły.ContainsKey(a.Nazwa + i.ToString()))
+                        {
+                            sou.nazwa = a.Nazwa + i.ToString();
+                            break;
+                        }
+
+                    }
+                    Statyczne.otwartyplik.moduły.Add(sou.nazwa, sou);
                     sou.sekw = a;
                     sou.xml = a.xml = Statyczne.otwartyplik.xml.CreateElement("sound");
                     var type = Statyczne.otwartyplik.xml.CreateAttribute("type");
                     type.Value = "VST";
                     sou.xml.Attributes.Append(type);
                     var url = Statyczne.otwartyplik.xml.CreateAttribute("url");
-                    url.Value = dialog.FileName;
+                    url.Value = x;
                     sou.xml.Attributes.Append(url);
+                    Statyczne.otwartyplik.xml.DocumentElement.AppendChild(sou.xml);
                     sou.UI = new Instrument(sou.nazwa, sou);
                     Statyczne.otwartyplik.zapis += a.actionZapis;
                     sou.UI.wewnętrzny.Children.Add((a).UI);

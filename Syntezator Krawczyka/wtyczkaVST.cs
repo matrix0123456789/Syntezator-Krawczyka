@@ -16,13 +16,15 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using SIURegistry_Installer;
 using System.Threading;
+using System.Windows.Interop;
 
 
 
 namespace Syntezator_Krawczyka
 {
-    class wtyczkaVST:soundStart
+    class wtyczkaVST : soundStart
     {
+        static Dictionary<int, wtyczkaVST> otwarte = new System.Collections.Generic.Dictionary<int, wtyczkaVST>();
         VstUI _UI = null;
         public VstUI UI
         {
@@ -44,18 +46,20 @@ namespace Syntezator_Krawczyka
         string zzzz = "esdx";
         public wtyczkaVST(string path)
         {
-         proces= Process.Start("VTSx86.exe", path);
-         Thread.Sleep(1000);
-         var zm =new byte[]{8,21,62,12};
+            czyWłączone = false;
+            proces = Process.Start("VTSx86.exe", "\"" + path + "\" "+(Process.GetCurrentProcess().Id));
+            otwarte.Add(proces.Id, this);
+           // while(!czyWłączone)
+           //     Thread.Sleep(100);
+            /*var zm =new byte[]{8,21,62,12};
 
-         MessageHelper msg = new MessageHelper();
-         int result = 0;
-         result = msg.sendWindowsStringMessage((int)proces.MainWindowHandle, 3, "Test");
-         result = msg.sendWindowsByteMessage((int)proces.MainWindowHandle, 80, zm);
-         result = msg.sendWindowsByteMessage((int)proces.MainWindowHandle, 3, zm);
+            MessageHelper msg = new MessageHelper();
+            int result = 0;
+            result = msg.sendWindowsStringMessage((int)proces.MainWindowHandle, 3, "Test");
+            result = msg.sendWindowsByteMessage((int)proces.MainWindowHandle, 80, zm);
+            result = msg.sendWindowsByteMessage((int)proces.MainWindowHandle, 3, zm);*/
 
 
-         SendMessage(proces.MainWindowHandle, 8753, (uint)polecenia.pokarzOkno.GetHashCode(), new byte[0]);
 
         }
         public string Nazwa
@@ -91,7 +95,8 @@ namespace Syntezator_Krawczyka
 
         public bool czyWłączone
         {
-            get { throw new NotImplementedException(); }
+            get;
+            set;
         }
 
         public long symuluj(long p)
@@ -104,15 +109,37 @@ namespace Syntezator_Krawczyka
 
         internal void actionZapis()
         {
-            while(xml.ChildNodes.Count>0)
+            while (xml.ChildNodes.Count > 0)
             {
                 xml.RemoveChild(xml.LastChild);
             }
         }
+
+
+        static wtyczkaVST()
+        {
+            HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(MainWindow.thi).Handle);
+            source.AddHook(new HwndSourceHook(WndProc));
+        }
+
+
+
+        private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+
+            if (msg == 8753)
+            {
+                otwarte[(int)lParam].czyWłączone = true;
+                ThreadPool.QueueUserWorkItem((a) =>
+                {
+                SendMessage(otwarte[(int)lParam].proces.MainWindowHandle, 8753, (uint)polecenia.pokarzOkno.GetHashCode(), new byte[0]);
+                });
+            }
+            return IntPtr.Zero;
+        }
     }
 
-
-    enum polecenia { pokarzOkno, ukryjOkno }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano }
     }
 
 
