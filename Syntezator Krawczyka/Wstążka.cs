@@ -216,7 +216,7 @@ namespace Syntezator_Krawczyka
             }
         }
         PrzyciskRozmiar _Rozmiar = PrzyciskRozmiar.Duży;
-        static Thickness marginesyDuży = new Thickness(0);
+        static Thickness marginesyDuży = new Thickness(2);
         void przerysuj()
         {
             switch (_Rozmiar)
@@ -226,28 +226,48 @@ namespace Syntezator_Krawczyka
                     _Obrazek.Height = 32;
                     _Obrazek.Margin = marginesyDuży;
                     _Obrazek.HorizontalAlignment = HorizontalAlignment.Center;
+                    _Obrazek.VerticalAlignment = VerticalAlignment.Top;
                     MinWidth = 40;
                     MinHeight = 60;
+                   // wew.MinWidth = 36;
+                   // wew.MinHeight = 58;
                     _podpis.HorizontalAlignment = HorizontalAlignment.Center;
-                    _podpis.VerticalAlignment = VerticalAlignment.Bottom;
-                    _podpis.Margin = new Thickness(0, 38, 0, 0);
+                    _podpis.VerticalAlignment = VerticalAlignment.Top;
+                    _podpis.Visibility = Visibility.Visible;
+                    _podpis.TextWrapping = TextWrapping.Wrap;
+                    _podpis.TextAlignment = TextAlignment.Center;
+                    _podpis.Margin = new Thickness(0, 32, 0, 0);
+                   // wew.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    // wew.VerticalAlignment = VerticalAlignment.Top;
                     break;
                 case PrzyciskRozmiar.Średni:
                     MinWidth = 80;
+                   // wew.MinWidth = 74;
                     _Obrazek.Width = 16;
                     _Obrazek.Height = 16;
-                    _Obrazek.HorizontalAlignment = HorizontalAlignment.Center;
-                    _podpis.HorizontalAlignment = HorizontalAlignment.Center;
-                    _podpis.VerticalAlignment = VerticalAlignment.Bottom;
-                    MinHeight = 30;
+                    _Obrazek.HorizontalAlignment = HorizontalAlignment.Left;
+                    _podpis.HorizontalAlignment = HorizontalAlignment.Left;
+                    _podpis.VerticalAlignment = VerticalAlignment.Center;
+                    _podpis.Visibility = Visibility.Visible;
+                    _podpis.Margin = new Thickness(0, 0, 0, 0);
+                    _podpis.TextWrapping = TextWrapping.NoWrap;
+                    _podpis.TextAlignment = TextAlignment.Left;
+                    Height = 22;
+                    MinHeight = 22;
+                    //wew.MinHeight = 18;
+                    //wew.HorizontalAlignment = HorizontalAlignment.Left;
+                    //wew.VerticalAlignment = VerticalAlignment.Center;
                     break;
                 case PrzyciskRozmiar.Mały:
-                    MinWidth = 30;
+                    MinWidth = 22;
+                    MinHeight = 22;
+                   // wew.MinHeight = 18;
+                   // wew.MinWidth = 18;
                     _Obrazek.Width = 16;
                     _Obrazek.Height = 16;
-                    _podpis.HorizontalAlignment = HorizontalAlignment.Center;
-                    _podpis.VerticalAlignment = VerticalAlignment.Bottom;
-                    MinHeight = 30;
+                    _podpis.Visibility = Visibility.Collapsed;
+                    Height = 22;
+                    Width = 22;
                     break;
             }
         }
@@ -260,7 +280,7 @@ namespace Syntezator_Krawczyka
             {
                 try
                 {
-                    _podpis.Content = value;
+                    _podpis.Text = value;
                 }
                 catch { }
                 _Podpis = value;
@@ -278,7 +298,7 @@ namespace Syntezator_Krawczyka
                 {
                     if (_Obrazek != null)
                         Children.Remove(_Obrazek);
-                    Children.Add(value);
+                    Children.Insert(0,value);
                     _Obrazek = value;
                     przerysuj();
                 }
@@ -286,19 +306,23 @@ namespace Syntezator_Krawczyka
             }
         }
         Canvas _Obrazek = null;
-        Label _podpis = new Label();
+        TextBlock _podpis = new TextBlock();
         Grid wew = new Grid();
         public Przycisk()
         {
+            this.VerticalContentAlignment = VerticalAlignment.Stretch;
+            this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
             Children = wew.Children;
             AddChild(wew);
+            //wew.Background = Brushes.Red;
             //Rozmiar = PrzyciskRozmiar.Duży;
             Background = Brushes.Azure.Clone();
-            Background.Opacity = 0.5;
+            Background.Opacity = 0;
+            
             _podpis.VerticalAlignment = VerticalAlignment.Bottom;
             Children.Add(_podpis);
             Rozmiar = PrzyciskRozmiar.Duży;
-            Margin = new Thickness(1);
+            Margin = new Thickness(0);
         }
 
         public UIElementCollection Children;

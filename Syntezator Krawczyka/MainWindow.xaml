@@ -11,11 +11,12 @@
     <Grid>
         <s:Wstążka>
             <s:WstążkaKarta Tytuł="Plik" Visibility="Visible" Height="78">
-                <WrapPanel Margin="5">
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Otwórz plik" Click="button3_Click"  ToolTip="Otwórz plik zawierający nuty">
+                <WrapPanel Margin="3">
+                    <s:Przycisk s:Rozmiar="Duży" Click="button3_Click"  ToolTip="Otwórz plik zawierający nuty" Width="47">
+                        <s:Przycisk.Podpis>Otwórz plik</s:Przycisk.Podpis>
                         <s:Przycisk.Obrazek>
                             <Canvas>
-                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                <Polygon Fill="White" Stroke="Black" StrokeThickness="2">
                                     <Polygon.Points>
                                         <Point X="5" Y="2"></Point>
                                         <Point X="30" Y="2"></Point>
@@ -24,7 +25,7 @@
                                     </Polygon.Points>
                                 </Polygon>
 
-                                <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
+                                <Polygon Fill="White" Stroke="Black" StrokeThickness="2">
                                     <Polygon.Points>
                                         <Point X="5" Y="2"></Point>
                                         <Point X="20" Y="7"></Point>
@@ -74,7 +75,7 @@
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Zapisz jako" Click="button4_Click"  ToolTip="Zapisz plik zawierający nuty">
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Zapisz jako" Click="button4_Click"  ToolTip="Zapisz plik zawierający nuty" Width="45">
                         <s:Przycisk.Obrazek>
                             <Canvas>
                                 <Polygon Fill="Black" Stroke="White" StrokeThickness="2">
@@ -128,38 +129,40 @@
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Generuj dźwięk" Click="button7_Click"  ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp).">
-                        <s:Przycisk.Obrazek>
-                            <Canvas>
+                    <StackPanel>
+                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="Generuj dźwięk" Click="button7_Click"  ToolTip="Zapisz plik dźwiękowy (można go potem odtworzyć programami typu Windows Media Player czy Winamp).">
+                            <s:Przycisk.Obrazek>
+                                <Canvas>
 
-                            </Canvas>
-                        </s:Przycisk.Obrazek>
-                        <Button.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="słaba jakość (8 bit)" Click="J8_click" ToolTip="Przy tej jakości mogą być słyszalne zakłócenia"></MenuItem>
-                                <MenuItem Header="wysoka jakość (16 bit)" Click="J16_click" ToolTip="Większość domowego sprzętu nie da rady obsłurzyć wyższej jakości"></MenuItem>
-                                <MenuItem Header="ekstremalnie wysoka jakość (32 bit)" Click="J32_click" ToolTip="Powoduje 2 razy większe pliki niż 16 bit, a i tak nikt nie zauwarzy różnicy. Jakość przeznaczona do dalszej obróbki."></MenuItem>
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </s:Przycisk>
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Metadane" Click="Metadane_click"  ToolTip="Edytuje informacje np. o tytule czy autorze.">
-                        <s:Przycisk.Obrazek>
-                            <Canvas>
+                                </Canvas>
+                            </s:Przycisk.Obrazek>
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="słaba jakość (8 bit)" Click="J8_click" ToolTip="Przy tej jakości mogą być słyszalne zakłócenia"></MenuItem>
+                                    <MenuItem Header="wysoka jakość (16 bit)" Click="J16_click" ToolTip="Większość domowego sprzętu nie da rady obsłurzyć wyższej jakości"></MenuItem>
+                                    <MenuItem Header="ekstremalnie wysoka jakość (32 bit)" Click="J32_click" ToolTip="Powoduje 2 razy większe pliki niż 16 bit, a i tak nikt nie zauwarzy różnicy. Jakość przeznaczona do dalszej obróbki."></MenuItem>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </s:Przycisk>
+                        <s:Przycisk HorizontalAlignment="Stretch" s:Rozmiar="Średni" s:Podpis="Metadane" Click="Metadane_click"  ToolTip="Edytuje informacje np. o tytule czy autorze." Width="90">
+                            <s:Przycisk.Obrazek>
+                                <Canvas>
 
-                            </Canvas>
-                        </s:Przycisk.Obrazek>
-                    </s:Przycisk>
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Kopia zapasowa" Click="Kopia_Click"  ToolTip="Zarządza tworzeniem kopii zapasowej i odzyskiwaniem jej.">
-                        <s:Przycisk.Obrazek>
-                            <Canvas>
+                                </Canvas>
+                            </s:Przycisk.Obrazek>
+                        </s:Przycisk>
+                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="Kopia zapasowa" Click="Kopia_Click"  ToolTip="Zarządza tworzeniem kopii zapasowej i odzyskiwaniem jej.">
+                            <s:Przycisk.Obrazek>
+                                <Canvas>
 
-                            </Canvas>
-                        </s:Przycisk.Obrazek>
-                    </s:Przycisk>
+                                </Canvas>
+                            </s:Przycisk.Obrazek>
+                        </s:Przycisk>
+                    </StackPanel>
                 </WrapPanel>
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Melodia" Visibility="Collapsed" Height="78">
-                <WrapPanel Margin="5">
+                <WrapPanel Margin="3">
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Edytor nut"  Click="Button_Click" ToolTip="Umożliwia przeglądanie całego zapisu nutowego.">
                         <s:Przycisk.Obrazek>
                             <Canvas>
@@ -191,7 +194,7 @@
                 </WrapPanel>
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Muzyka" Visibility="Collapsed" Height="78">
-                <WrapPanel Margin="5">
+                <WrapPanel Margin="3">
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wtyczka VST"  Click="VST_Click"  ToolTip="Otwiera wtyczkę (plugin) w formacie VST">
                         <s:Przycisk.Obrazek>
                             <Canvas>
@@ -282,5 +285,6 @@
             </s:Wstążka.PodSpodem>
         </s:Wstążka>
         <ProgressBar Visibility="Visible" Name="postęp" HorizontalAlignment="Right" Height="13" Margin="5" VerticalAlignment="Top" Width="92"/>
+        <TextBlock VerticalAlignment="Bottom">sd</TextBlock>
     </Grid>
 </Window>
