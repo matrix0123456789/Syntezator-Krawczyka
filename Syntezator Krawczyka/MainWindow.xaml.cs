@@ -43,131 +43,35 @@ namespace Syntezator_Krawczyka
         static public bool czyGC = false;
         public static Logowanie oknoLogowanie = null;
         Thread aktualizacjaOkna;
-        /// <summary>
-        /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
-        /// </summary>
-        static public bool debugowanie = false;
         public klawiaturaKomputera klawiatkompa1, klawiatkompa2;
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
-            ThreadPool.QueueUserWorkItem((a) => { Backup.czyśćStare(new TimeSpan(14, 0, 0, 0)); });//czyści backup starszy niż 14 dni
-            // var test = new Test();
+             // var test = new Test();
             // test.Show();
             InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             
             thi = this;
-            dispat = Dispatcher;
-            string[] parametry = Environment.GetCommandLineArgs();
-            bool otwarto = false;
-            bool zamknij = false;
-            for (var x = 1; x < parametry.Length; x++)
+            dispat = Dispatcher; klawiatkompa1 = new klawiaturaKomputera(typKlawiaturyKomputera.dolna);
+            klawiatkompa2 = new klawiaturaKomputera(typKlawiaturyKomputera.górna);
+            for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
             {
-                if (parametry[x] == "/d" || parametry[x] == "-d")
-                {
-                    debugowanie = true;
-                    gpgpu = true;
-                }
-                else if (parametry[x] == "/z" || parametry[x] == "-z")
-                {
-                    zamknij = true;
-                }
-                else if (parametry[x] == "/f" || parametry[x] == "-f")
-                {
-                    x++;
-                    plik.Hz = float.Parse(parametry[x]);
-                    plik.kHz = plik.Hz / 1000;
-                }
-                else if (parametry[x] == "/gc" || parametry[x] == "-gc")
-                {
-                    czyGC = true;
-                }
-                else if (parametry[x] == "/p" || parametry[x] == "-p")
-                {//graj od razu
-                }
-                else if (parametry[x] == "/s" || parametry[x] == "-s")
-                {
-                    if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
-                        Statyczne.skojarzPliki();
-                }
-                else if (!otwarto)
-                {
-                    var xKopia = x;
-                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
-                            { Statyczne.otwartyplik = new plik(parametry[xKopia]); });
-                    otwarto = true;
-                }
+                var k = new KlawiaturaMidi(i);
+                klawiatMidi.Add(k);
+                pokazŚcie.Children.Add(k.UI);
             }
-
-            if (!otwarto)
+            if (Statyczne.debugowanie)
             {
-                System.Threading.ThreadPool.QueueUserWorkItem((o) =>
-                           {
-                               Statyczne.otwartyplik = new plik(Syntezator_Krawczyka.Properties.Resources.przyklad, true);
-                           });
+                var k = new KlawiaturaMidi();
+                klawiatMidi.Add(k);
+                pokazŚcie.Children.Add(k.UI);
             }
-            if (zamknij)
-                App.Current.Shutdown();
-            else
-            {
-                klawiatkompa1 = new klawiaturaKomputera(typKlawiaturyKomputera.dolna);
-                klawiatkompa2 = new klawiaturaKomputera(typKlawiaturyKomputera.górna);
-                for (int i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
-                {
-                    var k = new KlawiaturaMidi(i);
-                    klawiatMidi.Add(k);
-                    pokazŚcie.Children.Add(k.UI);
-                }
-                if (debugowanie)
-                {
-                    var k = new KlawiaturaMidi();
-                    klawiatMidi.Add(k);
-                    pokazŚcie.Children.Add(k.UI);
-                }
-                pokazŚcie.Children.Add(klawiatkompa1.UI);
-                pokazŚcie.Children.Add(klawiatkompa2.UI);
-                //aktualizacjaOkna = new Timer(akt, null, 10, 100);
-                aktualizacjaOkna = new Thread(akt);
-                aktualizacjaOkna.Start();
-                //System.IO.StreamReader sa = new System.IO.StreamReader("C:\\Users\\Public\\Documents\\sinusoida.wav");
-
-
-                //System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
-                //sinus = read.ReadBytes((int)read.BaseStream.Length);
-
-                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) == null)
-                {
-                    if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .jms z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
-                    {
-                        if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
-                            Statyczne.skojarzPliki();
-                        else
-                        {
-                            ProcessStartInfo startInfo = new ProcessStartInfo();
-                            startInfo.UseShellExecute = true;
-                            startInfo.WorkingDirectory = Environment.CurrentDirectory;
-                            startInfo.FileName = System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
-                            startInfo.Verb = "runas";
-                            startInfo.Arguments = "/s /z";
-                            try
-                            {
-                                Process p = Process.Start(startInfo);
-                            }
-                            catch (System.ComponentModel.Win32Exception)
-                            {
-                                MessageBox.Show("Nie udało się skojażyć plików.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
-                        }
-                    }
-                }
-
-                for (var i = 0; i < NAudio.Midi.MidiIn.NumberOfDevices; i++)
-                {
-                    //var info = NAudio.Midi.MidiIn.DeviceInfo(i);
-                    var midiwejście = new MidiIn(i);
-                }
-            }
+            pokazŚcie.Children.Add(klawiatkompa1.UI);
+            pokazŚcie.Children.Add(klawiatkompa2.UI);
+            //aktualizacjaOkna = new Timer(akt, null, 10, 100);
+            aktualizacjaOkna = new Thread(akt);
+            aktualizacjaOkna.Start();
         }
         void akt(object o)
         {
@@ -202,7 +106,7 @@ namespace Syntezator_Krawczyka
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {
-                        if (debugowanie)
+                        if (Statyczne.debugowanie)
                             Title = Statyczne.bufor.BufferedBytes.ToString();
                         czas.Content = funkcje.sekundy(granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4) + '/' + funkcje.sekundy(granie.granieMax);
                         var pozycjaSuwaka = granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4;
@@ -372,7 +276,6 @@ namespace Syntezator_Krawczyka
         {
             //granie.t.Change(0, (long)(sender as Slider).Value);
         }
-        public static bool gpgpu = false;
 
         private void buttonNowyInstrument_Click(object sender, RoutedEventArgs e)
         {

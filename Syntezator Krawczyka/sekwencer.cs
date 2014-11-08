@@ -52,7 +52,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
             if (wyjście[0].DrógiModół != null)
             {
-                if (MainWindow.gpgpu)
+                if (Statyczne.gpgpu)
                 {
                     //nutaC a = new nutaC();
                     float[] q={5,5,5};

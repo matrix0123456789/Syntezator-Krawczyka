@@ -13,7 +13,11 @@ namespace Syntezator_Krawczyka
     /// zawiera niektóre elementy, które są statyczne, a nie było dla nich lepszego miejsca
     /// </summary>
    public  class Statyczne
-    {
+   {
+       /// <summary>
+       /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
+       /// </summary>
+       static public bool debugowanie = false;
        public static PolaczenieHTTP serwer;
         public static BufferedWaveProvider bufor=new BufferedWaveProvider(new WaveFormat((int)plik.Hz,2));
         public static WasapiOut WasapiWyjście = new WasapiOut(AudioClientShareMode.Shared, 10);
@@ -24,7 +28,6 @@ namespace Syntezator_Krawczyka
             WasapiWyjście.Init(bufor);
             WasapiWyjście.Play();
         }
-        public static bool debugowanie = false;
         static public plik otwartyplik;
         /// <summary>
         /// Tworzy informacje o plikach *.jms w rejestrze systemowym.
@@ -81,6 +84,8 @@ namespace Syntezator_Krawczyka
             Microsoft.Win32.Registry.SetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths\\syntezator krawczyka.exe", "", System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
 
         }
+
+        public static bool gpgpu;
     }
    public enum ModułyEnum { Sekwencer,Oscylator, Granie, cutoff, flanger}
 }
