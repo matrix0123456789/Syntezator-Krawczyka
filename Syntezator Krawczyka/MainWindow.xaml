@@ -10,30 +10,12 @@
     </Window.TaskbarItemInfo>
     <Grid>
         <s:Wstążka>
-            <s:WstążkaKarta Tytuł="Plik" Visibility="Collapsed" Height="78">
+            <s:WstążkaKarta Tytuł="Plik" Visibility="Visible" Height="78">
                 <WrapPanel Margin="3">
                     <s:Przycisk s:Rozmiar="Duży" Click="button3_Click"  ToolTip="Otwórz plik zawierający nuty" Width="47">
                         <s:Przycisk.Podpis>Otwórz plik</s:Przycisk.Podpis>
                         <s:Przycisk.Obrazek>
-                            <Canvas>
-                                <Polygon Fill="White" Stroke="Black" StrokeThickness="2">
-                                    <Polygon.Points>
-                                        <Point X="5" Y="2"></Point>
-                                        <Point X="30" Y="2"></Point>
-                                        <Point X="30" Y="25"></Point>
-                                        <Point X="5" Y="25"></Point>
-                                    </Polygon.Points>
-                                </Polygon>
-
-                                <Polygon Fill="White" Stroke="Black" StrokeThickness="2">
-                                    <Polygon.Points>
-                                        <Point X="5" Y="2"></Point>
-                                        <Point X="20" Y="7"></Point>
-                                        <Point X="20" Y="30"></Point>
-                                        <Point X="5" Y="25"></Point>
-                                    </Polygon.Points>
-                                </Polygon>
-                            </Canvas>
+                            <s:IkonaOtwórz></s:IkonaOtwórz>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Zapisz" Click="button4b_Click"  ToolTip="Zapisz plik zawierający nuty">
@@ -300,7 +282,7 @@
                     </s:Przycisk>
                 </WrapPanel>
             </s:WstążkaKarta>
-            <s:WstążkaKarta Tytuł="Muzyka" Visibility="Visible" Height="78">
+            <s:WstążkaKarta Tytuł="Muzyka" Visibility="Collapsed" Height="78">
                 <WrapPanel Margin="3">
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wtyczka VST"  Click="VST_Click"  ToolTip="Otwiera wtyczkę (plugin) w formacie VST" Width="52">
                         <s:Przycisk.Obrazek>

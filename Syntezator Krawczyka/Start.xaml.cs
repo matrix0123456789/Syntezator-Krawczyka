@@ -97,7 +97,7 @@ namespace Syntezator_Krawczyka
 
             if (!otwarto)
             {
-               
+
             }
             if (zamknij)
                 App.Current.Shutdown();
@@ -154,7 +154,29 @@ namespace Syntezator_Krawczyka
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
             Close();
-            
+
+        }
+
+        private void OtwórzClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var main = new MainWindow();
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.jms|Plik XML|*.xml|Plik Jaebe Music Studio|*.jms|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
+            dialog.ShowDialog();
+            if (dialog.FileName != null)
+            {
+                string[] explode = dialog.FileName.Split('.');
+                if (explode.Last() == "mid" || explode.Last() == "midi")
+                    Statyczne.otwartyplik = new plikmidi(dialog.FileName);
+                else
+                    Statyczne.otwartyplik = new plik(dialog.FileName);
+                main.Show();
+            }
+            }
+            catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
+            Close();
         }
     }
 }

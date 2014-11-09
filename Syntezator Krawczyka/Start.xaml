@@ -6,14 +6,15 @@
         <Label Content="Jaebe Music Studio" VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="30"/>
         <Grid Margin="0,55,0,0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="80"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*" MinHeight="120"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="1" Grid.RowSpan="2" Background="#880804">
+            <Grid Grid.ColumnSpan="1" Grid.RowSpan="3" Background="#880804">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -26,13 +27,28 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0"/>
+                <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0" Foreground="White"/>
                 <Button Margin="0" Content="Pusty" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="1" Grid.ColumnSpan="3" Background="#ff7760" Click="Pusty_Click" BorderThickness="0" />
                 <Button Margin="0" Content="Przykładowy Ambient" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dd2222"/>
                 <Button Margin="0" Content="Przykładowy Dubstep" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#cc3333"/>
                 <Button Margin="0" Content="Przykładowy Techno" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dd2222"/>
             </Grid>
-            <Grid Grid.Column="2" Background="Beige">
+            <Button Click="OtwórzClick" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" xmlns:s="clr-namespace:Syntezator_Krawczyka"  Grid.Column="2" Grid.Row="0" Background="Beige">
+                <Grid >
+                    <s:IkonaOtwórz HorizontalAlignment="Left" Margin="-3,8,0,68" VerticalAlignment="Center" RenderTransformOrigin="0,0">
+                        <s:IkonaOtwórz.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="2" ScaleX="2"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </s:IkonaOtwórz.RenderTransform>
+                    </s:IkonaOtwórz>
+                    <Label FontSize="25
+                           " Margin="67,11,-67,-11">Otwórz plik</Label>
+                </Grid></Button>
+            <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="1*"/>
@@ -40,7 +56,7 @@
                 <Label Content="Ostatnio otwierane" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="1" Grid.ColumnSpan="3"/>
                 <ScrollViewer Grid.Row="1"></ScrollViewer>
             </Grid>
-            <Grid Grid.Column="2" Grid.Row="1" Background="ForestGreen" xmlns:s="clr-namespace:Syntezator_Krawczyka">
+            <Grid Grid.Column="2" Grid.Row="2" Background="ForestGreen" xmlns:s="clr-namespace:Syntezator_Krawczyka">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="1*"/>

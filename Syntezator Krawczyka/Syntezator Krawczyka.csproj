@@ -155,6 +155,9 @@
     <Compile Include="EdytujWave.xaml.cs">
       <DependentUpon>EdytujWave.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IkonaOtwórz.xaml.cs">
+      <DependentUpon>IkonaOtwórz.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IPostep.cs" />
     <Compile Include="jedenSample.cs" />
     <Compile Include="LogowanieUC.xaml.cs">
@@ -301,6 +304,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EdytujWave.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IkonaOtwórz.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

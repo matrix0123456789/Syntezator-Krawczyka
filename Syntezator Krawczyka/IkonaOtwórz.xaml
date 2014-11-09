@@ -1,0 +1,27 @@
+﻿<Canvas x:Class="Syntezator_Krawczyka.IkonaOtwórz"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+	>
+    <Canvas>
+        <Polygon Fill="White" Stroke="Black" StrokeThickness="2">
+            <Polygon.Points>
+                <Point X="5" Y="2"></Point>
+                <Point X="30" Y="2"></Point>
+                <Point X="30" Y="25"></Point>
+                <Point X="5" Y="25"></Point>
+            </Polygon.Points>
+        </Polygon>
+
+        <Polygon Fill="White" Stroke="Black" StrokeThickness="2">
+            <Polygon.Points>
+                <Point X="5" Y="2"></Point>
+                <Point X="20" Y="7"></Point>
+                <Point X="20" Y="30"></Point>
+                <Point X="5" Y="25"></Point>
+            </Polygon.Points>
+        </Polygon>
+    </Canvas>
+</Canvas>
