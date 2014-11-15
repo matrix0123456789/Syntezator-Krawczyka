@@ -38,6 +38,11 @@ namespace Syntezator_Krawczyka
                 try
                 {
                     xml.Load(URL);
+                    if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
+                        Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+
+                    Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(URL);
+                    Syntezator_Krawczyka.Properties.Settings.Default.Save();
                 }
                 catch (System.Xml.XmlException e)
                 {
@@ -64,7 +69,7 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
-               // this.URL = URLStatyczne = a;
+                // this.URL = URLStatyczne = a;
                 xml = new XmlDocument();
                 try
                 {
@@ -111,21 +116,21 @@ namespace Syntezator_Krawczyka
                     {
 
                         MainWindow.thi.pokazInstr.Children.Remove((UIElement)MainWindow.thi.pokazInstr.Children[i]);
-                        
+
                     }
-                    });
+                });
             }
             MainWindow.ileScierzekWyswietla = 0;
             lock (Statyczne.otwartyplik)
                 try
                 {
                     var listaSameSample = xml.GetElementsByTagName("sample");
-                    for(int i=0;i<listaSameSample.Count;i++)
+                    for (int i = 0; i < listaSameSample.Count; i++)
                     {
-                        if(listaSameSample[i].Attributes["file"]!=null)
+                        if (listaSameSample[i].Attributes["file"] != null)
                         {
                             var a = new jedenSample(listaSameSample[i]);
-                        Statyczne.otwartyplik.sameSample.Add(a);
+                            Statyczne.otwartyplik.sameSample.Add(a);
                         }
                     }
                     var listaWave = xml.GetElementsByTagName("wave");
@@ -159,7 +164,7 @@ namespace Syntezator_Krawczyka
                         if (n.Attributes.GetNamedItem("delay") != null)
                         {
                             scie.delay = (int)(float.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo);
-                            scie.delayUstawione = (double.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)) ;
+                            scie.delayUstawione = (double.Parse(n.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture));
                         }
                         if (kopia)
                         {
@@ -280,8 +285,8 @@ namespace Syntezator_Krawczyka
         /// </summary>
         void uaktualnij()
         {
-            if(zapis!=null)
-            zapis();
+            if (zapis != null)
+                zapis();
             foreach (var x in moduły)
             {
                 foreach (var y in x.Value)
@@ -311,6 +316,10 @@ namespace Syntezator_Krawczyka
                 System.IO.StreamWriter zapis = new System.IO.StreamWriter(dialog.FileName);
                 zapis.Write(xml.OuterXml);
                 zapis.Close();
+                if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
+                    Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+                Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(dialog.FileName);
+                Syntezator_Krawczyka.Properties.Settings.Default.Save();
             }
         }
         public void zapisz(string path)
@@ -318,6 +327,10 @@ namespace Syntezator_Krawczyka
             uaktualnij();
             URL = path;
             System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
+            if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
+                Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+            Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(path);
+            Syntezator_Krawczyka.Properties.Settings.Default.Save();
             zapis.Write(xml.OuterXml);
             zapis.Close();
 
@@ -471,7 +484,7 @@ namespace Syntezator_Krawczyka
             else if (n.Attributes.GetNamedItem("type").Value == "midi")
             {
                 moduły.Add(n.Attributes.GetNamedItem("id").Value, new sound(n.Attributes.GetNamedItem("id").Value, n));
-               
+
                 moduły[n.Attributes.GetNamedItem("id").Value].sekw = new InstrumentMidi();
                 if (n.Attributes.GetNamedItem("volume") != null)
                     (moduły[n.Attributes.GetNamedItem("id").Value].sekw as sampler).głośność = float.Parse(n.Attributes.GetNamedItem("volume").Value, CultureInfo.InvariantCulture);
@@ -565,7 +578,7 @@ namespace Syntezator_Krawczyka
         }
         internal void grajStart(List<sciezka> a)
         {
-            
+
             granie.graniePrzy = 0;
 
 
@@ -599,11 +612,11 @@ namespace Syntezator_Krawczyka
 
             foreach (var x in Statyczne.otwartyplik.sameSample)
             {
-                
-                    
-                    if (x.dlugosc+x.delay > długość)
-                        długość = x.dlugosc + x.delay;
-               
+
+
+                if (x.dlugosc + x.delay > długość)
+                    długość = x.dlugosc + x.delay;
+
             }
 
             granie.PlikDoZapisu = null;

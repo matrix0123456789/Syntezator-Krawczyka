@@ -20,8 +20,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
-    <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory>http://syntezator.aq.pl/|http://syntezator.za.pl/</InstallUrlHistory>
+    <PublishUrlHistory>publish\|http://jaebe.za.pl/musicstudio/</PublishUrlHistory>
+    <InstallUrlHistory>http://jaebe.za.pl/musicstudio/|http://syntezator.aq.pl/|http://syntezator.za.pl/</InstallUrlHistory>
     <SupportUrlHistory />
     <UpdateUrlHistory />
     <BootstrapperUrlHistory />

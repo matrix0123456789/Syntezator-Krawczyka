@@ -47,11 +47,11 @@ namespace Syntezator_Krawczyka
         List<KlawiaturaMidi> klawiatMidi = new List<KlawiaturaMidi>();
         public MainWindow()
         {
-             // var test = new Test();
+            // var test = new Test();
             // test.Show();
             InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            
+
             thi = this;
             dispat = Dispatcher; klawiatkompa1 = new klawiaturaKomputera(typKlawiaturyKomputera.dolna);
             klawiatkompa2 = new klawiaturaKomputera(typKlawiaturyKomputera.górna);
@@ -370,43 +370,51 @@ namespace Syntezator_Krawczyka
 
                 dialog.Multiselect = true;
                 dialog.ShowDialog();
-                foreach(var x in dialog.FileNames)
+                wtyczkaVST.wndprocStart();
+                foreach (var x in dialog.FileNames)
                 {
                     //wtyczkaVST.test1(dialog.FileName);
                     //wtyczkaVST.test2(dialog.FileName);
                     //wtyczkaVST.test3(dialog.FileName);
                     // var b = new HostCommandStub();
-                    var a = new wtyczkaVST(x);
-                    var sou = new sound();
-                    sou.nazwa = a.Nazwa;
-                    for (var i = 1; true; i++)
+                    ThreadPool.QueueUserWorkItem((xx) =>
                     {
-                        if (!Statyczne.otwartyplik.moduły.ContainsKey(a.Nazwa + i.ToString()))
+
+                        var a = new wtyczkaVST(xx as string);
+                        var sou = new sound();
+                        sou.nazwa = a.Nazwa;
+                        if (Statyczne.otwartyplik.moduły.ContainsKey(a.Nazwa))
+                            for (var i = 1; true; i++)
+                            {
+                                if (!Statyczne.otwartyplik.moduły.ContainsKey(a.Nazwa + i.ToString()))
+                                {
+                                    sou.nazwa = a.Nazwa + i.ToString();
+                                    break;
+                                }
+
+                            }
+                        Statyczne.otwartyplik.moduły.Add(sou.nazwa, sou);
+                        sou.sekw = a;
+                        sou.xml = a.xml = Statyczne.otwartyplik.xml.CreateElement("sound");
+                        var type = Statyczne.otwartyplik.xml.CreateAttribute("type");
+                        type.Value = "VST";
+                        sou.xml.Attributes.Append(type);
+                        var url = Statyczne.otwartyplik.xml.CreateAttribute("url");
+                        url.Value = xx as string;
+                        sou.xml.Attributes.Append(url);
+                        Statyczne.otwartyplik.xml.DocumentElement.AppendChild(sou.xml);
+                        Statyczne.otwartyplik.zapis += a.actionZapis;
+                        MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                         {
-                            sou.nazwa = a.Nazwa + i.ToString();
-                            break;
-                        }
+                        sou.UI = new Instrument(sou.nazwa, sou, "VST");
+                        sou.UI.wewnętrzny.Children.Add((a).UI);
+                            if (!MainWindow.thi.pokazInstr.Children.Contains(sou.UI))
+                            {
 
-                    }
-                    Statyczne.otwartyplik.moduły.Add(sou.nazwa, sou);
-                    sou.sekw = a;
-                    sou.xml = a.xml = Statyczne.otwartyplik.xml.CreateElement("sound");
-                    var type = Statyczne.otwartyplik.xml.CreateAttribute("type");
-                    type.Value = "VST";
-                    sou.xml.Attributes.Append(type);
-                    var url = Statyczne.otwartyplik.xml.CreateAttribute("url");
-                    url.Value = x;
-                    sou.xml.Attributes.Append(url);
-                    Statyczne.otwartyplik.xml.DocumentElement.AppendChild(sou.xml);
-                    sou.UI = new Instrument(sou.nazwa, sou);
-                    Statyczne.otwartyplik.zapis += a.actionZapis;
-                    sou.UI.wewnętrzny.Children.Add((a).UI);
-
-                    if (!MainWindow.thi.pokazInstr.Children.Contains(sou.UI))
-                    {
-
-                        MainWindow.thi.pokazInstr.Children.Add(sou.UI);
-                    }
+                                MainWindow.thi.pokazInstr.Children.Add(sou.UI);
+                            }
+                        });
+                    }, x);
                 }
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd ładowania wtyczki", MessageBoxButton.OK, MessageBoxImage.Error); }
@@ -475,7 +483,7 @@ namespace Syntezator_Krawczyka
 
         private void WWW_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://jaebe.za.pl");
+            Process.Start("http://jaebe.za.pl/musicstudio");
         }
 
 

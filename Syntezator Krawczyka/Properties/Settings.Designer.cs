@@ -46,5 +46,16 @@ namespace Syntezator_Krawczyka.Properties {
                 this["Haslo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection OstatnioOtwarte {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["OstatnioOtwarte"]));
+            }
+            set {
+                this["OstatnioOtwarte"] = value;
+            }
+        }
     }
 }

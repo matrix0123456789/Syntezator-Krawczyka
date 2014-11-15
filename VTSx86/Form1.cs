@@ -1,5 +1,6 @@
 ﻿using Jacobi.Vst.Core.Host;
 using Jacobi.Vst.Interop.Host;
+using SIURegistry_Installer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VTSx86;
 
 namespace VTSx86
 {
@@ -31,11 +33,13 @@ namespace VTSx86
             }
             catch { }
             host = Process.GetProcessById(int.Parse(Environment.GetCommandLineArgs()[2]));
-            pokarzOkno();
-            //ThreadPool.QueueUserWorkItem((a) =>
-            //    {
-                    SendMessage(host.MainWindowHandle, 8753, (IntPtr)polecenia.załadowano.GetHashCode(), (IntPtr)Process.GetCurrentProcess().Id);
-               // });
+            cont.PluginCommandStub.Open();
+            cont.PluginCommandStub.EditorOpen(this.Handle);
+            // pokarzOkno();
+            ThreadPool.QueueUserWorkItem((a) =>
+                {
+                      SendMessage(host.MainWindowHandle, 8753, (IntPtr)polecenia.załadowano.GetHashCode(), (IntPtr)Process.GetCurrentProcess().Id);
+                });
         }
 
         [MarshalAs(UnmanagedType.LPStr)]
@@ -45,54 +49,52 @@ namespace VTSx86
             //filter the RF_TESTMESSAGE
             if (message.Msg == 0x4A)
             {
-                
 
-                     //   MessageBox.Show(message.LParam.ToString(), message.WParam.ToString());
-                        if ((int)message.WParam == 3)
-                        {
-                            var o = (COPYDATASTRUCT)message.GetLParam(typeof(COPYDATASTRUCT));
-                            MessageBox.Show(o.lpData, "Wiadomość");
-                        } if ((int)message.WParam == 80)
-                        {
-                            var o = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
-                            MessageBox.Show(o.lpData[0].ToString(), "dane");
-                        }
-                   
+                var polecenie = (polecenia)message.WParam;
+                MessageBox.Show(polecenie.ToString());
+                switch (polecenie)
+                {
+                    case polecenia.działaj:
+                        var lp = message.GetLParam(typeof(COPYBYTESTRUCT));
+                        cont.PluginCommandStub.ToString();
+                        break;
+                }
+
+
             }
             if (message.Msg == 8753)
             {
+                // MessageBox.Show(message.ToString());
                 if ((int)message.WParam == polecenia.pokarzOkno.GetHashCode())
                     pokarzOkno();
+                if ((int)message.WParam == polecenia.Nazwa.GetHashCode())
+                {
+
+
+                    MessageHelper msg = new MessageHelper();
+                    int result = 0;
+                    result = msg.sendWindowsStringMessage((int)host.MainWindowHandle, polecenia.Nazwa.GetHashCode(), cont.PluginCommandStub.GetEffectName());
+                }
             }
             //be sure to pass along all messages to the base also
             base.WndProc(ref message);
         }
         VstPluginContext cont;
+        //Form okno = null;
         void pokarzOkno()
         {
-            var okno = new Form();
-            cont.PluginCommandStub.Open();
-            cont.PluginCommandStub.EditorOpen(okno.Handle);
-            okno.Show();
-            Hide();
-            Opacity = 0;
+            //if (okno == null)
+            {
+                //okno = new Form();
+                //cont.PluginCommandStub.EditorOpen(okno.Handle);
+            }
+            // okno.Show();
+            //  Hide();
+            //Opacity = 0;
+            Show();
         }
     }
-    public struct COPYDATASTRUCT
-    {
-        public IntPtr dwData;
-        public int cbData;
-        //[MarshalAs(UnmanagedType.LPStr)]
-        public string lpData;
-    }
-    public struct COPYBYTESTRUCT
-    {
-        public IntPtr dwData;
-        public int cbData;
-        [MarshalAs(UnmanagedType.SafeArray, SafeArraySubType =VarEnum. VT_UI1)]
-        public byte[] lpData;
-    }
-    enum polecenia { pokarzOkno, ukryjOkno,załadowano }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz }
     /// <summary>
     /// The HostCommandStub class represents the part of the host that a plugin can call.
     /// </summary>
@@ -321,5 +323,120 @@ namespace VTSx86
         /// Gets the message.
         /// </summary>
         public string Message { get; private set; }
+    }
+   public struct NutaStruct
+    {
+        public double ilepróbekNaStarcie;
+    }
+}
+namespace SIURegistry_Installer
+{ //Used for WM_COPYDATA for string messages
+    public struct COPYDATASTRUCT
+    {
+        public IntPtr dwData;
+        public int cbData;
+        // [MarshalAs(UnmanagedType.LPStr)]
+        public string lpData;
+        public IntPtr process;
+    }//Used for WM_COPYDATA for string messages
+
+        [StructLayout(LayoutKind.Sequential)]
+    public struct COPYBYTESTRUCT
+    {
+        public IntPtr dwData;
+        public int cbData;
+        //[MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]
+        public NutaStruct lpData;
+        public IntPtr process;
+    }
+    public class MessageHelper
+    {
+        [DllImport("User32.dll")]
+        private static extern int RegisterWindowMessage(string lpString);
+
+        [DllImport("User32.dll", EntryPoint = "FindWindow")]
+        public static extern Int32 FindWindow(String lpClassName, String lpWindowName);
+
+        //For use with WM_COPYDATA and COPYDATASTRUCT
+        [DllImport("User32.dll", EntryPoint = "SendMessage")]
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
+        //For use with WM_COPYDATA and COPYDATASTRUCT
+        [DllImport("User32.dll", EntryPoint = "SendMessage")]
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYBYTESTRUCT lParam);
+
+        //For use with WM_COPYDATA and COPYDATASTRUCT
+        [DllImport("User32.dll", EntryPoint = "PostMessage")]
+        public static extern int PostMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
+
+        [DllImport("User32.dll", EntryPoint = "SendMessage")]
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, int lParam);
+
+        [DllImport("User32.dll", EntryPoint = "PostMessage")]
+        public static extern int PostMessage(int hWnd, int Msg, int wParam, int lParam);
+
+        [DllImport("User32.dll", EntryPoint = "SetForegroundWindow")]
+        public static extern bool SetForegroundWindow(int hWnd);
+
+        public const int WM_USER = 0x400;
+        public const int WM_COPYDATA = 0x4A;
+
+
+
+        public bool bringAppToFront(int hWnd)
+        {
+            return SetForegroundWindow(hWnd);
+        }
+
+        public int sendWindowsStringMessage(int hWnd, int wParam, string msg)
+        {
+            int result = 0;
+
+            if (hWnd != 0)
+            {
+                byte[] sarr = System.Text.Encoding.Default.GetBytes(msg);
+                int len = sarr.Length;
+                COPYDATASTRUCT cds;
+                cds.dwData = (IntPtr)Process.GetCurrentProcess().Id;
+                cds.lpData = msg;
+                cds.cbData = len + 1;
+                cds.process = (IntPtr)Process.GetCurrentProcess().Id;
+                result = SendMessage(hWnd, 0x4A, wParam, ref cds);
+            }
+            return result;
+        }/*
+        public int sendWindowsByteMessage(int hWnd, int wParam, byte[] msg)
+        {
+            int result = 0;
+
+            if (hWnd != 0)
+            {
+                int len = msg.Length;
+                COPYBYTESTRUCT cds;
+                cds.dwData = (IntPtr)100;
+                cds.lpData = msg;
+                cds.cbData = len + 1;
+                cds.process = (IntPtr)Process.GetCurrentProcess().Id;
+                result = SendMessage(hWnd, 0x4A, wParam, ref cds);
+            }
+            return result;
+        }*/
+
+        public int sendWindowsMessage(int hWnd, int Msg, int wParam, int lParam)
+        {
+            int result = 0;
+
+            if (hWnd > 0)
+            {
+                result = SendMessage(hWnd, Msg, wParam, lParam);
+            }
+            return result;
+        }
+
+        public int getWindowId(string className, string windowName)
+        {
+
+            return FindWindow(className, windowName);
+
+        }
     }
 }

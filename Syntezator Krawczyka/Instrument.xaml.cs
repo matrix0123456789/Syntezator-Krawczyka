@@ -25,12 +25,17 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             Children=wewnętrzny.Children;
         }
-
+        bool vst = false;
         public Instrument(string p, sound s):this()
         {
             parent = s;
             if (p != null)
                 label1.Content += " — "+p;
+        }
+        public Instrument(string p, sound s, string typ):this( p,  s){
+            if (typ == "vst")
+                vst = true;
+            rozwiń.Content = "Pokaż";
         }
         public UIElementCollection Children;
 
@@ -64,6 +69,11 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            if (typeof(wtyczkaVST).IsInstanceOfType(parent.sekw))
+            {
+            
+            (parent.sekw as wtyczkaVST).Pokarz();}
+            else { 
             if (wewnętrzny.Visibility == Visibility.Collapsed)
             {
                 wewnętrzny.Visibility = Visibility.Visible;
@@ -73,7 +83,7 @@ namespace Syntezator_Krawczyka
                 wewnętrzny.Visibility = Visibility.Collapsed;
                 (sender as Button).Content = "Rozwiń";
             }
-        }
+        }}
 
     }
 }

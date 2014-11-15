@@ -39,8 +39,38 @@ namespace Syntezator_Krawczyka
             }
             polecenia();
             InitializeComponent();
+            if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte != null)
+                for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0; i--)
+                {
+                    var lab = new Label();
+                    var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
+                    lab.ToolTip=str;
+                    lab.Content=str.Substring(str.LastIndexOfAny(new char[]{'/','\\'}));
+                    lab.MouseLeftButtonDown += uruchomOstatnie;
+                    OstOtw.Children.Add(lab);
+
+                }
+
             ThreadPool.QueueUserWorkItem((a) => { Backup.czyśćStare(new TimeSpan(14, 0, 0, 0)); });//czyści backup starszy niż 14 dni
 
+        }
+
+        void uruchomOstatnie(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var main = new MainWindow();
+
+                string[] explode = ((string)(sender as Label).ToolTip).Split('.');
+                    if (explode.Last() == "mid" || explode.Last() == "midi")
+                        Statyczne.otwartyplik = new plikmidi((string)(sender as Label).ToolTip);
+                    else
+                        Statyczne.otwartyplik = new plik((string)(sender as Label).ToolTip);
+                    main.Show();
+                
+            }
+            catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
+            Close();
         }
         void polecenia()
         {
@@ -162,18 +192,18 @@ namespace Syntezator_Krawczyka
             try
             {
                 var main = new MainWindow();
-            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.jms|Plik XML|*.xml|Plik Jaebe Music Studio|*.jms|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
-            dialog.ShowDialog();
-            if (dialog.FileName != null)
-            {
-                string[] explode = dialog.FileName.Split('.');
-                if (explode.Last() == "mid" || explode.Last() == "midi")
-                    Statyczne.otwartyplik = new plikmidi(dialog.FileName);
-                else
-                    Statyczne.otwartyplik = new plik(dialog.FileName);
-                main.Show();
-            }
+                Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+                dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.jms|Plik XML|*.xml|Plik Jaebe Music Studio|*.jms|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
+                dialog.ShowDialog();
+                if (dialog.FileName != null)
+                {
+                    string[] explode = dialog.FileName.Split('.');
+                    if (explode.Last() == "mid" || explode.Last() == "midi")
+                        Statyczne.otwartyplik = new plikmidi(dialog.FileName);
+                    else
+                        Statyczne.otwartyplik = new plik(dialog.FileName);
+                    main.Show();
+                }
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
             Close();

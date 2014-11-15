@@ -17,6 +17,9 @@ using System.Diagnostics;
 using SIURegistry_Installer;
 using System.Threading;
 using System.Windows.Interop;
+using System.Windows.Forms;
+using System.IO;
+using Syntezator_Krawczyka;
 
 
 
@@ -24,7 +27,7 @@ namespace Syntezator_Krawczyka
 {
     class wtyczkaVST : soundStart
     {
-        static Dictionary<int, wtyczkaVST> otwarte = new System.Collections.Generic.Dictionary<int, wtyczkaVST>();
+        static Dictionary<long, wtyczkaVST> otwarte = new System.Collections.Generic.Dictionary<long, wtyczkaVST>();
         VstUI _UI = null;
         public VstUI UI
         {
@@ -46,51 +49,40 @@ namespace Syntezator_Krawczyka
         string zzzz = "esdx";
         public wtyczkaVST(string path)
         {
-            czyWłączone = false;
-            proces = Process.Start("VTSx86.exe", "\"" + path + "\" "+(Process.GetCurrentProcess().Id));
+            proces = Process.Start("VTSx86.exe", "\"" + path + "\" " + (Process.GetCurrentProcess().Id));
             otwarte.Add(proces.Id, this);
-           // while(!czyWłączone)
-           //     Thread.Sleep(100);
-            /*var zm =new byte[]{8,21,62,12};
-
-            MessageHelper msg = new MessageHelper();
-            int result = 0;
-            result = msg.sendWindowsStringMessage((int)proces.MainWindowHandle, 3, "Test");
-            result = msg.sendWindowsByteMessage((int)proces.MainWindowHandle, 80, zm);
-            result = msg.sendWindowsByteMessage((int)proces.MainWindowHandle, 3, zm);*/
-
-
-
+            czyWłączone = true;
         }
+        public string _Nazwa = null;
         public string Nazwa
         {
             get
             {
-                return "vst";
-                //return cont.PluginCommandStub.GetEffectName();
-            }
-        }
-        public string Nazwa23
-        {
-            get
-            {
-                return "vst";
-                //return cont.PluginCommandStub.GetParameterName(0);
-            }
-        }
-        /*static public void test1(string p) { }
-        static public void test2(string p)
-        {
-            var CommandStub = new HostCommandStub();
-        }
-        static public void test3(string p)
-        {
-            var plugin = VstPluginContext.Create(p, null);
-        }*/
+                if (_Nazwa == null)
+                {
 
+                    SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
+                }
+                int cz = 0;
+                while (_Nazwa == null)
+                {
+                    Thread.Sleep(1); cz++;
+                    if (cz % 10 == 0)
+
+                        SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
+                }
+                return _Nazwa;
+            }
+            set
+            {
+                _Nazwa = value;
+            }
+        }
         public void działaj(nuta input)
         {
-            throw new NotImplementedException();
+            var dane = new NutaStruct();
+            dane.ilepróbekNaStarcie = input.ilepróbekNaStarcie;
+            MessageHelper.sendWindowsByteMessage((int)proces.MainWindowHandle, (int)polecenia.działaj.GetHashCode(), dane);
         }
 
         public bool czyWłączone
@@ -121,7 +113,7 @@ namespace Syntezator_Krawczyka
             HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(MainWindow.thi).Handle);
             source.AddHook(new HwndSourceHook(WndProc));
         }
-
+        static public void wndprocStart() { }
 
 
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -129,18 +121,37 @@ namespace Syntezator_Krawczyka
 
             if (msg == 8753)
             {
-                otwarte[(int)lParam].czyWłączone = true;
-                ThreadPool.QueueUserWorkItem((a) =>
-                {
-                SendMessage(otwarte[(int)lParam].proces.MainWindowHandle, 8753, (uint)polecenia.pokarzOkno.GetHashCode(), new byte[0]);
-                });
+                otwarte[(long)lParam].czyWłączone = true;
+                /* ThreadPool.QueueUserWorkItem((a) =>
+                 {
+                     SendMessage(otwarte[(int)lParam].proces.MainWindowHandle, 8753, (uint)polecenia.pokarzOkno.GetHashCode(), new byte[0]);
+                 });*/
+            }
+            if (msg == 0x4A)
+            {
+                Message a = new Message();
+                a.Msg = msg;
+                a.HWnd = hwnd;
+                a.LParam = lParam;
+                a.WParam = wParam;
+                var o = (SIURegistry_Installer.MessageHelper.COPYDATASTRUCT)a.GetLParam(typeof(SIURegistry_Installer.MessageHelper.COPYDATASTRUCT));
+                otwarte[(long)o.dwData].Nazwa = o.lpData;
             }
             return IntPtr.Zero;
         }
+
+        internal void Pokarz()
+        {
+            SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.pokarzOkno.GetHashCode(), (IntPtr)0);
+        }
     }
 
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz }
+    public struct NutaStruct
+    {
+        public double ilepróbekNaStarcie;
     }
+}
 
 
 namespace SIURegistry_Installer
@@ -181,15 +192,15 @@ namespace SIURegistry_Installer
         {
             public IntPtr dwData;
             public int cbData;
-           // [MarshalAs(UnmanagedType.LPStr)]
+            // [MarshalAs(UnmanagedType.LPStr)]
             public string lpData;
+            public IntPtr process;
         }//Used for WM_COPYDATA for string messages
         public struct COPYBYTESTRUCT
         {
             public IntPtr dwData;
             public int cbData;
-            [MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]
-            public byte[] lpData;
+            public NutaStruct lpData;
         }
 
         public bool bringAppToFront(int hWnd)
@@ -197,7 +208,7 @@ namespace SIURegistry_Installer
             return SetForegroundWindow(hWnd);
         }
 
-        public int sendWindowsStringMessage(int hWnd, int wParam, string msg)
+        public static int sendWindowsStringMessage(int hWnd, int wParam, string msg)
         {
             int result = 0;
 
@@ -209,21 +220,23 @@ namespace SIURegistry_Installer
                 cds.dwData = (IntPtr)100;
                 cds.lpData = msg;
                 cds.cbData = len + 1;
+                cds.process = (IntPtr)Process.GetCurrentProcess().Id;
                 result = SendMessage(hWnd, 0x4A, wParam, ref cds);
             }
             return result;
         }
-        public int sendWindowsByteMessage(int hWnd, int wParam, byte[] msg)
+        public static int sendWindowsByteMessage(int hWnd, int wParam, NutaStruct msg)
         {
             int result = 0;
 
             if (hWnd != 0)
             {
-                int len = msg.Length;
+                //int len = msg.Length;
                 COPYBYTESTRUCT cds;
                 cds.dwData = (IntPtr)100;
                 cds.lpData = msg;
-                cds.cbData = len + 1;
+                cds.cbData = Marshal.SizeOf(msg);
+                //cds.process = (IntPtr)Process.GetCurrentProcess().Id;
                 result = SendMessage(hWnd, 0x4A, wParam, ref cds);
             }
             return result;
@@ -232,7 +245,7 @@ namespace SIURegistry_Installer
         public int sendWindowsMessage(int hWnd, int Msg, int wParam, int lParam)
         {
             int result = 0;
- 
+
             if (hWnd > 0)
             {
                 result = SendMessage(hWnd, Msg, wParam, lParam);

@@ -202,6 +202,22 @@
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Dodaj instrument"  Click="buttonNowyInstrument_Click"  ToolTip="Dodaj wirtualny instrument" Width="63">
                         <s:Przycisk.Obrazek>
                             <Canvas>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: metadata-->
+                                <!--Unknown tag: sodipodi:namedview-->
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="0" Canvas.Top="4" Width="5" Height="24" Name="rect2987" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="5" Canvas.Top="4" Width="5" Height="24" Name="rect2989" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="9" Canvas.Top="4" Width="5" Height="24" Name="rect2991" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="14" Canvas.Top="4" Width="5" Height="24" Name="rect2993" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="18" Canvas.Top="4" Width="5" Height="24" Name="rect2995" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="23" Canvas.Top="4" Width="5" Height="24" Name="rect2997" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="27" Canvas.Top="4" Width="5" Height="24" Name="rect2999" Fill="#FFFFFFFF" StrokeThickness="0.2" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="3" Canvas.Top="4" Width="3" Height="16" Name="rect3001" Fill="#FF000000" StrokeThickness="0" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="8" Canvas.Top="4" Width="3" Height="16" Name="rect3003" Fill="#FF000000" StrokeThickness="0" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="16" Canvas.Top="4" Width="3" Height="16" Name="rect3005" Fill="#FF000000" StrokeThickness="0" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="21" Canvas.Top="4" Width="3" Height="16" Name="rect3007" Fill="#FF000000" StrokeThickness="0" Stroke="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="27" Canvas.Top="4" Width="3" Height="16" Name="rect3009" Fill="#FF000000" StrokeThickness="0" Stroke="#FF000000"/>
+
 
                             </Canvas>
                         </s:Przycisk.Obrazek>
@@ -351,7 +367,35 @@
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wyjście dźwięku"  Click="WyjDzwieku_Click"  ToolTip="Wybiera na jakie porty wysyłać dźwięk">
                         <s:Przycisk.Obrazek>
                             <Canvas>
-
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3017" StrokeThickness="1" Stroke="#FF000000" Fill="White" StrokeLineJoin="Round" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 0.5 10 5 0 6.5 -9.5 0 31 -6.5 -9.5 -5 0 z" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3787" Stroke="#FF000000">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 21.491422 -1.3845696 A 10.729459 15.930378 0 0 1 21.639253 24.85461" FillRule="NonZero"/>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="4.095213" Y="4.0133088"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path37871" Stroke="#FF000000">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 25.524756 6.2113139 a 10.729459 15.930378 0 0 1 0.464718 8.8079071" FillRule="NonZero"/>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-9.108163" Y="5.1945961"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path37877" Stroke="#FF000000">
+                                    <Path.Data>
+                                        <PathGeometry Figures="M 24.437776 3.0421449 A 10.729459 15.930378 0 0 1 24.627985 20.134897" FillRule="NonZero"/>
+                                    </Path.Data>
+                                    <Path.RenderTransform>
+                                        <TranslateTransform X="-2.2282051" Y="4.0479364"/>
+                                    </Path.RenderTransform>
+                                </Path>
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
@@ -359,17 +403,17 @@
                         <s:Przycisk.Obrazek>
                             <Canvas>
                                 <Canvas.RenderTransform>
-                                <TranslateTransform X="-170.90113" Y="-587.89291"/>
-                            </Canvas.RenderTransform>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="611" Width="9" Height="9" Name="rect3899" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="611" Width="9" Height="9" Name="rect38992" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="611" Width="9" Height="9" Name="rect389923" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="600" Width="9" Height="9" Name="rect38991" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="600" Width="9" Height="9" Name="rect389926" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="600" Width="9" Height="9" Name="rect3899238" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="589" Width="9" Height="9" Name="rect38998" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="589" Width="9" Height="9" Name="rect389922" Fill="#FF000000"/>
-                            <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="589" Width="9" Height="9" Name="rect3899237" Fill="#FF000000"/>
+                                    <TranslateTransform X="-170.90113" Y="-587.89291"/>
+                                </Canvas.RenderTransform>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="611" Width="9" Height="9" Name="rect3899" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="611" Width="9" Height="9" Name="rect38992" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="611" Width="9" Height="9" Name="rect389923" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="600" Width="9" Height="9" Name="rect38991" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="600" Width="9" Height="9" Name="rect389926" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="600" Width="9" Height="9" Name="rect3899238" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="171" Canvas.Top="589" Width="9" Height="9" Name="rect38998" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="182" Canvas.Top="589" Width="9" Height="9" Name="rect389922" Fill="#FF000000"/>
+                                <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="193" Canvas.Top="589" Width="9" Height="9" Name="rect3899237" Fill="#FF000000"/>
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
@@ -377,28 +421,30 @@
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Pomoc" Visibility="Collapsed" Height="78">
                 <WrapPanel Margin="5">
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wiki">
-                        <s:Przycisk.Obrazek>
-                            <Canvas>
+                    <StackPanel>
+                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="Pomoc">
+                            <s:Przycisk.Obrazek>
+                                <Canvas>
 
-                            </Canvas>
-                        </s:Przycisk.Obrazek>
-                    </s:Przycisk>
+                                </Canvas>
+                            </s:Przycisk.Obrazek>
+                        </s:Przycisk>
 
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="WWW"  Click="WWW_Click">
-                        <s:Przycisk.Obrazek>
-                            <Canvas>
+                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="WWW"  Click="WWW_Click">
+                            <s:Przycisk.Obrazek>
+                                <Canvas>
 
-                            </Canvas>
-                        </s:Przycisk.Obrazek>
-                    </s:Przycisk>
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="O Programie"  Click="About_Click">
-                        <s:Przycisk.Obrazek>
-                            <Canvas>
+                                </Canvas>
+                            </s:Przycisk.Obrazek>
+                        </s:Przycisk>
+                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="O Programie"  Click="About_Click">
+                            <s:Przycisk.Obrazek>
+                                <Canvas>
 
-                            </Canvas>
-                        </s:Przycisk.Obrazek>
-                    </s:Przycisk>
+                                </Canvas>
+                            </s:Przycisk.Obrazek>
+                        </s:Przycisk>
+                    </StackPanel>
                 </WrapPanel>
             </s:WstążkaKarta>
             <s:Wstążka.PodSpodem>
@@ -434,6 +480,6 @@
             </s:Wstążka.PodSpodem>
         </s:Wstążka>
         <ProgressBar Visibility="Visible" Name="postęp" HorizontalAlignment="Right" Height="13" Margin="5" VerticalAlignment="Top" Width="92"/>
-        <TextBlock VerticalAlignment="Bottom">sd</TextBlock>
+     
     </Grid>
 </Window>
