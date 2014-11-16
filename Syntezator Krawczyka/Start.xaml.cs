@@ -24,6 +24,8 @@ namespace Syntezator_Krawczyka
     {
         public Start()
         {
+            thi = this;
+          //
             try
             {
                 new Statyczne();
@@ -37,7 +39,7 @@ namespace Syntezator_Krawczyka
                 MessageBox.Show("Błąd ładowania biblioteki NAudio.dll, bez której program nie może odtwarzać dźwięku.", "Błąd pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
                 MessageBox.Show(ex.ToString());
             }
-            polecenia();
+            if (polecenia()) { 
             InitializeComponent();
             if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte != null)
                 for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0; i--)
@@ -50,7 +52,7 @@ namespace Syntezator_Krawczyka
                     OstOtw.Children.Add(lab);
 
                 }
-
+        }
             ThreadPool.QueueUserWorkItem((a) => { Backup.czyśćStare(new TimeSpan(14, 0, 0, 0)); });//czyści backup starszy niż 14 dni
 
         }
@@ -72,7 +74,7 @@ namespace Syntezator_Krawczyka
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
             Close();
         }
-        void polecenia()
+        bool polecenia()
         {
 
             string[] parametry = Environment.GetCommandLineArgs();
@@ -117,7 +119,7 @@ namespace Syntezator_Krawczyka
                         main.Show();
                     }
                     catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
-
+wtyczkaVST.wndprocStart(); 
                     System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                     { Statyczne.otwartyplik = new plik(parametry[xKopia]); });
                     otwarto = true;
@@ -172,6 +174,7 @@ namespace Syntezator_Krawczyka
                     var midiwejście = new MidiIn(i);
                 }
             }
+            return !otwarto;
         }
 
         private void Pusty_Click(object sender, RoutedEventArgs e)
@@ -208,5 +211,7 @@ namespace Syntezator_Krawczyka
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
             Close();
         }
+
+        public static Window thi;
     }
 }

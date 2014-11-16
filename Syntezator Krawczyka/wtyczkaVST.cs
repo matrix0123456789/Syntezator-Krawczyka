@@ -49,9 +49,19 @@ namespace Syntezator_Krawczyka
         string zzzz = "esdx";
         public wtyczkaVST(string path)
         {
-            proces = Process.Start("VTSx86.exe", "\"" + path + "\" " + (Process.GetCurrentProcess().Id));
+            var exe=System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
+            var info=new ProcessStartInfo(exe.Substring(0, exe.LastIndexOfAny(new char[]{'/','\\'}))+ "\\VTSx86.exe", "\"" + path + "\" " + (Process.GetCurrentProcess().Id));
+            info.WorkingDirectory=path.Substring(0, path.LastIndexOfAny(new char[]{'/','\\'}));
+            info.UseShellExecute = false ;
+            proces = Process.Start(info );
             otwarte.Add(proces.Id, this);
             czyWłączone = true;
+            Statyczne.otwartyplik.zapis += zapiszUstawienia;
+        }
+
+        private void zapiszUstawienia()
+        {
+            SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Zapisz.GetHashCode(), (IntPtr)0);
         }
         public string _Nazwa = null;
         public string Nazwa
@@ -61,15 +71,16 @@ namespace Syntezator_Krawczyka
                 if (_Nazwa == null)
                 {
 
-                    SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
+                    var res1 = SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
                 }
                 int cz = 0;
                 while (_Nazwa == null)
                 {
                     Thread.Sleep(1); cz++;
                     if (cz % 10 == 0)
-
-                        SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
+                    {
+                        var res2 = SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
+                    }
                 }
                 return _Nazwa;
             }
@@ -82,7 +93,8 @@ namespace Syntezator_Krawczyka
         {
             var dane = new NutaStruct();
             dane.ilepróbekNaStarcie = input.ilepróbekNaStarcie;
-            MessageHelper.sendWindowsByteMessage((int)proces.MainWindowHandle, (int)polecenia.działaj.GetHashCode(), dane);
+            dane.a = 0x11223344;
+            MessageHelper.sendWindowsMessage((int)proces.MainWindowHandle, (int)polecenia.działaj.GetHashCode(), dane);
         }
 
         public bool czyWłączone
@@ -96,27 +108,42 @@ namespace Syntezator_Krawczyka
             throw new NotImplementedException();
         }
 
-        public System.Xml.XmlElement xml;
+        public System.Xml.XmlNode xml;
         private Process proces;
 
         internal void actionZapis()
         {
-            while (xml.ChildNodes.Count > 0)
-            {
-                xml.RemoveChild(xml.LastChild);
-            }
+            /* while (xml.ChildNodes.Count > 0)
+             {
+                 xml.RemoveChild(xml.LastChild);
+             }*/
         }
 
 
         static wtyczkaVST()
         {
-            HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(MainWindow.thi).Handle);
-            source.AddHook(new HwndSourceHook(WndProc));
+            IntPtr han = (IntPtr)0;
+        sprawdz:
+            if (MainWindow.thi != null)
+                han = new WindowInteropHelper(MainWindow.thi).Handle;
+            if (han == (IntPtr)0 && Start.thi != null)
+            {
+                han = new WindowInteropHelper(Start.thi).Handle;
+            }
+            if (han != (IntPtr)0)
+            /*{
+                Thread.Sleep(1);
+                goto sprawdz;
+            }*/
+            {
+                HwndSource source = HwndSource.FromHwnd(han);
+                source.AddHook(new HwndSourceHook(WndProc));
+            }
         }
         static public void wndprocStart() { }
 
 
-        private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private unsafe static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
 
             if (msg == 8753)
@@ -134,130 +161,32 @@ namespace Syntezator_Krawczyka
                 a.HWnd = hwnd;
                 a.LParam = lParam;
                 a.WParam = wParam;
-                var o = (SIURegistry_Installer.MessageHelper.COPYDATASTRUCT)a.GetLParam(typeof(SIURegistry_Installer.MessageHelper.COPYDATASTRUCT));
-                otwarte[(long)o.dwData].Nazwa = o.lpData;
+                if ((polecenia)wParam == polecenia.Nazwa)
+                {
+
+                    var o = (COPYDATASTRUCT)a.GetLParam(typeof(COPYDATASTRUCT));
+                    otwarte[(long)o.dwData].Nazwa = o.lpData;
+                }
+                if ((polecenia)wParam == polecenia.Zapisz)
+                {
+
+                    var o = (COPYDATASTRUCT)a.GetLParam(typeof(COPYDATASTRUCT));
+                    //Marshal.
+                    otwarte[(long)o.dwData].xml.InnerText = o.lpData;
+                }
             }
             return IntPtr.Zero;
         }
 
+        public void ładuj(string base64chunk)
+        {
+            var res = MessageHelper.sendWindowsMessage((int)proces.MainWindowHandle, (int)polecenia.Ładuj, base64chunk);
+        }
         internal void Pokarz()
         {
             SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.pokarzOkno.GetHashCode(), (IntPtr)0);
         }
     }
 
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz }
-    public struct NutaStruct
-    {
-        public double ilepróbekNaStarcie;
-    }
 }
 
-
-namespace SIURegistry_Installer
-{
-    public class MessageHelper
-    {
-        [DllImport("User32.dll")]
-        private static extern int RegisterWindowMessage(string lpString);
-
-        [DllImport("User32.dll", EntryPoint = "FindWindow")]
-        public static extern Int32 FindWindow(String lpClassName, String lpWindowName);
-
-        //For use with WM_COPYDATA and COPYDATASTRUCT
-        [DllImport("User32.dll", EntryPoint = "SendMessage")]
-        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
-        //For use with WM_COPYDATA and COPYDATASTRUCT
-        [DllImport("User32.dll", EntryPoint = "SendMessage")]
-        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYBYTESTRUCT lParam);
-
-        //For use with WM_COPYDATA and COPYDATASTRUCT
-        [DllImport("User32.dll", EntryPoint = "PostMessage")]
-        public static extern int PostMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
-
-        [DllImport("User32.dll", EntryPoint = "SendMessage")]
-        public static extern int SendMessage(int hWnd, int Msg, int wParam, int lParam);
-
-        [DllImport("User32.dll", EntryPoint = "PostMessage")]
-        public static extern int PostMessage(int hWnd, int Msg, int wParam, int lParam);
-
-        [DllImport("User32.dll", EntryPoint = "SetForegroundWindow")]
-        public static extern bool SetForegroundWindow(int hWnd);
-
-        public const int WM_USER = 0x400;
-        public const int WM_COPYDATA = 0x4A;
-
-        //Used for WM_COPYDATA for string messages
-        public struct COPYDATASTRUCT
-        {
-            public IntPtr dwData;
-            public int cbData;
-            // [MarshalAs(UnmanagedType.LPStr)]
-            public string lpData;
-            public IntPtr process;
-        }//Used for WM_COPYDATA for string messages
-        public struct COPYBYTESTRUCT
-        {
-            public IntPtr dwData;
-            public int cbData;
-            public NutaStruct lpData;
-        }
-
-        public bool bringAppToFront(int hWnd)
-        {
-            return SetForegroundWindow(hWnd);
-        }
-
-        public static int sendWindowsStringMessage(int hWnd, int wParam, string msg)
-        {
-            int result = 0;
-
-            if (hWnd != 0)
-            {
-                byte[] sarr = System.Text.Encoding.Default.GetBytes(msg);
-                int len = sarr.Length;
-                COPYDATASTRUCT cds;
-                cds.dwData = (IntPtr)100;
-                cds.lpData = msg;
-                cds.cbData = len + 1;
-                cds.process = (IntPtr)Process.GetCurrentProcess().Id;
-                result = SendMessage(hWnd, 0x4A, wParam, ref cds);
-            }
-            return result;
-        }
-        public static int sendWindowsByteMessage(int hWnd, int wParam, NutaStruct msg)
-        {
-            int result = 0;
-
-            if (hWnd != 0)
-            {
-                //int len = msg.Length;
-                COPYBYTESTRUCT cds;
-                cds.dwData = (IntPtr)100;
-                cds.lpData = msg;
-                cds.cbData = Marshal.SizeOf(msg);
-                //cds.process = (IntPtr)Process.GetCurrentProcess().Id;
-                result = SendMessage(hWnd, 0x4A, wParam, ref cds);
-            }
-            return result;
-        }
-
-        public int sendWindowsMessage(int hWnd, int Msg, int wParam, int lParam)
-        {
-            int result = 0;
-
-            if (hWnd > 0)
-            {
-                result = SendMessage(hWnd, Msg, wParam, lParam);
-            }
-            return result;
-        }
-
-        public int getWindowId(string className, string windowName)
-        {
-
-            return FindWindow(className, windowName);
-
-        }
-    }
-}

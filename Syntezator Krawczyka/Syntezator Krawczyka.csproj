@@ -167,6 +167,7 @@
     <Compile Include="LogowanieUC.xaml.cs">
       <DependentUpon>LogowanieUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MessageHelper.cs" />
     <Compile Include="Oscyloskop.xaml.cs">
       <DependentUpon>Oscyloskop.xaml</DependentUpon>
     </Compile>

@@ -492,10 +492,15 @@ namespace Syntezator_Krawczyka
             }
             else if (n.Attributes.GetNamedItem("type").Value == "VST")
             {
+                wtyczkaVST.wndprocStart();
                 try
                 {
+
                     var a = new wtyczkaVST(n.Attributes.GetNamedItem("url").Value);
+                    a.xml = n;
                     var sou = new sound();
+                    MainWindow.dispat.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate()
+                {
                     sou.UI = new Instrument(sou.nazwa, sou);
                     Statyczne.otwartyplik.zapis += a.actionZapis;
                     sou.UI.wewnętrzny.Children.Add((a).UI);
@@ -505,8 +510,10 @@ namespace Syntezator_Krawczyka
 
                         MainWindow.thi.pokazInstr.Children.Add(sou.UI);
                     }
+                    a.ładuj(n.InnerText);
+                });
                 }
-                catch { }
+                catch (Exception e) { MessageBox.Show(e.ToString(), "Błąd ładowania wtyczki VST", MessageBoxButton.OK, MessageBoxImage.Error); }
             }
         }
         void dekoduj2(XmlNode n)
