@@ -28,7 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://jaebe.za.pl/musicstudio/</InstallUrl>
     <TargetCulture>pl-PL</TargetCulture>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>0.9.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -216,6 +216,9 @@
     </Compile>
     <Compile Include="UtworySerwer.cs" />
     <Compile Include="UtwórSerwer.cs" />
+    <Compile Include="UtwórSerwerUI.xaml.cs">
+      <DependentUpon>UtwórSerwerUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="vorbisInterop.cs" />
     <Compile Include="VstUI.xaml.cs">
       <DependentUpon>VstUI.xaml</DependentUpon>
@@ -361,6 +364,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UtwórSerwerUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

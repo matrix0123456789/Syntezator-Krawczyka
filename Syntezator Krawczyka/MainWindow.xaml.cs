@@ -51,7 +51,7 @@ namespace Syntezator_Krawczyka
             // test.Show();
             InitializeComponent();
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
-
+            PolaczenieHTTP.zmianaLogowania += zmianaLogowania;
             thi = this;
             dispat = Dispatcher; klawiatkompa1 = new klawiaturaKomputera(typKlawiaturyKomputera.dolna);
             klawiatkompa2 = new klawiaturaKomputera(typKlawiaturyKomputera.górna);
@@ -72,6 +72,7 @@ namespace Syntezator_Krawczyka
             //aktualizacjaOkna = new Timer(akt, null, 10, 100);
             aktualizacjaOkna = new Thread(akt);
             aktualizacjaOkna.Start();
+            zmianaLogowania(Statyczne.serwer);
         }
         void akt(object o)
         {
@@ -309,15 +310,18 @@ namespace Syntezator_Krawczyka
 
         internal void zmianaLogowania(PolaczenieHTTP polaczenieHTTP)
         {
-            if (polaczenieHTTP.zalogowano)
-            {
-                LogowanieTxt.Content = polaczenieHTTP.login;
-                LogowanieTxt.ToolTip = "zalogowano jako " + polaczenieHTTP.login;
-                LogowanieTxt.FontSize = 8;
-            }
-            else
-                LogowanieTxt.Content = "Zaloguj";
-            LogowanieTxt.FontSize = 12;
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                                     {
+                                         if (polaczenieHTTP.zalogowano)
+                                         {
+                                             LogowanieTxt.Content = polaczenieHTTP.login;
+                                             LogowanieTxt.ToolTip = "zalogowano jako " + polaczenieHTTP.login;
+                                             LogowanieTxt.FontSize = 8;
+                                         }
+                                         else
+                                             LogowanieTxt.Content = "Zaloguj";
+                                         LogowanieTxt.FontSize = 12;
+                                     });
         }
 
         private void Grid_Drop(object sender, DragEventArgs e)

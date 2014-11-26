@@ -27,6 +27,8 @@ namespace Syntezator_Krawczyka
         public Logowanie()
             : base()
         {
+
+            InitializeComponent();
             UC = UserCon;
         }
         public LogowanieUC UC;

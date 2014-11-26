@@ -20,28 +20,40 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public partial class LogowanieUC : UserControl
     {
-  public LogowanieUC()
+        public LogowanieUC()
         {
             InitializeComponent();
             PolaczenieHTTP.wyswietlUtworyZ += wyswietlUtwory;
-            if (Statyczne.serwer.zalogowano)
-            {
-
-                zalogowano.Visibility = Visibility.Visible;
-                logowanie.Visibility = Visibility.Collapsed;
-                wyswietlUtwory(Statyczne.serwer.utworyZalogowanego);
-            }
-            else
-            {
-                zalogowano.Visibility = Visibility.Collapsed;
-                logowanie.Visibility = Visibility.Visible;
-            }
+            PolaczenieHTTP.zmianaLogowania += zmianaLogowania;
+            zmianaLogowania(Statyczne.serwer);
+            try { wyswietlUtwory(Statyczne.serwer.utworyZalogowanego); }
+            catch { }
         }
 
-  private void Button_Click(object sender, RoutedEventArgs e)
-  {
-      Statyczne.serwer.loguj(login.Text, haslo.Password);
-  }
+        private void zmianaLogowania(PolaczenieHTTP pol)
+        {
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                                          {
+                                              if (pol.zalogowano)
+                                              {
+
+                                                  zalogowano.Visibility = Visibility.Visible;
+                                                  logowanie.Visibility = Visibility.Collapsed;
+                                                  if (pol.utworyZalogowanego != null)
+                                                      wyswietlUtwory(pol.utworyZalogowanego);
+                                              }
+                                              else
+                                              {
+                                                  zalogowano.Visibility = Visibility.Collapsed;
+                                                  logowanie.Visibility = Visibility.Visible;
+                                              }
+                                          });
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Statyczne.serwer.loguj(login.Text, haslo.Password);
+        }
 
         private void link_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -75,6 +87,7 @@ namespace Syntezator_Krawczyka
                         if (UtworyStack != null)
                         {
                             UtworyStack.Children.Clear();
+                            if (utworySerwer!=null)
                             foreach (var x in utworySerwer)
                             {
                                 UtworyStack.Children.Add(x.UI);
@@ -93,7 +106,7 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            Statyczne.serwer.wyślij(Statyczne.otwartyplik);       
+            Statyczne.serwer.wyślij(Statyczne.otwartyplik);
         }
     }
 }

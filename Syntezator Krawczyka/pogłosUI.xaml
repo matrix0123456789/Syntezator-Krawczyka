@@ -7,7 +7,7 @@
              mc:Ignorable="d" Background="LightGoldenrodYellow"
              d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
     <Grid>
-        <l:suwak Height="23" HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" Opis="czas między następnymi „odbiciami”" VerticalAlignment="Top" Width="111" SelectionStart="-4" Maximum="0" Minimum="-6" ValueChanged="slider1_ValueChanged" />
+        <l:suwak Height="23" HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" Opis="czas między następnymi „odbiciami”" VerticalAlignment="Top" Width="111" SelectionStart="-4" Maximum="0" Minimum="-8" ValueChanged="slider1_ValueChanged" />
         <l:suwak Height="23" HorizontalAlignment="Left" Margin="0,45,0,0" x:Name="sliderB" Opis="O ile następne „odbicie” ma być cichrze od poprzedniego" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="0.99" ValueChanged="slider2_ValueChanged" />
         <Label Content="Pogłos" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
         <l:suwak Height="23" HorizontalAlignment="Left" Margin="0,68,0,0" Opis="głośność echa" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="1" x:Name="sliderC" ValueChanged="slider3_ValueChanged" />

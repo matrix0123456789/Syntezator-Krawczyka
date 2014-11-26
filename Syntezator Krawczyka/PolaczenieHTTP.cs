@@ -13,6 +13,8 @@ namespace Syntezator_Krawczyka
     enum stanSerwera { oczekiwanie, połączono, błąd }
     public class PolaczenieHTTP
     {
+        public static event ZmLogAct zmianaLogowania;
+        public delegate void ZmLogAct(PolaczenieHTTP pol);
         public string login;
         int publiczny, laczony, suma, wysylaj;
         int prywatny = (ushort)(new Random()).Next(16777215);
@@ -96,15 +98,21 @@ namespace Syntezator_Krawczyka
                                 Syntezator_Krawczyka.Properties.Settings.Default.Login = login;
                                 Syntezator_Krawczyka.Properties.Settings.Default.Haslo = haslo;
                                 Syntezator_Krawczyka.Properties.Settings.Default.Save();
-                                MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
-                                {
-                                    if (MainWindow.oknoLogowanie != null)
-                                        MainWindow.oknoLogowanie.Close();
-                                    zalogowano = true;
-                                    MainWindow.thi.zmianaLogowania(this);
-                                });
+                                if (MainWindow.dispat != null)
+                                    MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                                    {
+                                        if (MainWindow.oknoLogowanie != null)
+                                            MainWindow.oknoLogowanie.Close();
+                                    });    zalogowano = true;
+                                zmianaLogowania(this);
+                                       // MainWindow.thi.zmianaLogowania(this);
+                                    
                                 id = long.Parse(odp.Groups[3].Value);
-                                pobierzUtwory();
+                                try { pobierzUtwory(); }
+                                catch
+                                {
+                                    MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
                             }
                             else { MessageBox.Show(odp.Groups[1].Value); }
                         }
@@ -170,7 +178,7 @@ namespace Syntezator_Krawczyka
             Statyczne.serwer.utworyZalogowanego = pobierzUtwory(id.ToString());
             if (Statyczne.serwer.utworyZalogowanego == null)
                 MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
-            else if (MainWindow.oknoLogowanie != null)
+           // else if (MainWindow.oknoLogowanie != null)
                 wyswietlUtworyZ(Statyczne.serwer.utworyZalogowanego);
             // });
         }

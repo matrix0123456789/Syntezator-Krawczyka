@@ -14,7 +14,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="1" Grid.RowSpan="3" Background="#880804">
+            <Grid Grid.ColumnSpan="1" Grid.RowSpan="3" Background="white">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
@@ -27,12 +27,12 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0" Foreground="White"/>
-                <Button Margin="0" Content="Pusty" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="1" Grid.ColumnSpan="3" Background="#ff7760" Click="Pusty_Click" BorderThickness="0" />
-                <Button Margin="0" Content="Przykładowy Ambient" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dd2222"/>
-                <Button Margin="0" Content="Przykładowy Dubstep" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#cc3333"/>
-                <Button Margin="0" Content="Przykładowy Techno" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dd2222"/>
-            </Grid>
+               <!-- <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0" Foreground="Black"/>
+               --> <Button Margin="0" Content="Nowy pusty projekt" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="#daddee" Click="Pusty_Click" BorderThickness="0" />
+               <!-- <Button Margin="0" Content="Przykładowy Ambient" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
+                <Button Margin="0" Content="Przykładowy Dubstep" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
+                <Button Margin="0" Content="Przykładowy Techno" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
+           --> </Grid>
             <Button Click="OtwórzClick" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" xmlns:s="clr-namespace:Syntezator_Krawczyka"  Grid.Column="2" Grid.Row="0" Background="Beige">
                 <Grid >
                     <s:IkonaOtwórz HorizontalAlignment="Left" Margin="-3,8,0,68" VerticalAlignment="Center" RenderTransformOrigin="0,0">
