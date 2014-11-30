@@ -80,54 +80,86 @@ namespace Syntezator_Krawczyka.Synteza
 
             if (wyjście[0].DrógiModół != null)
             {
-
-
                 var ilejest = głośność;
-
-                long czasjest = 0;
-                var ix = 0;
-                bool parzyste = false;
-                while (ilejest * zmniejszenie > 0.01)
+                if (granie.wynik != null && wyjście[0].DrógiModół.GetType() == typeof(granie))
                 {
-                    czasjest += czas2;
-                    ilejest *= zmniejszenie;
-                    var inp = (nuta)input.Clone();
-                    inp.id = inp.id * 256 + input.kopiaInnaId++;
-                    inp.opuznienie += czasjest;
+                    long czasjest = 0;
+                    bool parzyste = false;
+                    do
+                    {
 
-                    inp.generujOd = 0;
-                    inp.czyPogłos = true;
-                    if (wyjście[0].DrógiModół.GetType() == typeof(granie) || (wyjście[0].DrógiModół.GetType() == typeof(glosnosc) && wyjście[0].DrógiModół.wyjście[0].DrógiModół.GetType() == typeof(granie)))
-                    {
-                        inp.dane = input.dane;
-                        inp.głośność = inp.głośność * ilejest;
-                    }
-                    else
-                    {
-                        inp.dane = new float[input.dane.Length];
-                        int max;
-                        if (inp.dane.Length < inp.grajDo)
-                            max = inp.dane.Length;
-                        else
-                            max = (int)inp.grajDo;
-                        for (int i = (int)inp.grajOd; max > i; i++)
+
+                        if(czasjest==0)
                         {
-                            inp.dane[i] = input.dane[i] * ilejest;
+                            var op = input.opuznienie + czasjest;
+                            var mn0= input.balans0 * ilejest;
+                            var mn1 = input.balans1 * ilejest;
+                            for (long i = 0; i < input.dane.LongLength; i++)
+                            {
+                                granie.wynik[0, i+op] += input.dane[i ] * mn0;
+                                granie.wynik[1, i + op] += input.dane[i] * mn1;
+                            }
                         }
+                        else if (parzyste)
+                        { }
+                        else
+                        { }
+
+                        parzyste = !parzyste;
+
+                        czasjest += czas2;
+                        ilejest *= zmniejszenie;
                     }
-                    if (parzyste)
-                        inp.balans1 *= (1 - Balans);
-                    else
-                        inp.balans0 *= (1 - Balans);
+                    while (ilejest * zmniejszenie > 0.01);
 
-                    parzyste = !parzyste;
-                    wyjście[0].DrógiModół.działaj(inp);
                 }
-                wyjście[0].DrógiModół.działaj(input);
+                else
+                {
+
+
+                    long czasjest = 0;
+                    var ix = 0;
+                    bool parzyste = false;
+                    while (ilejest * zmniejszenie > 0.01)
+                    {
+                        czasjest += czas2;
+                        ilejest *= zmniejszenie;
+                        var inp = (nuta)input.Clone();
+                        inp.id = inp.id * 256 + input.kopiaInnaId++;
+                        inp.opuznienie += czasjest;
+                        inp.generujOd = 0;
+                        inp.czyPogłos = true;
+                        if (wyjście[0].DrógiModół.GetType() == typeof(granie) || (wyjście[0].DrógiModół.GetType() == typeof(glosnosc) && wyjście[0].DrógiModół.wyjście[0].DrógiModół.GetType() == typeof(granie)))
+                        {
+                            inp.dane = input.dane;
+                            inp.głośność = inp.głośność * ilejest;
+                        }
+                        else
+                        {
+                            inp.dane = new float[input.dane.Length];
+                            int max;
+                            if (inp.dane.Length < inp.grajDo)
+                                max = inp.dane.Length;
+                            else
+                                max = (int)inp.grajDo;
+                            for (int i = (int)inp.grajOd; max > i; i++)
+                            {
+                                inp.dane[i] = input.dane[i] * ilejest;
+                            }
+                        }
+                        if (parzyste)
+                            inp.balans1 *= (1 - Balans);
+                        else
+                            inp.balans0 *= (1 - Balans);
+
+                        parzyste = !parzyste;
+                        wyjście[0].DrógiModół.działaj(inp);
+                    }
+                    wyjście[0].DrógiModół.działaj(input);
+                }
+
+
             }
-
-
-
 
         }
     }

@@ -76,6 +76,12 @@ namespace Syntezator_Krawczyka.Synteza
                 for (int x = 0; x < zz.Length; x++)
                 {
 
+                    if (zz[x].nuta.głośność == 0 ||( zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
+                    {
+
+                        zz[x].nuta.dane = zz[x].dźwięk = null;
+                        continue;
+                    }
                     long i = 0;
                     if (zz[x].zagrano < 0 && -zz[x].zagrano < oz)
                         i = -zz[x].zagrano;
@@ -360,6 +366,13 @@ namespace Syntezator_Krawczyka.Synteza
                                     else
                                     {
                                         liczIle++;
+                                        
+                                        if (zz[x].nuta.głośność == 0 ||( zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
+                                        {
+
+                                            zz[x].zagrano += o;
+                                            continue;
+                                        }
                                         long i = 0;
                                         if (zz[x].zagrano < 0 && -zz[x].zagrano < o)
                                             i = -zz[x].zagrano;

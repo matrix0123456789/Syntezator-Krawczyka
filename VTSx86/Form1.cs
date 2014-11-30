@@ -43,8 +43,8 @@ namespace VTSx86
                 });
         }
 
-        [MarshalAs(UnmanagedType.LPStr)]
-        string zzzz;
+        //[MarshalAs(UnmanagedType.LPStr)]
+        //string zzzz;
         protected unsafe override void WndProc(ref Message message)
         {
             //filter the RF_TESTMESSAGE
@@ -52,13 +52,18 @@ namespace VTSx86
             {
 
                 var polecenie = (polecenia)message.WParam;
-                MessageBox.Show(polecenie.ToString() + "   s");
+               // 
                 switch (polecenie)
                 {
                     case polecenia.działaj:
                         var lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
 
-                        var test = cont.PluginCommandStub.GetParameterProperties(0);
+                       // var test = cont.PluginCommandStub.GetParameterProperties(0);
+                        /*var a = (VstPluginCommandStub)cont.PluginCommandStub;
+                       var b= a.GetDestinationBuffer();
+                        
+                        MessageBox.Show(b.ToString());*/
+                        cont.PluginCommandStub.SetSampleRate(48000);
                         //cont.PluginCommandStub.
                         break;
                     case polecenia.Ładuj:
@@ -67,6 +72,9 @@ namespace VTSx86
                         var chunk = Convert.FromBase64String(lpdane.lpData);
                         cont.PluginCommandStub.SetChunk(chunk, true);
                         message.Result = (IntPtr)polecenia.Ładuj;
+                        break;
+                    default:
+                        MessageBox.Show(polecenie.ToString() + "   zz");
                         break;
                 }
 
