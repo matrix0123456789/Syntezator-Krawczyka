@@ -20,7 +20,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Interaction logic for KlawiaturaKomputeraUI.xaml
     /// </summary>
-    public partial class sciezkaUI : UserControl
+    public partial class sciezkaUI : UserControl, IDisposable
     {
         sciezka parent;
         Timer akttimer;
@@ -131,6 +131,12 @@ namespace Syntezator_Krawczyka
                 Statyczne.otwartyplik.scieżkiZId.Remove(parent.nazwa);
             parent.xml.ParentNode.RemoveChild(parent.xml);
             (Parent as WrapPanel).Children.Remove(this);
+        }
+
+        public void Dispose()
+        {
+            if (akttimer != null)
+                akttimer.Dispose();
         }
     }
 }

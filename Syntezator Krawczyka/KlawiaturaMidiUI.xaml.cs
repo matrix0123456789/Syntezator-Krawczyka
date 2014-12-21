@@ -19,7 +19,7 @@ namespace Syntezator_Krawczyka
     /// Interfejs graiczny dla
     /// <see cref="KlawiaturaMidi"/>
     /// </summary>
-    public partial class KlawiaturaMidiUI : UserControl
+    public partial class KlawiaturaMidiUI : UserControl, IDisposable
     {
         KlawiaturaMidi parent;
         Timer akttimer;
@@ -148,6 +148,11 @@ namespace Syntezator_Krawczyka
             //comboOktMin.Margin = new Thickness(150, 0, 0, 0);
             graficzny.Children.Add(comboSekw);
             przedzialy.Children.Add(graficzny);
+        }
+        public void Dispose()
+        {
+            if (akttimer != null)
+                akttimer.Dispose();
         }
     }
 }

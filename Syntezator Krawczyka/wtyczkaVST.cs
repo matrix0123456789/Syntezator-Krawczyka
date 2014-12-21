@@ -7,13 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-
-using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
 using SIURegistry_Installer;
 using System.Threading;
 using System.Windows.Interop;

@@ -26,7 +26,7 @@ namespace Syntezator_Krawczyka
     /// <summary lang="pl">
     /// Główne okno, w danym procesie powinno być otwarte tylko jedno.
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         /// <summary>
         /// Przedstawia dane, które są aktualnie otwarte.
@@ -493,5 +493,16 @@ namespace Syntezator_Krawczyka
 
 
 
+
+        public void Dispose()
+        {
+            if (klawiatkompa1 != null)
+                klawiatkompa1.Dispose();
+            if (klawiatkompa2 != null)
+                klawiatkompa2.Dispose();
+            foreach (var x in klawiatMidi)
+                x.Dispose();
+
+        }
     }
 }

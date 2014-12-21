@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace Syntezator_Krawczyka
 {
-   public class InstrumentMidi:soundStart
+   public class InstrumentMidi:soundStart, IDisposable
     {
 
        public UserControl UI;
@@ -46,5 +46,11 @@ namespace Syntezator_Krawczyka
             urządzenie.Send((MidiMessage.ChangePatch(value, 1)).RawData);
             _instrument = value;
         } }
+
+        public void Dispose()
+        {
+            if (urządzenie != null)
+                urządzenie.Dispose();
+        }
     }
 }

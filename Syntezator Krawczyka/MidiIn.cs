@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
-    class MidiIn:wejście
+    class MidiIn:wejście, IDisposable
     {
         NAudio.Midi.MidiIn urządzenie;
         public UIElement UI { get; set; }
@@ -31,6 +31,12 @@ namespace Syntezator_Krawczyka
         public void działaj()
         {
 
+        }
+
+        public void Dispose()
+        {
+            if (urządzenie != null)
+                urządzenie.Dispose();
         }
     }
 }

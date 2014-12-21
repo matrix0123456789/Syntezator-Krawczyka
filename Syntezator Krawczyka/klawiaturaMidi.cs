@@ -14,7 +14,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Umożliwia granie na żywo z urzyciem urządzenia MIDI np. Keyboard
     /// </summary>
-    public class KlawiaturaMidi : wejście
+    public class KlawiaturaMidi : wejście, IDisposable
     {
         public UIElement UI { get; set; }
         public static long przetwarzaW = 0;
@@ -148,6 +148,18 @@ namespace Syntezator_Krawczyka
             public int min;
             public int max;
             soundStart sekw;
+        }
+        public void Dispose()
+        {
+            if (UI != null)
+                (UI as KlawiaturaMidiUI).Dispose();
+            if (akttimer != null)
+                (akttimer).Dispose();
+            if (wej != null)
+                (wej).Dispose();
+            UI = null;
+            akttimer = null;
+                wej = null;
         }
     }
 }

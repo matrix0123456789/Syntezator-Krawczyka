@@ -14,7 +14,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Umożliwia granie na żywo bez klawiatury midi za pomocą klawiatury komputerowej
     /// </summary>
-    public class klawiaturaKomputera : wejście
+    public class klawiaturaKomputera : wejście, IDisposable
     {
         public UIElement UI
         {
@@ -286,5 +286,14 @@ namespace Syntezator_Krawczyka
         public typKlawiaturyKomputera typ;
         public short oktawy;
         public double tony;
+
+        public void Dispose()
+        {
+            if (_UI != null)
+                (_UI as KlawiaturaKomputeraUI).Dispose();
+            if (akttimer != null)
+                (akttimer).Dispose();
+            _UI = null;
+        }
     }
 }

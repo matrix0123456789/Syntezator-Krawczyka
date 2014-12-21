@@ -20,7 +20,7 @@ namespace Syntezator_Krawczyka
     /// Interfejs graiczny dla
     /// <seealso cref="KlawiaturaKomputera"/>
     /// </summary>
-    public partial class KlawiaturaKomputeraUI : UserControl
+    public partial class KlawiaturaKomputeraUI : UserControl, IDisposable
     {
         klawiaturaKomputera parent;
         Timer akttimer;
@@ -75,6 +75,12 @@ namespace Syntezator_Krawczyka
             {
                 parent.sekw = (comboBox1.SelectedItem as FrameworkElement).Tag as soundStart;
             }
+        }
+
+        public void Dispose()
+        {
+            if (akttimer != null)
+                akttimer.Dispose();
         }
     }
 }
