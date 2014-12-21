@@ -51,11 +51,12 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("ucinanie", "false");
             _ustawienia.Add("ucinanieWartość", "1.0");
         }
+        bool ucinanie = false;
         public void działaj(nuta input)
         {
             
             // bool ucinanie;
-            if (ustawienia["ucinanie"] == "true")//uważać, czy nie jest po pogłosie
+            if (ucinanie)//uważać, czy nie jest po pogłosie
             {
                 var ucinanieWartość = float.Parse(ustawienia["ucinanieWartość"], CultureInfo.InvariantCulture);
                 var ucinanieWartośćMinus = -ucinanieWartość;

@@ -185,7 +185,7 @@ namespace Syntezator_Krawczyka
                             {
                                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                             {
-                                while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY)
+                                while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY/2)
                                 {
                                     if (Mouse.GetPosition(this).Y - kliknietoYPotem > 0)
                                     {
@@ -198,7 +198,17 @@ namespace Syntezator_Krawczyka
                                                 x.Margin = thi;
 
                                                 var n = (nutaXml)aktywna.Tag;
-                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = n.nuta.ilepróbekNaStarcie / Math.Pow(2d, 1d / 12d);
+                                                float ilepr=0;
+                                                try
+                                                {
+                                                    ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) - 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                                }
+                                                catch { }
+                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0,ilepr);
+
+                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+                                                atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
+                                                n.xml.Attributes.SetNamedItem(atrybut);
                                             }
                                     }
                                     else
@@ -212,7 +222,17 @@ namespace Syntezator_Krawczyka
                                                 thi.Top -= skalaY/2;
                                                 x.Margin = thi;
                                                 var n = (nutaXml)aktywna.Tag;
-                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = n.nuta.ilepróbekNaStarcie * Math.Pow(2d, 1d / 12d);
+                                                float ilepr = 0;
+                                                try
+                                                {
+                                                    ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) - 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                                }
+                                                catch { }
+                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);
+
+                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+                                                atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
+                                                n.xml.Attributes.SetNamedItem(atrybut);
                                             }
                                     }
 
