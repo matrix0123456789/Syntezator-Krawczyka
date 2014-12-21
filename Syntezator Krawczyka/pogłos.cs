@@ -56,7 +56,7 @@ namespace Syntezator_Krawczyka.Synteza
                 var ilejest = float.Parse(_ustawienia["glosnosc"], CultureInfo.InvariantCulture);
 
                 var ix = 0;
-                while (ilejest * zmniejszenie > 0.02)
+                while (ilejest * zmniejszenie > 0.01)
                 {
                     wej += czas;
                     ilejest *= zmniejszenie;
@@ -80,7 +80,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             if (wyjście[0].DrógiModół != null)
             {
-                var ilejest = głośność;
+                var ilejest = głośność * .33333333333333333f;
                 if (granie.wynik != null && wyjście[0].DrógiModół.GetType() == typeof(granie))
                 {
                     long czasjest = 0;
@@ -88,29 +88,74 @@ namespace Syntezator_Krawczyka.Synteza
                     do
                     {
 
-
-                        if(czasjest==0)
+                        lock (input)
                         {
-                            var op = input.opuznienie + czasjest;
-                            var mn0= input.balans0 * ilejest;
-                            var mn1 = input.balans1 * ilejest;
-                            for (long i = 0; i < input.dane.LongLength; i++)
+                            if (czasjest == 0)
                             {
-                                granie.wynik[0, i+op] += input.dane[i ] * mn0;
-                                granie.wynik[1, i + op] += input.dane[i] * mn1;
+                                var op = input.opuznienie + czasjest;
+                                var mn0 = input.balans0 * ilejest;
+                                var mn1 = input.balans1 * ilejest;
+                                for (long i = 0; i < input.dane.LongLength; i++)
+                                {
+                                    granie.wynik[0, i + op] += input.dane[i] * mn0;
+                                    granie.wynik[1, i + op] += input.dane[i] * mn1;
+                                   // if (granie.wynik[1, i + op] > 3)
+                                 //       (5).ToString();
+                                }
                             }
+                            else if (Balans == 1)
+                            {
+                                if (parzyste)
+                                {
+                                    var op = input.opuznienie + czasjest;
+                                    var mn0 = input.balans0 * ilejest;
+                                    for (long i = 0; i < input.dane.LongLength; i++)
+                                    {
+                                        granie.wynik[0, i + op] += input.dane[i] * mn0;
+                                    }
+                                }
+                                else
+                                {
+                                    var op = input.opuznienie + czasjest;
+                                    var mn1 = input.balans1 * ilejest;
+                                    for (long i = 0; i < input.dane.LongLength; i++)
+                                    {
+                                        granie.wynik[1, i + op] += input.dane[i] * mn1;
+                                    }
+                                }
+                            }
+                            else if (parzyste)
+                            {
+                                var op = input.opuznienie + czasjest;
+                                var mn0 = input.balans0 * ilejest;
+                                var mn1 = input.balans1 * ilejest * (1 - Balans);
+                                for (long i = 0; i < input.dane.LongLength; i++)
+                                {
+                                    granie.wynik[0, i + op] += input.dane[i] * mn0;
+                                    granie.wynik[1, i + op] += input.dane[i] * mn1;
+                                }
+                            }
+                            else
+                            {
+                                var op = input.opuznienie + czasjest;
+                                var mn0 = input.balans0 * ilejest * (1 - Balans);
+                                var mn1 = input.balans1 * ilejest;
+                                for (long i = 0; i < input.dane.LongLength; i++)
+                                {
+                                    granie.wynik[0, i + op] += input.dane[i] * mn0;
+                                    granie.wynik[1, i + op] += input.dane[i] * mn1;
+                                }
+                            }
+
+                            parzyste = !parzyste;
+
+                            czasjest += czas2;
+                            ilejest *= zmniejszenie;
                         }
-                        else if (parzyste)
-                        { }
-                        else
-                        { }
-
-                        parzyste = !parzyste;
-
-                        czasjest += czas2;
-                        ilejest *= zmniejszenie;
                     }
                     while (ilejest * zmniejszenie > 0.01);
+                    input.dane = null;
+                    
 
                 }
                 else

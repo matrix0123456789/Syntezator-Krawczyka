@@ -19,6 +19,10 @@ namespace Syntezator_Krawczyka
         /// Główna ścierzka,na której pracujemy
         /// </summary>
         sciezka main = null;
+        double kliknietoX = double.NaN;
+        double kliknietoY = double.NaN;
+        double kliknietoXPotem = double.NaN;
+        double kliknietoYPotem = double.NaN;
         double skalaX = 20;
         double skalaY = 20;
         double tonMax;
@@ -203,6 +207,8 @@ namespace Syntezator_Krawczyka
                     ton.Text = "0";
                 }
                 aktywna = (Rectangle)sender;
+                kliknietoY = kliknietoYPotem = e.GetPosition(Mouse.Captured).Y;
+                kliknietoY = kliknietoYPotem = e.GetPosition(this).Y;
             }
         }
 
@@ -368,10 +374,10 @@ namespace Syntezator_Krawczyka
         {
             switch (e.Key)
             {
-                case Key.LeftCtrl:
+                /*case Key.LeftCtrl:
                 case Key.RightCtrl:
                     nowaNuta.Focus();
-                    break;
+                    break;*/
                 case Key.C:
                     czas.Focus();
 
