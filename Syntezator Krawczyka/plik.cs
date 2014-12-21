@@ -322,15 +322,24 @@ namespace Syntezator_Krawczyka
                 Syntezator_Krawczyka.Properties.Settings.Default.Save();
             }
         }
-        public void zapisz(string path)
+        public void zapisz(string path) { zapisz(path, true); }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">Ścieżka do pliku</param>
+        /// <param name="OstatnioOtwarte">Czy dodać do listy "Ostatnio Otwarte"</param>
+        public void zapisz(string path, bool OstatnioOtwarte)
         {
             uaktualnij();
             URL = path;
             System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
-            if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
-                Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
-            Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(path);
-            Syntezator_Krawczyka.Properties.Settings.Default.Save();
+            if (OstatnioOtwarte)
+            {
+                if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
+                    Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+                Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(path);
+                Syntezator_Krawczyka.Properties.Settings.Default.Save();
+            }
             zapis.Write(xml.OuterXml);
             zapis.Close();
 

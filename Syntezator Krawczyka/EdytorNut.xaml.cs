@@ -218,6 +218,7 @@ namespace Syntezator_Krawczyka
         private void czas_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+            if (e.Changes.Count == 0) return;
             usuńLitery((TextBox)sender);
             if (aktywna != null)
             {
@@ -240,6 +241,7 @@ namespace Syntezator_Krawczyka
         }
         private void dlugosc_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (e.Changes.Count == 0) return;
             usuńLitery((TextBox)sender);
             if (aktywna != null)
             {
@@ -275,6 +277,7 @@ namespace Syntezator_Krawczyka
 
         private void ton_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (e.Changes.Count == 0) return;
             usuńLitery((TextBox)sender);
             if (aktywna != null)
             {
@@ -378,6 +381,9 @@ namespace Syntezator_Krawczyka
                 case Key.RightCtrl:
                     nowaNuta.Focus();
                     break;*/
+                case Key.F5:
+                    refresh(true);
+                    break;
                 case Key.C:
                     czas.Focus();
 

@@ -42,7 +42,7 @@ namespace Syntezator_Krawczyka
             if (polecenia()) { 
             InitializeComponent();
             if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte != null)
-                for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0; i--)
+                for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count-20; i--)
                 {
                     var lab = new Label();
                     var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
@@ -213,5 +213,12 @@ wtyczkaVST.wndprocStart();
         }
 
         public static Window thi;
+
+        private void WyczyśćListę_Click(object sender, RoutedEventArgs e)
+        {
+            Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Clear();
+            Syntezator_Krawczyka.Properties.Settings.Default.Save();
+            OstOtw.Children.Clear();
+        }
     }
 }
