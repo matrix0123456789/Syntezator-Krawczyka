@@ -326,25 +326,62 @@ namespace Syntezator_Krawczyka
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
+            Grid_Dropp(sender, e);
+        }
+        public static void Grid_Dropp(object sender, DragEventArgs e)
+        {
 
             //if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument")!=null)
             //            nowyInstrument.laduj((string)e.Data.GetData("audio/x-syntezator-krawczyka-instrument"));
-
+            if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument") != null)
+            {
+                // e.Effects = DragDropEffects.None;
+               /* if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument").GetHashCode() == hashCodeDragAndDrop)
+                {
+                    e.Effects = DragDropEffects.None;
+                    // e.Data.SetData(null);
+                }
+                */
+            }
+            else if (e.Data.GetData("FileDrop") != null)
+            {
+                string[] explode = (e.Data.GetData("FileDrop") as String[])[0].Split('.');
+                if (explode.Last() == "mid" || explode.Last() == "midi")
+                    Statyczne.otwartyplik = new plikmidi((e.Data.GetData("FileDrop") as String[])[0]);
+                else
+                    Statyczne.otwartyplik = new plik((e.Data.GetData("FileDrop") as String[])[0]);
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
         }
 
-        private void Grid_DragOver(object sender, DragEventArgs e)
+        public void Grid_DragOver(object sender, DragEventArgs e)
         {
-            /*if(e.Data.GetData("audio/x-syntezator-krawczyka-instrument")==null)
+            if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument") != null)
             {
-                e.Effects = DragDropEffects.None;
-                
+                // e.Effects = DragDropEffects.None;
+                if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument").GetHashCode() == hashCodeDragAndDrop)
+                {
+                    e.Effects = DragDropEffects.None;
+                   // e.Data.SetData(null);
+                }
 
             }
-            else if (e.Data.GetData("audio/x-syntezator-krawczyka-instrument").GetHashCode() == hashCodeDragAndDrop)
+            else if (e.Data.GetData("FileDrop") != null)
             {
+                /*string[] explode = e.Data.GetData("FileDrop").Split('.');
+                if (explode.Last() == "mid" || explode.Last() == "midi")
+                    Statyczne.otwartyplik = new plikmidi(dialog.FileName);
+                else
+                    Statyczne.otwartyplik = new plik(dialog.FileName);*/
+            }
+            else
+            {
+                
                 e.Effects = DragDropEffects.None;
-                e.Data.SetData(null);
-            }*/
+            }
         }
         static public int hashCodeDragAndDrop = 0;
         Boolean suwakdziala = false;
@@ -410,8 +447,8 @@ namespace Syntezator_Krawczyka
                         Statyczne.otwartyplik.zapis += a.actionZapis;
                         MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                         {
-                        sou.UI = new Instrument(sou.nazwa, sou, "VST");
-                        sou.UI.wewnętrzny.Children.Add((a).UI);
+                            sou.UI = new Instrument(sou.nazwa, sou, "VST");
+                            sou.UI.wewnętrzny.Children.Add((a).UI);
                             if (!MainWindow.thi.pokazInstr.Children.Contains(sou.UI))
                             {
 

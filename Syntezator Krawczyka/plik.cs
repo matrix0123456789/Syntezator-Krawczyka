@@ -9,6 +9,7 @@ using System.Windows;
 using System.Threading;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using System.Windows.Shell;
 namespace Syntezator_Krawczyka
 {
     public class plik
@@ -64,6 +65,7 @@ namespace Syntezator_Krawczyka
                 catch { }
                 dekoduj();
             }
+            aktJumpList();
         }
         public plik(string a, bool czyXML)
         {
@@ -103,6 +105,11 @@ namespace Syntezator_Krawczyka
                 moduły.Clear();
                 sciezki.Clear();
                 scieżkiZId.Clear();
+                if (MainWindow.dispat == null)
+                {
+                    var mainO = new MainWindow();
+                    mainO.Show();
+                }
                 MainWindow.dispat.BeginInvoke(DispatcherPriority.Send, (ThreadStart)delegate()
                 {
                     for (var i = MainWindow.thi.pokazŚcie.Children.Count - 1; i >= 0; i--)
@@ -321,6 +328,7 @@ namespace Syntezator_Krawczyka
                 Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(dialog.FileName);
                 Syntezator_Krawczyka.Properties.Settings.Default.Save();
             }
+            aktJumpList();
         }
         public void zapisz(string path) { zapisz(path, true); }
         /// <summary>
@@ -342,7 +350,7 @@ namespace Syntezator_Krawczyka
             }
             zapis.Write(xml.OuterXml);
             zapis.Close();
-
+            aktJumpList();
         }
         public byte[] zapiszDoZmiennej()
         {
@@ -737,5 +745,33 @@ namespace Syntezator_Krawczyka
         }
 
 
+
+        internal static void aktJumpList()
+        {
+            var lista = JumpList.GetJumpList(Application.Current);
+
+            if (lista == null)
+                lista = new JumpList();
+            lista.ShowRecentCategory = false;
+            lista.ShowFrequentCategory = false;
+            lista.JumpItems.Clear();
+            for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+            {
+                var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
+                //lista.
+                var item = new JumpTask();
+                item.Description = str;
+                item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' })+1);
+                item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
+                item.Arguments = str;
+                item.CustomCategory = "Ostatnie";
+                lista.JumpItems.Add(item);
+                // lab.Content=;
+
+
+            }
+            lista.Apply();
+            JumpList.SetJumpList(Application.Current, lista);
+        }
     }
 }

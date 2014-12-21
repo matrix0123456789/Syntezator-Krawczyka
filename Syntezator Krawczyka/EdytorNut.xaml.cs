@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -166,49 +167,115 @@ namespace Syntezator_Krawczyka
                 if (aktywne == null)
                     aktywne = new List<Rectangle>() { aktywna };
                 aktywne.Add((Rectangle)sender);
+                ((Rectangle)sender).Stroke = Brushes.Green;
             }
             else
             {
-                if (aktywne != null)
+                if (aktywne != null && aktywne.Contains((Rectangle)sender))
                 {
-                    foreach (var x in aktywne)
-                        x.Stroke = null;
-                    aktywne = null;
-                }
-                if (aktywna != null)
-                    aktywna.Stroke = null;
-                aktywna = null;
-                var nuta = (nutaXml)((sender as Rectangle).Tag);
-                czas.IsEnabled = dlugosc.IsEnabled = ton.IsEnabled = true;
-                ((Rectangle)sender).Stroke = Brushes.Green;
+                    if (e == null) { kliknietoX = kliknietoY = kliknietoXPotem = kliknietoYPotem = double.NaN; }
+                    else
+                    {
+                        kliknietoY = kliknietoYPotem = e.GetPosition(this).Y;
+                        kliknietoX = kliknietoXPotem = e.GetPosition(this).X;
 
-                try
-                {
-                    czas.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture).ToString();
+                        var wątek = new Thread(() =>
+                        {
+                            while (!double.IsNaN(kliknietoY))
+                            {
+                                MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                            {
+                                while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY)
+                                {
+                                    if (Mouse.GetPosition(this).Y - kliknietoYPotem > 0)
+                                    {
+                                        kliknietoYPotem += skalaY;
+                                        if (aktywne != null) foreach (var x in aktywne)
+                                            {
+                                                // x.Margin.Top -= skalaY;
+                                                var thi = x.Margin;
+                                                thi.Top += skalaY/2;
+                                                x.Margin = thi;
+
+                                                var n = (nutaXml)aktywna.Tag;
+                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = n.nuta.ilepróbekNaStarcie / Math.Pow(2d, 1d / 12d);
+                                            }
+                                    }
+                                    else
+                                    {
+
+                                        kliknietoYPotem -= skalaY;
+                                        if (aktywne != null) foreach (var x in aktywne)
+                                            {
+                                                // x.Margin.Top -= skalaY;
+                                                var thi = x.Margin;
+                                                thi.Top -= skalaY/2;
+                                                x.Margin = thi;
+                                                var n = (nutaXml)aktywna.Tag;
+                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = n.nuta.ilepróbekNaStarcie * Math.Pow(2d, 1d / 12d);
+                                            }
+                                    }
+
+                                }
+
+                                if (Mouse.LeftButton == MouseButtonState.Released)
+                                {
+                                    kliknietoX = kliknietoY = kliknietoXPotem = kliknietoYPotem = double.NaN;
+                                    return;
+                                }
+                            });
+                                Thread.Sleep(10);
+                                if (double.IsNaN(kliknietoY))
+                                    return;
+                            }
+                        });
+                        wątek.Start();
+
+                    }
                 }
-                catch (NullReferenceException)
+                else
                 {
-                    czas.Text = "0";
+                    if (aktywne != null)
+                    {
+                        foreach (var x in aktywne)
+                            x.Stroke = null;
+                        aktywne = null;
+                    }
+                    if (aktywna != null)
+                        aktywna.Stroke = null;
+                    aktywna = null;
+                    var nuta = (nutaXml)((sender as Rectangle).Tag);
+                    czas.IsEnabled = dlugosc.IsEnabled = ton.IsEnabled = true;
+                    ((Rectangle)sender).Stroke = Brushes.Green;
+
+                    try
+                    {
+                        czas.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture).ToString();
+                    }
+                    catch (NullReferenceException)
+                    {
+                        czas.Text = "0";
+                    }
+                    try
+                    {
+                        dlugosc.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture).ToString();
+                    }
+                    catch (NullReferenceException)
+                    {
+                        dlugosc.Text = "0";
+                    }
+                    try
+                    {
+                        ton.Text = (double.Parse(nuta.xml.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture) + 6 * double.Parse(nuta.xml.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture)).ToString();
+                    }
+                    catch (NullReferenceException)
+                    {
+                        ton.Text = "0";
+                    }
+                    aktywna = (Rectangle)sender;
+                    aktywne = new List<Rectangle>() { aktywna };
+
                 }
-                try
-                {
-                    dlugosc.Text = double.Parse(nuta.xml.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture).ToString();
-                }
-                catch (NullReferenceException)
-                {
-                    dlugosc.Text = "0";
-                }
-                try
-                {
-                    ton.Text = (double.Parse(nuta.xml.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture) + 6 * double.Parse(nuta.xml.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture)).ToString();
-                }
-                catch (NullReferenceException)
-                {
-                    ton.Text = "0";
-                }
-                aktywna = (Rectangle)sender;
-                kliknietoY = kliknietoYPotem = e.GetPosition(Mouse.Captured).Y;
-                kliknietoY = kliknietoYPotem = e.GetPosition(this).Y;
             }
         }
 

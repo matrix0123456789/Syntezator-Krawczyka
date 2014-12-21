@@ -24,6 +24,7 @@ namespace Syntezator_Krawczyka
     {
         public Start()
         {
+            plik.aktJumpList();
             thi = this;
           //
             try
@@ -219,6 +220,12 @@ wtyczkaVST.wndprocStart();
             Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Clear();
             Syntezator_Krawczyka.Properties.Settings.Default.Save();
             OstOtw.Children.Clear();
+            plik.aktJumpList();
+        }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            MainWindow.Grid_Dropp(sender, e);
         }
     }
 }

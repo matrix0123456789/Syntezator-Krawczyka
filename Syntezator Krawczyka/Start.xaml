@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.Start"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Start" Height="390" Width="640">
+        Title="Start" Height="390" Width="640" Drop="Grid_Drop" AllowDrop="True">
     <Grid>
         <Label Content="Jaebe Music Studio" VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="30"/>
         <Grid Margin="0,55,0,0">
