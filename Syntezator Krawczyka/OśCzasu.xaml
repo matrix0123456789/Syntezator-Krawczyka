@@ -4,7 +4,9 @@
         Title="EdytorScierzek" Height="400" Width="450">
     <Grid>
         <ScrollViewer Margin="0,0,119,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <Grid Name="panel" ></Grid>
+            <Grid Name="panel" >
+                <Rectangle Name="PasekPostępu" Fill="red" HorizontalAlignment="Left" Width="2"/>
+            </Grid>
         </ScrollViewer>
         <Grid Margin="0,0,0,338" HorizontalAlignment="Right" Width="114">
             <Label Name="nazwa" Content="Label"  VerticalAlignment="Top" RenderTransformOrigin="-0.867,-0.686" />

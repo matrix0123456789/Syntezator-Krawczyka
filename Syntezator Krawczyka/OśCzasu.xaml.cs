@@ -55,6 +55,20 @@ namespace Syntezator_Krawczyka
                 szukaj(akt, i + Statyczne.otwartyplik.sciezki.Count);
             }
             rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
+             tim = new Timer(TimerAkt, null, 30, 30);
+
+        }
+
+        private void TimerAkt(object state)
+        {
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+            {
+                int bu=0;
+                if(Statyczne.bufor!=null)
+                bu=Statyczne.bufor.BufferedBytes;
+                var pozycjaSuwaka = granie.graniePrzy - bu / 4;
+                PasekPostępu.Margin = new Thickness(pozycjaSuwaka / plik.Hz / 60 * plik.tempo*skalaX, 0, 0, 0);
+            });
         }
         float iRysujSkala = 0;
         private void rysujSkala(double p)
@@ -96,6 +110,7 @@ namespace Syntezator_Krawczyka
             panel.Children.Add(gr);
         }
         static Brush strokeNormal = new SolidColorBrush(Color.FromArgb(50, 0, 0, 0));
+        private Timer tim;
         void szukaj(odDo akt, int i)
         {
             bool znaleniono = false;
@@ -156,7 +171,7 @@ namespace Syntezator_Krawczyka
                 nazwa.Content = ((sciezka)((odDo)aktywna.Tag).sciezka).nazwa;
                 edytSciezka.Visibility = Visibility.Visible;
                 edytSample.Visibility = Visibility.Collapsed;
-                delay.Text = ( ((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione).ToString();
+                delay.Text = (((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione).ToString();
                 aktModuły();
             }
             else
@@ -231,7 +246,7 @@ namespace Syntezator_Krawczyka
                 var akt = new odDo(a);
 
                 //szukaj miejsca na wyświetlenie
-                szukaj(akt, Statyczne.otwartyplik.sciezki.Count + Statyczne.otwartyplik.sameSample.Count-1);
+                szukaj(akt, Statyczne.otwartyplik.sciezki.Count + Statyczne.otwartyplik.sameSample.Count - 1);
 
                 rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
             }
@@ -257,7 +272,7 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.White;
                     ((odDo)aktywna.Tag).start = (long)(plik.Hz * 60 / plik.tempo * cz);
                     rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
-            Statyczne.otwartyplik.zmiana();
+                    Statyczne.otwartyplik.zmiana();
                 }
                 catch (FormatException)
                 {
@@ -337,15 +352,15 @@ namespace Syntezator_Krawczyka
         private void duplikuj_click(object sender, RoutedEventArgs e)
         {
             var scorg = (aktywna.Tag as odDo).sciezka as sciezka;
-           var sc= Statyczne.otwartyplik.duplikujScierzke(scorg);
-           sc.delayUstawione = scorg.delayUstawione;
-           sc.delay = scorg.delay;
-           var akt = new odDo(sc);
-           akt.dlugosc = scorg.dlugosc;
-           akt.start = scorg.delay;
+            var sc = Statyczne.otwartyplik.duplikujScierzke(scorg);
+            sc.delayUstawione = scorg.delayUstawione;
+            sc.delay = scorg.delay;
+            var akt = new odDo(sc);
+            akt.dlugosc = scorg.dlugosc;
+            akt.start = scorg.delay;
             //szukaj miejsca na wyświetlenie
-           szukaj(akt, Statyczne.otwartyplik.sciezki.IndexOf(scorg));
-           Statyczne.otwartyplik.zmiana();
+            szukaj(akt, Statyczne.otwartyplik.sciezki.IndexOf(scorg));
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void usuń_click(object sender, RoutedEventArgs e)
@@ -374,8 +389,8 @@ namespace Syntezator_Krawczyka
         private void graj_click(object sender, RoutedEventArgs e)
         {
             Statyczne.otwartyplik.zmiana();
-            granie.graniePrzy =(int) (((odDo)aktywna.Tag).sciezka as sciezka).delay;
-            Statyczne.otwartyplik.grajStart(new List<sciezka>(){(((odDo)aktywna.Tag).sciezka as sciezka)}, null);
+            granie.graniePrzy = (int)(((odDo)aktywna.Tag).sciezka as sciezka).delay;
+            Statyczne.otwartyplik.grajStart(new List<sciezka>() { (((odDo)aktywna.Tag).sciezka as sciezka) }, null);
         }
     }
     interface IodDo
