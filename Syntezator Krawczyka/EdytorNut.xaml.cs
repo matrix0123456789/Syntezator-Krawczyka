@@ -197,7 +197,7 @@ namespace Syntezator_Krawczyka
                                                 thi.Top += skalaY/2;
                                                 x.Margin = thi;
 
-                                                var n = (nutaXml)aktywna.Tag;
+                                                var n = (nutaXml)x.Tag;
                                                 float ilepr=0;
                                                 try
                                                 {
@@ -221,11 +221,11 @@ namespace Syntezator_Krawczyka
                                                 var thi = x.Margin;
                                                 thi.Top -= skalaY/2;
                                                 x.Margin = thi;
-                                                var n = (nutaXml)aktywna.Tag;
+                                                var n = (nutaXml)x.Tag;
                                                 float ilepr = 0;
                                                 try
                                                 {
-                                                    ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) - 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                                    ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) + 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
                                                 }
                                                 catch { }
                                                 n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);

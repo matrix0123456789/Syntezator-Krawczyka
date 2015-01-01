@@ -3,8 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Oscyloskop" Height="300" Width="300" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Grid>
-        <Canvas Name="wykres">
+        <Canvas Name="wykres" Margin="0,0,0,29">
 
         </Canvas>
+        <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left">Oś X</TextBlock>
+        <ComboBox Name="OśX" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,-1" SelectionChanged="OśX_SelectionChanged" >
+            <ComboBoxItem>Lewy kanał</ComboBoxItem>
+            <ComboBoxItem>Prawy kanał</ComboBoxItem>
+            <ComboBoxItem Selector.IsSelected="True">Piła 55Hz</ComboBoxItem>
+            <ComboBoxItem>Piła 60Hz</ComboBoxItem>
+        </ComboBox>
+        <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="119,0,0,2">Oś Y</TextBlock>
+        <ComboBox Name="OśY" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="153,0,0,-2" SelectionChanged="OśY_SelectionChanged">
+            <ComboBoxItem Selector.IsSelected="True">Lewy kanał</ComboBoxItem>
+            <ComboBoxItem>Prawy kanał</ComboBoxItem>
+            <ComboBoxItem>Piła 55Hz</ComboBoxItem>
+            <ComboBoxItem>Piła 60Hz</ComboBoxItem>
+        </ComboBox>
     </Grid>
 </Window>

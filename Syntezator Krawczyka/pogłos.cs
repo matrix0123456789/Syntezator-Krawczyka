@@ -81,7 +81,7 @@ namespace Syntezator_Krawczyka.Synteza
             if (wyjście[0].DrógiModół != null)
             {
                 //var ilejest = głośność * .33333333333333333f;
-                var ilejest = input.głośność*głośność;
+                var ilejest = głośność;
                 if (granie.wynik != null && wyjście[0].DrógiModół.GetType() == typeof(granie))
                 {
                     long czasjest = 0;
@@ -109,7 +109,7 @@ namespace Syntezator_Krawczyka.Synteza
                                 if (parzyste)
                                 {
                                     var op = input.opuznienie + czasjest;
-                                    var mn0 = input.balans0 * ilejest;
+                                    var mn0 = input.balans0 * input.głośność * ilejest;
                                     for (long i = 0; i < input.dane.LongLength; i++)
                                     {
                                         granie.wynik[0, i + op] += input.dane[i] * mn0;
@@ -118,7 +118,7 @@ namespace Syntezator_Krawczyka.Synteza
                                 else
                                 {
                                     var op = input.opuznienie + czasjest;
-                                    var mn1 = input.balans1 * ilejest;
+                                    var mn1 = input.balans1 * input.głośność * ilejest;
                                     for (long i = 0; i < input.dane.LongLength; i++)
                                     {
                                         granie.wynik[1, i + op] += input.dane[i] * mn1;
@@ -128,8 +128,8 @@ namespace Syntezator_Krawczyka.Synteza
                             else if (parzyste)
                             {
                                 var op = input.opuznienie + czasjest;
-                                var mn0 = input.balans0 * ilejest;
-                                var mn1 = input.balans1 * ilejest * (1 - Balans);
+                                var mn0 = input.balans0 * input.głośność * ilejest;
+                                var mn1 = input.balans1 * input.głośność * ilejest * (1 - Balans);
                                 for (long i = 0; i < input.dane.LongLength; i++)
                                 {
                                     granie.wynik[0, i + op] += input.dane[i] * mn0;
@@ -139,8 +139,8 @@ namespace Syntezator_Krawczyka.Synteza
                             else
                             {
                                 var op = input.opuznienie + czasjest;
-                                var mn0 = input.balans0 * ilejest * (1 - Balans);
-                                var mn1 = input.balans1 * ilejest;
+                                var mn0 = input.balans0 * input.głośność * ilejest * (1 - Balans);
+                                var mn1 = input.balans1 * input.głośność * ilejest;
                                 for (long i = 0; i < input.dane.LongLength; i++)
                                 {
                                     granie.wynik[0, i + op] += input.dane[i] * mn0;

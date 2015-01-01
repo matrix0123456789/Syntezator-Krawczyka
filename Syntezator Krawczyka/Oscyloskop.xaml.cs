@@ -42,6 +42,7 @@ namespace Syntezator_Krawczyka
         }
         static float[,] aktualniePrzetwarzane;
         static int pozycja = 0;
+        int typX = 0, typY = 1;
         static DateTime czas = new DateTime(0);
         private void akt(object state)
         {
@@ -110,8 +111,8 @@ namespace Syntezator_Krawczyka
                             if (dane.Count == 0)
                             {
 
-                                linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, 0.5 * wykres.ActualHeight));
-                                linia.Points.Add(new Point(wykres.ActualWidth, 0.5 * wykres.ActualHeight));
+                                //linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, 0.5 * wykres.ActualHeight));
+                                //linia.Points.Add(new Point(wykres.ActualWidth, 0.5 * wykres.ActualHeight));
                                 aktualniePrzetwarzane = null;
                                 pozycja = 0;
                                 //wykres.Children.Add(linia);
@@ -120,7 +121,32 @@ namespace Syntezator_Krawczyka
                             aktualniePrzetwarzane = dane.Dequeue();
                             pozycja = 0;
                         }
-                        linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, (-aktualniePrzetwarzane[0, pozycja] + 2f) / 4f * wykres.ActualHeight));
+                        double X, Y;
+                        if (typX == 0)
+                        {
+                            X = (-aktualniePrzetwarzane[0, pozycja] + 2f) / 4f * wykres.ActualHeight;
+                        }
+                        else if (typX == 1)
+                        {
+                            X = (-aktualniePrzetwarzane[1, pozycja] + 2f) / 4f * wykres.ActualHeight;
+                        }
+                        else
+                        {
+                            X = wykres.ActualWidth * i / ilePróbek;
+                        }
+                        if (typY == 0)
+                        {
+                            Y = (-aktualniePrzetwarzane[0, pozycja] + 2f) / 4f * wykres.ActualHeight;
+                        }
+                        else if (typY == 1)
+                        {
+                            Y = (-aktualniePrzetwarzane[1, pozycja] + 2f) / 4f * wykres.ActualHeight;
+                        }
+                        else
+                        {
+                            Y = wykres.ActualWidth * i / ilePróbek;
+                        }
+                        linia.Points.Add(new Point(X,Y));
                     }
                     wykres.Children.Add(linia);
                 }
@@ -135,7 +161,7 @@ namespace Syntezator_Krawczyka
 
         public static Timer timer;
 
-        const int częstotliwość = 52;
+         int częstotliwość = 55;
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             MainWindow.thi.Window_KeyDown(sender, e);
@@ -145,6 +171,15 @@ namespace Syntezator_Krawczyka
         {
             MainWindow.thi.Window_KeyUp(sender, e);
 
+        }
+
+        private void OśX_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            typX = OśX.SelectedIndex;
+        }
+        private void OśY_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            typY = OśY.SelectedIndex;
         }
     }
 }
