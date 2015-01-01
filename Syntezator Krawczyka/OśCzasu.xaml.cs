@@ -234,6 +234,7 @@ namespace Syntezator_Krawczyka
 
                 rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
             }
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void SampleDelay_TextChanged(object sender, TextChangedEventArgs e)
@@ -261,6 +262,7 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -273,6 +275,7 @@ namespace Syntezator_Krawczyka
                     var atr = ((aktywna.Tag as odDo).sciezka as sciezka).xml.OwnerDocument.CreateAttribute("sound");
                     atr.Value = (string)(comboBox1.SelectedItem as ComboBoxItem).Content;
                     ((aktywna.Tag as odDo).sciezka as sciezka).xml.Attributes.Append(atr);
+                    Statyczne.otwartyplik.zmiana();
                 }
             }
             catch (NullReferenceException) { }
@@ -340,6 +343,7 @@ namespace Syntezator_Krawczyka
            akt.start = scorg.delay;
             //szukaj miejsca na wyświetlenie
            szukaj(akt, Statyczne.otwartyplik.sciezki.IndexOf(scorg));
+           Statyczne.otwartyplik.zmiana();
         }
 
         private void usuń_click(object sender, RoutedEventArgs e)
@@ -354,6 +358,7 @@ namespace Syntezator_Krawczyka
             aktywna = null;
             edytSciezka.Visibility = Visibility.Collapsed;
             edytSample.Visibility = Visibility.Collapsed;
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void przytnij_click(object sender, RoutedEventArgs e)
@@ -361,6 +366,7 @@ namespace Syntezator_Krawczyka
             var scorg = (aktywna.Tag as odDo).sciezka as jedenSample;
             var okno = new EdytujWave(scorg);
             okno.Show();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void graj_click(object sender, RoutedEventArgs e)

@@ -31,6 +31,8 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             głównySekwencer.ustawienia["oktawy"] = ((short)slider1.Value).ToString(CultureInfo.InvariantCulture);
+            głównySekwencer.akt();
+            Statyczne.otwartyplik.zmiana();
         }
     }
 }

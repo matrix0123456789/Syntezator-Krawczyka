@@ -12,7 +12,10 @@ namespace Syntezator_Krawczyka.Synteza
     public class sekwencer : moduł, soundStart
     {
         public XmlNode XML { get; set; }
-        public void akt() { }
+        public void akt()
+        {
+             oktawy = float.Parse(_ustawienia["oktawy"], CultureInfo.InvariantCulture);
+        }
         public UserControl UI
         {
             get
@@ -33,6 +36,7 @@ namespace Syntezator_Krawczyka.Synteza
             get { return _ustawienia; }
         }
         Dictionary<string, string> _ustawienia;
+        private float oktawy;
         public sekwencer()
         {
             wejście = new List<Typ>();
@@ -84,7 +88,6 @@ namespace Syntezator_Krawczyka.Synteza
                 }
                 //else
                 {
-                    var oktawy = float.Parse(_ustawienia["oktawy"], CultureInfo.InvariantCulture);
                     o.ilepróbek = o.ilepróbek / Math.Pow(2, oktawy);
                     o.głośność =o.balans0=o.balans1= 1;
                     

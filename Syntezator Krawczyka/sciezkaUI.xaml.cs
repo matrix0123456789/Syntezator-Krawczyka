@@ -86,6 +86,7 @@ namespace Syntezator_Krawczyka
                     var atr = parent.xml.OwnerDocument.CreateAttribute("sound");
                     atr.Value = (string)(comboBox1.SelectedItem as ComboBoxItem).Content;
                     parent.xml.Attributes.Append(atr);
+                    Statyczne.otwartyplik.zmiana();
                 }
             }
             catch (NullReferenceException) { }
@@ -100,6 +101,7 @@ namespace Syntezator_Krawczyka
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Statyczne.otwartyplik.duplikujScierzke(parent);
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void delay_TextChanged(object sender, TextChangedEventArgs e)
@@ -115,6 +117,7 @@ namespace Syntezator_Krawczyka
                 {
                     (sender as TextBox).Background = Brushes.Red;
                 }
+                    Statyczne.otwartyplik.zmiana();
             }
         }
 
@@ -131,6 +134,7 @@ namespace Syntezator_Krawczyka
                 Statyczne.otwartyplik.scieżkiZId.Remove(parent.nazwa);
             parent.xml.ParentNode.RemoveChild(parent.xml);
             (Parent as WrapPanel).Children.Remove(this);
+            Statyczne.otwartyplik.zmiana();
         }
 
         public void Dispose()

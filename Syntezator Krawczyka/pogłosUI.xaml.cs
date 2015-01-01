@@ -31,17 +31,20 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["czas"] = (Math.Pow(2, Math.Round(sliderA.Value)) * (plik.tempo / 60)).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
             
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["zmniejszenie"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["glosnosc"] = (sliderC.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         void ustawSuwaki()
         {

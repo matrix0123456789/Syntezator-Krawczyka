@@ -260,15 +260,15 @@ namespace Syntezator_Krawczyka
             granie.można = true;
             granie.graniePlay = false;
 
-            granie.generować[0] = false;
-            granie.generować = new bool[1];
-            granie.generować[0] = true;
-            granie.graniePrzy = 0;
-            granie.wynik = null;
-            granie.granieMax = 0;
-            granie.granieNuty = null;
-            granie.liczbaGenerowanych = 0;
-            granie.liczbaGenerowanychMax = 0;
+           // granie.generować[0] = false;
+            //granie.generować = new bool[1];
+           // granie.generować[0] = true;
+           // granie.graniePrzy = 0;
+            //granie.wynik = null;
+            //granie.granieMax = 0;
+           // granie.granieNuty = null;
+            //granie.liczbaGenerowanych = 0;
+            //granie.liczbaGenerowanychMax = 0;
             Statyczne.bufor.ClearBuffer();
         }
 

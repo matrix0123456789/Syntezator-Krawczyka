@@ -14,6 +14,30 @@ namespace Syntezator_Krawczyka
 {
     public class plik
     {
+        public DateTime zmieniono=DateTime.Now;
+        public void zmiana()
+        {
+            zmieniono = DateTime.Now;
+            if (granie.graniePlay)
+            {
+                granie.grają.Clear();
+                granie.można = true;
+                granie.graniePlay = false;
+
+                granie.generować[0] = false;
+                granie.generować = new bool[1];
+                granie.generować[0] = true;
+              //  granie.graniePrzy = 0;
+                granie.wynik = null;
+                granie.granieMax = 0;
+                granie.granieNuty = null;
+                granie.liczbaGenerowanych = 0;
+                granie.liczbaGenerowanychMax = 0;
+                Statyczne.bufor.ClearBuffer();
+                grajStart(ostaGrajStartA);
+            }
+
+        }
         public static string URLStatyczne;
         public string URL;
         public event Action zapis;
@@ -29,6 +53,8 @@ namespace Syntezator_Krawczyka
         public List<DrumJeden> DrumLista = new List<DrumJeden>();
         public Dictionary<string, FalaNiestandardowa> fale = new Dictionary<string, FalaNiestandardowa>();
         public List<jedenSample> sameSample = new List<jedenSample>();
+        private List<sciezka> ostaGrajStartA;
+        private DateTime ostGraj;
         public plik(string a)
         {
             if (a != "")
@@ -600,95 +626,116 @@ namespace Syntezator_Krawczyka
         {
             grajStart(Statyczne.otwartyplik.sciezki);
         }
+
         internal void grajStart(List<sciezka> a)
         {
-
-            granie.graniePrzy = 0;
-
-
-
-            granie.generować[0] = false;
-            granie.generować = new bool[1];
-            granie.generować[0] = true;
-            granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
-            granie.można = false;
-            granie.grają.Clear();
-            long długość = 0;
-            foreach (var x in a)
+            if (ostGraj == zmieniono)
             {
-                if (x.sekw != null)
+                granie.graniePlay = true; 
+                var watek = new Thread(() => { var gen = granie.generować; Thread.Sleep(1000); while (granie.liveGraj() && gen[0]) { Thread.Sleep(100); } });
+                watek.Priority = ThreadPriority.Highest;
+                watek.Start();
+            }
+            else
+            {
+                ostGraj = zmieniono;
+                //granie.graniePrzy = 0;
+                ostaGrajStartA = a;
+
+
+                granie.generować[0] = false;
+                granie.generować = new bool[1];
+                granie.generować[0] = true;
+                granie.liczbaGenerowanychMax = granie.liczbaGenerowanych = 0;
+                granie.można = false;
+                granie.grają.Clear();
+                long długość = 0;
+                foreach (var x in a)
                 {
-                    long długośćStart = 0;
-                    for (var i = 0; i < x.nuty.Count; i++)
+                    if (x.sekw != null)
+                    {
+                        long długośćStart = 0;
+                        for (var i = 0; i < x.nuty.Count; i++)
+                        {
+
+                            if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
+                                długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
+
+                        }
+
+                        long długośćTeraz = x.sekw.symuluj(długośćStart);
+                        if (długośćTeraz > długość)
+                            długość = długośćTeraz;
+                    }
+                }
+
+
+                foreach (var x in Statyczne.otwartyplik.sameSample)
+                {
+
+
+                    if (x.dlugosc + x.delay > długość)
+                        długość = x.dlugosc + x.delay;
+
+                }
+
+                granie.PlikDoZapisu = null;
+                granie.granieMax = (int)długość;
+                granie.wynik = new float[2, długość];
+                List<nuta> lista = new List<nuta>();
+                foreach (var x in a)
+                {
+                    foreach (var nuta in x.nuty)
+                    {
+                        nuta.sekw = x.sekw;
+                        lista.Add(nuta);
+                    }
+                }
+                lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
+                granie.granieNuty = lista.ToArray();
+                granie.graniePlay = true;
+                granie.liczbaGenerowanych += granie.granieNuty.Length;
+                granie.liczbaGenerowanychMax += granie.granieNuty.Length;
+                foreach (var x in granie.granieNuty)
+                {
+                    lock (granie.grają)
                     {
 
-                        if (długośćStart < x.nuty[i].opuznienie + x.nuty[i].długość)
-                            długośćStart = x.nuty[i].opuznienie + x.nuty[i].długość;
+                        var tabl = (nuta)x.Clone();
+                        tabl.grajDo = long.MaxValue;
+                        /*System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                        {
+
+                            if (((bool[])o)[0] && x.sekw != null)
+                            {
+                                x.sekw.działaj(tabl);
+                                x.czyGotowe = true;
+                                // granie.liveGraj();
+                            }
+
+                            lock (granie.liczbaGenerowanychBlokada)
+                            {
+                                granie.liczbaGenerowanych--;
+                                //if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                                //granie.grajcale(false);
+                            }
+                        }, granie.generować);*/
+
+                        for (var i = 0; i < Environment.ProcessorCount; i++)
+                        {
+                            var wąt = new Thread(() =>
+                            {
+
+                            });
+                            wąt.Priority = ThreadPriority.Lowest;
+                            wąt.Start();
+                        }
+                        var watek = new Thread(() => { var gen = granie.generować; Thread.Sleep(1000); while (granie.liveGraj() && gen[0]) { Thread.Sleep(100); } });
+                        watek.Priority = ThreadPriority.Highest;
+                        watek.Start();
 
                     }
-
-                    long długośćTeraz = x.sekw.symuluj(długośćStart);
-                    if (długośćTeraz > długość)
-                        długość = długośćTeraz;
-                }
-            }
-
-
-            foreach (var x in Statyczne.otwartyplik.sameSample)
-            {
-
-
-                if (x.dlugosc + x.delay > długość)
-                    długość = x.dlugosc + x.delay;
-
-            }
-
-            granie.PlikDoZapisu = null;
-            granie.granieMax = (int)długość;
-            granie.wynik = new float[2, długość];
-            List<nuta> lista = new List<nuta>();
-            foreach (var x in a)
-            {
-                foreach (var nuta in x.nuty)
-                {
-                    nuta.sekw = x.sekw;
-                    lista.Add(nuta);
-                }
-            }
-            lista.Sort(Syntezator_Krawczyka.nuta.sortuj);
-            granie.granieNuty = lista.ToArray();
-            granie.graniePlay = true;
-            granie.liczbaGenerowanych += granie.granieNuty.Length;
-            granie.liczbaGenerowanychMax += granie.granieNuty.Length;
-            foreach (var x in granie.granieNuty)
-            {
-                lock (granie.grają)
-                {
-
-                    var tabl = (nuta)x.Clone();
-                    tabl.grajDo = long.MaxValue;
-                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
-                    {
-
-                        if (((bool[])o)[0] && x.sekw != null)
-                        {
-                            x.sekw.działaj(tabl);
-                            x.czyGotowe = true;
-                            // granie.liveGraj();
-                        }
-
-                        lock (granie.liczbaGenerowanychBlokada)
-                        {
-                            granie.liczbaGenerowanych--;
-                            //if (!granie.można && granie.liczbaGenerowanych == 0)
-
-                            //granie.grajcale(false);
-                        }
-                    }, granie.generować);
-                    var watek = new Thread(() => { var gen = granie.generować; Thread.Sleep(1000); while (granie.liveGraj() && gen[0]) { Thread.Sleep(100); } });
-                    watek.Priority = ThreadPriority.Highest;
-                    watek.Start();
-
                 }
             }
         }

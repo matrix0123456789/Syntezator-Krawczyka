@@ -209,6 +209,7 @@ namespace Syntezator_Krawczyka
                                                 var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
                                                 atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
                                                 n.xml.Attributes.SetNamedItem(atrybut);
+                                                Statyczne.otwartyplik.zmiana();
                                             }
                                     }
                                     else
@@ -233,6 +234,7 @@ namespace Syntezator_Krawczyka
                                                 var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
                                                 atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
                                                 n.xml.Attributes.SetNamedItem(atrybut);
+                                                Statyczne.otwartyplik.zmiana();
                                             }
                                     }
 
@@ -325,6 +327,7 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
+            Statyczne.otwartyplik.zmiana();
         }
         private void dlugosc_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -348,6 +351,7 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
+            Statyczne.otwartyplik.zmiana();
         }
         struct nutaXml
         {
@@ -390,6 +394,7 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
+            Statyczne.otwartyplik.zmiana();
         }
         void refresh(bool wymus)
         {

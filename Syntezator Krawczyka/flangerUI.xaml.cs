@@ -31,11 +31,13 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["przesuniecie"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["czestotliwosc"] = (sliderB.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
             
         }
         void ustawSuwaki()

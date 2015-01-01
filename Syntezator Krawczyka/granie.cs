@@ -13,6 +13,7 @@ namespace Syntezator_Krawczyka.Synteza
 {
     public class granie : moduł
     {
+        public static DateTime wygenerowano;
         public static bool[] generować = { true };
         public XmlNode XML { get; set; }
         static public int o = 4410;

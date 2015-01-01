@@ -30,15 +30,21 @@ namespace Syntezator_Krawczyka.Synteza
         {
 
             głównySekwencer.ustawienia["oktawy"] = ((short)slider1.Value).ToString(CultureInfo.InvariantCulture);
+            głównySekwencer.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            głównySekwencer.ustawienia["tony"] = (Math.Floor(slider2.Value*2)/2).ToString(CultureInfo.InvariantCulture);
+            głównySekwencer.ustawienia["tony"] = (Math.Floor(slider2.Value * 2) / 2).ToString(CultureInfo.InvariantCulture);
+            głównySekwencer.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             głównySekwencer.ustawienia["czestotliwosc"] = ((float)slider3.Value).ToString(CultureInfo.InvariantCulture);
+            głównySekwencer.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         void ustawSuwaki()
         {

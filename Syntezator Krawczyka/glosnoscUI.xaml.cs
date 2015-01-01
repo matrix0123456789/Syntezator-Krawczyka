@@ -31,11 +31,13 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["głośność"] = ((Slider)sender).Value.ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         private void slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["ucinanieWartość"] = ((Slider)sender).Value.ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         void ustawSuwaki()
@@ -52,11 +54,13 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["ucinanie"] = "false";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["ucinanie"] = "true";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
     }
 }

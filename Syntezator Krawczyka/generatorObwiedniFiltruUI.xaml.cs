@@ -31,21 +31,25 @@ namespace Syntezator_Krawczyka.Synteza
         private void sliderA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["A"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["D"] = (sliderD.Value).ToString(CultureInfo.InvariantCulture);
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["S"] = sliderS.Value.ToString(CultureInfo.InvariantCulture);
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["R"] = (sliderR.Value).ToString(CultureInfo.InvariantCulture);
+            Statyczne.otwartyplik.zmiana();
         }
         void ustawSuwaki()
         {

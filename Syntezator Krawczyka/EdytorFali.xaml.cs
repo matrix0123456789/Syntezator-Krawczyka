@@ -85,6 +85,7 @@ namespace Syntezator_Krawczyka
             (aktywne as SkładoweHarmoniczne).Składowe[(int)(sender as Slider).Tag-1] = (float)(sender as Slider).Value;
             (aktywne as SkładoweHarmoniczne).czyść();
             rysujWykres();
+            Statyczne.otwartyplik.zmiana();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -144,6 +145,7 @@ namespace Syntezator_Krawczyka
                 }
                 ładuj(aktywne as SkładoweHarmoniczne);
             }
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

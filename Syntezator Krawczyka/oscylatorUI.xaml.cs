@@ -32,12 +32,14 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "sinusoidalna";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void trójkątny_Checked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["typ"] = "trójkątna";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void prostokątny_Checked(object sender, RoutedEventArgs e)
@@ -45,6 +47,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "prostokątna";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void piłokształtny_Checked(object sender, RoutedEventArgs e)
@@ -52,6 +55,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "piłokształtna";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -59,35 +63,41 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["gladkosc"] = slider1.Value.ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["A"] = (sliderA.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["D"] = (sliderD.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["S"] = sliderS.Value.ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
 
         private void sliderR_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["R"] = (sliderR.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         private void sliderBalans_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             parentNode.ustawienia["balans"] = (sliderBalans.Value).ToString(CultureInfo.InvariantCulture);
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
         }
         void ustawSuwaki()
         {
@@ -131,7 +141,8 @@ namespace Syntezator_Krawczyka.Synteza
             {
                 parentNode.ustawienia["typ"] = parentNode.niestandardowa.nazwa;
 
-            parentNode.akt();
+                parentNode.akt();
+                Statyczne.otwartyplik.zmiana();
         }
         }
 
@@ -149,6 +160,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["typ"] = "szum";
             parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
 
         }
     }
