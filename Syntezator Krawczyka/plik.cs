@@ -696,13 +696,11 @@ namespace Syntezator_Krawczyka
                 granie.graniePlay = true;
                 granie.liczbaGenerowanych += granie.granieNuty.Length;
                 granie.liczbaGenerowanychMax += granie.granieNuty.Length;
-                foreach (var x in granie.granieNuty)
+                //foreach (var x in granie.granieNuty)
                 {
                     lock (granie.grają)
                     {
 
-                        var tabl = (nuta)x.Clone();
-                        tabl.grajDo = long.MaxValue;
                         /*System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                         {
 
@@ -721,15 +719,37 @@ namespace Syntezator_Krawczyka
                                 //granie.grajcale(false);
                             }
                         }, granie.generować);*/
-
-                        for (var i = 0; i < Environment.ProcessorCount; i++)
+                        var ilośćWątków=Environment.ProcessorCount*2;
+                        var genr = granie.generować;
+                        for (var i = 0; i < ilośćWątków; i++)
                         {
-                            var wąt = new Thread(() =>
+                            var wąt = new Thread((i2) =>
                             {
+                                for (var j = (int)i2; j < granie.granieNuty.Length; j += ilośćWątków)
+                                {
 
+                                    //var tabl = (nuta)granie.granieNuty[j].Clone();
+                                    //tabl.grajDo = long.MaxValue;
+                                    if ((genr)[0] && granie.granieNuty[j].sekw != null)
+                                    {
+                                        while (granie.graniePrzy + (int)plik.Hz * 5 < granie.granieNuty[j].opuznienie)
+                                            Thread.Sleep(200);
+                                        granie.granieNuty[j].sekw.działaj(granie.granieNuty[j]);
+                                        granie.granieNuty[j].czyGotowe = true;
+                                        // granie.liveGraj();
+                                    }
+
+                                    lock (granie.liczbaGenerowanychBlokada)
+                                    {
+                                        granie.liczbaGenerowanych--;
+                                        //if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                                        //granie.grajcale(false);
+                                    }
+                                }
                             });
                             wąt.Priority = ThreadPriority.Lowest;
-                            wąt.Start();
+                            wąt.Start(i);
                         }
                         var watek = new Thread(() => { var gen = granie.generować; Thread.Sleep(1000); while (granie.liveGraj() && gen[0]) { Thread.Sleep(100); } });
                         watek.Priority = ThreadPriority.Highest;
