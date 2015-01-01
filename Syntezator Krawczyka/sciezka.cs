@@ -11,7 +11,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// prezentuje ścieszkę dźwiękową (linię melodyczną) w celu odtworzenia automatycznie (bez grania na żywo z klawiatury)
     /// </summary>
-    public class sciezka : wejście, IComparable<sciezka>, IodDo
+    public class sciezka : wejście, IComparable<sciezka>, IodDo, IDisposable
     {
         /// <summary>
         /// Lista nut
@@ -143,6 +143,12 @@ namespace Syntezator_Krawczyka
         public override string ToString()
         {
             return nazwa;
+        }
+
+        public void Dispose()
+        {
+            if (_UI != null)
+                (_UI as IDisposable).Dispose();
         }
     }
 }

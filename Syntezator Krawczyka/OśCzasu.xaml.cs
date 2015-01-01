@@ -20,7 +20,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Interaction logic for EdytorScierzek.xaml
     /// </summary>
-    public partial class OśCzasu : Window
+    public partial class OśCzasu : Window, IDisposable
     {
         List<List<odDo>> elementy = new List<List<odDo>>();
         float dlugosc
@@ -391,6 +391,12 @@ namespace Syntezator_Krawczyka
             Statyczne.otwartyplik.zmiana();
             granie.graniePrzy = (int)(((odDo)aktywna.Tag).sciezka as sciezka).delay;
             Statyczne.otwartyplik.grajStart(new List<sciezka>() { (((odDo)aktywna.Tag).sciezka as sciezka) }, null);
+        }
+
+        public void Dispose()
+        {
+            if (tim != null)
+                tim.Dispose();
         }
     }
     interface IodDo
