@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Syntezator_Krawczyka.Synteza;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -256,13 +257,13 @@ namespace Syntezator_Krawczyka
                     (sender as TextBox).Background = Brushes.White;
                     ((odDo)aktywna.Tag).start = (long)(plik.Hz * 60 / plik.tempo * cz);
                     rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
+            Statyczne.otwartyplik.zmiana();
                 }
                 catch (FormatException)
                 {
                     (sender as TextBox).Background = Brushes.Red;
                 }
             }
-            Statyczne.otwartyplik.zmiana();
         }
 
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -293,6 +294,7 @@ namespace Syntezator_Krawczyka
                     ((odDo)aktywna.Tag).start = ((sciezka)((odDo)aktywna.Tag).sciezka).delay;
 
                     rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
+                    Statyczne.otwartyplik.zmiana();
                 }
                 catch (System.FormatException)
                 {
@@ -366,12 +368,14 @@ namespace Syntezator_Krawczyka
             var scorg = (aktywna.Tag as odDo).sciezka as jedenSample;
             var okno = new EdytujWave(scorg);
             okno.Show();
-            Statyczne.otwartyplik.zmiana();
+            //Statyczne.otwartyplik.zmiana();
         }
 
         private void graj_click(object sender, RoutedEventArgs e)
         {
-            Statyczne.otwartyplik.grajStart(new List<sciezka>(){(((odDo)aktywna.Tag).sciezka as sciezka)});
+            Statyczne.otwartyplik.zmiana();
+            granie.graniePrzy =(int) (((odDo)aktywna.Tag).sciezka as sciezka).delay;
+            Statyczne.otwartyplik.grajStart(new List<sciezka>(){(((odDo)aktywna.Tag).sciezka as sciezka)}, null);
         }
     }
     interface IodDo

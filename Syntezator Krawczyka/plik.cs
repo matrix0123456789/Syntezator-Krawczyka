@@ -14,7 +14,7 @@ namespace Syntezator_Krawczyka
 {
     public class plik
     {
-        public DateTime zmieniono=DateTime.Now;
+        public DateTime zmieniono = DateTime.Now;
         public void zmiana()
         {
             zmieniono = DateTime.Now;
@@ -27,14 +27,14 @@ namespace Syntezator_Krawczyka
                 granie.generować[0] = false;
                 granie.generować = new bool[1];
                 granie.generować[0] = true;
-              //  granie.graniePrzy = 0;
+                //  granie.graniePrzy = 0;
                 granie.wynik = null;
                 granie.granieMax = 0;
                 granie.granieNuty = null;
                 granie.liczbaGenerowanych = 0;
                 granie.liczbaGenerowanychMax = 0;
                 Statyczne.bufor.ClearBuffer();
-                grajStart(ostaGrajStartA);
+                grajStart(ostaGrajStartA,null);
             }
 
         }
@@ -624,14 +624,14 @@ namespace Syntezator_Krawczyka
         }
         internal void grajStart()
         {
-            grajStart(Statyczne.otwartyplik.sciezki);
+            grajStart(Statyczne.otwartyplik.sciezki, Statyczne.otwartyplik.sameSample);
         }
 
-        internal void grajStart(List<sciezka> a)
+        internal void grajStart(List<sciezka> a, List<jedenSample> sameSampl)
         {
-            if (ostGraj == zmieniono)
+            if (ostGraj == zmieniono && a == ostaGrajStartA)
             {
-                granie.graniePlay = true; 
+                granie.graniePlay = true;
                 var watek = new Thread(() => { var gen = granie.generować; Thread.Sleep(1000); while (granie.liveGraj() && gen[0]) { Thread.Sleep(100); } });
                 watek.Priority = ThreadPriority.Highest;
                 watek.Start();
@@ -719,8 +719,14 @@ namespace Syntezator_Krawczyka
                                 //granie.grajcale(false);
                             }
                         }, granie.generować);*/
-                        var ilośćWątków=Environment.ProcessorCount*2;
+                        var ilośćWątków = Environment.ProcessorCount * 2;
                         var genr = granie.generować;
+                        if (sameSampl != null)
+                            foreach (var x in sameSampl)
+                            {
+                                x.działaj();
+
+                            }
                         for (var i = 0; i < ilośćWątków; i++)
                         {
                             var wąt = new Thread((i2) =>
@@ -828,7 +834,7 @@ namespace Syntezator_Krawczyka
                 //lista.
                 var item = new JumpTask();
                 item.Description = str;
-                item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' })+1);
+                item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
                 item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
                 item.Arguments = str;
                 item.CustomCategory = "Ostatnie";
