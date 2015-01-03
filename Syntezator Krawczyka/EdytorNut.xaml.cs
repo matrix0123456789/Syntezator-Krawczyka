@@ -185,7 +185,7 @@ namespace Syntezator_Krawczyka
                             {
                                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                             {
-                                while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY/2)
+                                while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY / 2)
                                 {
                                     if (Mouse.GetPosition(this).Y - kliknietoYPotem > 0)
                                     {
@@ -194,17 +194,17 @@ namespace Syntezator_Krawczyka
                                             {
                                                 // x.Margin.Top -= skalaY;
                                                 var thi = x.Margin;
-                                                thi.Top += skalaY/2;
+                                                thi.Top += skalaY / 2;
                                                 x.Margin = thi;
 
                                                 var n = (nutaXml)x.Tag;
-                                                float ilepr=0;
+                                                float ilepr = 0;
                                                 try
                                                 {
                                                     ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) - 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
                                                 }
                                                 catch { }
-                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0,ilepr);
+                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);
 
                                                 var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
                                                 atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
@@ -220,7 +220,7 @@ namespace Syntezator_Krawczyka
                                             {
                                                 // x.Margin.Top -= skalaY;
                                                 var thi = x.Margin;
-                                                thi.Top -= skalaY/2;
+                                                thi.Top -= skalaY / 2;
                                                 x.Margin = thi;
                                                 var n = (nutaXml)x.Tag;
                                                 float ilepr = 0;
@@ -233,6 +233,71 @@ namespace Syntezator_Krawczyka
 
                                                 var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
                                                 atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
+                                                n.xml.Attributes.SetNamedItem(atrybut);
+                                                Statyczne.otwartyplik.zmiana();
+                                            }
+                                    }
+
+                                }
+
+
+
+
+
+                                var skokPier = 10;
+                                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                                    skokPier = 40;
+                                var skokT = Math.Pow(2, (Math.Log(skalaX / skokPier, 2))) * skokPier;
+                                var skok = Math.Pow(2, Math.Ceiling(Math.Log(skokPier / skalaX, 2))) * skalaX;
+
+                                while (Math.Abs(Mouse.GetPosition(this).X - kliknietoXPotem) > skok)
+                                {
+                                    if (Mouse.GetPosition(this).X - kliknietoXPotem > 0)
+                                    {
+                                        kliknietoXPotem += skok;
+                                        if (aktywne != null) foreach (var x in aktywne)
+                                            {
+                                                // x.Margin.Top -= skalaY;
+                                                var thi = x.Margin;
+                                                thi.Left += skok;
+                                                x.Margin = thi;
+
+                                                var n = (nutaXml)x.Tag;
+                                                float delay = 0;
+                                                try
+                                                {
+                                                    delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) + (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                                }
+                                                catch { }
+                                                n.nuta.opuznienie += (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
+
+                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                                                atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
+                                                n.xml.Attributes.SetNamedItem(atrybut);
+                                                Statyczne.otwartyplik.zmiana();
+                                            }
+                                    }
+                                    else
+                                    {
+                                        kliknietoXPotem -= skok;
+                                        if (aktywne != null) foreach (var x in aktywne)
+                                            {
+                                                // x.Margin.Top -= skalaY;
+                                                var thi = x.Margin;
+                                                thi.Left -= skok;
+                                                x.Margin = thi;
+
+                                                var n = (nutaXml)x.Tag;
+                                                float delay = 0;
+                                                try
+                                                {
+                                                    delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) - (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                                }
+                                                catch { }
+                                                n.nuta.opuznienie -= (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
+
+                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                                                atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
                                                 n.xml.Attributes.SetNamedItem(atrybut);
                                                 Statyczne.otwartyplik.zmiana();
                                             }
