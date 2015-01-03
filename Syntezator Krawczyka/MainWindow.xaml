@@ -296,6 +296,7 @@
                             <Canvas></Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
+                    <TextBox Name="BoxTempo" TextChanged="BoxTempo_TextChanged" VerticalAlignment="Top" Width="100"></TextBox>
                 </WrapPanel>
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Muzyka" Visibility="Collapsed" Height="78">

@@ -179,143 +179,7 @@ namespace Syntezator_Krawczyka
                         kliknietoY = kliknietoYPotem = e.GetPosition(this).Y;
                         kliknietoX = kliknietoXPotem = e.GetPosition(this).X;
 
-                        var wątek = new Thread(() =>
-                        {
-                            while (!double.IsNaN(kliknietoY))
-                            {
-                                MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
-                            {
-                                while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY / 2)
-                                {
-                                    if (Mouse.GetPosition(this).Y - kliknietoYPotem > 0)
-                                    {
-                                        kliknietoYPotem += skalaY;
-                                        if (aktywne != null) foreach (var x in aktywne)
-                                            {
-                                                // x.Margin.Top -= skalaY;
-                                                var thi = x.Margin;
-                                                thi.Top += skalaY / 2;
-                                                x.Margin = thi;
-
-                                                var n = (nutaXml)x.Tag;
-                                                float ilepr = 0;
-                                                try
-                                                {
-                                                    ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) - 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
-                                                }
-                                                catch { }
-                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);
-
-                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
-                                                atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
-                                                n.xml.Attributes.SetNamedItem(atrybut);
-                                                Statyczne.otwartyplik.zmiana();
-                                            }
-                                    }
-                                    else
-                                    {
-
-                                        kliknietoYPotem -= skalaY;
-                                        if (aktywne != null) foreach (var x in aktywne)
-                                            {
-                                                // x.Margin.Top -= skalaY;
-                                                var thi = x.Margin;
-                                                thi.Top -= skalaY / 2;
-                                                x.Margin = thi;
-                                                var n = (nutaXml)x.Tag;
-                                                float ilepr = 0;
-                                                try
-                                                {
-                                                    ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) + 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
-                                                }
-                                                catch { }
-                                                n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);
-
-                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
-                                                atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
-                                                n.xml.Attributes.SetNamedItem(atrybut);
-                                                Statyczne.otwartyplik.zmiana();
-                                            }
-                                    }
-
-                                }
-
-
-
-
-
-                                var skokPier = 10;
-                                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                                    skokPier = 40;
-                                var skokT = Math.Pow(2, (Math.Log(skalaX / skokPier, 2))) * skokPier;
-                                var skok = Math.Pow(2, Math.Ceiling(Math.Log(skokPier / skalaX, 2))) * skalaX;
-
-                                while (Math.Abs(Mouse.GetPosition(this).X - kliknietoXPotem) > skok)
-                                {
-                                    if (Mouse.GetPosition(this).X - kliknietoXPotem > 0)
-                                    {
-                                        kliknietoXPotem += skok;
-                                        if (aktywne != null) foreach (var x in aktywne)
-                                            {
-                                                // x.Margin.Top -= skalaY;
-                                                var thi = x.Margin;
-                                                thi.Left += skok;
-                                                x.Margin = thi;
-
-                                                var n = (nutaXml)x.Tag;
-                                                float delay = 0;
-                                                try
-                                                {
-                                                    delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) + (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
-                                                }
-                                                catch { }
-                                                n.nuta.opuznienie += (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
-
-                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
-                                                atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
-                                                n.xml.Attributes.SetNamedItem(atrybut);
-                                                Statyczne.otwartyplik.zmiana();
-                                            }
-                                    }
-                                    else
-                                    {
-                                        kliknietoXPotem -= skok;
-                                        if (aktywne != null) foreach (var x in aktywne)
-                                            {
-                                                // x.Margin.Top -= skalaY;
-                                                var thi = x.Margin;
-                                                thi.Left -= skok;
-                                                x.Margin = thi;
-
-                                                var n = (nutaXml)x.Tag;
-                                                float delay = 0;
-                                                try
-                                                {
-                                                    delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) - (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
-                                                }
-                                                catch { }
-                                                n.nuta.opuznienie -= (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
-
-                                                var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
-                                                atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
-                                                n.xml.Attributes.SetNamedItem(atrybut);
-                                                Statyczne.otwartyplik.zmiana();
-                                            }
-                                    }
-
-                                }
-
-                                if (Mouse.LeftButton == MouseButtonState.Released)
-                                {
-                                    kliknietoX = kliknietoY = kliknietoXPotem = kliknietoYPotem = double.NaN;
-                                    return;
-                                }
-                            });
-                                Thread.Sleep(10);
-                                if (double.IsNaN(kliknietoY))
-                                    return;
-                            }
-                        });
+                        var wątek = new Thread(sprawdzajMysz);
                         wątek.Start();
 
                     }
@@ -366,6 +230,148 @@ namespace Syntezator_Krawczyka
             }
         }
 
+        private void sprawdzajMysz(object obj)
+        {
+            {
+                while (!double.IsNaN(kliknietoY))
+                {
+                    MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+                    {
+                        while (Math.Abs(Mouse.GetPosition(this).Y - kliknietoYPotem) > skalaY / 2)
+                        {
+                            if (Mouse.GetPosition(this).Y - kliknietoYPotem > 0)
+                            {
+                                kliknietoYPotem += skalaY;
+                                if (aktywne != null) foreach (var x in aktywne)
+                                    {
+                                        // x.Margin.Top -= skalaY;
+                                        var thi = x.Margin;
+                                        thi.Top += skalaY / 2;
+                                        x.Margin = thi;
+
+                                        var n = (nutaXml)x.Tag;
+                                        float ilepr = 0;
+                                        try
+                                        {
+                                            ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) - 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                        }
+                                        catch { }
+                                        n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);
+
+                                        var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+                                        atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
+                                        n.xml.Attributes.SetNamedItem(atrybut);
+                                        Statyczne.otwartyplik.zmiana();
+                                    }
+                            }
+                            else
+                            {
+
+                                kliknietoYPotem -= skalaY;
+                                if (aktywne != null) foreach (var x in aktywne)
+                                    {
+                                        // x.Margin.Top -= skalaY;
+                                        var thi = x.Margin;
+                                        thi.Top -= skalaY / 2;
+                                        x.Margin = thi;
+                                        var n = (nutaXml)x.Tag;
+                                        float ilepr = 0;
+                                        try
+                                        {
+                                            ilepr = float.Parse(n.xml.Attributes["note"].Value, CultureInfo.InvariantCulture) + 0.5f;//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                        }
+                                        catch { }
+                                        n.nuta.ilepróbek = n.nuta.ilepróbekNaStarcie = funkcje.ilepróbek(0, ilepr);
+
+                                        var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+                                        atrybut.Value = (ilepr).ToString(CultureInfo.InvariantCulture);
+                                        n.xml.Attributes.SetNamedItem(atrybut);
+                                        Statyczne.otwartyplik.zmiana();
+                                    }
+                            }
+
+                        }
+
+
+
+
+
+                        var skokPier = 10;
+                        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                            skokPier = 40;
+                        var skokT = Math.Pow(2, (Math.Log(skalaX / skokPier, 2))) * skokPier;
+                        var skok = Math.Pow(2, Math.Ceiling(Math.Log(skokPier / skalaX, 2))) * skalaX;
+
+                        while (Math.Abs(Mouse.GetPosition(this).X - kliknietoXPotem) > skok)
+                        {
+                            if (Mouse.GetPosition(this).X - kliknietoXPotem > 0)
+                            {
+                                kliknietoXPotem += skok;
+                                if (aktywne != null) foreach (var x in aktywne)
+                                    {
+                                        // x.Margin.Top -= skalaY;
+                                        var thi = x.Margin;
+                                        thi.Left += skok;
+                                        x.Margin = thi;
+
+                                        var n = (nutaXml)x.Tag;
+                                        float delay = 0;
+                                        try
+                                        {
+                                            delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) + (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                        }
+                                        catch { }
+                                       // n.nuta.opuznienie += (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
+                                        n.nuta.opuznienieF += (skok / skalaX);
+                                        n.nuta.przeliczOpóźnenie();
+                                        var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                                        atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
+                                        n.xml.Attributes.SetNamedItem(atrybut);
+                                        Statyczne.otwartyplik.zmiana();
+                                    }
+                            }
+                            else
+                            {
+                                kliknietoXPotem -= skok;
+                                if (aktywne != null) foreach (var x in aktywne)
+                                    {
+                                        // x.Margin.Top -= skalaY;
+                                        var thi = x.Margin;
+                                        thi.Left -= skok;
+                                        x.Margin = thi;
+
+                                        var n = (nutaXml)x.Tag;
+                                        float delay = 0;
+                                        try
+                                        {
+                                            delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) - (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+                                        }
+                                        catch { }
+                                        //n.nuta.opuznienie -= (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
+                                        n.nuta.opuznienieF -= (skok / skalaX);
+                                        n.nuta.przeliczOpóźnenie();
+                                        var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                                        atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
+                                        n.xml.Attributes.SetNamedItem(atrybut);
+                                        Statyczne.otwartyplik.zmiana();
+                                    }
+                            }
+
+                        }
+
+                        if (Mouse.LeftButton == MouseButtonState.Released)
+                        {
+                            kliknietoX = kliknietoY = kliknietoXPotem = kliknietoYPotem = double.NaN;
+                            return;
+                        }
+                    });
+                    Thread.Sleep(10);
+                    if (double.IsNaN(kliknietoY))
+                        return;
+                }
+            }
+        }
+
         public Rectangle aktywna { get; set; }
         public List<Rectangle> aktywne = null;
 
@@ -384,7 +390,8 @@ namespace Syntezator_Krawczyka
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
                     n.xml.Attributes.SetNamedItem(atrybut);
                     aktywna.Margin = new Thickness((cz * skalaX), aktywna.Margin.Top, 0, 0);
-                    n.nuta.opuznienie = (long)(plik.Hz * 60 / plik.tempo * cz);
+                    n.nuta.opuznienieF = cz;
+                    n.nuta.przeliczOpóźnenie();
                     (sender as TextBox).Background = Brushes.White;
                 }
                 catch (FormatException)
@@ -497,7 +504,7 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click(object sender, RoutedEventArgs e)//Przycisk "nowa nuta"
         {
-            var nuta = new nuta(funkcje.częstotliwość(0, 0), (long)plik.Hz * 60 / (long)plik.tempo, main.delay);
+            var nuta = new nuta(funkcje.częstotliwość(0, 0), 1, main.delayUstawione);
             main.nuty.Add(nuta);
             var nutaXML = Statyczne.otwartyplik.xml.CreateElement("nute");
 
@@ -546,7 +553,58 @@ namespace Syntezator_Krawczyka
 
                     break;
                 case Key.D:
-                    dlugosc.Focus();
+
+                    if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+                    {
+                        var akt = aktywne.ToArray();
+                        foreach (var x in akt)
+                        {
+
+                            var n = (nutaXml)x.Tag;
+                            var nuta = (nuta)n.nuta.Clone();
+                            main.nuty.Add(nuta);
+                            var nutaXML = Statyczne.otwartyplik.xml.CreateElement("nute");
+
+                            var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("note");
+                            atrybut.Value = n.xml.Attributes["note"].Value;
+                            nutaXML.Attributes.SetNamedItem(atrybut);
+                            var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("octave");
+                            atrybut2.Value = n.xml.Attributes["octave"].Value;
+                            nutaXML.Attributes.SetNamedItem(atrybut2);
+                            var atrybut3 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                            atrybut3.Value = n.xml.Attributes["delay"].Value;
+                            nutaXML.Attributes.SetNamedItem(atrybut3);
+                            var atrybut4 = Statyczne.otwartyplik.xml.CreateAttribute("duration");
+                            atrybut4.Value = n.xml.Attributes["duration"].Value;
+                            nutaXML.Attributes.SetNamedItem(atrybut4);
+
+                            main.xml.AppendChild(nutaXML);
+                            var prostokat = new Rectangle();
+                            prostokat.Margin = x.Margin;
+
+                            prostokat.Width = x.Width;
+                            prostokat.Height = x.Height;
+                            prostokat.Fill = x.Fill;
+                            prostokat.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                            prostokat.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                            prostokat.Tag = new nutaXml(nuta, nutaXML, main);
+                            prostokat.MouseDown += prostokat_MouseClick;
+                            panel.Children.Insert(0, prostokat);
+                            listaChildren.Add(prostokat);
+                            if (double.IsNaN(kliknietoX))
+                            {
+                                kliknietoY = kliknietoYPotem = Mouse.GetPosition(this).Y;
+                                kliknietoX = kliknietoXPotem = Mouse.GetPosition(this).X;
+
+                                var wątek = new Thread(sprawdzajMysz);
+                                wątek.Start();
+                            }
+                            //prostokat_MouseClick(prostokat, null);
+
+                        }
+                    }
+                    else
+                        dlugosc.Focus();
                     break;
                 case Key.W:
                     ton.Focus();

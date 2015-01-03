@@ -541,5 +541,21 @@ namespace Syntezator_Krawczyka
                 x.Dispose();
 
         }
+
+        private void BoxTempo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try{
+            plik.tempo = float.Parse(BoxTempo.Text);
+            var at=Statyczne.otwartyplik.xml.CreateAttribute("tempo");
+            at.Value=BoxTempo.Text;
+            Statyczne.otwartyplik.xml.DocumentElement.Attributes.Append(at);
+             foreach(var scie in   Statyczne.otwartyplik.sciezki)
+             {
+                 foreach (var nut in scie.nuty)
+                     nut.przeliczOpóźnenie();
+             }
+             Statyczne.otwartyplik.zmiana();
+            }catch{}
+        }
     }
 }

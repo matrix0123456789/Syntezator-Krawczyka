@@ -34,7 +34,7 @@ namespace Syntezator_Krawczyka
                 granie.liczbaGenerowanych = 0;
                 granie.liczbaGenerowanychMax = 0;
                 Statyczne.bufor.ClearBuffer();
-                grajStart(ostaGrajStartA,null);
+                grajStart(ostaGrajStartA, null);
             }
 
         }
@@ -214,7 +214,7 @@ namespace Syntezator_Krawczyka
                             {
                                 try
                                 {
-                                    nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (long)(float.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo), (long)(float.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) + scie.delay);
+                                    nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (double.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture)), double.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)  + scie.delayUstawione);
                                     scie.nuty.Add(nu);
                                 }
                                 catch { }
@@ -242,10 +242,16 @@ namespace Syntezator_Krawczyka
                             {
                                 (n[0] as sciezka).kopia = true;
                                 long delay;
+                                double delayF;
                                 if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
+                                {
                                     delay = (long)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
+                                    delayF = double.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)  - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delayUstawione;
+                                }
                                 else
-                                    delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
+                                { delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
+                                delayF = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delayUstawione;
+                                }
 
                                 (n[0] as sciezka).oryginał = scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value];
                                 foreach (var x in scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].nuty)
@@ -253,6 +259,7 @@ namespace Syntezator_Krawczyka
                                     var xx = x.Clone() as nuta;
                                     xx.id = nuta.nowyid;
                                     xx.opuznienie += delay;
+                                    xx.opuznienieF += delayF;
                                     (n[0] as sciezka).nuty.Add(xx);
                                 }
                             }
