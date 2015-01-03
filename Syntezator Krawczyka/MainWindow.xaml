@@ -296,7 +296,10 @@
                             <Canvas></Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
-                    <TextBox Name="BoxTempo" TextChanged="BoxTempo_TextChanged" VerticalAlignment="Top" Width="100"></TextBox>
+                    <StackPanel>
+                        <TextBlock>Tempo</TextBlock>
+                        <TextBox Name="BoxTempo" TextChanged="BoxTempo_TextChanged" VerticalAlignment="Top" Width="100"/>
+                    </StackPanel>
                 </WrapPanel>
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Muzyka" Visibility="Collapsed" Height="78">
@@ -481,6 +484,6 @@
             </s:Wstążka.PodSpodem>
         </s:Wstążka>
         <ProgressBar Visibility="Visible" Name="postęp" HorizontalAlignment="Right" Height="13" Margin="5" VerticalAlignment="Top" Width="92"/>
-     
+
     </Grid>
 </Window>
