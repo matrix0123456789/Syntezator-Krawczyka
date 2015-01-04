@@ -67,6 +67,8 @@ namespace Syntezator_Krawczyka
                     xml.Load(URL);
                     if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
                         Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+                    else while (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Contains(URL))
+                            Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Remove(URL);
 
                     Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(URL);
                     Syntezator_Krawczyka.Properties.Settings.Default.Save();
@@ -214,7 +216,7 @@ namespace Syntezator_Krawczyka
                             {
                                 try
                                 {
-                                    nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (double.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture)), double.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)  + scie.delayUstawione);
+                                    nuta nu = new nuta(plik.Hz / funkcje.częstotliwość(short.Parse(nutax.Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(nutax.Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture)), (double.Parse(nutax.Attributes.GetNamedItem("duration").Value, CultureInfo.InvariantCulture)), double.Parse(nutax.Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) + scie.delayUstawione);
                                     scie.nuty.Add(nu);
                                 }
                                 catch { }
@@ -246,11 +248,12 @@ namespace Syntezator_Krawczyka
                                 if ((n[1] as XmlElement).Attributes.GetNamedItem("delay") != null)
                                 {
                                     delay = (long)(float.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) * plik.Hz * 60 / tempo) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
-                                    delayF = double.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture)  - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delayUstawione;
+                                    delayF = double.Parse((n[1] as XmlElement).Attributes.GetNamedItem("delay").Value, CultureInfo.InvariantCulture) - scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delayUstawione;
                                 }
                                 else
-                                { delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
-                                delayF = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delayUstawione;
+                                {
+                                    delay = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delay;
+                                    delayF = -scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value].delayUstawione;
                                 }
 
                                 (n[0] as sciezka).oryginał = scieżkiZId[(n[1] as XmlElement).Attributes.GetNamedItem("copy").Value];
@@ -358,7 +361,10 @@ namespace Syntezator_Krawczyka
                 zapis.Close();
                 if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
                     Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+                else while (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Contains(dialog.FileName))
+                        Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Remove(dialog.FileName);
                 Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(dialog.FileName);
+
                 Syntezator_Krawczyka.Properties.Settings.Default.Save();
             }
             aktJumpList();
@@ -378,6 +384,8 @@ namespace Syntezator_Krawczyka
             {
                 if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
                     Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
+                else while (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Contains(path))
+                        Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Remove(path);
                 Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(path);
                 Syntezator_Krawczyka.Properties.Settings.Default.Save();
             }

@@ -107,6 +107,8 @@ namespace Syntezator_Krawczyka
                 }
                 MainWindow.dispat.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                     {
+                        if(!BoxTempo.IsFocused)
+                        BoxTempo.Text = plik.tempo.ToString();
                         if (Statyczne.debugowanie)
                             Title = Statyczne.bufor.BufferedBytes.ToString();
                         czas.Content = funkcje.sekundy(granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4) + '/' + funkcje.sekundy(granie.granieMax);

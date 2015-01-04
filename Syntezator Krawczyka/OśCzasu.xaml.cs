@@ -55,7 +55,7 @@ namespace Syntezator_Krawczyka
                 szukaj(akt, i + Statyczne.otwartyplik.sciezki.Count);
             }
             rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
-             tim = new Timer(TimerAkt, null, 30, 30);
+            tim = new Timer(TimerAkt, null, 30, 30);
 
         }
 
@@ -63,11 +63,11 @@ namespace Syntezator_Krawczyka
         {
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
             {
-                int bu=0;
-                if(Statyczne.bufor!=null)
-                bu=Statyczne.bufor.BufferedBytes;
+                int bu = 0;
+                if (Statyczne.bufor != null)
+                    bu = Statyczne.bufor.BufferedBytes;
                 var pozycjaSuwaka = granie.graniePrzy - bu / 4;
-                PasekPostępu.Margin = new Thickness(pozycjaSuwaka / plik.Hz / 60 * plik.tempo*skalaX, 0, 0, 0);
+                PasekPostępu.Margin = new Thickness(pozycjaSuwaka / plik.Hz / 60 * plik.tempo * skalaX, 0, 0, 0);
             });
         }
         float iRysujSkala = 0;
@@ -302,11 +302,85 @@ namespace Syntezator_Krawczyka
             {
                 try
                 {
+                    var oddo = ((odDo)aktywna.Tag);
                     ((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione = double.Parse(delay.Text);
                     ((sciezka)((odDo)aktywna.Tag).sciezka).xml.Attributes.GetNamedItem("delay").Value = (((sciezka)((odDo)aktywna.Tag).sciezka).delayUstawione.ToString(CultureInfo.InvariantCulture));
                     ((sciezka)((odDo)aktywna.Tag).sciezka).delay = (int)(float.Parse(delay.Text) * 60 * plik.Hz / plik.tempo);
-                    aktywna.Margin = new Thickness(((float.Parse(delay.Text)) * skalaX), aktywna.Margin.Top, 0, 0);
                     ((odDo)aktywna.Tag).start = ((sciezka)((odDo)aktywna.Tag).sciezka).delay;
+
+                    double marTop = aktywna.Margin.Top;
+                    bool znaleniono = false;
+                    for (int i2 = 0; i2 < elementy.Count; i2++)
+                    {
+                        if (!elementy[i2].Contains(oddo))
+                            continue;
+                        bool znTera = true;
+                        foreach (var x in elementy[i2])
+                        {
+                            if (x == oddo)
+                                continue;
+                            if (
+                               (x.start >= oddo.start && x.end <= oddo.end)
+                                ||
+                                (x.start <= oddo.start && x.end > oddo.start)
+                                ||
+                                (x.start <= oddo.end && x.end > oddo.end)
+                                )
+                            {
+                                znTera = false;
+                                break;
+                            }
+                        }
+                        if (znTera)
+                        {
+                            marTop = aktywna.Margin.Top;
+                            znaleniono = true;
+                        }
+                        else
+                        {
+                            elementy[i2].Remove(oddo);
+                        }
+                        break;
+                    }
+                    if (!znaleniono)
+                    {
+                        for (int i2 = 0; i2 < elementy.Count; i2++)
+                        {
+                            bool znTera = true;
+                            foreach (var x in elementy[i2])
+                            {
+                                if (x == oddo)
+                                    continue;
+                                if (
+                                   (x.start >= oddo.start && x.end <= oddo.end)
+                                    ||
+                                    (x.start <= oddo.start && x.end > oddo.start)
+                                    ||
+                                    (x.start <= oddo.end && x.end > oddo.end)
+                                    )
+                                {
+                                    znTera = false;
+                                    break;
+                                }
+                            }
+                            if (znTera)
+                            {
+                                marTop = i2*skalaY+25;
+                                znaleniono = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!znaleniono)
+                    {
+                        var ost = new List<odDo>();
+                        ost.Add(oddo); elementy.Add(ost);
+                        marTop = skalaY * (elementy.Count - 1)+25;
+
+                    }
+                    aktywna.Margin = new Thickness(((float.Parse(delay.Text)) * skalaX), marTop, 0, 0);
+
+
 
                     rysujSkala(plik.tempo * dlugosc / (60 * plik.Hz));
                     Statyczne.otwartyplik.zmiana();
