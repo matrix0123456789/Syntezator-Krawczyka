@@ -26,6 +26,7 @@ namespace Syntezator_Krawczyka
         public Widmo()
         {
             InitializeComponent();
+            rysujSkale();
         }
         public static void pokarz()
         {
@@ -34,15 +35,36 @@ namespace Syntezator_Krawczyka
             wid.Show();
             wid.Start();
             czas = DateTime.Now;
+            
 
         }
         bool logarytmicznaSkala = false;
+        bool wykresMocy = false;
         void rysujSkale()
         {
-            var prógPx = 100;
+            skala.Children.Clear();
+            var prógPx = 100d;
             if (!logarytmicznaSkala)
             {
                 var HzNaPx = plik.Hz / 2 / wykres.ActualWidth;
+                var HzNaPróg = prógPx * HzNaPx;
+                var log = Math.Log10(HzNaPróg);
+                var HzNaPróg10 = Math.Pow(10, Math.Floor(log));
+                var mantysa = log - Math.Floor(log);
+                if (mantysa > Math.Log10(5))
+                    HzNaPróg10 = HzNaPróg10 * 5;
+                else if (mantysa > Math.Log10(2))
+                    HzNaPróg10 = HzNaPróg10 * 2;
+                
+                prógPx = HzNaPróg10 / HzNaPx;
+
+                for (var i = 0; i * prógPx < wykres.ActualWidth; i++)
+                {
+                    var Text = new TextBlock();
+                    Text.Text = (HzNaPróg10 * i).ToString();
+                    Text.Margin = new Thickness(prógPx * i, 0, 0, 0);
+                    skala.Children.Add(Text);
+                }
             }
 
         }
@@ -178,6 +200,11 @@ namespace Syntezator_Krawczyka
         {
             MainWindow.thi.Window_KeyUp(sender, e);
 
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            rysujSkale();
         }
     }
 }
