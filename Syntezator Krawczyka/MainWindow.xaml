@@ -368,6 +368,20 @@
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Spektroskop"  Click="Spektroskop_click"  ToolTip="Pokazuje aktualnie odgrywaną falę dźwiękową na wykresie">
+                        <s:Przycisk.Obrazek>
+                            <Canvas >
+                                <Canvas.RenderTransform>
+                                    <TranslateTransform X="-170.90113" Y="-587.89291"/>
+                                </Canvas.RenderTransform>
+                                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StrokeThickness="1" Stroke="#FF000000" StrokeLineJoin="Miter" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                                    <Path.Data>
+                                        <PathGeometry Figures="m 171.51978 603.99605 c 19.36744 -26.49484 14.90452 28.27823 30.7627 -2.3067" FillRule="NonZero"/>
+                                    </Path.Data>
+                                </Path>
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wyjście dźwięku"  Click="WyjDzwieku_Click"  ToolTip="Wybiera na jakie porty wysyłać dźwięk">
                         <s:Przycisk.Obrazek>
                             <Canvas>

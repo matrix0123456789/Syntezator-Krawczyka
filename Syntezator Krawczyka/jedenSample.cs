@@ -9,15 +9,16 @@ using System.Xml;
 
 namespace Syntezator_Krawczyka
 {
-    public class jedenSample:IodDo
+    public class jedenSample : IodDo
     {
         public sample sample;
-        public float głośność = 1;
+        public float głośność {get;set;}
         public long delay { get; set; }
         public XmlNode xml;
 
         public jedenSample()
         {
+            głośność=1;
             granie.graniestart();
             xml = Statyczne.otwartyplik.xml.CreateElement("sample");
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(xml);
@@ -38,7 +39,7 @@ namespace Syntezator_Krawczyka
             atrybut.Value = x;
             xml.Attributes.SetNamedItem(atrybut);
         }
-        
+
         public jedenSample(XmlNode xml)
             : this()
         {
@@ -177,7 +178,7 @@ namespace Syntezator_Krawczyka
         }
         public override string ToString()
         {
-            return sample.plik.Substring(sample.plik.LastIndexOfAny(new char[] {'\\','/'})+1);
+            return sample.plik.Substring(sample.plik.LastIndexOfAny(new char[] { '\\', '/' }) + 1);
         }
 
         public double delayUstawione;

@@ -50,6 +50,8 @@ namespace Syntezator_Krawczyka
         {
             if (Oscyloskop.oscyl != null)
                 Oscyloskop.dane.Enqueue(fala);
+            if (Widmo.wid != null)
+                Widmo.dane.Enqueue(fala);
             var bufor = new byte[fala.Length * 2];
             for (var i = 0; i < fala.Length / 2; i++)
             {

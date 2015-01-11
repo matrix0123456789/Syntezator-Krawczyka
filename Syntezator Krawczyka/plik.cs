@@ -703,6 +703,7 @@ namespace Syntezator_Krawczyka
                     foreach (var nuta in x.nuty)
                     {
                         nuta.sekw = x.sekw;
+                        nuta.głośność = x.głośność;
                         lista.Add(nuta);
                     }
                 }

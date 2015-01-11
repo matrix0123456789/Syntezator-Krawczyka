@@ -80,7 +80,11 @@ namespace Syntezator_Krawczyka
                 lab.Margin = new Thickness(iRysujSkala * skalaX, 0, 0, 0);
                 lab.HorizontalAlignment = HorizontalAlignment.Left;
                 lab.VerticalAlignment = VerticalAlignment.Top;
-                panel.Children.Add(lab);
+                panelSkala.Children.Add(lab);
+            }
+            for (; iRysujSkala > p; iRysujSkala -= 4)
+            {
+                panelSkala.Children.RemoveAt(panelSkala.Children.Count - 1);
             }
         }
 
@@ -166,6 +170,8 @@ namespace Syntezator_Krawczyka
 
             (aktywna.Children[0] as Rectangle).Stroke = Brushes.Black;
             (aktywna.Children[0] as Rectangle).StrokeThickness = 2;
+            suwakGlosnosc.Visibility = Visibility.Visible;
+            suwakGlosnosc.Value = ((odDo)aktywna.Tag).sciezka.głośność;
             if (((odDo)aktywna.Tag).sciezka.GetType() == typeof(sciezka))
             {
                 nazwa.Content = ((sciezka)((odDo)aktywna.Tag).sciezka).nazwa;
@@ -449,6 +455,7 @@ namespace Syntezator_Krawczyka
             aktywna = null;
             edytSciezka.Visibility = Visibility.Collapsed;
             edytSample.Visibility = Visibility.Collapsed;
+            suwakGlosnosc.Visibility = Visibility.Collapsed;
             Statyczne.otwartyplik.zmiana();
         }
 
@@ -472,10 +479,17 @@ namespace Syntezator_Krawczyka
             if (tim != null)
                 tim.Dispose();
         }
+
+        private void suwakGlosnosc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (aktywna!=null)
+            ((odDo)aktywna.Tag).sciezka.głośność = (float)suwakGlosnosc.Value;
+        }
     }
     interface IodDo
     {
         long delay { get; }
         long dlugosc { get; }
+        float głośność { get; set; }
     }
 }

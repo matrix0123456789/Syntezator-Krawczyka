@@ -30,12 +30,16 @@ namespace Syntezator_Krawczyka
 
         void rysujFala()
         {
-            Fala.Children.Clear();
-            var path=new Polygon();
+           // Fala.Children.Clear();
+            var path = (Polygon)Fala.Children[1];
+            path.Points.Clear();
             path.HorizontalAlignment = HorizontalAlignment.Left;
             path.Fill = Brushes.Red;
             var piksel = (pokażDo - pokażOd) / Fala.ActualWidth;
-            for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i++)
+            var iZwiększ = (int)Math.Ceiling(Fala.ActualWidth / (pokażDo-pokażOd));
+            if(iZwiększ<1)
+                iZwiększ=1;
+            for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i+=iZwiększ)
             {
                 var jestW = pokażOd + i * piksel;
                 if (jestW < 0)
@@ -50,9 +54,9 @@ namespace Syntezator_Krawczyka
                         min = Dźwięk.sample.fala[0, i2];
                 }
                 path.Points.Add(new Point(i, (max+1)*Fala.ActualHeight/2));
-                path.Points.Insert(0, new Point(i, (min + 1) * Fala.ActualHeight / 2));
+                path.Points.Insert(0, new Point(i, (min + 1) * Fala.ActualHeight / 2-1));
             }
-            Fala.Children.Add(path);
+            //Fala.Children.Add(path);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -97,6 +101,11 @@ namespace Syntezator_Krawczyka
             myszX = (float)e.GetPosition(this).X;
             myszY = (float)e.GetPosition(this).Y;
             rysujFala();
+        }
+
+        private void Play_click(object sender, RoutedEventArgs e)
+        {
+            Dźwięk.działaj();
         }
 
     }

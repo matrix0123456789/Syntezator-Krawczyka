@@ -215,6 +215,7 @@
     <Compile Include="Test.xaml.cs">
       <DependentUpon>Test.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TransformacjaFouriera.cs" />
     <Compile Include="UtworySerwer.cs" />
     <Compile Include="UtwórSerwer.cs" />
     <Compile Include="UtwórSerwerUI.xaml.cs">
@@ -223,6 +224,9 @@
     <Compile Include="vorbisInterop.cs" />
     <Compile Include="VstUI.xaml.cs">
       <DependentUpon>VstUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widmo.xaml.cs">
+      <DependentUpon>Widmo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wstążka.cs" />
     <Compile Include="wtyczkaVST.cs" />
@@ -373,6 +377,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="VstUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widmo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

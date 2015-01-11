@@ -13,6 +13,8 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public class sciezka : wejście, IComparable<sciezka>, IodDo, IDisposable
     {
+        public float głośność { get;set;}
+
         /// <summary>
         /// Lista nut
         /// </summary>
@@ -46,14 +48,17 @@ namespace Syntezator_Krawczyka
         public bool kopia = false;
         public sciezka()
         {
+            głośność = 1;
         }
         public sciezka(string Nazwa, XmlNode xml)
         {
+            głośność = 1;
             nazwa = Nazwa;
             this.xml = xml;
         }
         public sciezka(string Nazwa, XmlNode xml, bool kopia)
         {
+            głośność = 1;
 
             this.xml = xml;
             if (kopia && (Nazwa.Length < 8 || Nazwa.Substring(Nazwa.Length - 8) != " (kopia)"))
@@ -74,6 +79,7 @@ namespace Syntezator_Krawczyka
                 foreach (var prz in nuty)
                 {
                     var tabl = (nuta)prz.Clone();
+                    tabl.głośność = głośność;
                     tabl.grajDo = long.MaxValue;
                     System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                     {

@@ -17,7 +17,12 @@ namespace Syntezator_Krawczyka
        /// <summary>
        /// Informuje, czy jest włączony trub debugowania (parametr /d przy uruchamianiu)
        /// </summary>
+#if DEBUG
+       static public bool debugowanie = true;
+#endif
+#if !DEBUG
        static public bool debugowanie = false;
+#endif
        public static PolaczenieHTTP serwer;
         public static BufferedWaveProvider bufor=new BufferedWaveProvider(new WaveFormat((int)plik.Hz,2));
         public static WasapiOut WasapiWyjście = new WasapiOut(AudioClientShareMode.Shared, 10);

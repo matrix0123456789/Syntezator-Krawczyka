@@ -559,5 +559,11 @@ namespace Syntezator_Krawczyka
              Statyczne.otwartyplik.zmiana();
             }catch{}
         }
+
+        private void Spektroskop_click(object sender, RoutedEventArgs e)
+        {
+
+            Widmo.pokarz();
+        }
     }
 }
