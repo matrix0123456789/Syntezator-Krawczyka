@@ -19,6 +19,8 @@ namespace Syntezator_Krawczyka.Properties {
         
         public static Settings Default {
             get {
+                if (defaultInstance == null)
+                    defaultInstance = new Settings();
                 return defaultInstance;
             }
         }

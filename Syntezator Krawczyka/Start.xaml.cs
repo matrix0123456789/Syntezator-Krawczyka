@@ -24,9 +24,13 @@ namespace Syntezator_Krawczyka
     {
         public Start()
         {
-            plik.aktJumpList();
+            try
+            {
+                plik.aktJumpList();
+            }
+            catch { }
             thi = this;
-          //
+            //
             try
             {
                 new Statyczne();
@@ -40,20 +44,38 @@ namespace Syntezator_Krawczyka
                 MessageBox.Show("Błąd ładowania biblioteki NAudio.dll, bez której program nie może odtwarzać dźwięku.", "Błąd pliku NAudio.dll", MessageBoxButton.OK, MessageBoxImage.Error);
                 MessageBox.Show(ex.ToString());
             }
-            if (polecenia()) { 
-            InitializeComponent();
-            if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte != null)
-                for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count-20; i--)
-                {
-                    var lab = new Label();
-                    var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
-                    lab.ToolTip=str;
-                    lab.Content=str.Substring(str.LastIndexOfAny(new char[]{'/','\\'}));
-                    lab.MouseLeftButtonDown += uruchomOstatnie;
-                    OstOtw.Children.Add(lab);
+            if (polecenia())
+            {
+                InitializeComponent();
+                try
+                {/*
+                    MessageBox.Show("Saz");
+                    Syntezator_Krawczyka.Properties.Settings.Default.Upgrade();
+                    MessageBox.Show("Saz");
+                    Syntezator_Krawczyka.Properties.Settings.Default.Save();
+                    MessageBox.Show("Saz");
+                    Syntezator_Krawczyka.Properties.Settings.Default.Reload();
+                    MessageBox.Show("Saz");
+                    Syntezator_Krawczyka.Properties.Settings.Default.Reset();
+                    MessageBox.Show(Syntezator_Krawczyka.Properties.Settings.Default.Context.ToString());
+                    MessageBox.Show("Saz");*/
+                    if (Syntezator_Krawczyka.Properties.Settings.Default != null)
+                    {
+                        if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte != null)
+                            for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+                            {
+                                var lab = new Label();
+                                var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
+                                lab.ToolTip = str;
+                                lab.Content = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }));
+                                lab.MouseLeftButtonDown += uruchomOstatnie;
+                                OstOtw.Children.Add(lab);
 
+                            }
+                    }
                 }
-        }
+                catch (Exception e) { MessageBox.Show(e.ToString()); }
+            }
             ThreadPool.QueueUserWorkItem((a) => { Backup.czyśćStare(new TimeSpan(14, 0, 0, 0)); });//czyści backup starszy niż 14 dni
 
         }
@@ -65,12 +87,12 @@ namespace Syntezator_Krawczyka
                 var main = new MainWindow();
 
                 string[] explode = ((string)(sender as Label).ToolTip).Split('.');
-                    if (explode.Last() == "mid" || explode.Last() == "midi")
-                        Statyczne.otwartyplik = new plikmidi((string)(sender as Label).ToolTip);
-                    else
-                        Statyczne.otwartyplik = new plik((string)(sender as Label).ToolTip);
-                    main.Show();
-                
+                if (explode.Last() == "mid" || explode.Last() == "midi")
+                    Statyczne.otwartyplik = new plikmidi((string)(sender as Label).ToolTip);
+                else
+                    Statyczne.otwartyplik = new plik((string)(sender as Label).ToolTip);
+                main.Show();
+
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
             Close();
@@ -120,7 +142,7 @@ namespace Syntezator_Krawczyka
                         main.Show();
                     }
                     catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
-wtyczkaVST.wndprocStart(); 
+                    wtyczkaVST.wndprocStart();
                     System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                     { Statyczne.otwartyplik = new plik(parametry[xKopia]); });
                     otwarto = true;
@@ -217,6 +239,7 @@ wtyczkaVST.wndprocStart();
 
         private void WyczyśćListę_Click(object sender, RoutedEventArgs e)
         {
+
             Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Clear();
             Syntezator_Krawczyka.Properties.Settings.Default.Save();
             OstOtw.Children.Clear();

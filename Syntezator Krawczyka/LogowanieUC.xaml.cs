@@ -71,6 +71,7 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            
             Syntezator_Krawczyka.Properties.Settings.Default.Haslo = Syntezator_Krawczyka.Properties.Settings.Default.Login = "";
             Syntezator_Krawczyka.Properties.Settings.Default.Save();
             Statyczne.serwer = new PolaczenieHTTP();

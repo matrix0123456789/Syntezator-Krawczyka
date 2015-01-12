@@ -80,7 +80,7 @@ namespace Syntezator_Krawczyka
                     Thread.Sleep(100);
                 if (stan == stanSerwera.błąd)
                 {
-                    MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
@@ -103,15 +103,15 @@ namespace Syntezator_Krawczyka
                                     {
                                         if (MainWindow.oknoLogowanie != null)
                                             MainWindow.oknoLogowanie.Close();
-                                    });    zalogowano = true;
+                                    }); zalogowano = true;
                                 zmianaLogowania(this);
-                                       // MainWindow.thi.zmianaLogowania(this);
-                                    
+                                // MainWindow.thi.zmianaLogowania(this);
+
                                 id = long.Parse(odp.Groups[3].Value);
                                 try { pobierzUtwory(); }
                                 catch
                                 {
-                                    MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    // MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
                                 }
                             }
                             else { MessageBox.Show(odp.Groups[1].Value); }
@@ -120,7 +120,7 @@ namespace Syntezator_Krawczyka
                     }
                     catch
                     {
-                        MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
+                        // MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }, this);
@@ -177,9 +177,11 @@ namespace Syntezator_Krawczyka
 
             Statyczne.serwer.utworyZalogowanego = pobierzUtwory(id.ToString());
             if (Statyczne.serwer.utworyZalogowanego == null)
-                MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
-           // else if (MainWindow.oknoLogowanie != null)
-                wyswietlUtworyZ(Statyczne.serwer.utworyZalogowanego);
+            {
+                //MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            // else if (MainWindow.oknoLogowanie != null)
+            wyswietlUtworyZ(Statyczne.serwer.utworyZalogowanego);
             // });
         }
         public UtworySerwer pobierzUtwory(string autor)
