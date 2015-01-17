@@ -1,7 +1,7 @@
 ﻿<Application x:Class="Syntezator_Krawczyka.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="Start.xaml" Exit="Application_Exit">
+              Exit="Application_Exit" Startup="aaa" >
     <Application.Resources>
          
     </Application.Resources>

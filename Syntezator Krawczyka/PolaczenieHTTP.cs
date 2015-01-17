@@ -189,6 +189,7 @@ namespace Syntezator_Krawczyka
         }
         public UtworySerwer pobierzUtwory(string autor)
         {
+            if(autor!="publiczne")
             while (stan == stanSerwera.oczekiwanie)
                 Thread.Sleep(100);
             if (stan == stanSerwera.błąd)
@@ -202,7 +203,8 @@ namespace Syntezator_Krawczyka
                     WebClient polaczenie = new WebClient();
                     polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                     polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                    var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + id + "\"}"));
+                    
+                    var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + autor + "\"}"));
                     var ret = new UtworySerwer();
                     if (RegexUtwory.IsMatch(json))
                     {

@@ -210,6 +210,9 @@
       <DependentUpon>nowyInstrument.xaml</DependentUpon>
     </Compile>
     <Compile Include="PolaczenieHTTP.cs" />
+    <Compile Include="PrzykładyZSerwera.xaml.cs">
+      <DependentUpon>PrzykładyZSerwera.xaml</DependentUpon>
+    </Compile>
     <Compile Include="sample.cs" />
     <Compile Include="sampler.cs" />
     <Compile Include="Serializer.cs" />
@@ -372,6 +375,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="nowyInstrument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PrzykładyZSerwera.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

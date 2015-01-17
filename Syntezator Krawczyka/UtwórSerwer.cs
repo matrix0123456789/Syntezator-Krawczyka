@@ -67,7 +67,11 @@ namespace Syntezator_Krawczyka
         private void grid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
                 Statyczne.otwartyplik = new plik(((UtwórSerwer)((FrameworkElement)sender).Tag).URL);
+                (sender as UtwórSerwerUI).WybranoDz();
+            }
+           
             //MainWindow.oknoLogowanie.Close();
         }
 

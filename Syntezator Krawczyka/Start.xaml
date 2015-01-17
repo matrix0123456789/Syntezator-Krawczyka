@@ -1,6 +1,6 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.Start"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:Syntezator_Krawczyka" 
         Title="Start" Height="390" Width="640" Drop="Grid_Drop" AllowDrop="True">
     <Grid>
         <Label Content="Jaebe Music Studio" VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="30"/>
@@ -27,13 +27,22 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-               <!-- <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0" Foreground="Black"/>
-               --> <Button Margin="0" Content="Nowy pusty projekt" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="3" Background="#daddee" Click="Pusty_Click" BorderThickness="0" />
-               <!-- <Button Margin="0" Content="Przykładowy Ambient" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
+                <!-- <Label Content="Nowy plik" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="3" Margin="0,0,0,0" Foreground="Black"/>
+               -->
+                <Grid Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" MinHeight="100"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <Button Content="Nowy pusty projekt"  Background="#daddee" Click="Pusty_Click" Grid.Row="0" BorderThickness="0" />
+                    <s:PrzykładyZSerwera Wybrano="wybrano"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1"></s:PrzykładyZSerwera>
+                </Grid>
+                <!-- <Button Margin="0" Content="Przykładowy Ambient" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
                 <Button Margin="0" Content="Przykładowy Dubstep" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
                 <Button Margin="0" Content="Przykładowy Techno" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" BorderThickness="0" Background="#dde0f0"/>
-           --> </Grid>
-            <Button Click="OtwórzClick" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" xmlns:s="clr-namespace:Syntezator_Krawczyka"  Grid.Column="2" Grid.Row="0" Background="Beige">
+           -->
+            </Grid>
+            <Button Click="OtwórzClick" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Column="2" Grid.Row="0" Background="Beige">
                 <Grid >
                     <s:IkonaOtwórz HorizontalAlignment="Left" Margin="-3,8,0,68" VerticalAlignment="Center" RenderTransformOrigin="0,0">
                         <s:IkonaOtwórz.RenderTransform>
@@ -45,20 +54,23 @@
                             </TransformGroup>
                         </s:IkonaOtwórz.RenderTransform>
                     </s:IkonaOtwórz>
-                    <Label FontSize="25
-                           " Margin="67,11,-67,-11">Otwórz plik</Label>
-                </Grid></Button>
+                    <Label FontSize="25" Margin="67,11,-67,-11">Otwórz plik</Label>
+                </Grid>
+            </Button>
             <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
                 <Grid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Wyczyść listę" Click="WyczyśćListę_Click"></MenuItem></ContextMenu></Grid.ContextMenu>
+                        <MenuItem Header="Wyczyść listę" Click="WyczyśćListę_Click"></MenuItem>
+                    </ContextMenu>
+                </Grid.ContextMenu>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Label Content="Ostatnio otwierane" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="1" Grid.ColumnSpan="3"/>
                 <ScrollViewer Grid.Row="1">
-                    <StackPanel Name="OstOtw"></StackPanel></ScrollViewer>
+                    <StackPanel Name="OstOtw"></StackPanel>
+                </ScrollViewer>
             </Grid>
             <Grid Grid.Column="2" Grid.Row="2" Background="ForestGreen" xmlns:s="clr-namespace:Syntezator_Krawczyka">
                 <Grid.RowDefinitions>
@@ -67,7 +79,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="Twoje pliki na jaebe.za.pl/musicstudio" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.ColumnSpan="3"/>
                 <ScrollViewer Grid.Row="3"></ScrollViewer>
-                <s:LogowanieUC Grid.RowSpan="2" ></s:LogowanieUC>
+                <s:LogowanieUC Grid.RowSpan="2"  Wybrano="wybrano" ></s:LogowanieUC>
             </Grid>
         </Grid>
 

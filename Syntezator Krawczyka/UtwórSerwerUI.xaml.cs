@@ -22,6 +22,7 @@ namespace Syntezator_Krawczyka
         private UtwórSerwer utwórSerwer;
         private string login;
         private string tytul;
+        public event Action Wybrano;
 
 
 
@@ -53,5 +54,11 @@ namespace Syntezator_Krawczyka
             Statyczne.serwer.pobierzUtwory();
         }
 
+
+        internal void WybranoDz()
+        {
+            if (Wybrano != null)
+                Wybrano();
+        }
     }
 }

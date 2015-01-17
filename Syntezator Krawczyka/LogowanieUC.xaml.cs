@@ -20,12 +20,14 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public partial class LogowanieUC : UserControl
     {
+        public event Action Wybrano;
         public LogowanieUC()
         {
             InitializeComponent();
             PolaczenieHTTP.wyswietlUtworyZ += wyswietlUtwory;
             PolaczenieHTTP.zmianaLogowania += zmianaLogowania;
-            zmianaLogowania(Statyczne.serwer);
+            try { zmianaLogowania(Statyczne.serwer); }
+            catch { }
             try { wyswietlUtwory(Statyczne.serwer.utworyZalogowanego); }
             catch { }
         }
@@ -91,7 +93,10 @@ namespace Syntezator_Krawczyka
                             if (utworySerwer!=null)
                             foreach (var x in utworySerwer)
                             {
-                                UtworyStack.Children.Add(x.UI);
+
+                                var ui = x.UI;
+                                UtworyStack.Children.Add(ui);
+                                (ui as UtwórSerwerUI).Wybrano += () => { if (Wybrano != null) Wybrano(); };
                             }
                         }
                     });
