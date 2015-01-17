@@ -11,11 +11,13 @@ namespace Syntezator_Krawczyka
 {
     public class UtwórSerwer
     {
-        static Regex reg = new Regex("\"id\":\"([0-9]*)\", ?\"tytul\":\"([^\"]*)\", ?\"plik\":\"([^\"]*)\", ?\"login\":\"([^\"]*)\"");
+        public enum uprawnienia { publiczny, prywatny }
+        static Regex reg = new Regex("\"id\":\"([0-9]*)\", ?\"tytul\":\"([^\"]*)\", ?\"plik\":\"([^\"]*)\", ?\"login\":\"([^\"]*)\", ?\"uprawnienia\":\"([^\"]*)\"");
         public long id;
         public string tytul;
         private string plik;
         private string login;
+        public uprawnienia upr;
         private string URL
         {
             get
@@ -31,6 +33,13 @@ namespace Syntezator_Krawczyka
             tytul = grupy[2].Value;
             plik = grupy[3].Value;
             login = grupy[4].Value;
+            if (grupy[5].Value == "publiczne")
+            {
+                upr = uprawnienia.publiczny;
+
+            }
+            else
+                upr = uprawnienia.prywatny;
         }
         public System.Windows.UIElement UI
         {
@@ -61,5 +70,6 @@ namespace Syntezator_Krawczyka
                 Statyczne.otwartyplik = new plik(((UtwórSerwer)((FrameworkElement)sender).Tag).URL);
             //MainWindow.oknoLogowanie.Close();
         }
+
     }
 }

@@ -9,8 +9,9 @@
         <Label Name="Tytuł" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Margin="0,21,0,0">Tytuł</Label>
         <Grid.ContextMenu>
             <ContextMenu>
-                <Label>Otwórz</Label>
-                <Label>Usuń</Label>
+                <!--<MenuItem Header="Otwórz" Click="Otwórz_click"/>-->
+                <MenuItem  Click="Usuń_click" Header="Usuń" />
+                <MenuItem Header="Publiczny" IsCheckable="True" IsChecked="False" Click="CheckBox_Click" Name="pubCheck"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>

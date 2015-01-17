@@ -45,10 +45,10 @@ namespace Syntezator_Krawczyka
                     laczony = int.Parse(poRegExpie.Groups[2].Value);
                     wysylaj = (int)(((long)publiczny * (long)prywatny) % 16777216);
                     suma = (int)(((long)laczony * (long)prywatny) % 16777216);*/
-                    stan = stanSerwera.połączono;
 
                     if (Syntezator_Krawczyka.Properties.Settings.Default.Login != "" && Syntezator_Krawczyka.Properties.Settings.Default.Haslo != "")
                         loguj(Syntezator_Krawczyka.Properties.Settings.Default.Login, Syntezator_Krawczyka.Properties.Settings.Default.Haslo);
+                    stan = stanSerwera.połączono;
 
                 }
                 catch
@@ -76,20 +76,22 @@ namespace Syntezator_Krawczyka
             this.haslo = haslo;
             System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
             {
-                while (stan == stanSerwera.oczekiwanie)
-                    Thread.Sleep(100);
-                if (stan == stanSerwera.błąd)
-                {
-                    // MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
+                //while (stan == stanSerwera.oczekiwanie)
+                //     Thread.Sleep(100);
+                //if (stan == stanSerwera.błąd)
+                //{
+                // MessageBox.Show("Błąd", "Błąd połączenia z serwerem", MessageBoxButton.OK, MessageBoxImage.Error);
+                //}
+                //else
                 {
                     try
                     {
                         WebClient polaczenie = new WebClient();
                         polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                         polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                        var ret = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
+                        var ret = polaczenie.UploadString("http://jaebe.za.pl/json.php?", "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
+                        var grupy = Regex.Match(polaczenie.ResponseHeaders["Set-cookie"], "PHPSESSID=([a-zA-Z0-9]*);").Groups;
+                        sesjaPHP = grupy[1].Value;
                         if (Regexlogowanie.IsMatch(ret))
                         {
                             var odp = Regexlogowanie.Match(ret);
@@ -104,7 +106,8 @@ namespace Syntezator_Krawczyka
                                         if (MainWindow.oknoLogowanie != null)
                                             MainWindow.oknoLogowanie.Close();
                                     }); zalogowano = true;
-                                zmianaLogowania(this);
+                                if (zmianaLogowania != null)
+                                    zmianaLogowania(this);
                                 // MainWindow.thi.zmianaLogowania(this);
 
                                 id = long.Parse(odp.Groups[3].Value);
@@ -205,9 +208,10 @@ namespace Syntezator_Krawczyka
                     {
                         var mat = RegexUtwory.Match(json);
                         var utwory = mat.Groups[1].Value.Split(',');
-                        if (utwory.Length >= 4)
-                            for (int i = 0; i < utwory.Length; i += 4)
-                                ret.Add(new UtwórSerwer(utwory[i] + ',' + utwory[i + 1] + ',' + utwory[i + 2] + ',' + utwory[i + 3]));
+                        if (utwory.Length >= 5)
+                            for (int i = 0; i < utwory.Length; i += 5)
+                                try { ret.Add(new UtwórSerwer(utwory[i] + ',' + utwory[i + 1] + ',' + utwory[i + 2] + ',' + utwory[i + 3] + ',' + utwory[i + 4])); }
+                                catch { }
                     }
 
                     // MessageBox.Show(json);
@@ -311,6 +315,33 @@ namespace Syntezator_Krawczyka
                 rStream.Close();
             }
             return request.GetResponse() as HttpWebResponse;
+        }
+
+        internal void usuń(UtwórSerwer utwórSerwer)
+        {
+
+            WebClient polaczenie = new WebClient();
+            polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
+            polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"usun\":\"" + utwórSerwer.id + "\"}"));
+        }
+
+        internal void ustaw_publiczne(UtwórSerwer utwórSerwer)
+        {
+
+            WebClient polaczenie = new WebClient();
+            polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
+            polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"ustaw_publiczne\":\"" + utwórSerwer.id + "\"}"));
+        }
+
+        internal void ustaw_prywatne(UtwórSerwer utwórSerwer)
+        {
+
+            WebClient polaczenie = new WebClient();
+            polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
+            polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"ustaw_prywatne\":\"" + utwórSerwer.id + "\"}"));
         }
     }
 

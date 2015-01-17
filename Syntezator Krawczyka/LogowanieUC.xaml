@@ -13,8 +13,7 @@
             <ScrollViewer Margin="10,41,10,35">
                 <ScrollViewer.ContextMenu>
                     <ContextMenu>
-                        <Label Content="Odświerz" MouseEnter="Button_Click_2"/>
-                        
+                        <MenuItem Header="Odświerz" Click="Button_Click_2"/>
                     </ContextMenu>
                 </ScrollViewer.ContextMenu>
                 <StackPanel x:Name="UtworyStack"/>

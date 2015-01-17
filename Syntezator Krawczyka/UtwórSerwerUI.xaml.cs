@@ -23,15 +23,35 @@ namespace Syntezator_Krawczyka
         private string login;
         private string tytul;
 
-        
+
 
         public UtwórSerwerUI(UtwórSerwer utwórSerwer, string login, string tytul)
         {
             // TODO: Complete member initialization
             InitializeComponent();
-           Tag= this.utwórSerwer = utwórSerwer;
+            Tag = this.utwórSerwer = utwórSerwer;
             Autor.Content = login;
             Tytuł.Content = tytul;
+            pubCheck.IsChecked = utwórSerwer.upr == UtwórSerwer.uprawnienia.publiczny;
         }
+
+        private void Usuń_click(object sender, RoutedEventArgs e)
+        {
+            Statyczne.serwer.usuń(utwórSerwer);
+            Statyczne.serwer.pobierzUtwory();
+
+
+        }
+
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (utwórSerwer.upr == UtwórSerwer.uprawnienia.prywatny)
+                Statyczne.serwer.ustaw_publiczne(utwórSerwer);
+            else
+                Statyczne.serwer.ustaw_prywatne(utwórSerwer);
+            Statyczne.serwer.pobierzUtwory();
+        }
+
     }
 }

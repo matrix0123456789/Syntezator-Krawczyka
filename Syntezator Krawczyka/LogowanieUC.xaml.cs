@@ -109,5 +109,11 @@ namespace Syntezator_Krawczyka
         {
             Statyczne.serwer.wyślij(Statyczne.otwartyplik);
         }
+
+
+        private void Button_Click_2(object sender, MouseEventArgs e)
+        {
+            Statyczne.serwer.pobierzUtwory();
+        }
     }
 }

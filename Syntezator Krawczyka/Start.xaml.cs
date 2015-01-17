@@ -48,17 +48,7 @@ namespace Syntezator_Krawczyka
             {
                 InitializeComponent();
                 try
-                {/*
-                    MessageBox.Show("Saz");
-                    Syntezator_Krawczyka.Properties.Settings.Default.Upgrade();
-                    MessageBox.Show("Saz");
-                    Syntezator_Krawczyka.Properties.Settings.Default.Save();
-                    MessageBox.Show("Saz");
-                    Syntezator_Krawczyka.Properties.Settings.Default.Reload();
-                    MessageBox.Show("Saz");
-                    Syntezator_Krawczyka.Properties.Settings.Default.Reset();
-                    MessageBox.Show(Syntezator_Krawczyka.Properties.Settings.Default.Context.ToString());
-                    MessageBox.Show("Saz");*/
+                {
                     if (Syntezator_Krawczyka.Properties.Settings.Default != null)
                     {
                         if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte != null)
