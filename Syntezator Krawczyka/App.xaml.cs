@@ -17,11 +17,6 @@ namespace Syntezator_Krawczyka
     {
         public App()
         {
-            try
-            {
-                plik.aktJumpList();
-            }
-            catch { }
             //
             try
             {

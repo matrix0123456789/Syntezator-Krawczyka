@@ -14,7 +14,11 @@ namespace VTSx86
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
+            if (Environment.GetCommandLineArgs().Length == 0)
+            {
+                MessageBox.Show("Uruchomiłeś program słurzący do ładowania wtyczek VST do programu Jaebe Music Studio.\r\n\r\nProgram ten może być uruchomiony tylko z poziomu Music Studio.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            } Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 

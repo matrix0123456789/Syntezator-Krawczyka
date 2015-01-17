@@ -837,30 +837,33 @@ namespace Syntezator_Krawczyka
 
         internal static void aktJumpList()
         {
-            var lista = JumpList.GetJumpList(Application.Current);
-
-            if (lista == null)
-                lista = new JumpList();
-            lista.ShowRecentCategory = false;
-            lista.ShowFrequentCategory = false;
-            lista.JumpItems.Clear();
-            for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+            MainWindow.thi.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
             {
-                var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
-                //lista.
-                var item = new JumpTask();
-                item.Description = str;
-                item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
-                item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
-                item.Arguments = str;
-                item.CustomCategory = "Ostatnie";
-                lista.JumpItems.Add(item);
-                // lab.Content=;
+                var lista = JumpList.GetJumpList(Application.Current);
+
+                if (lista == null)
+                    lista = new JumpList();
+                lista.ShowRecentCategory = false;
+                lista.ShowFrequentCategory = false;
+                lista.JumpItems.Clear();
+                for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+                {
+                    var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
+                    //lista.
+                    var item = new JumpTask();
+                    item.Description = str;
+                    item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
+                    item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
+                    item.Arguments = str;
+                    item.CustomCategory = "Ostatnie";
+                    lista.JumpItems.Add(item);
+                    // lab.Content=;
 
 
-            }
-            lista.Apply();
-            JumpList.SetJumpList(Application.Current, lista);
+                }
+                lista.Apply();
+                JumpList.SetJumpList(Application.Current, lista);
+            });
         }
     }
 }

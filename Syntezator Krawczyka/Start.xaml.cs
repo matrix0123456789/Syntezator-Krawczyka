@@ -39,7 +39,7 @@ namespace Syntezator_Krawczyka
                                 var lab = new Label();
                                 var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
                                 lab.ToolTip = str;
-                                lab.Content = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }));
+                                lab.Content = str.Substring(1+str.LastIndexOfAny(new char[] { '/', '\\' }));
                                 lab.MouseLeftButtonDown += uruchomOstatnie;
                                 OstOtw.Children.Add(lab);
 
