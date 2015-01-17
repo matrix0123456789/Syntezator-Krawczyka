@@ -1,0 +1,10 @@
+﻿<Window x:Class="Syntezator_Krawczyka.FeedBack"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FeedBack" Height="300" Width="300">
+    <Grid>
+        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Stretch" TextWrapping="WrapWithOverflow" >Zauwazyles jakis blad? Chcialbys cos poprawic? Napisz do nas.</TextBlock>
+        <TextBox Margin="6,53,6,25" Name="txt"></TextBox>
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Click="Button_Click">Wyślij</Button>
+    </Grid>
+</Window>

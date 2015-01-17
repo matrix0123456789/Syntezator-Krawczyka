@@ -565,5 +565,12 @@ namespace Syntezator_Krawczyka
 
             Widmo.pokarz();
         }
+
+        private void FeedBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            var feed = new FeedBack();
+            feed.Show();
+            feed.Activate();
+        }
     }
 }

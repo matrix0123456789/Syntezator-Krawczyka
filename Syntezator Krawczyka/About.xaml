@@ -5,7 +5,7 @@
     <Grid>
         <Label Content="Jaebe" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" />
         <Label Content="Music Studio" HorizontalAlignment="Left" Margin="0,33,0,0" VerticalAlignment="Top" FontSize="60"/>
-        <Label Content="Wersja 0.9.1" HorizontalAlignment="Left" Margin="0,110,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label Content="Wersja 0.9.1" Name="Wer" HorizontalAlignment="Left" Margin="0,110,0,0" VerticalAlignment="Top" FontSize="20"/>
 
     </Grid>
 </Window>

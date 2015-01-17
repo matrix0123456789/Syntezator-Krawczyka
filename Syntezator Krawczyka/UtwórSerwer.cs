@@ -20,7 +20,7 @@ namespace Syntezator_Krawczyka
         {
             get
             {
-                return "http://syntezator.aq.pl/utwory/" + id + plik + ".jms";
+                return "http://jaebe.za.pl/utwory/" + id + plik + ".jms";
             }
         }
 

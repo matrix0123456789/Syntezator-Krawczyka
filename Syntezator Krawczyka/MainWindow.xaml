@@ -497,7 +497,8 @@
                 </Grid>
             </s:Wstążka.PodSpodem>
         </s:Wstążka>
-        <ProgressBar Visibility="Visible" Name="postęp" HorizontalAlignment="Right" Height="13" Margin="5" VerticalAlignment="Top" Width="92"/>
+        <ProgressBar Visibility="Visible" Name="postęp" HorizontalAlignment="Right" Height="13" Margin="0,7,72,0" VerticalAlignment="Top" Width="92"/>
+        <Button Visibility="Visible" Name="FeedBackButton" HorizontalAlignment="Right" Click="FeedBackButton_Click" Margin="5" VerticalAlignment="Top">Zgłoś błąd</Button>
 
     </Grid>
 </Window>

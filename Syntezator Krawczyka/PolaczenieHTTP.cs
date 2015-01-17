@@ -35,7 +35,7 @@ namespace Syntezator_Krawczyka
             start:
                 try
                 {
-                    WebClient polaczenie = new WebClient();
+                    /*WebClient polaczenie = new WebClient();
                     string kody = polaczenie.DownloadString("http://syntezator.aq.pl/json.php?kody");
                     var grupy = Regex.Match(polaczenie.ResponseHeaders["Set-cookie"], "PHPSESSID=([a-zA-Z0-9]*);").Groups;
                     sesjaPHP = grupy[1].Value;
@@ -44,7 +44,7 @@ namespace Syntezator_Krawczyka
                     publiczny = int.Parse(poRegExpie.Groups[1].Value);
                     laczony = int.Parse(poRegExpie.Groups[2].Value);
                     wysylaj = (int)(((long)publiczny * (long)prywatny) % 16777216);
-                    suma = (int)(((long)laczony * (long)prywatny) % 16777216);
+                    suma = (int)(((long)laczony * (long)prywatny) % 16777216);*/
                     stan = stanSerwera.połączono;
 
                     if (Syntezator_Krawczyka.Properties.Settings.Default.Login != "" && Syntezator_Krawczyka.Properties.Settings.Default.Haslo != "")
@@ -89,7 +89,7 @@ namespace Syntezator_Krawczyka
                         WebClient polaczenie = new WebClient();
                         polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                         polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                        var ret = polaczenie.UploadString("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
+                        var ret = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
                         if (Regexlogowanie.IsMatch(ret))
                         {
                             var odp = Regexlogowanie.Match(ret);
@@ -199,7 +199,7 @@ namespace Syntezator_Krawczyka
                     WebClient polaczenie = new WebClient();
                     polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                     polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                    var json = polaczenie.UploadString("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + id + "\"}"));
+                    var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + id + "\"}"));
                     var ret = new UtworySerwer();
                     if (RegexUtwory.IsMatch(json))
                     {
@@ -225,7 +225,7 @@ namespace Syntezator_Krawczyka
         {
             var dane = new Dictionary<string, object>();
             dane.Add("pliki[]", plik.zapiszDoZmiennej());
-            var ret = Submit("http://syntezator.aq.pl/json.php?phpsession=" + sesjaPHP, dane);
+            var ret = Submit("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, dane);
 
             /* byte[] bu = new byte[1000];
              ret.GetResponseStream().Read(bu, 0, 1000);

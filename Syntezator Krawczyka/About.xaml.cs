@@ -21,6 +21,7 @@ namespace Syntezator_Krawczyka
         public About()
         {
             InitializeComponent();
+            Wer.Content = "Wersja " + Statyczne.wersja;
         }
     }
 }
