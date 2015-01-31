@@ -28,7 +28,7 @@ namespace Syntezator_Krawczyka.Synteza
         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }
+            get { return _wyjście; }set { _wyjście = value; }
         }
         Typ[] _wyjście;
         public Dictionary<string, string> ustawienia
@@ -90,8 +90,11 @@ namespace Syntezator_Krawczyka.Synteza
                 {
                     o.ilepróbek = o.ilepróbek / Math.Pow(2, oktawy);
                     o.głośność =o.balans0=o.balans1= 1;
-                    
-                    wyjście[0].DrógiModół.działaj(o);
+                    try
+                    {
+                        wyjście[0].DrógiModół.działaj(o);
+                    }
+                    catch { }
                 }
             }
         }

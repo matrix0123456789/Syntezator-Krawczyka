@@ -22,7 +22,11 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public void akt()
         {
-             głośność = float.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture);
+            głośność = float.Parse(ustawienia["głośność"], CultureInfo.InvariantCulture);
+            ucinanie = bool.Parse(ustawienia["ucinanie"]);
+            transformacja = bool.Parse(ustawienia["transformacja"]);
+            ucinanieWartość = float.Parse(ustawienia["ucinanieWartość"], CultureInfo.InvariantCulture);
+            transformacjaWartość = float.Parse(ustawienia["transformacjaWartość"], CultureInfo.InvariantCulture);
         }
         public long symuluj(long p)
         {
@@ -33,7 +37,7 @@ namespace Syntezator_Krawczyka.Synteza
         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }
+            get { return _wyjście; }set { _wyjście = value; }
         }
         Typ[] _wyjście;
         public Dictionary<string, string> ustawienia
@@ -50,15 +54,19 @@ namespace Syntezator_Krawczyka.Synteza
             _ustawienia.Add("głośność", "1.0");
             _ustawienia.Add("ucinanie", "false");
             _ustawienia.Add("ucinanieWartość", "1.0");
+            _ustawienia.Add("transformacja", "false");
+            _ustawienia.Add("transformacjaWartość", "1.0");
         }
         bool ucinanie = false;
+        private bool transformacja=false;
+        private float ucinanieWartość;
+        private float transformacjaWartość;
         public void działaj(nuta input)
         {
             
             // bool ucinanie;
-            if (ucinanie)//uważać, czy nie jest po pogłosie
+            if (ucinanie && transformacja)//uważać, czy nie jest po pogłosie
             {
-                var ucinanieWartość = float.Parse(ustawienia["ucinanieWartość"], CultureInfo.InvariantCulture);
                 var ucinanieWartośćMinus = -ucinanieWartość;
                 var ucinaniePomnożone = ucinanieWartość * głośność;
                 var ucinaniePomnożoneMinus = -ucinaniePomnożone;
@@ -70,6 +78,30 @@ namespace Syntezator_Krawczyka.Synteza
                         input.dane[i] = ucinanieWartośćMinus;
                     else
                         input.dane[i] = input.dane[i] * głośność;
+                    input.dane[i] = (float)Math.Pow(input.dane[i], ucinanieWartość);
+                }
+            } else if (ucinanie)//uważać, czy nie jest po pogłosie
+            {
+                var ucinanieWartośćMinus = -ucinanieWartość;
+                var ucinaniePomnożone = ucinanieWartość / głośność;
+                var ucinaniePomnożoneMinus = -ucinaniePomnożone;
+                for (var i = 0; i < input.dane.Length; i++)
+                {
+                    if (ucinaniePomnożone <= input.dane[i])
+                        input.dane[i] = ucinanieWartość;
+                    else if (ucinaniePomnożoneMinus >= input.dane[i])
+                        input.dane[i] = ucinanieWartośćMinus;
+                    else
+                        input.dane[i] = input.dane[i] * głośność;
+                }
+            }else if (transformacja)//uważać, czy nie jest po pogłosie
+            {
+                for (var i = 0; i < input.dane.Length; i++)
+                {
+                    if (input.dane[i] >= 0)
+                        input.dane[i] = (float)Math.Pow(input.dane[i], transformacjaWartość) * głośność;
+                    else
+                        input.dane[i] = -(float)Math.Pow(-input.dane[i], transformacjaWartość) * głośność;
                 }
             }
             else if (głośność != 1)

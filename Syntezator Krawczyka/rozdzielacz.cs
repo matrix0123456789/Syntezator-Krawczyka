@@ -24,7 +24,7 @@ namespace Syntezator_Krawczyka.Synteza
         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }
+            get { return _wyjście; }set { _wyjście = value; }
         }
         Typ[] _wyjście;
         public Dictionary<string, string> ustawienia
@@ -41,7 +41,7 @@ namespace Syntezator_Krawczyka.Synteza
             lock (flangeryBlock)
             {
                 flangery = new Dictionary<moduł, List<Typ>>();
-                for (var i = 0; i < 8; i++)
+                for (var i = 0; i < wyjście.Length; i++)
                 {
                     if (wyjście[i].DrógiModół != null)
                     {
@@ -142,7 +142,7 @@ namespace Syntezator_Krawczyka.Synteza
                     input.dane = dane;
                     x.Key.działaj(input);
                 }
-                for (var i = 7; i >= 0; i--)
+                for (var i = wyjście.Length-1; i >= 0; i--)
                 {
                     if (wyjście[i].DrógiModół != null)
                     {

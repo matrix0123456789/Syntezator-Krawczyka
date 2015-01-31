@@ -12,6 +12,7 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public interface moduł
     {
+
         UserControl UI
         {
             get;
@@ -23,6 +24,7 @@ namespace Syntezator_Krawczyka
         Typ[] wyjście
         {
             get;
+            set;
         }
 
         Dictionary<string,string> ustawienia

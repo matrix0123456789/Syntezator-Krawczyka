@@ -172,6 +172,8 @@ namespace Syntezator_Krawczyka
 
 
             }
+            sound.AppendChild(mod("mikser", "K" + K, "K"+(K+1)));
+            K++;
             if (flanger.IsChecked.Value)
             {
                 sound.AppendChild(mod("rozdzielacz", "K" + K, "Fl1 Fl2 Fl3 Fl4 Fl5 Fl6 Fl7 Fl8"));
@@ -214,6 +216,19 @@ namespace Syntezator_Krawczyka
                 ret.Attributes.Append(output);
             }
             return ret;
+        }
+
+        private void osc_Checked(object sender, RoutedEventArgs e)
+        {
+            ileOsc.IsEnabled = true;
+            Mik.IsChecked = false;
+        }
+
+        private void Mik_Checked(object sender, RoutedEventArgs e)
+        {
+
+            ileOsc.IsEnabled = false;
+            osc.IsChecked = false;
         }
     }
 }

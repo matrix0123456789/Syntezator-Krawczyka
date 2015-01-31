@@ -39,6 +39,12 @@ namespace Syntezator_Krawczyka.Synteza
             parentNode.akt();
             Statyczne.otwartyplik.zmiana();
         }
+        private void slider3_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            parentNode.ustawienia["transformacjaWartość"] = ((Slider)sender).Value.ToString(CultureInfo.InvariantCulture);
+            parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
+        }
 
         void ustawSuwaki()
         {
@@ -59,6 +65,19 @@ namespace Syntezator_Krawczyka.Synteza
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             parentNode.ustawienia["ucinanie"] = "true";
+            parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
+        }
+
+        private void CheckBox3_Unchecked(object sender, RoutedEventArgs e)
+        {
+            parentNode.ustawienia["transformacja"] = "false";
+            parentNode.akt();
+            Statyczne.otwartyplik.zmiana();
+        }
+        private void CheckBox3_Checked(object sender, RoutedEventArgs e)
+        {
+            parentNode.ustawienia["transformacja"] = "true";
             parentNode.akt();
             Statyczne.otwartyplik.zmiana();
         }

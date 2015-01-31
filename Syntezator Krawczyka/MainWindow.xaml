@@ -479,7 +479,7 @@
                     <TabControl Margin="0,35,0,0">
                         <TabItem Header="Instrumenty">
                             <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
-                                <StackPanel Name="pokazInstr" />
+                                <Grid>  <StackPanel Name="pokazInstr" /></Grid>
                             </ScrollViewer>
                         </TabItem>
                         <TabItem Header="Scieżki">

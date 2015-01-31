@@ -5,20 +5,18 @@
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid>
-                <Button Content="Proste" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-                <Button Content="Dwa" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="75" Click="Button2_Click"/>
-                <Button Content="Trzy" HorizontalAlignment="Left" Margin="170,10,0,0" VerticalAlignment="Top" Width="75" Click="Button3_Click"/>
-                <GroupBox Header="Syntezator Krawczyka" Margin="10,44,10,0" VerticalAlignment="Top" Height="199">
+                <GroupBox Header="Syntezator Krawczyka" Margin="10,10,10,0" VerticalAlignment="Top" Height="233">
                     <Grid>
-                        <TextBox Height="23" Margin="116,3,10,0" TextWrapping="Wrap" Text="4" VerticalAlignment="Top" Name="ileOsc"/>
-                        <Label Content="Ilość oscylatorów" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <CheckBox Content="Filtr" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" Name="filtr"/>
-                        <CheckBox Content="Flanger" HorizontalAlignment="Left" Margin="10,131,0,0" VerticalAlignment="Top" Name="flanger"/>
-                        <CheckBox Content="Filtr z ADSR" HorizontalAlignment="Left" Margin="10,111,0,0" VerticalAlignment="Top" Name="FilADSR"/>
-                        <CheckBox Content="LFO na filtr" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Name="LFONaFil"/>
-                        <CheckBox Content="LFO na głośność" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Name="LFONaGł"/>
-                        <CheckBox Content="LFO na wysokość" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Name="LFONaWys"/>
-                        <Button Content="Dodaj" Margin="10,151,10,0" VerticalAlignment="Top" Click="dodaj_click"/>
+                        <TextBox Height="23" Margin="92,3,10,0" TextWrapping="Wrap" ToolTip="Ilość oscylatorów" Text="4" VerticalAlignment="Top" Name="ileOsc"/>
+                        <RadioButton Content="Oscylatory" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,7,0,0" Name="osc" Checked="osc_Checked" IsChecked="True"/>
+                        <CheckBox Content="Filtr" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Name="filtr"/>
+                        <CheckBox Content="Flanger" HorizontalAlignment="Left" Margin="10,164,0,0" VerticalAlignment="Top" Name="flanger"/>
+                        <CheckBox Content="Filtr z ADSR" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top" Name="FilADSR"/>
+                        <CheckBox Content="LFO na filtr" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Name="LFONaFil"/>
+                        <CheckBox Content="LFO na głośność" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Name="LFONaGł"/>
+                        <CheckBox Content="LFO na wysokość" HorizontalAlignment="Left" Margin="10,124,0,0" VerticalAlignment="Top" Name="LFONaWys"/>
+                        <Button Content="Dodaj" Margin="10,184,10,0" VerticalAlignment="Top" Click="dodaj_click"/>
+                        <RadioButton Content="Mikrofon" Name="Mik" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,32,0,0" IsEnabled="False" ToolTip="Dostępne wkrótce" Checked="Mik_Checked" />
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="MIDI" Margin="14,248,10,0" VerticalAlignment="Top" Height="60">

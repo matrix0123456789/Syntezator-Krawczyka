@@ -20,7 +20,7 @@ namespace Syntezator_Krawczyka.Synteza
         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }
+            get { return _wyjście; }set { _wyjście = value; }
         }
         Typ[] _wyjście;
         public Dictionary<string, string> ustawienia

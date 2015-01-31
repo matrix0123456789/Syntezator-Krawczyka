@@ -9,8 +9,10 @@
     <Grid Background="PaleTurquoise">
         <Label VerticalAlignment="Top" HorizontalAlignment="Left" Margin="12,12,0,0">Głośność</Label>
         <a:suwak Height="23" HorizontalAlignment="Left" Margin="10,32,0,0" x:Name="slider1" VerticalAlignment="Top"  Width="111" Maximum="1" ValueChanged="slider1_ValueChanged" />
-        <a:suwak Visibility="Collapsed" Height="23" HorizontalAlignment="Left" Margin="12,84,0,0" x:Name="slider2" Opis="Przy jakiej głośności ucinać dźwięk" VerticalAlignment="Top" Width="100" Maximum="1" ValueChanged="slider2_ValueChanged" />
-        <CheckBox Visibility="Collapsed" Content="Ucinanie dźwięku" HorizontalAlignment="Left" Margin="12,60,0,0" VerticalAlignment="Top" Checked="CheckBox_Unchecked" Unchecked="CheckBox_Unchecked"/>
-        
+        <a:suwak Visibility="Visible" Height="23" HorizontalAlignment="Left" Value="1" Margin="12,84,0,0" x:Name="slider2" Opis="Przy jakiej głośności ucinać dźwięk" VerticalAlignment="Top" Width="100" Maximum="1" ValueChanged="slider2_ValueChanged" />
+        <CheckBox  Content="Przestery" HorizontalAlignment="Left" Margin="12,60,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+        <a:suwak Visibility="Visible" Height="23" HorizontalAlignment="Left" Margin="135,84,0,0" x:Name="slider3" Opis="Przy jakiej głośności ucinać dźwięk" VerticalAlignment="Top" Width="100" Minimum="0.0001" Maximum="5" Value="1" ValueChanged="slider3_ValueChanged" />
+        <CheckBox  Content="Transformacja" HorizontalAlignment="Left" Margin="144,59,0,0" VerticalAlignment="Top" Checked="CheckBox3_Checked" Unchecked="CheckBox3_Unchecked"/>
+
     </Grid>
 </UserControl>

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Shell;
+using System.Windows.Controls;
 namespace Syntezator_Krawczyka
 {
     public class plik
@@ -278,17 +279,61 @@ namespace Syntezator_Krawczyka
                                 z.UI.wewnętrzny.Children.Add((z.sekw as InstrumentMidi).UI);
                             }
                             else
+                            {
+                                var lis=z.Values.ToList();
+                                if (z.Values.Count > 5 && lis[1].GetType() == typeof(rozdzielacz) && lis[1].wyjście.Length>1)
+                                {
+                                    int start=1, koniec = 1;
+                                    for (var i = 0; i < lis[1].wyjście.Length; i++)
+                                    {
+                                        if (i == lis[1].wyjście.Length - 1)
+                                        {
+                                            var różn = koniec - start;
+                                            start = koniec;
+                                            koniec = koniec + różn;
+
+                                        }
+                                        else
+                                        {
+                                            start = lis.IndexOf(lis[1].wyjście[i].DrógiModół);
+                                            koniec = lis.IndexOf(lis[1].wyjście[i + 1].DrógiModół);
+                                        }
+
+                                        var grupa = new GroupBox();
+                                        z.UI.wewnętrzny.Children.Add(grupa);
+                                        var gr = new WrapPanel();
+                                        grupa.Content = gr;
+                                        for(var j=start;j<koniec;j++)
+                                        {
+                                            gr.Children.Add(lis[j].UI);
+                                        }
+                                    } var grupa2 = new GroupBox();
+                                    z.UI.wewnętrzny.Children.Add(grupa2);
+                                    var gr2 = new WrapPanel();
+                                    grupa2.Content = gr2;
+                                    for (var j = koniec; j < lis.Count; j++)
+                                    {
+                                        gr2.Children.Add(lis[j].UI);
+                                    }
+
+                                }
+                                else{
+                                var grupa = new GroupBox();
+                                z.UI.wewnętrzny.Children.Add(grupa);
+                                var gr = new WrapPanel();
+                                grupa.Content = gr;
                                 foreach (moduł zz in z.Values)
                                 {
                                     try
                                     {
-                                        z.UI.Children.Add(zz.UI);
+                                        gr.Children.Add(zz.UI);
                                     }
                                     catch (System.ArgumentException e)
                                     {
 
                                     }
                                 }
+                            }}
                             if (!MainWindow.thi.pokazInstr.Children.Contains(z.UI))
                             {
 
@@ -505,7 +550,6 @@ namespace Syntezator_Krawczyka
                         if (moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].ustawienia == null)
                         { }
                         modułFunkcje.czytajXML(moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].ustawienia, nn);
-                        moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].akt();
                     }
                 }
             }
@@ -586,10 +630,12 @@ namespace Syntezator_Krawczyka
                         if (nn.Attributes.GetNamedItem("output") != null)
                         {
                             string[] exp = nn.Attributes.GetNamedItem("output").Value.Split(' ');
+                            moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].wyjście = new Typ[exp.Length];
                             for (int az = 0; az < exp.Length; az++)
                             {
                                 try
                                 {
+                                    moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].wyjście[az] = new Typ();
                                     moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].wyjście[az].DrógiModół = moduły[n.Attributes.GetNamedItem("id").Value][exp[az]];
                                     moduły[n.Attributes.GetNamedItem("id").Value][exp[az]].wejście.Add(new Typ(moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value]));
                                 }
@@ -597,8 +643,11 @@ namespace Syntezator_Krawczyka
                             }
                         }
 
+
+
                     }
-                }
+                } foreach (XmlNode nn in n.ChildNodes)
+                { moduły[n.Attributes.GetNamedItem("id").Value][nn.Attributes.GetNamedItem("id").Value].akt(); }
             }
         }
 
@@ -839,30 +888,34 @@ namespace Syntezator_Krawczyka
         {
             MainWindow.thi.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
             {
-                var lista = JumpList.GetJumpList(Application.Current);
-
-                if (lista == null)
-                    lista = new JumpList();
-                lista.ShowRecentCategory = false;
-                lista.ShowFrequentCategory = false;
-                lista.JumpItems.Clear();
-                for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+                try
                 {
-                    var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
-                    //lista.
-                    var item = new JumpTask();
-                    item.Description = str;
-                    item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
-                    item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
-                    item.Arguments = str;
-                    item.CustomCategory = "Ostatnie";
-                    lista.JumpItems.Add(item);
-                    // lab.Content=;
+                    var lista = JumpList.GetJumpList(Application.Current);
+
+                    if (lista == null)
+                        lista = new JumpList();
+                    lista.ShowRecentCategory = false;
+                    lista.ShowFrequentCategory = false;
+                    lista.JumpItems.Clear();
+                    for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+                    {
+                        var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
+                        //lista.
+                        var item = new JumpTask();
+                        item.Description = str;
+                        item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
+                        item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
+                        item.Arguments = str;
+                        item.CustomCategory = "Ostatnie";
+                        lista.JumpItems.Add(item);
+                        // lab.Content=;
 
 
+                    }
+                    lista.Apply();
+                    JumpList.SetJumpList(Application.Current, lista);
                 }
-                lista.Apply();
-                JumpList.SetJumpList(Application.Current, lista);
+                catch { }
             });
         }
     }

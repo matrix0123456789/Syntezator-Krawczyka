@@ -17,6 +17,17 @@ namespace Syntezator_Krawczyka
     static class funkcje
     {
 
+        public static int liczWejścia(this moduł m)
+        {
+            if (m.GetType() == typeof(sekwencer))
+                return 1;
+            int l = 0;
+            foreach (var x in m.wejście)
+            {
+                l+=x.DrógiModół.liczWejścia();
+            }
+            return l;
+        }
         //static byte[] puste2=null;
         static public bool graj(float[] fala, double głośność)
         {
