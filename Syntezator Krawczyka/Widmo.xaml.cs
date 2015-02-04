@@ -88,17 +88,22 @@ namespace Syntezator_Krawczyka
                 catch { }
             });
         }
+        DateTime czOst;
         int ilepr = 1024;
         private void aktTresc()
         {
             lock (dane)
             {
+            while (czOst.AddTicks(100000 / częstotliwość) > DateTime.Now)
+                Thread.Sleep(1);
+
+                czOst=DateTime.Now;
                 var ilePróbek = ilepr;
                 Title = (DateTime.Now - czas).TotalMilliseconds.ToString();
-                czas = czas.AddMilliseconds(1000 / częstotliwość);
+                czas = czas.AddTicks(100000 / częstotliwość);
                 while ((DateTime.Now - czas).TotalMilliseconds > 1000 / częstotliwość * 10)
                 {
-                    czas = czas.AddMilliseconds(1000 / częstotliwość);
+                    czas = czas.AddTicks(1000 / częstotliwość);
                     if (aktualniePrzetwarzane == null && dane.Count != 0)
                     {
 
@@ -172,6 +177,9 @@ namespace Syntezator_Krawczyka
                 {
 
                     double X, Y;
+                    if (logaryticzna)
+                        X = (Math.Log10((i+1) / (double)ilePróbek)+3) * wykres.ActualWidth /3;
+                    else
                     X = i / (double)ilePróbek * wykres.ActualWidth * 2;
                     Y = wykres.ActualHeight - zespolone[i].Magnitude * wykres.ActualHeight * 3;
                     // AForge.Math.FourierTransform.FFT
@@ -190,7 +198,7 @@ namespace Syntezator_Krawczyka
 
         public static Timer timer;
 
-        int częstotliwość = 48000 / 1024;
+        int częstotliwość { get { return (int)(plik.Hz / ilepr); } }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             MainWindow.thi.Window_KeyDown(sender, e);
@@ -205,6 +213,23 @@ namespace Syntezator_Krawczyka
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             rysujSkale();
+        }
+        bool logaryticzna = false;
+        private void skalLog_Checked(object sender, RoutedEventArgs e)
+        {
+            logaryticzna = true;
+            rysujSkale();
+        }
+
+        private void skalLin_Checked(object sender, RoutedEventArgs e)
+        {
+            logaryticzna = false;
+            rysujSkale();
+        }
+
+        private void szybk_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            ilepr = (int)Math.Pow(2, Math.Round((sender as suwak).Value));
         }
     }
 }

@@ -300,6 +300,7 @@ namespace Syntezator_Krawczyka
                                         }
 
                                         var grupa = new GroupBox();
+                                        grupa.Header = "Grupa oscylatora " + (i + 1);
                                         z.UI.wewnętrzny.Children.Add(grupa);
                                         var gr = new WrapPanel();
                                         grupa.Content = gr;
@@ -308,6 +309,7 @@ namespace Syntezator_Krawczyka
                                             gr.Children.Add(lis[j].UI);
                                         }
                                     } var grupa2 = new GroupBox();
+                                    grupa2.Header = "Grupa wspólna";
                                     z.UI.wewnętrzny.Children.Add(grupa2);
                                     var gr2 = new WrapPanel();
                                     grupa2.Content = gr2;
@@ -875,11 +877,11 @@ namespace Syntezator_Krawczyka
 
                 }
                 var dialog = new SaveFileDialog();
-                dialog.Filter = "Plik muzyczny|*.wav;*.wave";
+                dialog.Filter = "Plik muzyczny|*.wav;*.wave|Plik muzyczny|*.mp3";
                 dialog.ShowDialog();
                 granie.PlikDoZapisu = dialog.FileName;
             }
-            catch (Exception e1) { MessageBox.Show("Błąd przy zapisie dźwięku", e1.ToString()); }
+            catch (Exception e1) { MessageBox.Show(e1.ToString(), "Błąd przy zapisie dźwięku"); }
         }
 
 

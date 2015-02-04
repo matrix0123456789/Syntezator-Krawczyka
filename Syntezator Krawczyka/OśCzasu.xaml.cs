@@ -241,7 +241,7 @@ namespace Syntezator_Krawczyka
         {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = "Pliki dźwiękowe|*.wav;*.wave";
+            dialog.Filter = "Pliki dźwiękowe|*.wav;*.wave|Pliki dźwiękowe|*.mp3";
             dialog.ShowDialog();
             foreach (var x in dialog.FileNames)
             {

@@ -38,7 +38,7 @@ namespace Syntezator_Krawczyka
 
         private void Start()
         {
-            timer = new Timer(akt, null, 1000 / częstotliwość, 1000 / częstotliwość);
+            timer = new Timer(akt, null, 17, 17);
         }
         static float[,] aktualniePrzetwarzane;
         static int pozycja = 0;
@@ -103,10 +103,11 @@ namespace Syntezator_Krawczyka
                         aktualniePrzetwarzane = dane.Dequeue();
                         pozycja = 0;
                     }
-                    for (int i = 0; i < ilePróbek; i++)
+                    int przeskokint = (int)przeskok;
+                    for (int i = 0; i < ilePróbek; i += przeskokint)
                     {
-                        pozycja++;
-                        if (pozycja == aktualniePrzetwarzane.Length / 2)
+                        pozycja += przeskokint;
+                        if (pozycja >= aktualniePrzetwarzane.Length / 2)
                         {
                             if (dane.Count == 0)
                             {
@@ -161,7 +162,7 @@ namespace Syntezator_Krawczyka
 
         public static Timer timer;
 
-         int częstotliwość = 55;
+         double częstotliwość = 57.90841667912205;
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             MainWindow.thi.Window_KeyDown(sender, e);
@@ -180,6 +181,11 @@ namespace Syntezator_Krawczyka
         private void OśY_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             typY = OśY.SelectedIndex;
+        }
+        double przeskok = 1;
+        private void jakosc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            przeskok = 100 / jakosc.Value;
         }
     }
 }

@@ -81,7 +81,7 @@ namespace Syntezator_Krawczyka.Synteza
         public long symuluj(long wej)
         {
             long ret = 0;
-            for (var i = 0; i < 8; i++)
+            for (var i = 0; i < wejście.Count; i++)
             {
                 if (wyjście[i].DrógiModół != null)
                 {

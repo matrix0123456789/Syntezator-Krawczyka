@@ -32,6 +32,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "sinusoidalna";
             parentNode.akt();
+            buttonEdytuj.IsEnabled = false;
             Statyczne.otwartyplik.zmiana();
         }
 
@@ -39,6 +40,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["typ"] = "trójkątna";
             parentNode.akt();
+            buttonEdytuj.IsEnabled = false;
             Statyczne.otwartyplik.zmiana();
         }
 
@@ -47,6 +49,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "prostokątna";
             parentNode.akt();
+            buttonEdytuj.IsEnabled = false;
             Statyczne.otwartyplik.zmiana();
         }
 
@@ -55,6 +58,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             parentNode.ustawienia["typ"] = "piłokształtna";
             parentNode.akt();
+            buttonEdytuj.IsEnabled = false;
             Statyczne.otwartyplik.zmiana();
         }
 
@@ -144,6 +148,11 @@ namespace Syntezator_Krawczyka.Synteza
                 parentNode.akt();
                 Statyczne.otwartyplik.zmiana();
         }
+            else
+            {
+                Button_Click(null, null);
+            }
+            buttonEdytuj.IsEnabled = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -160,6 +169,7 @@ namespace Syntezator_Krawczyka.Synteza
         {
             parentNode.ustawienia["typ"] = "szum";
             parentNode.akt();
+            buttonEdytuj.IsEnabled = false;
             Statyczne.otwartyplik.zmiana();
 
         }

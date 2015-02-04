@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
-    public class sample:IPostep
+    public class sample : IPostep
     {
         public string plik;
         public float note;
@@ -25,6 +26,17 @@ namespace Syntezator_Krawczyka
                 System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
                 {
                     BinaryReader zawartość;
+                    if(p.Substring(p.Length-4)==".mp3")
+                    {
+                        var bufor=new byte[1024*1024];
+                        var read = new Mp3FileReader(p);
+                        WaveStream convertedStream = WaveFormatConversionStream.CreatePcmStream(read);
+                        zawartość = new BinaryReader(convertedStream);
+                        kanały = (ushort)convertedStream.WaveFormat.Channels;
+                        częstotliwość = convertedStream.WaveFormat.SampleRate;
+                        bitrate = convertedStream.WaveFormat.BitsPerSample;
+                        
+                    }else{
                     try
                     {
                         zawartość = new BinaryReader((new StreamReader((new Regex("\\\\([^\\\\]*)$")).Replace(Syntezator_Krawczyka.plik.URLStatyczne, "\\" + plik), Encoding.ASCII)).BaseStream);
@@ -40,11 +52,14 @@ namespace Syntezator_Krawczyka
                             MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
-                    }
                     zawartość.BaseStream.Position = 22;
                     kanały = zawartość.ReadUInt16();
-                    częstotliwość = zawartość.ReadInt32();
-                    bitrate = 8 * zawartość.ReadInt32() / częstotliwość/kanały;
+                    częstotliwość = zawartość.ReadInt32(); if (kanały == 0 || częstotliwość == 0)
+
+                    { MessageBox.Show("Nieprawidłowy plik", "Bląd", MessageBoxButton.OK, MessageBoxImage.Error); }
+                    bitrate = 8 * zawartość.ReadInt32() / częstotliwość / kanały;
+                    }}
+                   
 
                     zawartość.BaseStream.Position = 44;
                     if (kanały == 1)

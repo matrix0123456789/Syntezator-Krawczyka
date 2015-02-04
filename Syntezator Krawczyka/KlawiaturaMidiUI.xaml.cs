@@ -35,6 +35,8 @@ namespace Syntezator_Krawczyka
         }
         void aktModuły()
         {
+            if (Statyczne.otwartyplik == null)
+                return;
             lock (comboBox1)
             {
                 comboBox1.Items.Clear();

@@ -93,7 +93,9 @@ namespace Syntezator_Krawczyka
             aktywne = new SkładoweHarmoniczne();
             aktywne.nazwa="fala"+(Statyczne.otwartyplik.fale.Count+1);
             Statyczne.otwartyplik.fale.Add(aktywne.nazwa, aktywne);
+            gdzieKliknięto.niestandardowa = aktywne;
             ładuj(aktywne as SkładoweHarmoniczne);
+
             aktListaFal();
         }
         void aktListaFal()
@@ -102,6 +104,8 @@ namespace Syntezator_Krawczyka
             foreach(var x in Statyczne.otwartyplik.fale)
             {
                 lista.Items.Add(x.Key);
+                if (gdzieKliknięto.niestandardowa == x.Value)
+                    lista.SelectedItem = x.Key;
             }
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -221,6 +221,7 @@ namespace Syntezator_Krawczyka
         private void osc_Checked(object sender, RoutedEventArgs e)
         {
             ileOsc.IsEnabled = true;
+            if (Mik!=null)
             Mik.IsChecked = false;
         }
 

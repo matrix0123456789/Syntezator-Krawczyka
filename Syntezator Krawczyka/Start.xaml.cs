@@ -110,7 +110,8 @@ namespace Syntezator_Krawczyka
 
         private void WyczyśćListę_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
+                Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
             Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Clear();
             Syntezator_Krawczyka.Properties.Settings.Default.Save();
             OstOtw.Children.Clear();

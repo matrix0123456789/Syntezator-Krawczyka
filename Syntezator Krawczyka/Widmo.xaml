@@ -1,11 +1,15 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.Widmo"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:Syntezator_Krawczyka"
         Title="Spektroskop" Height="300" Width="300" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp" SizeChanged="Window_SizeChanged">
     <Grid>
         <Canvas Name="wykres" Margin="0,0,0,29">
 
         </Canvas>
         <Grid Name="skala" Height="29" VerticalAlignment="Bottom"/>
+        <RadioButton Name="skalLog" HorizontalAlignment="Right" Width="132" VerticalAlignment="Top" Checked="skalLog_Checked">Skala logarytmiczna</RadioButton>
+        <RadioButton Name="skalLin" IsChecked="True" Margin="0,27,0,0" HorizontalAlignment="Right" Width="132" VerticalAlignment="Top" Checked="skalLin_Checked">Skala liniowa</RadioButton>
+        <l:suwak Opis="szybkość odświerzania" x:Name="szybk" VerticalAlignment="Top" Margin="0,52,2,0" HorizontalAlignment="Right" Width="123" Minimum="9" Maximum="16" ValueChanged="szybk_ValueChanged" ></l:suwak>
     </Grid>
 </Window>

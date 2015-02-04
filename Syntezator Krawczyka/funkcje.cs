@@ -141,9 +141,13 @@ namespace Syntezator_Krawczyka
             var format = new WaveFormat(48000, 16, 2);
            Stream str = new MemoryStream();
             wave(fala, new BinaryWriter(str));
-           using(  var mp3 = new LameMP3FileWriter(writer.BaseStream, format, 128000))
-           using( var wav = WaveFormatConversionStream.CreatePcmStream(new RawSourceWaveStream(str, format)))
-            wav.CopyTo(mp3);
+            str.Seek(0, SeekOrigin.Begin);
+           using(  var mp3 = new LameMP3FileWriter(writer.BaseStream, format, 320000))
+           using (var wav = WaveFormatConversionStream.CreatePcmStream(new RawSourceWaveStream(str, format)))
+           {
+               
+               wav.CopyTo(mp3);
+           }
         }
         /// <summary>
         /// Tworzy plik wave

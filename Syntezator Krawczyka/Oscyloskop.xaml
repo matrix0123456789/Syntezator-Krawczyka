@@ -1,7 +1,8 @@
 ﻿<Window x:Class="Syntezator_Krawczyka.Oscyloskop"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Oscyloskop" Height="300" Width="300" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+        xmlns:l="clr-namespace:Syntezator_Krawczyka"
+        Title="Oscyloskop" Height="333" Width="491" Closed="Window_Closed" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Grid>
         <Canvas Name="wykres" Margin="0,0,0,29">
 
@@ -10,15 +11,14 @@
         <ComboBox Name="OśX" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30,0,0,-1" SelectionChanged="OśX_SelectionChanged" >
             <ComboBoxItem>Lewy kanał</ComboBoxItem>
             <ComboBoxItem>Prawy kanał</ComboBoxItem>
-            <ComboBoxItem Selector.IsSelected="True">Piła 55Hz</ComboBoxItem>
-            <ComboBoxItem>Piła 60Hz</ComboBoxItem>
+            <ComboBoxItem Selector.IsSelected="True">Fala pilokształtna 58Hz</ComboBoxItem>
         </ComboBox>
-        <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="119,0,0,2">Oś Y</TextBlock>
-        <ComboBox Name="OśY" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="153,0,0,-2" SelectionChanged="OśY_SelectionChanged">
+        <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="188,0,0,3">Oś Y</TextBlock>
+        <ComboBox Name="OśY" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="219,0,0,-1" SelectionChanged="OśY_SelectionChanged">
             <ComboBoxItem Selector.IsSelected="True">Lewy kanał</ComboBoxItem>
             <ComboBoxItem>Prawy kanał</ComboBoxItem>
-            <ComboBoxItem>Piła 55Hz</ComboBoxItem>
-            <ComboBoxItem>Piła 60Hz</ComboBoxItem>
+            <ComboBoxItem>Fala pilokształtna 58Hz</ComboBoxItem>
         </ComboBox>
+        <l:suwak x:Name="jakosc" Opis="Jakość" Jednostka="%" Value="100" Minimum="1" Max="100" VerticalAlignment="Top" HorizontalAlignment="Right" Width="103" ValueChanged="jakosc_ValueChanged"/>
     </Grid>
 </Window>
