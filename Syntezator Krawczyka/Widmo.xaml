@@ -10,6 +10,6 @@
         <Grid Name="skala" Height="29" VerticalAlignment="Bottom"/>
         <RadioButton Name="skalLog" HorizontalAlignment="Right" Width="132" VerticalAlignment="Top" Checked="skalLog_Checked">Skala logarytmiczna</RadioButton>
         <RadioButton Name="skalLin" IsChecked="True" Margin="0,27,0,0" HorizontalAlignment="Right" Width="132" VerticalAlignment="Top" Checked="skalLin_Checked">Skala liniowa</RadioButton>
-        <l:suwak Opis="szybkość odświerzania" x:Name="szybk" VerticalAlignment="Top" Margin="0,52,2,0" HorizontalAlignment="Right" Width="123" Minimum="9" Maximum="16" ValueChanged="szybk_ValueChanged" ></l:suwak>
+        <l:suwak Opis="szybkość odświerzania" x:Name="szybk" VerticalAlignment="Top" Margin="0,52,2,0" HorizontalAlignment="Right" Width="123" Minimum="9" Maximum="13" ValueChanged="szybk_ValueChanged" ></l:suwak>
     </Grid>
 </Window>

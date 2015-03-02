@@ -35,7 +35,7 @@ namespace Syntezator_Krawczyka
             wid.Show();
             wid.Start();
             czas = DateTime.Now;
-            
+
 
         }
         bool logarytmicznaSkala = false;
@@ -44,7 +44,7 @@ namespace Syntezator_Krawczyka
         {
             skala.Children.Clear();
             var prógPx = 100d;
-            if (!logarytmicznaSkala)
+            if (!logaryticzna)
             {
                 var HzNaPx = plik.Hz / 2 / wykres.ActualWidth;
                 var HzNaPróg = prógPx * HzNaPx;
@@ -55,7 +55,7 @@ namespace Syntezator_Krawczyka
                     HzNaPróg10 = HzNaPróg10 * 5;
                 else if (mantysa > Math.Log10(2))
                     HzNaPróg10 = HzNaPróg10 * 2;
-                
+
                 prógPx = HzNaPróg10 / HzNaPx;
 
                 for (var i = 0; i * prógPx < wykres.ActualWidth; i++)
@@ -66,47 +66,78 @@ namespace Syntezator_Krawczyka
                     skala.Children.Add(Text);
                 }
             }
+            else
+            {
+
+
+                for (var i = 1; i <5; i++)
+                {
+                    var Text = new TextBlock();
+                    Text.Text = (Math.Pow(10, i)).ToString();
+
+                    Text.Margin = new Thickness(((i - 1) * wykres.ActualWidth / Math.Log10(plik.Hz / 2)), 0, 0, 0);
+                    // var ilenapr = plik.Hz / ilepr;
+                    //var nrpr = Math.Pow(10, i) / ilenapr;
+                    Text.Margin = new Thickness((Math.Log10(Math.Pow(10, i) / plik.Hz) + 3) * wykres.ActualWidth / 3, 0, 0, 0);
+                    skala.Children.Add(Text);
+
+
+                    var Text2 = new TextBlock();
+                    Text2.Text = (Math.Pow(10, i)*2).ToString();
+
+                    Text2.Margin = new Thickness((Math.Log10(Math.Pow(10, i)*2 / plik.Hz) + 3) * wykres.ActualWidth / 3, 0, 0, 0);
+                    skala.Children.Add(Text2);
+
+
+                    var Text5 = new TextBlock();
+                    Text5.Text = (Math.Pow(10, i)*5).ToString();
+
+                     Text5.Margin = new Thickness((Math.Log10(Math.Pow(10, i)*5 / plik.Hz) + 3) * wykres.ActualWidth / 3, 0, 0, 0);
+                    skala.Children.Add(Text5);
+                }
+            }
 
         }
         static float[,] aktualniePrzetwarzane;
         static int pozycja = 0;
         private void Start()
         {
-           // timer = new Timer(akt, null, 1000 / częstotliwość, 1000 / częstotliwość);
+            timer = new Thread(akt);
+            timer.Start();
+            // timer = new Timer(akt, null, 1000 / częstotliwość, 1000 / częstotliwość);
+        }
+
+        private void akt(object obj)
+        {
+            while (true)
+            { aktTresc(); }
         }
         static DateTime czas = new DateTime(0);
 
-        private void akt(object state)
-        {
-
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (ThreadStart)delegate()
-            {
-                try
-                {
-                    aktTresc();
-                }
-                catch { }
-            });
-        }
         DateTime czOst;
         int ilepr = 1024;
         private void aktTresc()
         {
+            // while (czOst.AddTicks(100000 / częstotliwość) > DateTime.Now)
+            //    Thread.Sleep(1);
+            //  var a = (DateTime.Now - czas).TotalMilliseconds;
+            //while ((DateTime.Now - czas).TotalMilliseconds < 0)
+            //     Thread.Sleep(1);
+            czOst = DateTime.Now;
             lock (dane)
             {
-            while (czOst.AddTicks(100000 / częstotliwość) > DateTime.Now)
-                Thread.Sleep(1);
-
-                czOst=DateTime.Now;
                 var ilePróbek = ilepr;
-                Title = (DateTime.Now - czas).TotalMilliseconds.ToString();
-                czas = czas.AddTicks(100000 / częstotliwość);
-                while ((DateTime.Now - czas).TotalMilliseconds > 1000 / częstotliwość * 10)
+                //Title = (DateTime.Now - czas).TotalMilliseconds.ToString();
+                //czas = czas.AddTicks(100000 / częstotliwość);
+                /*while ((DateTime.Now - czas).TotalMilliseconds > 1000 / częstotliwość * 10)
                 {
                     czas = czas.AddTicks(1000 / częstotliwość);
+                    /*while (aktualniePrzetwarzane == null && dane.Count == 0)
+                    {
+                        Thread.Sleep(1);
+                    }
                     if (aktualniePrzetwarzane == null && dane.Count != 0)
                     {
-
                         aktualniePrzetwarzane = dane.Dequeue();
                         pozycja = 0;
                     }
@@ -130,63 +161,92 @@ namespace Syntezator_Krawczyka
                                 break;
                             }
                         }
-                }
+                }*/
 
 
-
-                wykres.Children.Clear();
-                var linia = new Polyline();
-                linia.Stroke = Brushes.Black;
+                var zespolone = new Complex[ilePróbek];
                 if (aktualniePrzetwarzane == null)
                 {
-                    if (dane.Count == 0)
-                    {
 
-                        linia.Points.Add(new Point(0, 0));
-                        linia.Points.Add(new Point(wykres.ActualWidth, 0));
-                        wykres.Children.Add(linia);
-                        return;
+                    while (dane.Count == 0)
+                    {
+                        Thread.Sleep(1);
+                        if (czOst.AddSeconds(ilepr*2 / plik.Hz) < DateTime.Now)
+                        {
+                            aktualniePrzetwarzane = null;
+
+                            goto rysuj;
+                        }
                     }
                     aktualniePrzetwarzane = dane.Dequeue();
                     pozycja = 0;
                 }
-                var zespolone = new Complex[ilePróbek];
                 for (int i = 0; i < ilePróbek; i++)
                 {
                     pozycja++;
                     if (pozycja == aktualniePrzetwarzane.Length / 2)
                     {
-                        if (dane.Count == 0)
+                        while (dane.Count == 0)
                         {
-
-                            //linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, 0.5 * wykres.ActualHeight));
+                            Thread.Sleep(1);
+                            if (czOst.AddSeconds(ilepr*2 / plik.Hz) < DateTime.Now)
+                            {
+                                aktualniePrzetwarzane = null;
+                                goto rysuj;
+                            }//linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, 0.5 * wykres.ActualHeight));
                             //linia.Points.Add(new Point(wykres.ActualWidth, 0.5 * wykres.ActualHeight));
-                            aktualniePrzetwarzane = null;
-                            pozycja = 0;
+                            //aktualniePrzetwarzane = null;
+                            //pozycja = 0;
                             //wykres.Children.Add(linia);
-                            break;
+                            //break;
                         }
+                        
                         aktualniePrzetwarzane = dane.Dequeue();
                         pozycja = 0;
                     }
                     zespolone[i] = new Complex(aktualniePrzetwarzane[0, pozycja], 0);
                 }
-                AForge.Math.FourierTransform.FFT(zespolone, FourierTransform.Direction.Forward);
-                var naJeden = plik.Hz / ilePróbek * 2;
-                for (int i = 0; i < ilePróbek / 2; i++)
+            rysuj:
+                Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (ThreadStart)delegate()
                 {
+                    try
+                    {
+                        wykres.Children.Clear();
+                        var linia = new Polyline();
+                        linia.Stroke = Brushes.Black;
+                        if (aktualniePrzetwarzane == null)
+                        {
+                            if (dane.Count == 0)
+                            {
 
-                    double X, Y;
-                    if (logaryticzna)
-                        X = (Math.Log10((i+1) / (double)ilePróbek)+3) * wykres.ActualWidth /3;
-                    else
-                    X = i / (double)ilePróbek * wykres.ActualWidth * 2;
-                    Y = wykres.ActualHeight - zespolone[i].Magnitude * wykres.ActualHeight * 3;
-                    // AForge.Math.FourierTransform.FFT
+                                linia.Points.Add(new Point(0, 0));
+                                linia.Points.Add(new Point(wykres.ActualWidth, 0));
+                                wykres.Children.Add(linia);
+                                return;
+                            }
+                            aktualniePrzetwarzane = dane.Dequeue();
+                            pozycja = 0;
+                        }
+                        AForge.Math.FourierTransform.FFT(zespolone, FourierTransform.Direction.Forward);
+                        var naJeden = plik.Hz / ilePróbek * 2;
+                        for (int i = 0; i < ilePróbek / 2; i++)
+                        {
 
-                    linia.Points.Add(new Point(X, Y));
-                }
-                wykres.Children.Add(linia);
+                            double X, Y;
+                            if (logaryticzna)
+                                X = (Math.Log10((i + 1) / (double)ilePróbek) + 3) * wykres.ActualWidth / 3;
+                            else
+                                X = i / (double)ilePróbek * wykres.ActualWidth * 2;
+                            Y = wykres.ActualHeight - zespolone[i].Magnitude * wykres.ActualHeight * 3;
+                            // AForge.Math.FourierTransform.FFT
+
+                            linia.Points.Add(new Point(X, Y));
+                        }
+                        wykres.Children.Add(linia);
+
+                    }
+                    catch { }
+                });
             }
         }
 
@@ -196,7 +256,7 @@ namespace Syntezator_Krawczyka
             timer = null;
         }
 
-        public static Timer timer;
+        public static Thread timer;
 
         int częstotliwość { get { return (int)(plik.Hz / ilepr); } }
         private void Window_KeyDown(object sender, KeyEventArgs e)
