@@ -72,7 +72,7 @@ namespace Syntezator_Krawczyka
         static int pozycja = 0;
         private void Start()
         {
-            timer = new Timer(akt, null, 1000 / częstotliwość, 1000 / częstotliwość);
+           // timer = new Timer(akt, null, 1000 / częstotliwość, 1000 / częstotliwość);
         }
         static DateTime czas = new DateTime(0);
 

@@ -48,8 +48,11 @@ namespace Syntezator_Krawczyka
                     {
                         while (Statyczne.otwartyplik == null)
                             Thread.Sleep(100);
-                        if (Statyczne.otwartyplik.moduły.Count > 0)
-                            sekw = Statyczne.otwartyplik.moduły.ElementAt(0).Value.sekw;
+                        lock (Statyczne.otwartyplik.moduły)
+                        {
+                            if (Statyczne.otwartyplik.moduły.Count > 0)
+                                sekw = Statyczne.otwartyplik.moduły.ElementAt(0).Value.sekw;
+                        }
                     });
             /*akttimer = new Timer((object o) =>
             {

@@ -114,7 +114,13 @@ namespace Syntezator_Krawczyka
                 //System.IO.BinaryReader read = new System.IO.BinaryReader(sa.BaseStream);
                 //sinus = read.ReadBytes((int)read.BaseStream.Length);
 
-                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) == null)
+                if (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) == null
+                    ||
+                    (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) != null && Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false).OpenSubKey("OpenWithList") == null)
+
+                    ||
+                    (Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false) != null && Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false).OpenSubKey("OpenWithList") != null && !Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".jms", false).OpenSubKey("OpenWithList").GetValueNames().Contains("a"))
+                    )
                 {
                     if (MessageBoxResult.Yes == MessageBox.Show("Czy chcesz skojarzyć pliki .jms z tym programem?", "Skojarzenie plików", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No))
                     {

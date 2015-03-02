@@ -31,8 +31,8 @@
     <ProductName>Jaebe Music Studio</ProductName>
     <PublisherName>Jaebe</PublisherName>
     <SuiteName>Jaebe Music Studio</SuiteName>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>0.9.3.%2a</ApplicationVersion>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>0.9.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

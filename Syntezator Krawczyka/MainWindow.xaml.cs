@@ -202,6 +202,8 @@ namespace Syntezator_Krawczyka
         {
             if (Statyczne.otwartyplik.URL != null)
                 Statyczne.otwartyplik.zapisz(Statyczne.otwartyplik.URL);
+            else if (Statyczne.otwartyplik.xml.BaseURI != null)
+                Statyczne.otwartyplik.zapisz(Statyczne.otwartyplik.URL);
             else
                 Statyczne.otwartyplik.zapisz();
         }
