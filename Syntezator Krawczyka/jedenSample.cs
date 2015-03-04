@@ -15,7 +15,8 @@ namespace Syntezator_Krawczyka
         public float głośność {get;set;}
         public long delay { get; set; }
         public XmlNode xml;
-
+        public long start = 0;
+        public long end;
         public jedenSample()
         {
             głośność=1;
@@ -34,10 +35,15 @@ namespace Syntezator_Krawczyka
                 sample = new sample(x);
                 Statyczne.otwartyplik.wszytskieSamplePliki.Add(x, sample);
             }
-
+            sample.load += sample_load;
             var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("file");
             atrybut.Value = x;
             xml.Attributes.SetNamedItem(atrybut);
+        }
+
+        void sample_load()
+        {
+            end = sample.max;
         }
 
         public jedenSample(XmlNode xml)
@@ -60,6 +66,7 @@ namespace Syntezator_Krawczyka
                 sample = new sample(xml.Attributes["file"].Value);
                 Statyczne.otwartyplik.wszytskieSamplePliki.Add(xml.Attributes["file"].Value, sample);
             }
+            sample.load += sample_load;
         }
         internal void działaj()
         {

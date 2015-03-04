@@ -30,16 +30,16 @@ namespace Syntezator_Krawczyka
 
         void rysujFala()
         {
-           // Fala.Children.Clear();
+            // Fala.Children.Clear();
             var path = (Polygon)Fala.Children[1];
             path.Points.Clear();
             path.HorizontalAlignment = HorizontalAlignment.Left;
             path.Fill = Brushes.Red;
             var piksel = (pokażDo - pokażOd) / Fala.ActualWidth;
-            var iZwiększ = (int)Math.Ceiling(Fala.ActualWidth / (pokażDo-pokażOd));
-            if(iZwiększ<1)
-                iZwiększ=1;
-            for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i+=iZwiększ)
+            var iZwiększ = (int)Math.Ceiling(Fala.ActualWidth / (pokażDo - pokażOd));
+            if (iZwiększ < 1)
+                iZwiększ = 1;
+            for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i += iZwiększ)
             {
                 var jestW = pokażOd + i * piksel;
                 if (jestW < 0)
@@ -50,13 +50,18 @@ namespace Syntezator_Krawczyka
                 {
                     if (Dźwięk.sample.fala[0, i2] > max)
                         max = Dźwięk.sample.fala[0, i2];
-                    else if (Dźwięk.sample.fala[0, i2] <min)
+                    else if (Dźwięk.sample.fala[0, i2] < min)
                         min = Dźwięk.sample.fala[0, i2];
                 }
-                path.Points.Add(new Point(i, (max+1)*Fala.ActualHeight/2));
-                path.Points.Insert(0, new Point(i, (min + 1) * Fala.ActualHeight / 2-1));
+                path.Points.Add(new Point(i, (max + 1) * Fala.ActualHeight / 2));
+                path.Points.Insert(0, new Point(i, (min + 1) * Fala.ActualHeight / 2 - 1));
             }
             //Fala.Children.Add(path);
+            var startTrj = -(pokażOd - Dźwięk.start) / piksel;
+            trójkąt1.Margin = new Thickness(startTrj, 35, 0, 0);
+            var endTrj = -(pokażOd - Dźwięk.end) / piksel;
+            trójkąt2.Margin = new Thickness(endTrj, 35, 0, 0);
+
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -79,7 +84,21 @@ namespace Syntezator_Krawczyka
         float myszX = float.NaN, myszY = float.NaN;
         private void Fala_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            if (e.OriginalSource == trójkąt1) lastDrag = 1;
+            else if (e.OriginalSource == trójkąt2) lastDrag = 2;
+            else lastDrag = 0;
+            myszX = (float)e.GetPosition(this).X;
+            myszY = (float)e.GetPosition(this).Y;
+        }
+        private void Fala_MouseDowntrj1(object sender, MouseButtonEventArgs e)
+        {
+            lastDrag = 1;
+            myszX = (float)e.GetPosition(this).X;
+            myszY = (float)e.GetPosition(this).Y;
+        }
+        private void Fala_MouseDowntrj2(object sender, MouseButtonEventArgs e)
+        {
+            lastDrag = 2;
             myszX = (float)e.GetPosition(this).X;
             myszY = (float)e.GetPosition(this).Y;
         }
@@ -88,14 +107,38 @@ namespace Syntezator_Krawczyka
 
             myszX = myszY = float.NaN;
         }
+        byte lastDrag = 0;
         private void Fala_MouseMove(object sender, MouseEventArgs e)
         {
-            if (myszX != float.NaN && myszY != float.NaN && (e.LeftButton==MouseButtonState.Pressed || Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+            if (lastDrag == 0)
             {
-                var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
-                var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
-                pokażDo -= różn;
-                pokażOd -= różn;
+                if (myszX != float.NaN && myszY != float.NaN && (e.LeftButton == MouseButtonState.Pressed || Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+                {
+                    var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
+                    var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
+                    pokażDo -= różn;
+                    pokażOd -= różn;
+                }
+            }
+            else if (lastDrag == 1)
+            {
+                if (myszX != float.NaN && myszY != float.NaN && (e.LeftButton == MouseButtonState.Pressed || Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+                {
+                    var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
+                    var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
+                    Dźwięk.start += (long)różn;
+                }
+
+            }
+            else if (lastDrag == 2)
+            {
+                if (myszX != float.NaN && myszY != float.NaN && (e.LeftButton == MouseButtonState.Pressed || Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+                {
+                    var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
+                    var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
+                    Dźwięk.end += (long)różn;
+                }
+
             }
 
             myszX = (float)e.GetPosition(this).X;

@@ -18,7 +18,7 @@ namespace Syntezator_Krawczyka
         public float[,] fala;
         public ushort kanały = 1;
         private string p;
-
+        public event Action load;
         public sample(string p)
         {
             {
@@ -119,6 +119,8 @@ namespace Syntezator_Krawczyka
                             }
                         }
                     }
+                    if (load != null)
+                        load();
                 });
             }  
         }
