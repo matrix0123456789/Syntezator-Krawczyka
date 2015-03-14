@@ -181,8 +181,12 @@ namespace Syntezator_Krawczyka.Synteza
                             var Max1 = długośćCała - input.generujOd - rMax;
                             var Max2 = aMax - (int)input.generujOd;
                             var Max3 = dMax - (int)input.generujOd;
-                            var Acc1 = dMax * (1 - s);
+                            var Acc1 = dMax / (1 - s);
                             var genInt = (int)input.generujOd;
+                           // float afdoszlo = 1;
+                            if (( (int)input.długość) / aMax<1)
+                                aProcent=input.długość / aMax;
+                            float glosnoscUstaw=1;
                             for (int i = 0; i < input.dane.Length; i++)
                             {
                                 if (Max1 > i)
@@ -192,7 +196,9 @@ namespace Syntezator_Krawczyka.Synteza
                                         aProcent = 1;
                                 else
                                 {
-                                    rProcent = (długośćCała - i - input.generujOd) / rMax;
+                                   // if (Max1 == i)
+                                   //     glosnoscUstaw = aProcent;
+                                    rProcent = (długośćCała - i - input.generujOd) / rMax*aProcent;
                                     //aProcent = 1;
                                 }
                                 if (Max3 > i)
@@ -207,7 +213,14 @@ namespace Syntezator_Krawczyka.Synteza
                                 input.dane[i] = jedenPrzebieg[(i + genInt) % jedenPrzebieg.Length] * aProcent * rProcent * dProcent;
 
                             }
+                           // input.głośność *= glosnoscUstaw;
                             wyjście[0].DrógiModół.działaj(input);
+                        }
+                        else if((D == 0 && S == 0))
+                        {
+                            input.dane = new float[0];
+                            wyjście[0].DrógiModół.działaj(input);
+
                         }
                     }
                 }

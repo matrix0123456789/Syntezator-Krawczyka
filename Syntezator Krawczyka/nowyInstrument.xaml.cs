@@ -129,11 +129,18 @@ namespace Syntezator_Krawczyka
                 else
                     sound.AppendChild(mod("zmianaWysokości", "zmianaWysokości" + i, "oscylator" + i));
                 int P = 1;
+                XmlNode osc;
                 if (LFONaGł.IsChecked.Value || LFONaFil.IsChecked.Value || FilADSR.IsChecked.Value || filtr.IsChecked.Value)
-                    sound.AppendChild(mod("oscylator", "oscylator" + i, "P" + P + "nr" + i));
+                    osc=(mod("oscylator", "oscylator" + i, "P" + P + "nr" + i));
                 else
-                    sound.AppendChild(mod("oscylator", "oscylator" + i, "K" + K));
-
+                    osc=(mod("oscylator", "oscylator" + i, "K" + K));
+                if(i>1)
+                {
+                    var atr = Statyczne.otwartyplik.xml.CreateAttribute("S");
+                    atr.Value = "0";
+                    osc.Attributes.Append(atr);
+                }
+                sound.AppendChild(osc);
 
                 if (LFONaGł.IsChecked.Value)
                 {
