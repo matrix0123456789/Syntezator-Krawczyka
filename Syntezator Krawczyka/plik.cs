@@ -11,6 +11,8 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Shell;
 using System.Windows.Controls;
+using ICSharpCode.SharpZipLib.Zip;
+using System.IO;
 namespace Syntezator_Krawczyka
 {
     public class plik
@@ -49,6 +51,7 @@ namespace Syntezator_Krawczyka
         public static float tempo = 120;
         public static float kHz = 48f;
         int pusteID = 0;
+        public bool? pakuj;
         public Dictionary<string, sample> wszytskieSamplePliki = new Dictionary<string, sample>();
         public static float Hz = kHz * 1000;
         public List<DrumJeden> DrumLista = new List<DrumJeden>();
@@ -60,12 +63,34 @@ namespace Syntezator_Krawczyka
         {
             if (a != "")
             {
+
                 URL = a;
                 URLStatyczne = a;
                 xml = new XmlDocument();
                 try
                 {
-                    xml.Load(URL);
+                    var read = new System.IO.FileStream(a, FileMode.Open);
+                    if (read.ReadByte() == 'P' && read.ReadByte() == 'K')//zip
+                    {
+                        read.Position = 0;
+                        var zis = new ZipInputStream(read);
+                        ZipEntry ent;
+                        do
+                        {
+                            ent = zis.GetNextEntry();
+                            if(ent.Name=="project.jms")
+                            {
+                                xml.Load(zis);
+                                break;
+                            }
+
+                       }while(ent!=null);
+                    }
+                    else
+                    {
+                        read.Position = 0;
+                        xml.Load(read);
+                    }
                     if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
                         Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
                     else while (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Contains(URL))
@@ -280,10 +305,10 @@ namespace Syntezator_Krawczyka
                             }
                             else
                             {
-                                var lis=z.Values.ToList();
-                                if (z.Values.Count > 5 && lis[1].GetType() == typeof(rozdzielacz) && lis[1].wyjście.Length>1)
+                                var lis = z.Values.ToList();
+                                if (z.Values.Count > 5 && lis[1].GetType() == typeof(rozdzielacz) && lis[1].wyjście.Length > 1)
                                 {
-                                    int start=1, koniec = 1;
+                                    int start = 1, koniec = 1;
                                     for (var i = 0; i < lis[1].wyjście.Length; i++)
                                     {
                                         if (i == lis[1].wyjście.Length - 1)
@@ -304,7 +329,7 @@ namespace Syntezator_Krawczyka
                                         z.UI.wewnętrzny.Children.Add(grupa);
                                         var gr = new WrapPanel();
                                         grupa.Content = gr;
-                                        for(var j=start;j<koniec;j++)
+                                        for (var j = start; j < koniec; j++)
                                         {
                                             gr.Children.Add(lis[j].UI);
                                         }
@@ -319,23 +344,25 @@ namespace Syntezator_Krawczyka
                                     }
 
                                 }
-                                else{
-                                var grupa = new GroupBox();
-                                z.UI.wewnętrzny.Children.Add(grupa);
-                                var gr = new WrapPanel();
-                                grupa.Content = gr;
-                                foreach (moduł zz in z.Values)
+                                else
                                 {
-                                    try
+                                    var grupa = new GroupBox();
+                                    z.UI.wewnętrzny.Children.Add(grupa);
+                                    var gr = new WrapPanel();
+                                    grupa.Content = gr;
+                                    foreach (moduł zz in z.Values)
                                     {
-                                        gr.Children.Add(zz.UI);
-                                    }
-                                    catch (System.ArgumentException e)
-                                    {
+                                        try
+                                        {
+                                            gr.Children.Add(zz.UI);
+                                        }
+                                        catch (System.ArgumentException e)
+                                        {
 
+                                        }
                                     }
                                 }
-                            }}
+                            }
                             if (!MainWindow.thi.pokazInstr.Children.Contains(z.UI))
                             {
 
@@ -396,25 +423,15 @@ namespace Syntezator_Krawczyka
         }
         public void zapisz()
         {
-            uaktualnij();
+            //uaktualnij();
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.Filter = "Plik Jaebe Music Studio|*.jms";
             dialog.ShowDialog();
             if (dialog.FileName != "")
             {
-                URL = dialog.FileName;
-                System.IO.StreamWriter zapis = new System.IO.StreamWriter(dialog.FileName);
-                zapis.Write(xml.OuterXml);
-                zapis.Close();
-                if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
-                    Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte = new System.Collections.Specialized.StringCollection();
-                else while (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Contains(dialog.FileName))
-                        Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Remove(dialog.FileName);
-                Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Add(dialog.FileName);
-
-                Syntezator_Krawczyka.Properties.Settings.Default.Save();
+                zapisz(dialog.FileName, true);
             }
-            aktJumpList();
+            //aktJumpList();
         }
         public void zapisz(string path) { zapisz(path, true); }
         /// <summary>
@@ -424,9 +441,40 @@ namespace Syntezator_Krawczyka
         /// <param name="OstatnioOtwarte">Czy dodać do listy "Ostatnio Otwarte"</param>
         public void zapisz(string path, bool OstatnioOtwarte)
         {
+
             uaktualnij();
             URL = path;
-            System.IO.StreamWriter zapis = new System.IO.StreamWriter(path);
+            if (Statyczne.otwartyplik.sameSample.Count > 0)
+                if (Statyczne.otwartyplik.pakuj == null)
+                {
+                    var odp = MessageBox.Show("Projekt zawiera dodatkowe pliki dźwiękowe. Czy chcesz przekopiować je do pliku projektu? Ułatwi to przeniesienie projektu na inny komputer, ale zajmuje dodatkowe miejsce na dysku.", "Zapisywanie projektu", MessageBoxButton.YesNo);
+                    Statyczne.otwartyplik.pakuj = odp == MessageBoxResult.Yes;
+                }
+            System.IO.StreamWriter zapis;
+            ZipFile zip = null;
+            if (Statyczne.otwartyplik.pakuj == true && OstatnioOtwarte && Statyczne.otwartyplik.sameSample.Count > 0)
+            {
+                zip = ZipFile.Create(path);
+                var str = new MemoryStream();
+                zapis = new System.IO.StreamWriter(str);
+                // var stor=new MemoryArchiveStorage();
+
+                zapis = new System.IO.StreamWriter(str);
+                //ZipEntry e = zip.AddEntry("Content-From-Stream.bin", "basedirectory", StreamToRead);
+                // To use the entryStream as a file to be added to the zip,
+                // we need to put it into an implementation of IStaticDataSource.
+                CustomStaticDataSource sds = new CustomStaticDataSource();
+                sds.SetStream(str);
+                zip.BeginUpdate();
+                // If an entry of the same name already exists, it will be overwritten; otherwise added.
+                zip.Add(sds, "project.jms");
+
+
+            }
+            else
+            {
+                zapis = new System.IO.StreamWriter(path);
+            }
             if (OstatnioOtwarte)
             {
                 if (Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte == null)
@@ -437,8 +485,41 @@ namespace Syntezator_Krawczyka
                 Syntezator_Krawczyka.Properties.Settings.Default.Save();
             }
             zapis.Write(xml.OuterXml);
-            zapis.Close();
+            zapis.Flush();
+            if (Statyczne.otwartyplik.pakuj == true && OstatnioOtwarte && Statyczne.otwartyplik.sameSample.Count > 0)
+            {
+                zapis.BaseStream.Position = 0;
+                // Both CommitUpdate and Close must be called.
+
+                // Set this so that Close does not close the memorystream
+                zip.IsStreamOwner = true;
+                for (var i = 0; i < Statyczne.otwartyplik.sameSample.Count; i++)
+                {
+                    var rozsz = Statyczne.otwartyplik.sameSample[i].sample.plik.Substring(Statyczne.otwartyplik.sameSample[i].sample.plik.LastIndexOf('.'));
+                    zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik, "sample/" + i + rozsz);
+                } zip.CommitUpdate();
+                zip.Close();
+
+            }
+            else
+                zapis.Close();
             aktJumpList();
+        }
+        public class CustomStaticDataSource : IStaticDataSource
+        {
+            private Stream _stream;
+            // Implement method from IStaticDataSource
+            public Stream GetSource()
+            {
+                return _stream;
+            }
+
+            // Call this to provide the memorystream
+            public void SetStream(Stream inputStream)
+            {
+                _stream = inputStream;
+                _stream.Position = 0;
+            }
         }
         public byte[] zapiszDoZmiennej()
         {
@@ -920,5 +1001,6 @@ namespace Syntezator_Krawczyka
                 catch { }
             });
         }
+
     }
 }
