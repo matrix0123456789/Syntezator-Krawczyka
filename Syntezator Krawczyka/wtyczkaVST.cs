@@ -14,6 +14,7 @@ using System.Windows.Interop;
 using System.Windows.Forms;
 using System.IO;
 using Syntezator_Krawczyka;
+using Syntezator_Krawczyka.Synteza;
 
 
 
@@ -43,11 +44,11 @@ namespace Syntezator_Krawczyka
         string zzzz = "esdx";
         public wtyczkaVST(string path)
         {
-            var exe=System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
-            var info=new ProcessStartInfo(exe.Substring(0, exe.LastIndexOfAny(new char[]{'/','\\'}))+ "\\VTSx86.exe", "\"" + path + "\" " + (Process.GetCurrentProcess().Id));
-            info.WorkingDirectory=path.Substring(0, path.LastIndexOfAny(new char[]{'/','\\'}));
-            info.UseShellExecute = false ;
-            proces = Process.Start(info );
+            var exe = System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName;
+            var info = new ProcessStartInfo(exe.Substring(0, exe.LastIndexOfAny(new char[] { '/', '\\' })) + "\\VTSx86.exe", "\"" + path + "\" " + (Process.GetCurrentProcess().Id));
+            info.WorkingDirectory = path.Substring(0, path.LastIndexOfAny(new char[] { '/', '\\' }));
+            info.UseShellExecute = false;
+            proces = Process.Start(info);
             otwarte.Add(proces.Id, this);
             czyWłączone = true;
             Statyczne.otwartyplik.zapis += zapiszUstawienia;
@@ -86,7 +87,7 @@ namespace Syntezator_Krawczyka
         public void działaj(nuta input)
         {
             var dane = new NutaStruct();
-            dane.ilepróbekNaStarcie = input.ilepróbekNaStarcie;
+            dane.nuta = (int)(funkcje.ton(input.ilepróbekNaStarcie)*2+60);
             dane.a = 0x11223344;
             MessageHelper.sendWindowsMessage((int)proces.MainWindowHandle, (int)polecenia.działaj.GetHashCode(), dane);
         }
@@ -161,12 +162,18 @@ namespace Syntezator_Krawczyka
                     var o = (COPYDATASTRUCT)a.GetLParam(typeof(COPYDATASTRUCT));
                     otwarte[(long)o.dwData].Nazwa = o.lpData;
                 }
-                if ((polecenia)wParam == polecenia.Zapisz)
+                else if ((polecenia)wParam == polecenia.Zapisz)
                 {
 
                     var o = (COPYDATASTRUCT)a.GetLParam(typeof(COPYDATASTRUCT));
                     //Marshal.
                     otwarte[(long)o.dwData].xml.InnerText = o.lpData;
+                }
+                else if ((polecenia)wParam == polecenia.Dźwięk)
+                {
+
+                    var o = (COPYBYTESTRUCT3)a.GetLParam(typeof(COPYBYTESTRUCT3));
+                     granie.Działaj( o.lpData,(o.cbData-10)/8,0,0);
                 }
             }
             return IntPtr.Zero;

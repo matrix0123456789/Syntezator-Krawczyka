@@ -43,7 +43,8 @@ namespace Syntezator_Krawczyka.Synteza
         public List<Typ> wejście { get; set; }
         public Typ[] wyjście
         {
-            get { return _wyjście; }set { _wyjście = value; }
+            get { return _wyjście; }
+            set { _wyjście = value; }
         }
         Typ[] _wyjście;
         public Dictionary<string, string> ustawienia
@@ -77,7 +78,7 @@ namespace Syntezator_Krawczyka.Synteza
                 for (int x = 0; x < zz.Length; x++)
                 {
 
-                    if (zz[x].nuta.głośność == 0 ||( zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
+                    if (zz[x].nuta.głośność == 0 || (zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
                     {
 
                         zz[x].nuta.dane = zz[x].dźwięk = null;
@@ -336,7 +337,7 @@ namespace Syntezator_Krawczyka.Synteza
                     dodatkowy:
                         try
                         {
-                            
+
                             var falaLength = o;
                             fala = new float[2, falaLength];
                             /*if (MainWindow.gpgpu)
@@ -357,7 +358,7 @@ namespace Syntezator_Krawczyka.Synteza
                                 for (int x = 0; x < zz.Length; x++)
                                 {
 
-                                    if (zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
+                                    if (zz[x].nuta.dane==null||zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
                                     {
                                         zz[x].nuta.dane = null;
                                         zz[x].dźwięk = null;
@@ -367,8 +368,8 @@ namespace Syntezator_Krawczyka.Synteza
                                     else
                                     {
                                         liczIle++;
-                                        
-                                        if (zz[x].nuta.głośność == 0 ||( zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
+
+                                        if (zz[x].nuta.głośność == 0 || (zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
                                         {
 
                                             zz[x].zagrano += o;
@@ -549,6 +550,49 @@ namespace Syntezator_Krawczyka.Synteza
                 catch (IndexOutOfRangeException) { }
 
                 input.dane = null;
+            }
+            //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }
+            //catch { }
+        }
+        public unsafe static void Działaj(float* input, long length, long inputopuznienie, long inputgenerujOd)
+        {
+            if (wynik == null)
+                lock (grają)
+                {//tynczasowo
+                    nuta nut = new nuta();
+                    nut.dane = new float[length];
+                    for (int i = 0; i < length;i++ )
+                    {
+                        nut.dane[i]=input[i*2];
+                    }
+                        grają.Add(nuta.nowyid, new gra(nut)); 
+                   /* if (grają.ContainsKey(input.id))
+                    {
+                        grają[input.id].dźwięk = (input).dane;
+                        grają[input.id].nuta = input;
+                    }
+                    else
+                        grają.Add(input.id, new gra(input));*/
+                }
+            else
+            {
+
+
+                long i = inputopuznienie + inputgenerujOd;
+                var opt1 = -inputgenerujOd - inputopuznienie;
+
+                var opt3 = length - opt1;
+                try
+                {
+
+                    for (; i < opt3; i++)
+                    {
+                        wynik[0, i] += input[(i + opt1) * 2];
+                        wynik[1, i] += input[(i + opt1) * 2 + 1];
+                    }
+                }
+                catch (IndexOutOfRangeException) { }
+                Marshal.FreeHGlobal((IntPtr)input);
             }
             //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }
             //catch { }

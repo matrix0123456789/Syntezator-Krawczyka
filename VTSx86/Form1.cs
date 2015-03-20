@@ -1,4 +1,5 @@
-﻿using Jacobi.Vst.Core.Host;
+﻿using Jacobi.Vst.Core;
+using Jacobi.Vst.Core.Host;
 using Jacobi.Vst.Interop.Host;
 using SIURegistry_Installer;
 using Syntezator_Krawczyka;
@@ -31,6 +32,8 @@ namespace VTSx86
             {
                 HostCommandStub cmdstub = new HostCommandStub(); //Code for this class is in the VSTHost Sample code
                 cont = VstPluginContext.Create(Environment.GetCommandLineArgs()[1], cmdstub);
+                cont.PluginCommandStub.StartProcess();
+
             }
             catch { }
             host = Process.GetProcessById(int.Parse(Environment.GetCommandLineArgs()[2]));
@@ -41,6 +44,70 @@ namespace VTSx86
                 {
                     SendMessage(host.MainWindowHandle, 8753, (IntPtr)polecenia.załadowano.GetHashCode(), (IntPtr)Process.GetCurrentProcess().Id);
                 });
+            //System.Threading.Timer dzwiekti = new System.Threading.Timer(dzwiekodb, null, 100, 100);
+            ThreadPool.QueueUserWorkItem((a) =>
+            {
+                while (true)
+                {
+                    dzwiekodb(null);
+                    Thread.Sleep(10);
+                }
+            });
+        }
+
+        private void dzwiekodb(object state)
+        {
+            VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
+            VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
+
+            var vstInputBuffers = inputMgr.ToArray();
+            var vstOutputBuffers = outputMgr.ToArray();
+            cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
+
+            unsafe
+            {
+                float* tablica = (float*)Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
+                for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
+                {
+                    tablica[2 * i] = vstOutputBuffers[0][i];
+                    tablica[2 * i + 1] = vstOutputBuffers[1][i];
+                }
+                MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
+            }
+        }
+
+        private VstEvent[] CreateMidiEvent(byte statusByte, byte midiNote, byte midiVelocity)
+        {
+            /* 
+             * Just a small note on the code for setting up a midi event:
+             * You can use the VstEventCollection class (Framework) to setup one or more events
+             * and then call the ToArray() method on the collection when passing it to
+             * ProcessEvents. This will save you the hassle of dealing with arrays explicitly.
+             * http://computermusicresource.com/MIDI.Commands.html
+             * 
+             * Freq to Midi notes etc:
+             * http://www.sengpielaudio.com/calculator-notenames.htm
+             * 
+             * Example to use NAudio Midi support
+             * http://stackoverflow.com/questions/6474388/naudio-and-midi-file-reading
+             */
+            byte[] midiData = new byte[4];
+
+            midiData[0] = statusByte;
+            midiData[1] = midiNote;   	// Midi note
+            midiData[2] = midiVelocity; // Note strike velocity
+            midiData[3] = 0;    		// Reserved, unused
+
+            VstMidiEvent vse = new VstMidiEvent(/*DeltaFrames*/ 	0,
+                /*NoteLength*/ 	0,
+                /*NoteOffset*/ 	0,
+                                                midiData,
+                /*Detune*/    		0,
+                /*NoteOffVelocity*/ 127); // previously 0
+
+            VstEvent[] ve = new VstEvent[1];
+            ve[0] = vse;
+            return ve;
         }
 
         //[MarshalAs(UnmanagedType.LPStr)]
@@ -52,18 +119,21 @@ namespace VTSx86
             {
 
                 var polecenie = (polecenia)message.WParam;
-               // 
+                // 
                 switch (polecenie)
                 {
                     case polecenia.działaj:
                         var lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
 
-                       // var test = cont.PluginCommandStub.GetParameterProperties(0);
+                        // var test = cont.PluginCommandStub.GetParameterProperties(0);
                         /*var a = (VstPluginCommandStub)cont.PluginCommandStub;
                        var b= a.GetDestinationBuffer();
                         
                         MessageBox.Show(b.ToString());*/
                         cont.PluginCommandStub.SetSampleRate(48000);
+
+                        VstEvent[] vEvent = CreateMidiEvent(144, lp.lpData[0].nuta, 100);
+                        cont.PluginCommandStub.ProcessEvents(vEvent);
                         //cont.PluginCommandStub.
                         break;
                     case polecenia.Ładuj:
@@ -94,11 +164,11 @@ namespace VTSx86
                     message.Result = (IntPtr)result;
                 } if ((int)message.WParam == polecenia.Zapisz.GetHashCode())
                 {
-                    
-                     var   chunk = Convert.ToBase64String( cont.PluginCommandStub.GetChunk(true));
-                     MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Zapisz.GetHashCode(), chunk);
 
-                     message.Result = (IntPtr)polecenia.Zapisz;
+                    var chunk = Convert.ToBase64String(cont.PluginCommandStub.GetChunk(true));
+                    MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Zapisz.GetHashCode(), chunk);
+
+                    message.Result = (IntPtr)polecenia.Zapisz;
                 }
             }
             //be sure to pass along all messages to the base also

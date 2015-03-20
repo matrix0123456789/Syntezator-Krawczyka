@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 namespace Syntezator_Krawczyka
 {
 
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz, Zapisz, Ładuj }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz, Zapisz, Ładuj, Dźwięk }
     public struct NutaStruct
     {
         public int a;
-        public double ilepróbekNaStarcie;
+        public int nuta;
     }
 }
 
@@ -128,6 +128,25 @@ namespace SIURegistry_Installer
                 var blok = Marshal.AllocHGlobal(msg.Length + 10);
                 Marshal.StructureToPtr(msg, blok, false);
                 cds.lpData = (byte*)blok;
+                //SendMessage(hWnd, 0x4A, wParam, ref cds);
+                //cds.lpData[0] = msg;
+                SendMessage(hWnd, 0x4A, wParam, ref cds);
+
+            }
+            return result;
+        }
+        public unsafe static int sendWindowsMessage(int hWnd, int wParam, float* msg, int length)
+        {
+            int result = 0;
+
+            if (hWnd != 0)
+            {
+                COPYBYTESTRUCT2 cds;
+                cds.dwData = (IntPtr)Process.GetCurrentProcess().Id;
+                cds.cbData = length + 10;
+                //var blok = Marshal.AllocHGlobal(msg.Length + 10);
+                //Marshal.StructureToPtr(msg, blok, false);
+                cds.lpData = (byte*)msg;
                 //SendMessage(hWnd, 0x4A, wParam, ref cds);
                 //cds.lpData[0] = msg;
                 SendMessage(hWnd, 0x4A, wParam, ref cds);

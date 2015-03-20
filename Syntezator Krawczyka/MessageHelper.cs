@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 namespace Syntezator_Krawczyka
 {
 
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz, Zapisz, Ładuj }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz, Zapisz, Ładuj, Dźwięk }
     public struct NutaStruct
     {
         public int a;
-        public double ilepróbekNaStarcie;
+        public int nuta;
     }
 }
 
@@ -37,6 +37,13 @@ namespace SIURegistry_Installer
         public int cbData;
         // [MarshalAs(UnmanagedType.LPStr)]
         public byte* lpData;
+    }
+    public unsafe struct COPYBYTESTRUCT3
+    {
+        public IntPtr dwData;
+        public int cbData;
+        // [MarshalAs(UnmanagedType.LPStr)]
+        public float* lpData;
     }
     public class MessageHelper
     {
