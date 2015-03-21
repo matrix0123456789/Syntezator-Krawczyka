@@ -16,7 +16,7 @@ namespace Syntezator_Krawczyka
         public long delay { get; set; }
         public XmlNode xml;
         public long start = 0;
-        public long end;
+        public long end=int.MaxValue;
         public jedenSample()
         {
             głośność=1;
@@ -57,6 +57,14 @@ namespace Syntezator_Krawczyka
             {
                 delay = (long)(float.Parse((xml.Attributes["delay"].Value), CultureInfo.InvariantCulture) * plik.Hz * 60 / plik.tempo);
                 delayUstawione = double.Parse((xml.Attributes["delay"].Value), CultureInfo.InvariantCulture);
+            }
+            if (xml.Attributes["start"] != null)
+            {
+                start = (long)(float.Parse((xml.Attributes["start"].Value), CultureInfo.InvariantCulture));
+            }
+            if (xml.Attributes["end"] != null)
+            {
+                start = (long)(float.Parse((xml.Attributes["end"].Value), CultureInfo.InvariantCulture));
             }
 
             if (Statyczne.otwartyplik.wszytskieSamplePliki.ContainsKey(xml.Attributes["file"].Value))
@@ -120,9 +128,9 @@ namespace Syntezator_Krawczyka
 
 
                 long i = delay;
-                var opt1 = -delay;
+                var opt1 = -delay+start;
 
-                var opt3 = dl - opt1;
+                var opt3 = end - opt1;
                 try
                 {
                     /*if (głośność == 1)

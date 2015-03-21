@@ -204,7 +204,10 @@ namespace Syntezator_Krawczyka
             {
                 sciezka = s;
                 start = s.delay;
-                dlugosc = s.dlugosc;
+                if (s.end < s.dlugosc)
+                    dlugosc = s.end - s.start;
+                else
+                dlugosc = s.dlugosc - s.start;
             }
             public void odsw()
             {
@@ -241,7 +244,8 @@ namespace Syntezator_Krawczyka
         {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = "Pliki dźwiękowe|*.wav;*.wave|Pliki dźwiękowe|*.mp3";
+            dialog.Filter = "Plik muzyczny|*.wav;*.wave|Plik muzyczny|*.mp3|Wszystkie plik muzyczne|*.mp3;*.wav;*.wave";
+            dialog.FilterIndex = 3;
             dialog.ShowDialog();
             foreach (var x in dialog.FileNames)
             {

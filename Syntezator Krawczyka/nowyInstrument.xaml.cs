@@ -131,10 +131,10 @@ namespace Syntezator_Krawczyka
                 int P = 1;
                 XmlNode osc;
                 if (LFONaGł.IsChecked.Value || LFONaFil.IsChecked.Value || FilADSR.IsChecked.Value || filtr.IsChecked.Value)
-                    osc=(mod("oscylator", "oscylator" + i, "P" + P + "nr" + i));
+                    osc = (mod("oscylator", "oscylator" + i, "P" + P + "nr" + i));
                 else
-                    osc=(mod("oscylator", "oscylator" + i, "K" + K));
-                if(i>1)
+                    osc = (mod("oscylator", "oscylator" + i, "K" + K));
+                if (i > 1)
                 {
                     var atr = Statyczne.otwartyplik.xml.CreateAttribute("S");
                     atr.Value = "0";
@@ -179,7 +179,7 @@ namespace Syntezator_Krawczyka
 
 
             }
-            sound.AppendChild(mod("mikser", "K" + K, "K"+(K+1)));
+            sound.AppendChild(mod("mikser", "K" + K, "K" + (K + 1)));
             K++;
             if (flanger.IsChecked.Value)
             {
@@ -196,7 +196,11 @@ namespace Syntezator_Krawczyka
                     sound.AppendChild(flang);
                 } K++;
             }
-
+            /*if (rekonst.IsChecked.Value)
+            {
+                sound.AppendChild(mod("rekonstruktor", "K" + K, "K" + (K + 1)));
+                K++;
+            }*/
             sound.AppendChild(mod("glosnosc", "K" + K, "K" + (K + 1)));
             K++;
             sound.AppendChild(mod("poglos", "K" + K, "K" + (K + 1)));
@@ -216,7 +220,7 @@ namespace Syntezator_Krawczyka
             var id = Statyczne.otwartyplik.xml.CreateAttribute("id");
             id.Value = p2;
             ret.Attributes.Append(id);
-            if (p3!="")
+            if (p3 != "")
             {
                 var output = Statyczne.otwartyplik.xml.CreateAttribute("output");
                 output.Value = p3;
@@ -228,8 +232,8 @@ namespace Syntezator_Krawczyka
         private void osc_Checked(object sender, RoutedEventArgs e)
         {
             ileOsc.IsEnabled = true;
-            if (Mik!=null)
-            Mik.IsChecked = false;
+            if (Mik != null)
+                Mik.IsChecked = false;
         }
 
         private void Mik_Checked(object sender, RoutedEventArgs e)

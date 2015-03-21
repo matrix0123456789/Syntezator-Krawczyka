@@ -184,6 +184,10 @@
     <Compile Include="FeedBack.xaml.cs">
       <DependentUpon>FeedBack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="rekonstruktorUI.xaml.cs">
+      <DependentUpon>rekonstruktorUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="rekonstruktor.cs" />
     <Compile Include="IkonaOtwórz.xaml.cs">
       <DependentUpon>IkonaOtwórz.xaml</DependentUpon>
     </Compile>
@@ -350,6 +354,10 @@
     <Page Include="FeedBack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="rekonstruktorUI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="IkonaOtwórz.xaml">
       <SubType>Designer</SubType>

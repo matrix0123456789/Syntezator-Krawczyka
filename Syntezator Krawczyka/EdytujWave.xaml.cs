@@ -127,6 +127,9 @@ namespace Syntezator_Krawczyka
                     var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
                     var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
                     Dźwięk.start += (long)różn;
+                    var atr=Dźwięk.xml.OwnerDocument.CreateAttribute("start");
+                    atr.Value=Dźwięk.start.ToString();
+                    Dźwięk.xml.Attributes.Append(atr);
                 }
 
             }
@@ -137,6 +140,9 @@ namespace Syntezator_Krawczyka
                     var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
                     var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
                     Dźwięk.end += (long)różn;
+                    var atr = Dźwięk.xml.OwnerDocument.CreateAttribute("end");
+                    atr.Value = Dźwięk.end.ToString();
+                    Dźwięk.xml.Attributes.Append(atr);
                 }
 
             }

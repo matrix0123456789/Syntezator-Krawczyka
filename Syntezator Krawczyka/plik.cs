@@ -621,6 +621,11 @@ namespace Syntezator_Krawczyka
 
                                 moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new cutoff());
                                 break;
+                            case "rekonstruktor":
+
+
+                                moduły[n.Attributes.GetNamedItem("id").Value].Add(nn.Attributes.GetNamedItem("id").Value, new rekonstruktor());
+                                break;
                             case "generatorObwiedniFiltru":
 
 
@@ -954,7 +959,19 @@ namespace Syntezator_Krawczyka
                 }
                 foreach (var x in Statyczne.otwartyplik.sameSample)
                 {
-                    x.działaj();
+                    granie.liczbaGenerowanych++;
+                    granie.liczbaGenerowanychMax++;
+                    ThreadPool.QueueUserWorkItem((a) => { x.działaj();
+
+                    lock (granie.liczbaGenerowanychBlokada)
+                    {
+                        granie.liczbaGenerowanych--;
+                        if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                            granie.grajcale(false);
+                    }
+                    });
+                    
 
                 }
                 var dialog = new SaveFileDialog();

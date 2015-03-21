@@ -228,6 +228,7 @@ namespace Syntezator_Krawczyka
                             pozycja = 0;
                         }
                         AForge.Math.FourierTransform.FFT(zespolone, FourierTransform.Direction.Forward);
+                        //AForge.Math.FourierTransform.FFT(zespolone, FourierTransform.Direction.Backward);
                         var naJeden = plik.Hz / ilePróbek * 2;
                         for (int i = 0; i < ilePróbek / 2; i++)
                         {
