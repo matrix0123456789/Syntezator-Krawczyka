@@ -12,14 +12,14 @@ namespace Syntezator_Krawczyka
     public class jedenSample : IodDo
     {
         public sample sample;
-        public float głośność {get;set;}
+        public float głośność { get; set; }
         public long delay { get; set; }
         public XmlNode xml;
         public long start = 0;
-        public long end=int.MaxValue;
+        public long end = int.MaxValue;
         public jedenSample()
         {
-            głośność=1;
+            głośność = 1;
             granie.graniestart();
             xml = Statyczne.otwartyplik.xml.CreateElement("sample");
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(xml);
@@ -128,7 +128,7 @@ namespace Syntezator_Krawczyka
 
 
                 long i = delay;
-                var opt1 = -delay+start;
+                var opt1 = -delay + start;
 
                 var opt3 = end - opt1;
                 try
@@ -188,7 +188,20 @@ namespace Syntezator_Krawczyka
             {
                 if (sample.fala == null)
                     return 0;
-                return sample.fala.GetLongLength(1);
+                return  sample.fala.GetLongLength(1);
+            }
+        }
+        public long dlugoscGrana
+        {
+            get
+            {
+                if (sample.fala == null)
+                    return 0;
+                var mdl = sample.fala.GetLongLength(1);
+                if (mdl < end)
+                    return sample.fala.GetLongLength(1) - start;
+                else
+                    return end - start;
             }
         }
         public override string ToString()

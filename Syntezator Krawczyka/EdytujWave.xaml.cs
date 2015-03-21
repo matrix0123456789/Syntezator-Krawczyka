@@ -26,8 +26,9 @@ namespace Syntezator_Krawczyka
             pokażDo = j.dlugosc;
             rysujFala();
         }
+        float[,] temp = null;
         float pokażOd = 0, pokażDo;
-
+        const int mnożnikTemp = 2048;
         void rysujFala()
         {
             // Fala.Children.Clear();
@@ -35,32 +36,82 @@ namespace Syntezator_Krawczyka
             path.Points.Clear();
             path.HorizontalAlignment = HorizontalAlignment.Left;
             path.Fill = Brushes.Red;
-            var piksel = (pokażDo - pokażOd) / Fala.ActualWidth;
+            var jakosc = 1;
+            var piksel = (pokażDo - pokażOd) / Fala.ActualWidth * jakosc;
             var iZwiększ = (int)Math.Ceiling(Fala.ActualWidth / (pokażDo - pokażOd));
             if (iZwiększ < 1)
                 iZwiększ = 1;
-            for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i += iZwiększ)
+            if (piksel > mnożnikTemp)
             {
-                var jestW = pokażOd + i * piksel;
-                if (jestW < 0)
-                    continue;
-                float min, max;
-                min = max = Dźwięk.sample.fala[0, (int)Math.Floor(jestW)];
-                for (var i2 = (int)Math.Floor(jestW); i2 < Math.Floor(jestW + piksel) && i2 < Dźwięk.sample.fala.GetLength(1); i2++)
+                if (temp == null)
+                    genTemp();
+                for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i += iZwiększ)
                 {
-                    if (Dźwięk.sample.fala[0, i2] > max)
-                        max = Dźwięk.sample.fala[0, i2];
-                    else if (Dźwięk.sample.fala[0, i2] < min)
-                        min = Dźwięk.sample.fala[0, i2];
+                    var jestW = pokażOd + i * piksel;
+                    if (jestW < 0)
+                        continue;
+                    float min, max;
+                    min = max = Dźwięk.sample.fala[0, (int)Math.Floor(jestW)];
+                    for (var i2 = (int)Math.Floor(jestW); i2 < Math.Floor(jestW + piksel) && i2 < Dźwięk.sample.fala.GetLength(1); i2 += mnożnikTemp)
+                    {
+                        if (temp[i2 / mnożnikTemp, 0] > max)
+                            max = temp[i2 / mnożnikTemp, 0];
+                        else if (temp[i2 / mnożnikTemp, 0] < min)
+                            min = temp[i2 / mnożnikTemp, 0];
+                        if (temp[i2 / mnożnikTemp, 1] > max)
+                            max = temp[i2 / mnożnikTemp, 1];
+                        else if (temp[i2 / mnożnikTemp, 1] < min)
+                            min = temp[i2 / mnożnikTemp, 1];
+                    }
+                    path.Points.Add(new Point(i * jakosc, (max + 1) * Fala.ActualHeight / 2));
+                    path.Points.Insert(0, new Point(i * jakosc, (min + 1) * Fala.ActualHeight / 2 - 1));
                 }
-                path.Points.Add(new Point(i, (max + 1) * Fala.ActualHeight / 2));
-                path.Points.Insert(0, new Point(i, (min + 1) * Fala.ActualHeight / 2 - 1));
             }
+            else
+
+                for (var i = 0; i < Fala.ActualWidth && Math.Floor(pokażOd + i * piksel) < Dźwięk.sample.fala.GetLength(1); i += iZwiększ)
+                {
+                    var jestW = pokażOd + i * piksel;
+                    if (jestW < 0)
+                        continue;
+                    float min, max;
+                    min = max = Dźwięk.sample.fala[0, (int)Math.Floor(jestW)];
+                    for (var i2 = (int)Math.Floor(jestW); i2 < Math.Floor(jestW + piksel) && i2 < Dźwięk.sample.fala.GetLength(1); i2++)
+                    {
+                        if (Dźwięk.sample.fala[0, i2] > max)
+                            max = Dźwięk.sample.fala[0, i2];
+                        else if (Dźwięk.sample.fala[0, i2] < min)
+                            min = Dźwięk.sample.fala[0, i2];
+                    }
+                    path.Points.Add(new Point(i * jakosc, (max + 1) * Fala.ActualHeight / 2));
+                    path.Points.Insert(0, new Point(i * jakosc, (min + 1) * Fala.ActualHeight / 2 - 1));
+                }
             //Fala.Children.Add(path);
             var startTrj = -(pokażOd - Dźwięk.start) / piksel;
             trójkąt1.Margin = new Thickness(startTrj, 35, 0, 0);
             var endTrj = -(pokażOd - Dźwięk.end) / piksel;
             trójkąt2.Margin = new Thickness(endTrj, 35, 0, 0);
+
+        }
+
+        private void genTemp()
+        {
+            int dl = Dźwięk.sample.fala.GetLength(1);
+            temp = new float[dl / mnożnikTemp + 1, 2];
+            for (long i = 0; i + mnożnikTemp < dl; i += mnożnikTemp)
+            {
+                float min = Dźwięk.sample.fala[0, i];
+                float max = min;
+                for (long i2 = 1; i2 < mnożnikTemp; i2++)
+                {
+                    if (Dźwięk.sample.fala[0, i + i2] > max)
+                        max = Dźwięk.sample.fala[0, i + i2];
+                    else if (Dźwięk.sample.fala[0, i + i2] < min)
+                        min = Dźwięk.sample.fala[0, i + i2];
+                }
+                temp[i / mnożnikTemp, 0] = min;
+                temp[i / mnożnikTemp, 1] = max;
+            }
 
         }
 
@@ -127,8 +178,8 @@ namespace Syntezator_Krawczyka
                     var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
                     var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
                     Dźwięk.start += (long)różn;
-                    var atr=Dźwięk.xml.OwnerDocument.CreateAttribute("start");
-                    atr.Value=Dźwięk.start.ToString();
+                    var atr = Dźwięk.xml.OwnerDocument.CreateAttribute("start");
+                    atr.Value = Dźwięk.start.ToString();
                     Dźwięk.xml.Attributes.Append(atr);
                 }
 

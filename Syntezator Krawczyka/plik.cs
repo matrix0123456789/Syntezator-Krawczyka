@@ -444,7 +444,7 @@ namespace Syntezator_Krawczyka
 
             uaktualnij();
             URL = path;
-            if (Statyczne.otwartyplik.sameSample.Count > 0)
+            if (Statyczne.otwartyplik.sameSample.Count > 0 && OstatnioOtwarte)
                 if (Statyczne.otwartyplik.pakuj == null)
                 {
                     var odp = MessageBox.Show("Projekt zawiera dodatkowe pliki dźwiękowe. Czy chcesz przekopiować je do pliku projektu? Ułatwi to przeniesienie projektu na inny komputer, ale zajmuje dodatkowe miejsce na dysku.", "Zapisywanie projektu", MessageBoxButton.YesNo);
@@ -826,8 +826,8 @@ namespace Syntezator_Krawczyka
                 {
 
 
-                    if (x.dlugosc + x.delay > długość)
-                        długość = x.dlugosc + x.delay;
+                    if (x.dlugoscGrana + x.delay > długość)
+                        długość = x.dlugoscGrana + x.delay;
 
                 }
 
@@ -947,8 +947,8 @@ namespace Syntezator_Krawczyka
                 }
                 foreach (var x in Statyczne.otwartyplik.sameSample)
                 {
-                    if (x.delay + x.dlugosc > długość)
-                        długość = x.delay + x.dlugosc;
+                    if (x.delay + x.dlugoscGrana > długość)
+                        długość = x.delay + x.dlugoscGrana;
                 }
                 granie.PlikDoZapisu = null;
                 granie.wynik = new float[2, długość];
