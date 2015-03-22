@@ -13,6 +13,8 @@ namespace Syntezator_Krawczyka
     /// </summary>
     public class sciezka : wejście, IComparable<sciezka>, IodDo, IDisposable
     {
+
+        public event Action zmianaDługości;
         public float głośność { get;set;}
 
         /// <summary>

@@ -77,7 +77,7 @@
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Label Content="Twoje pliki na jaebe.za.pl/musicstudio" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.ColumnSpan="3"/>
+                <Label Content="Twoje pliki na jaebestudio.tk/musicstudio" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.ColumnSpan="3"/>
                 <ScrollViewer Grid.Row="3"></ScrollViewer>
                 <s:LogowanieUC Grid.RowSpan="2"  Wybrano="wybrano" ></s:LogowanieUC>
             </Grid>

@@ -181,6 +181,7 @@ namespace Syntezator_Krawczyka
                     var atr = Dźwięk.xml.OwnerDocument.CreateAttribute("start");
                     atr.Value = Dźwięk.start.ToString();
                     Dźwięk.xml.Attributes.Append(atr);
+                    Dźwięk.zmienionoDługość();
                 }
 
             }
@@ -194,6 +195,7 @@ namespace Syntezator_Krawczyka
                     var atr = Dźwięk.xml.OwnerDocument.CreateAttribute("end");
                     atr.Value = Dźwięk.end.ToString();
                     Dźwięk.xml.Attributes.Append(atr);
+                    Dźwięk.zmienionoDługość();
                 }
 
             }

@@ -16,8 +16,8 @@ namespace Syntezator_Krawczyka
         public static event ZmLogAct zmianaLogowania;
         public delegate void ZmLogAct(PolaczenieHTTP pol);
         public string login;
-        int publiczny, laczony, suma, wysylaj;
-        int prywatny = (ushort)(new Random()).Next(16777215);
+        //int publiczny, laczony, suma, wysylaj;
+        //int prywatny = (ushort)(new Random()).Next(16777215);
         string sesjaPHP;
         const string Base64Str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
         public bool zalogowano = false;
@@ -89,7 +89,7 @@ namespace Syntezator_Krawczyka
                         WebClient polaczenie = new WebClient();
                         polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                         polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                        var ret = polaczenie.UploadString("http://jaebe.za.pl/json.php?", "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
+                        var ret = polaczenie.UploadString("http://jaebestudio.tk/json.php?", "POST", koduj("{\"login\":\"" + login + "\",\"haslo\":\"" + haslo + "\"}"));
                         var grupy = Regex.Match(polaczenie.ResponseHeaders["Set-cookie"], "PHPSESSID=([a-zA-Z0-9]*);").Groups;
                         sesjaPHP = grupy[1].Value;
                         if (Regexlogowanie.IsMatch(ret))
@@ -204,7 +204,7 @@ namespace Syntezator_Krawczyka
                     polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                     polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                     
-                    var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + autor + "\"}"));
+                    var json = polaczenie.UploadString("http://jaebestudo.tk/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + autor + "\"}"));
                     var ret = new UtworySerwer();
                     if (RegexUtwory.IsMatch(json))
                     {
@@ -231,7 +231,7 @@ namespace Syntezator_Krawczyka
         {
             var dane = new Dictionary<string, object>();
             dane.Add("pliki[]", plik.zapiszDoZmiennej());
-            var ret = Submit("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, dane);
+            var ret = Submit("http://jaebestudio.tk/json.php?phpsession=" + sesjaPHP, dane);
 
             /* byte[] bu = new byte[1000];
              ret.GetResponseStream().Read(bu, 0, 1000);
@@ -325,7 +325,7 @@ namespace Syntezator_Krawczyka
             WebClient polaczenie = new WebClient();
             polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
             polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"usun\":\"" + utwórSerwer.id + "\"}"));
+            var json = polaczenie.UploadString("http://jaebestudio.tk/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"usun\":\"" + utwórSerwer.id + "\"}"));
         }
 
         internal void ustaw_publiczne(UtwórSerwer utwórSerwer)
@@ -334,7 +334,7 @@ namespace Syntezator_Krawczyka
             WebClient polaczenie = new WebClient();
             polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
             polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"ustaw_publiczne\":\"" + utwórSerwer.id + "\"}"));
+            var json = polaczenie.UploadString("http://jaebestudio.tk/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"ustaw_publiczne\":\"" + utwórSerwer.id + "\"}"));
         }
 
         internal void ustaw_prywatne(UtwórSerwer utwórSerwer)
@@ -343,7 +343,7 @@ namespace Syntezator_Krawczyka
             WebClient polaczenie = new WebClient();
             polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
             polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            var json = polaczenie.UploadString("http://jaebe.za.pl/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"ustaw_prywatne\":\"" + utwórSerwer.id + "\"}"));
+            var json = polaczenie.UploadString("http://jaebestudio.tk/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"ustaw_prywatne\":\"" + utwórSerwer.id + "\"}"));
         }
     }
 

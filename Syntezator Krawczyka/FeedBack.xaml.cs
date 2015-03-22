@@ -30,7 +30,7 @@ namespace Syntezator_Krawczyka
             WebClient polaczenie = new WebClient();
             polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka"+Statyczne.wersja);
             polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            var json = polaczenie.UploadString("http://jaebe.za.pl/musicstudio/feedback.php", "POST", "&t="+txt.Text);
+            var json = polaczenie.UploadString("http://jaebestudio.tk/musicstudio/feedback.php", "POST", "&t="+txt.Text);
             Close();
         }
     }

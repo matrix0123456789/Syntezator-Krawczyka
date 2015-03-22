@@ -528,7 +528,7 @@ namespace Syntezator_Krawczyka
 
         private void WWW_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://jaebe.za.pl/musicstudio");
+            Process.Start("http://jaebestudio.tk/musicstudio");
         }
 
 

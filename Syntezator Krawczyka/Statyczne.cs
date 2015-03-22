@@ -29,7 +29,11 @@ namespace Syntezator_Krawczyka
         public static String[] nazwyDźwięków = { "C","C♯","D","D♯","E","F","F♯","G","G♯","A","B","H"};
         public Statyczne()
         {
-           serwer= new PolaczenieHTTP();
+            try
+            {
+                serwer = new PolaczenieHTTP();
+            }
+            catch { }
             WasapiWyjście.Init(bufor);
             WasapiWyjście.Play();
         }

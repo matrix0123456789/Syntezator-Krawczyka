@@ -121,6 +121,12 @@
   <data name="czysty" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\czysty.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
+  <data name="Nowypustyprojekt" xml:space="preserve">
+    <value>Nowy pusty projekt</value>
+  </data>
+  <data name="Otwórzplik" xml:space="preserve">
+    <value>Otwórz plik</value>
+  </data>
   <data name="przyklad" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\przyklad.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

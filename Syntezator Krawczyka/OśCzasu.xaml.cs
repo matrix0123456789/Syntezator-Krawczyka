@@ -107,7 +107,13 @@ namespace Syntezator_Krawczyka
             gr.Tag = akt;
             gr.MouseDown += prostokat_MouseClick;
             gr.Children.Add(prostokat);
-
+            akt.sciezka.zmianaDługości += () =>
+            {
+                wid = plik.tempo * akt.dlugosc / (60 * plik.Hz) * skalaX;
+                if (wid < 0)
+                    wid = 0;
+                gr.Width = wid;
+            };
             var lab = new Label();
             lab.Content = akt.sciezka.ToString();
             gr.Children.Add(lab);
@@ -193,27 +199,39 @@ namespace Syntezator_Krawczyka
         {
             public IodDo sciezka;
             public long start;
-            public long dlugosc;
+            public long dlugosc
+            {
+                get
+                {
+                    if (sciezka.GetType() == typeof(sciezka))
+                    {
+                        return (long)sciezka.dlugosc;
+                    }
+                    else if (sciezka.GetType() == typeof(jedenSample))
+                    {
+                        if ((sciezka as jedenSample).end < (sciezka as jedenSample).dlugosc)
+                            return (sciezka as jedenSample).end - (sciezka as jedenSample).start;
+                        else
+                            return (sciezka as jedenSample).dlugosc - (sciezka as jedenSample).start;
+                    }
+                    else return 0;
+
+                }
+            }
             public odDo(sciezka s)
             {
                 sciezka = s;
                 start = s.delay;
-                dlugosc = (long)s.dlugosc;
             }
             public odDo(jedenSample s)
             {
                 sciezka = s;
                 start = s.delay;
-                if (s.end < s.dlugosc)
-                    dlugosc = s.end - s.start;
-                else
-                dlugosc = s.dlugosc - s.start;
             }
             public void odsw()
             {
 
                 start = sciezka.delay;
-                dlugosc = sciezka.dlugosc;
             }
             public long end
             {
@@ -375,7 +393,7 @@ namespace Syntezator_Krawczyka
                             }
                             if (znTera)
                             {
-                                marTop = i2*skalaY+25;
+                                marTop = i2 * skalaY + 25;
                                 znaleniono = true;
                                 break;
                             }
@@ -385,7 +403,7 @@ namespace Syntezator_Krawczyka
                     {
                         var ost = new List<odDo>();
                         ost.Add(oddo); elementy.Add(ost);
-                        marTop = skalaY * (elementy.Count - 1)+25;
+                        marTop = skalaY * (elementy.Count - 1) + 25;
 
                     }
                     aktywna.Margin = new Thickness(((float.Parse(delay.Text)) * skalaX), marTop, 0, 0);
@@ -440,7 +458,7 @@ namespace Syntezator_Krawczyka
             sc.delayUstawione = scorg.delayUstawione;
             sc.delay = scorg.delay;
             var akt = new odDo(sc);
-            akt.dlugosc = scorg.dlugosc;
+            //akt.dlugosc = scorg.dlugosc;
             akt.start = scorg.delay;
             //szukaj miejsca na wyświetlenie
             szukaj(akt, Statyczne.otwartyplik.sciezki.IndexOf(scorg));
@@ -486,12 +504,13 @@ namespace Syntezator_Krawczyka
 
         private void suwakGlosnosc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (aktywna!=null)
-            ((odDo)aktywna.Tag).sciezka.głośność = (float)suwakGlosnosc.Value;
+            if (aktywna != null)
+                ((odDo)aktywna.Tag).sciezka.głośność = (float)suwakGlosnosc.Value;
         }
     }
     interface IodDo
     {
+        event Action zmianaDługości;
         long delay { get; }
         long dlugosc { get; }
         float głośność { get; set; }

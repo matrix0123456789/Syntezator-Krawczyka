@@ -18,7 +18,7 @@
             <Button Content="Przytnij" Margin="10,38,10,0" VerticalAlignment="Top" Click="przytnij_click"/>
 
         </Grid>
-        <Grid Margin="0,61,0,35" HorizontalAlignment="Right" Width="119" x:Name="edytSciezka" Visibility="Visible">
+        <Grid Margin="0,61,0,35" HorizontalAlignment="Right" Width="119" x:Name="edytSciezka" Visibility="Collapsed">
             <Button Content="Edytuj nuty" Margin="10,10,10,0" VerticalAlignment="Top" Click="edytujNuty_click"/>
             <ComboBox ToolTip="Wybierz na czym ma ta ścierzka być odegrana" Height="23" HorizontalAlignment="Left" Margin="0,35,0,0" x:Name="comboBox1" VerticalAlignment="Top" Width="119" SelectionChanged="comboBox1_SelectionChanged"/>
             <TextBox HorizontalAlignment="Left" Height="23" Margin="75,68,0,0"  VerticalAlignment="Top" Width="44" x:Name="delay" TextChanged="delay__TextChanged" />

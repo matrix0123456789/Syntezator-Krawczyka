@@ -26,6 +26,8 @@ namespace Syntezator_Krawczyka
             InitializeComponent();
             PolaczenieHTTP.wyswietlUtworyZ += wyswietlUtwory;
             PolaczenieHTTP.zmianaLogowania += zmianaLogowania;
+            try { login.Text = Properties.Settings.Default.Login; }
+            catch { }
             try { zmianaLogowania(Statyczne.serwer); }
             catch { }
             try { wyswietlUtwory(Statyczne.serwer.utworyZalogowanego); }
@@ -34,6 +36,7 @@ namespace Syntezator_Krawczyka
 
         private void zmianaLogowania(PolaczenieHTTP pol)
         {
+            if(pol!=null)
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
                                           {
                                               if (pol.zalogowano)
@@ -59,7 +62,7 @@ namespace Syntezator_Krawczyka
 
         private void link_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://jaebe.za.pl/musicstudio");
+            System.Diagnostics.Process.Start("http://jaebestudio.tk/musicstudio");
         }
 
         private void haslo_KeyDown(object sender, KeyEventArgs e)

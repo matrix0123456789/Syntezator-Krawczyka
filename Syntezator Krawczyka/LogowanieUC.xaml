@@ -27,7 +27,7 @@
             <Button Content="Loguj" Margin="10,87,10,0" VerticalAlignment="Top" Height="30" Click="Button_Click"/>
             <Label Margin="10,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Content="Login" />
             <Label Margin="10,56,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" Content="Hasło" />
-            <Label x:Name="link" Margin="93,8,10,0" VerticalAlignment="Top" Foreground="#FF4CA6FF" RenderTransformOrigin="1,0.5" Content="jaebe.za.pl/musicstudio" Cursor="Hand" Background="#00000000" MouseDown="link_MouseDown" />
+            <Label x:Name="link" Margin="93,8,10,0" VerticalAlignment="Top" Foreground="#FF4CA6FF" RenderTransformOrigin="1,0.5" Content="jaebestudio.tk/musicstudio" Cursor="Hand" Background="#00000000" MouseDown="link_MouseDown" />
 
         </Grid>
     </Grid>

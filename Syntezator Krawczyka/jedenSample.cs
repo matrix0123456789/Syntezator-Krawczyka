@@ -11,6 +11,13 @@ namespace Syntezator_Krawczyka
 {
     public class jedenSample : IodDo
     {
+
+        public event Action zmianaDługości;
+        public void zmienionoDługość()
+        {
+            if (zmianaDługości != null)
+                zmianaDługości();
+        }
         public sample sample;
         public float głośność { get; set; }
         public long delay { get; set; }

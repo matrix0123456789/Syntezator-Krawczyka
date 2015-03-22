@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock MouseDown="TextBlock_MouseDown" VerticalAlignment="Top">Ostatnio opublikowane na jaebe.za.pl/musicstudio</TextBlock>
+        <TextBlock MouseDown="TextBlock_MouseDown" VerticalAlignment="Top">Ostatnio opublikowane na jaebestudio.tk/musicstudio</TextBlock>
         <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,20,0,0">
             <StackPanel Name="Lista"></StackPanel></ScrollViewer>
     </Grid>
