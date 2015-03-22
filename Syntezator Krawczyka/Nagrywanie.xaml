@@ -1,0 +1,10 @@
+﻿<Window x:Class="Syntezator_Krawczyka.Nagrywanie"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Nagrywanie" Height="300" Width="300">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <StackPanel Name="lista"></StackPanel></Grid></ScrollViewer>
+    </Grid>
+</Window>

@@ -507,6 +507,12 @@ namespace Syntezator_Krawczyka
             if (aktywna != null)
                 ((odDo)aktywna.Tag).sciezka.głośność = (float)suwakGlosnosc.Value;
         }
+
+        private void mikrofonnagraj_click(object sender, RoutedEventArgs e)
+        {
+            var okno = new Nagrywanie();
+            okno.Show();
+        }
     }
     interface IodDo
     {

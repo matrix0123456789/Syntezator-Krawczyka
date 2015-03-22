@@ -30,6 +30,7 @@ namespace Syntezator_Krawczyka
             granie.graniestart();
             xml = Statyczne.otwartyplik.xml.CreateElement("sample");
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(xml);
+            
         }
 
         public jedenSample(string x)

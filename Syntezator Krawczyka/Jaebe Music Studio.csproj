@@ -185,6 +185,9 @@
     <Compile Include="FeedBack.xaml.cs">
       <DependentUpon>FeedBack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Nagrywanie.xaml.cs">
+      <DependentUpon>Nagrywanie.xaml</DependentUpon>
+    </Compile>
     <Compile Include="rekonstruktorUI.xaml.cs">
       <DependentUpon>rekonstruktorUI.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,9 @@
     <Compile Include="vorbisInterop.cs" />
     <Compile Include="VstUI.xaml.cs">
       <DependentUpon>VstUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WejścieDźwięku.xaml.cs">
+      <DependentUpon>WejścieDźwięku.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widmo.xaml.cs">
       <DependentUpon>Widmo.xaml</DependentUpon>
@@ -357,6 +363,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Nagrywanie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="rekonstruktorUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -422,6 +432,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="VstUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WejścieDźwięku.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
