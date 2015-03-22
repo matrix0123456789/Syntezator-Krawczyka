@@ -986,7 +986,14 @@ namespace Syntezator_Krawczyka
 
         internal static void aktJumpList()
         {
-            MainWindow.thi.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+            Dispatcher dis;
+            if (MainWindow.thi != null)
+                dis = MainWindow.thi.Dispatcher;
+            else if (Start.thi != null)
+                dis = Start.thi.Dispatcher;
+            else
+                return;
+           dis.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
             {
                 try
                 {

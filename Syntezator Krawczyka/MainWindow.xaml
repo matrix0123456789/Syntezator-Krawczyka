@@ -291,6 +291,18 @@
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wczytaj dźwięk"  Click="sample_Click"  ToolTip="Wczytuje próbkę dźwięku z pliku" Width="46">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+                                  </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Nagraj"  Click="nagraj_Click"  ToolTip="Nagrywa dźwięk z mikrofonu lub wejścia liniowego" Width="46">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+                               </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Oś czasu"  Click="OśCzasu_Click"  ToolTip="Pokazuje wszystkie ścierzki w formie osi czasu" Width="35">
                         <s:Przycisk.Obrazek>
                             <Canvas></Canvas>

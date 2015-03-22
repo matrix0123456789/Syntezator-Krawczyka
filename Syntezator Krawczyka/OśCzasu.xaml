@@ -31,8 +31,8 @@
 
         <local:suwak ValueChanged="suwakGlosnosc_ValueChanged" Margin="0,30,5,0" VerticalAlignment="Top" RenderTransformOrigin="5.833,-4.556" HorizontalAlignment="Right" Width="103" x:Name="suwakGlosnosc" ToolTip="Głośność" Minimum="0" Max="1"/>
 
-        <Button Content="Otwórz próbkę dźwięku" ToolTip="Wczytuje plik typu wawe zawierający próbkę dźwięku" Margin="0,0,10,10" Click="nowaPróbka_click" HorizontalAlignment="Right" Width="141" Height="20" VerticalAlignment="Bottom"/>
-        <Button Content="Nagraj z mikrofonu" ToolTip="Wczytuje plik typu wawe zawierający próbkę dźwięku" Margin="0,0,156,10" Click="mikrofonnagraj_click" HorizontalAlignment="Right" Width="123" Height="20" VerticalAlignment="Bottom"/>
+        <Button Content="Otwórz próbkę dźwięku" ToolTip="Wczytuje plik typu wave lub mp3 zawierający próbkę dźwięku" Margin="0,0,10,10" Click="nowaPróbka_click" HorizontalAlignment="Right" Width="141" Height="20" VerticalAlignment="Bottom"/>
+        <Button Content="Nagraj z mikrofonu" ToolTip="Nagrywa dźwięk z mikrofonu lub wejścia liniowego" Margin="0,0,156,10" Click="mikrofonnagraj_click" HorizontalAlignment="Right" Width="123" Height="20" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

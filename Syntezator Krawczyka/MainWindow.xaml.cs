@@ -574,5 +574,27 @@ namespace Syntezator_Krawczyka
             feed.Show();
             feed.Activate();
         }
+
+        private void sample_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+            dialog.Filter = "Plik muzyczny|*.wav;*.wave|Plik muzyczny|*.mp3|Wszystkie plik muzyczne|*.mp3;*.wav;*.wave";
+            dialog.FilterIndex = 3;
+            dialog.ShowDialog();
+            foreach (var x in dialog.FileNames)
+            {
+                var a = new jedenSample(x);
+                Statyczne.otwartyplik.sameSample.Add(a);
+            }
+            Statyczne.otwartyplik.zmiana();
+        }
+
+        private void nagraj_Click(object sender, RoutedEventArgs e)
+        {
+
+            var okno = new Nagrywanie();
+            okno.Show();
+        }
     }
 }
