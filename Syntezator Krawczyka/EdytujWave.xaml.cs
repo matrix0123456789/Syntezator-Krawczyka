@@ -177,6 +177,7 @@ namespace Syntezator_Krawczyka
                 {
                     var piksel = (float)((pokażDo - pokażOd) / Fala.ActualWidth);
                     var różn = ((float)e.GetPosition(this).X - myszX) * piksel;
+
                     Dźwięk.start += (long)różn;
                     var atr = Dźwięk.xml.OwnerDocument.CreateAttribute("start");
                     atr.Value = Dźwięk.start.ToString();
@@ -198,6 +199,23 @@ namespace Syntezator_Krawczyka
                     Dźwięk.zmienionoDługość();
                 }
 
+            }
+            if (Dźwięk.start > Dźwięk.end)
+            {
+                var st = Dźwięk.start;
+                Dźwięk.start = Dźwięk.end;
+                Dźwięk.end = st;
+                var atr = Dźwięk.xml.OwnerDocument.CreateAttribute("end");
+                atr.Value = Dźwięk.end.ToString();
+                Dźwięk.xml.Attributes.Append(atr);
+                var atr2 = Dźwięk.xml.OwnerDocument.CreateAttribute("start");
+                atr2.Value = Dźwięk.start.ToString();
+                Dźwięk.xml.Attributes.Append(atr2);
+                Dźwięk.zmienionoDługość();
+                if (lastDrag == 1)
+                    lastDrag = 2;
+                else if (lastDrag == 2)
+                    lastDrag = 1;
             }
 
             myszX = (float)e.GetPosition(this).X;

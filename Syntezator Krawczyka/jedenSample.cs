@@ -71,7 +71,7 @@ namespace Syntezator_Krawczyka
             }
             if (xml.Attributes["end"] != null)
             {
-                start = (long)(float.Parse((xml.Attributes["end"].Value), CultureInfo.InvariantCulture));
+                end = (long)(float.Parse((xml.Attributes["end"].Value), CultureInfo.InvariantCulture));
             }
 
             if (Statyczne.otwartyplik.wszytskieSamplePliki.ContainsKey(xml.Attributes["file"].Value))
