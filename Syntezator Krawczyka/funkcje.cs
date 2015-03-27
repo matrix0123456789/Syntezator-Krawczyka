@@ -142,7 +142,7 @@ namespace Syntezator_Krawczyka
            Stream str = new MemoryStream();
             wave(fala, new BinaryWriter(str));
             str.Seek(0, SeekOrigin.Begin);
-           using(  var mp3 = new LameMP3FileWriter(writer.BaseStream, format, 320000))
+            using (var mp3 = new LameMP3FileWriter(writer.BaseStream, format, 320000))
            using (var wav = WaveFormatConversionStream.CreatePcmStream(new RawSourceWaveStream(str, format)))
            {
                
@@ -162,7 +162,7 @@ namespace Syntezator_Krawczyka
 
 
             char[] pus = Syntezator_Krawczyka.Properties.Resources.czysty.ToCharArray();
-            byte[] puste = new byte[pus.Length - 1];
+            byte[] puste = new byte[44];
             var pusteLength = pus.Length + fala.Length * (granie.bity / 8) - 2;
             for (int i = 0; i < pus.Length && i < puste.Length; i++)
             {
@@ -238,8 +238,8 @@ namespace Syntezator_Krawczyka
                 }*/
                 else if (granie.bity == 32)
                 {
-                    writer.Write((int)(fala[0, falai] * (32767)));
-                    writer.Write((int)(fala[1, falai] * (32767)));
+                    writer.Write((int)(fala[0, falai] * (2147483647)));
+                    writer.Write((int)(fala[1, falai] * (2147483647)));
                 }
                 //puste[z + 1] = 0;
 

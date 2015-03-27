@@ -1,8 +1,11 @@
-﻿using NAudio.Wave;
+﻿using NAudio.MediaFoundation;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -11,7 +14,7 @@ namespace Syntezator_Krawczyka
 {
     public class sample : IPostep
     {
-        public string plik="";
+        public string plik = "";
         public float note;
         public int częstotliwość;
         public float accept;
@@ -37,7 +40,7 @@ namespace Syntezator_Krawczyka
                         bitrate = convertedStream.WaveFormat.BitsPerSample;
 
                     }
-                    else
+                    else if (p.Substring(p.Length - 4) == ".wav" || p.Substring(p.Length - 5) == ".wave")
                     {
                         try
                         {
@@ -62,8 +65,51 @@ namespace Syntezator_Krawczyka
                             bitrate = 8 * zawartość.ReadInt32() / częstotliwość / kanały;
                         }
                     }
+                    else
+                    {
+                      /*  IMFSourceReader pReader;
+                        MediaFoundationInterop.MFCreateSourceReaderFromURL(p, null, out pReader);
+                        pReader.SetStreamSelection(MediaFoundationInterop.MF_SOURCE_READER_ALL_STREAMS, false);
+                        pReader.SetStreamSelection(MediaFoundationInterop.MF_SOURCE_READER_FIRST_AUDIO_STREAM, true);
+                        IMFMediaType partialMediaType;
+                        MediaFoundationInterop.MFCreateMediaType(out partialMediaType);
+                        partialMediaType.SetGUID(MediaFoundationAttributes.MF_MT_MAJOR_TYPE, MediaTypes.MFMediaType_Audio);
+                        partialMediaType.SetGUID(MediaFoundationAttributes.MF_MT_SUBTYPE, AudioSubtypes.MFAudioFormat_PCM);
+                        pReader.SetCurrentMediaType(MediaFoundationInterop.MF_SOURCE_READER_FIRST_AUDIO_STREAM, IntPtr.Zero, partialMediaType);
+                        Marshal.ReleaseComObject(partialMediaType); IMFMediaType uncompressedMediaType;
+                        pReader.GetCurrentMediaType(MediaFoundationInterop.MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+                                out uncompressedMediaType);
+                        Guid audioSubType;
+                        uncompressedMediaType.GetGUID(MediaFoundationAttributes.MF_MT_SUBTYPE, out audioSubType);
+                        Debug.Assert(audioSubType == AudioSubtypes.MFAudioFormat_PCM);
+                        int channels;
+                        uncompressedMediaType.GetUINT32(MediaFoundationAttributes.MF_MT_AUDIO_NUM_CHANNELS, out channels);
+                        int bits;
+                        uncompressedMediaType.GetUINT32(MediaFoundationAttributes.MF_MT_AUDIO_BITS_PER_SAMPLE, out bits);
+                        int sampleRate;
+                        uncompressedMediaType.GetUINT32(MediaFoundationAttributes.MF_MT_AUDIO_SAMPLES_PER_SECOND, out sampleRate);
+                       var waveFormat = new WaveFormat(sampleRate, bits, channels);
 
+                       IMFSample pSample;
+                       int dwFlags;
+                       ulong timestamp;
+                       int actualStreamIndex;
+                       pReader.ReadSample(MediaFoundationInterop.MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, out actualStreamIndex, out dwFlags, out timestamp, out pSample);
+                       if (dwFlags != 0) // reached the end of the stream or media type changed
+                       {
+                           return;
+                       } */
 
+                        var bufor = new byte[1024 * 1024];
+                        
+                        var read = new MediaFoundationReader(p);
+                        WaveStream convertedStream = WaveFormatConversionStream.CreatePcmStream(read);
+                        zawartość = new BinaryReader(convertedStream);
+                        kanały = (ushort)convertedStream.WaveFormat.Channels;
+                        częstotliwość = convertedStream.WaveFormat.SampleRate;
+                        bitrate = convertedStream.WaveFormat.BitsPerSample;
+                    }
+                    
                     zawartość.BaseStream.Position = 44;
                     if (kanały == 1)
                     {
@@ -140,15 +186,16 @@ namespace Syntezator_Krawczyka
             fala = new float[kanały, dlugosc];
             int przy = 0;//TODO pozbyć się zbędnego kopiowania
             for (int i = 0; i < bufory.Count; i++)
-                 {for (int i2 = 0; i2 < kanały; i2++)
-               
+            {
+                for (int i2 = 0; i2 < kanały; i2++)
+
                     for (int i3 = 0; i3 < bufory[i].Length / kanały; i3++)
                     {
-                        fala[i2, przy+i3] = bufory[i][i2, i3];
+                        fala[i2, przy + i3] = bufory[i][i2, i3];
                         //przy++;
                     }
-                    przy += bufory[i].GetLength(1);
-                }
+                przy += bufory[i].GetLength(1);
+            }
             this.bufory = null;
 
         }
