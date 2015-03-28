@@ -262,6 +262,7 @@ namespace Syntezator_Krawczyka
         {
             granie.grają.Clear();
             granie.można = true;
+            granie.graniePrzy = granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4;
             granie.graniePlay = false;
 
            // granie.generować[0] = false;

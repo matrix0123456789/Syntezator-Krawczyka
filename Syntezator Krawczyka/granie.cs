@@ -301,7 +301,11 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public static void grajRaz()
         {
-
+            if (granie.graniePrzy - Statyczne.bufor.BufferedBytes / 4 == granieMax && granieMax != 0)
+            {
+                graniePlay = false;
+                graniePrzy = 0;
+            }
             if (można && liczbaGenerowanych == 0)
             {
                 float[,] fala;
@@ -358,7 +362,7 @@ namespace Syntezator_Krawczyka.Synteza
                                 for (int x = 0; x < zz.Length; x++)
                                 {
 
-                                    if (zz[x].nuta.dane==null||zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
+                                    if (zz[x].nuta.dane == null || zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
                                     {
                                         zz[x].nuta.dane = null;
                                         zz[x].dźwięk = null;
@@ -449,54 +453,65 @@ namespace Syntezator_Krawczyka.Synteza
         }
         public static bool liveGraj()
         {
-            bool czyJeszczeRaz = false; if (graniePlay)
+            try
             {
-                lock (wynik)
+                bool czyJeszczeRaz = false; if (graniePlay)
                 {
-                    long wygenerowanoDo = wynik.Length / 2;
-                    foreach (var x in granieNuty)
+                    lock (wynik)
                     {
-                        if (!x.czyGotowe && x.sekw != null && wygenerowanoDo > x.opuznienie)
+                        long wygenerowanoDo = wynik.Length / 2;
+                        foreach (var x in granieNuty)
                         {
-                            wygenerowanoDo = x.opuznienie;
-                            czyJeszczeRaz = true;
+                            if (!x.czyGotowe && x.sekw != null && wygenerowanoDo > x.opuznienie)
+                            {
+                                wygenerowanoDo = x.opuznienie;
+                                czyJeszczeRaz = true;
+                            }
+
+                        }
+                        var dl = wygenerowanoDo - graniePrzy;
+
+
+                        if (dl > 0)
+                        {
+                            if ((Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4 < dl)
+                            {
+                                czyJeszczeRaz = true;
+                                dl = (Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4;
+                            }
+                            var falaT = new float[2, dl];
+                            for (var i = 0; i < dl; i++)
+                            {
+                                falaT[0, i] = wynik[0, i + graniePrzy];
+                                falaT[1, i] = wynik[1, i + graniePrzy];
+                            }
+                            try
+                            {
+                                if (funkcje.graj(falaT))
+                                { }// goto dodatkowy;
+                            }
+                            catch (FormatException a) { System.Windows.MessageBox.Show("błąd"); }
+                            graniePrzy += (int)dl;
                         }
 
+                        else if (graniePrzy == granieMax)
+                        {
+                            graniePlay = false;
+                            graniePrzy = 0;
+                        }
                     }
-                    var dl = wygenerowanoDo - graniePrzy;
-
-
-                    if (dl > 0)
+                    /*if(czyJeszczeRaz)
                     {
-                        if ((Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4 < dl)
-                        {
-                            czyJeszczeRaz = true;
-                            dl = (Statyczne.bufor.BufferLength - Statyczne.bufor.BufferedBytes) / 4;
-                        }
-                        var falaT = new float[2, dl];
-                        for (var i = 0; i < dl; i++)
-                        {
-                            falaT[0, i] = wynik[0, i + graniePrzy];
-                            falaT[1, i] = wynik[1, i + graniePrzy];
-                        }
-                        try
-                        {
-                            if (funkcje.graj(falaT))
-                            { }// goto dodatkowy;
-                        }
-                        catch (FormatException a) { System.Windows.MessageBox.Show("błąd"); }
-                        graniePrzy += (int)dl;
-                    }
-                }
-                /*if(czyJeszczeRaz)
-                {
-                    //Thread.Sleep(100);
-                    jedenTimer = new Timer((o) => { liveGraj(); }, null, 100, 0);
+                        //Thread.Sleep(100);
+                        jedenTimer = new Timer((o) => { liveGraj(); }, null, 100, 0);
                 
-                }*/
+                    }*/
 
-            }
+                }
             return czyJeszczeRaz;
+            }
+            catch {return true; }
+            
         }
         static Timer jedenTimer;
         public static void Działaj(nuta input)
@@ -561,18 +576,18 @@ namespace Syntezator_Krawczyka.Synteza
                 {//tynczasowo
                     nuta nut = new nuta();
                     nut.dane = new float[length];
-                    for (int i = 0; i < length;i++ )
+                    for (int i = 0; i < length; i++)
                     {
-                        nut.dane[i]=input[i*2];
+                        nut.dane[i] = input[i * 2];
                     }
-                        grają.Add(nuta.nowyid, new gra(nut)); 
-                   /* if (grają.ContainsKey(input.id))
-                    {
-                        grają[input.id].dźwięk = (input).dane;
-                        grają[input.id].nuta = input;
-                    }
-                    else
-                        grają.Add(input.id, new gra(input));*/
+                    grają.Add(nuta.nowyid, new gra(nut));
+                    /* if (grają.ContainsKey(input.id))
+                     {
+                         grają[input.id].dźwięk = (input).dane;
+                         grają[input.id].nuta = input;
+                     }
+                     else
+                         grają.Add(input.id, new gra(input));*/
                 }
             else
             {

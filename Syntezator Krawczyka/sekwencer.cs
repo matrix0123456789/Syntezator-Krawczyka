@@ -88,7 +88,7 @@ namespace Syntezator_Krawczyka.Synteza
                 }
                 //else
                 {
-                    o.ilepróbek = o.ilepróbek / Math.Pow(2, oktawy);
+                    o.ilepróbek = o.ilepróbekNaStarcie / Math.Pow(2, oktawy);
                     o.głośność =o.balans0=o.balans1= 1;
                     try
                     {
