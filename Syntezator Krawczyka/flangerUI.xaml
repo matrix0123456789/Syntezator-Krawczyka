@@ -6,8 +6,10 @@
              xmlns:l="clr-namespace:Syntezator_Krawczyka"
              mc:Ignorable="d" Background="DarkTurquoise"
              d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
-    <Grid><l:suwak Opis="Przesunięcie" Height="23"  HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="5" ValueChanged="slider1_ValueChanged" Jednostka="ms" />
-    <l:suwak Height="23" HorizontalAlignment="Left" Opis="Częstotliwość" Margin="0,51,0,0" x:Name="sliderB" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="3" ValueChanged="slider2_ValueChanged" Jednostka="Hz" />
+    <Grid>
+        <help:HelpButton xmlns:help="clr-namespace:Syntezator_Krawczyka.JaebeHelp" strona="Flanger" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <l:suwak Opis="Przesunięcie" Height="23"  HorizontalAlignment="Left" Margin="0,22,0,0" x:Name="sliderA" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="5" ValueChanged="slider1_ValueChanged" Jednostka="ms" />
+        <l:suwak Height="23" HorizontalAlignment="Left" Opis="Częstotliwość" Margin="0,51,0,0" x:Name="sliderB" VerticalAlignment="Top" Width="111" SelectionStart="0.5" Maximum="3" ValueChanged="slider2_ValueChanged" Jednostka="Hz" />
         <Label Content="Flanger" Height="28" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" />
     </Grid>
 

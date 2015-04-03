@@ -597,5 +597,11 @@ namespace Syntezator_Krawczyka
             var okno = new Nagrywanie();
             okno.Show();
         }
+
+        private void Pomoc_click(object sender, RoutedEventArgs e)
+        {
+            var okno=new JaebeHelp.HelpWindow(JaebeHelp.HelpDatabase.baza, "pl");
+            okno.Show();
+        }
     }
 }

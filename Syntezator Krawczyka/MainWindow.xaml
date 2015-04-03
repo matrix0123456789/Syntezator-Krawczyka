@@ -452,7 +452,7 @@
             <s:WstążkaKarta Tytuł="Pomoc" Visibility="Collapsed" Height="78">
                 <WrapPanel Margin="5">
                     <StackPanel>
-                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="Pomoc">
+                        <s:Przycisk s:Rozmiar="Średni" s:Podpis="Pomoc" Click="Pomoc_click">
                             <s:Przycisk.Obrazek>
                                 <Canvas>
 

@@ -9,6 +9,7 @@
     <Grid Background="#112">
         <Grid x:Name="zalogowano">
             <Label Content="Zalogowano jako" Foreground="White" Margin="10,10,80,0" VerticalAlignment="Top"/>
+            <Label Content="(user)" Name="username" Foreground="White" Margin="110,10,80,0" VerticalAlignment="Top"/>
             <Button Content="Wyloguj" Margin="0,10,10,0" VerticalAlignment="Top" Height="26" HorizontalAlignment="Right" Width="65" Click="Button_Click_1"/>
             <ScrollViewer Margin="10,41,10,35">
                 <ScrollViewer.ContextMenu>

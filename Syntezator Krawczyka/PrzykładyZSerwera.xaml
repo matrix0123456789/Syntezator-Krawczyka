@@ -8,6 +8,7 @@
     <Grid>
         <TextBlock MouseDown="TextBlock_MouseDown" VerticalAlignment="Top">Ostatnio opublikowane na jaebestudio.tk/musicstudio</TextBlock>
         <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,20,0,0">
-            <StackPanel Name="Lista"></StackPanel></ScrollViewer>
+            <StackPanel Name="Lista">
+                <Label>Trwa ładowanie...</Label></StackPanel></ScrollViewer>
     </Grid>
 </UserControl>

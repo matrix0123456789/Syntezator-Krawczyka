@@ -155,5 +155,19 @@ namespace Syntezator_Krawczyka.Properties {
                 return ResourceManager.GetString("przykladMidi", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; ?&gt;&lt;wiki&gt;&lt;page lang=&quot;pl&quot; kat=&quot;jms&quot; nazwa=&quot;Strona Główna&quot; polskanazwa=&quot;Strona Główna&quot;&gt;Jaebe Music Studio to zaawansowany zestaw narzędzi do tworzenia i remiksowania muzyki.
+        ///
+        ///Tematy, które mogą cię zainteresować:
+        ///*[[Zapis do pliku]]
+        ///*[[Sample|wczytywanie i obsługa sampli]]
+        ///*[[Wbudowany syntezator|opis wbudowanego syntezatora]]&lt;/page&gt;&lt;page lang=&quot;pl&quot; kat=&quot;jms&quot; nazwa=&quot;Zapis do pliku&quot; polskanazwa=&quot;Zapis do pliku&quot;&gt;W Jaebe Music Studio gotowy projekt można zapisać albo jako projekt, albo jak [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string wiki {
+            get {
+                return ResourceManager.GetString("wiki", resourceCulture);
+            }
+        }
     }
 }

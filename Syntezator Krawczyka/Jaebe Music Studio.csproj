@@ -185,6 +185,13 @@
     <Compile Include="FeedBack.xaml.cs">
       <DependentUpon>FeedBack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JaebeHelp\HelpButton.xaml.cs">
+      <DependentUpon>HelpButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JaebeHelp\HelpDatabase.cs" />
+    <Compile Include="JaebeHelp\HelpWindow.xaml.cs">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Nagrywanie.xaml.cs">
       <DependentUpon>Nagrywanie.xaml</DependentUpon>
     </Compile>
@@ -360,6 +367,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FeedBack.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JaebeHelp\HelpButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JaebeHelp\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -604,6 +619,7 @@
     <Content Include="libmp3lame.64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\wiki.xml" />
     <Content Include="VTSx86.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:Syntezator_Krawczyka"
+             xmlns:help="clr-namespace:Syntezator_Krawczyka.JaebeHelp"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300" MouseMove="UserControl_MouseMove">
     <Grid Background="#FFFF8686">
+        <help:HelpButton strona="Oscylator" HorizontalAlignment="Right" VerticalAlignment="Top" ></help:HelpButton>
         <RadioButton Content="sinusoidalna" Height="16" HorizontalAlignment="Left" Margin="0,25,0,0" Name="sinusoidalny" VerticalAlignment="Top" Checked="sinusoidalny_Checked" />
         <RadioButton Content="trójkątna" Height="16" HorizontalAlignment="Left" Margin="0,47,0,0" Name="trójkątny" VerticalAlignment="Top" Checked="trójkątny_Checked" />
         <RadioButton Content="prostokątna" HorizontalAlignment="Left" Margin="0,69,0,0" Name="prostokątny" Height="16" VerticalAlignment="Top" Checked="prostokątny_Checked" />

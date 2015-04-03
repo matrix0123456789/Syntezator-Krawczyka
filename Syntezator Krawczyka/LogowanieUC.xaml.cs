@@ -46,6 +46,7 @@ namespace Syntezator_Krawczyka
                                                   logowanie.Visibility = Visibility.Collapsed;
                                                   if (pol.utworyZalogowanego != null)
                                                       wyswietlUtwory(pol.utworyZalogowanego);
+                                                  username.Content= pol.login;
                                               }
                                               else
                                               {

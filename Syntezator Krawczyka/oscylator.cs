@@ -343,6 +343,10 @@ namespace Syntezator_Krawczyka.Synteza
             var niski = 0 - 2 * gladkosc;
             long i = 0;
             var dłGl = długość * gladkosc;
+            if (dłGl == 0)
+                dłGl = 1;
+            else if (dłGl == długość)
+                dłGl--;
             for (; i < dłGl; i++)
             {
                 ret[i] = wysoki;

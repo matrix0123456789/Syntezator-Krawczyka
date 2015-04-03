@@ -771,6 +771,13 @@ namespace Syntezator_Krawczyka
 
             sciezka scie = new sciezka(id, scierzkaXML, true);
             scie.oryginał = org;
+            foreach(var nut in org.nuty)
+            {
+                var kop = (nuta)nut.Clone();
+                kop.opuznienie += scie.delay;
+                kop.opuznienieF += scie.delayUstawione;
+                scie.nuty.Add(kop);
+            }
             sciezki.Add(scie);
             return scie;
         }

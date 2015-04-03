@@ -1,0 +1,37 @@
+<?xml version="1.0" ?><wiki><page lang="pl" kat="jms" nazwa="Strona Główna" polskanazwa="Strona Główna">Jaebe Music Studio to zaawansowany zestaw narzędzi do tworzenia i remiksowania muzyki.
+
+Tematy, które mogą cię zainteresować:
+*[[Zapis do pliku]]
+*[[Sample|wczytywanie i obsługa sampli]]
+*[[Wbudowany syntezator|opis wbudowanego syntezatora]]</page><page lang="pl" kat="jms" nazwa="Zapis do pliku" polskanazwa="Zapis do pliku">W Jaebe Music Studio gotowy projekt można zapisać albo jako projekt, albo jako plik dźwiękowy.
+==Zapisywanie jako projekt==
+W pliku projektu zapisane są wszystkie ustawienia syntezatorów, nuty itd.
+
+Plik projektu można otworzyć tylko w Jaebe Music Studio.
+
+Jeśli dodałeś do projektu inne pliki np. mp3, to przy zapisie zostaniesz spytany czy chcesz je przekopiować. Klikając tak to wszystko zostanie spakowane do jednego pliku. Klikając nie plik będzie mniejszy, ale mogą być problemy z przeniesieniem projektu na inny komputer.
+==Zapisywanie jako plik dźwiękowy==
+tutaj zostanie wygenerowany gotowy dźwięk i zapisany do pliku wave lub mp3. Można go otworzyć w programach do odtwarzania muzyki np. Windows Media Player, można otworzyć na urządzeniach typu telefon, odtwarzacz CD itp. ale modyfikacja takiego pliku jest utrudniona.
+
+Wybieraj?c format wave dostajesz najwy?sz? jako?? d?wi?ku. W formacie mp3 jako?? jest minimalnie ograniczona, a w zamian pliki s? du?o mniejsze.</page><page lang="pl" kat="jms" nazwa="Sample" polskanazwa="Sample">Aby wczytać próbkę dźwięku należy w [[Główne okno|głównym oknie]] kliknąć melodia->wczytaj dźwięk. Obsługiwane są formaty mp3 i wave.</page><page lang="pl" kat="jms" nazwa="Główne okno" polskanazwa="Główne okno">Główne okno zawiera menu w postaci tzw. wstążki, z którego można otworzyć większość potrzebnych rzeczy.</page><page lang="pl" kat="jms" nazwa="Wbudowany syntezator" polskanazwa="Wbudowany syntezator">W programie zawarty jest autorski syntezator dźwięku.
+==Moduły==
+Syntezator składa się z modułów. Kliknij na jeden z nich by zobaczyć szczegółową pomoc.
+*[[Oscylator]]
+*[[Flanger]]
+*[[Głośność]]
+*[[LFO]]</page><page lang="pl" kat="jms" nazwa="Oscylator" polskanazwa="Oscylator">Oscylator to element, który generuje pierwszy dźwięk, który może być ewentualnie modyfikowany.
+
+==Podstawowe dźwięki==
+
+==Dźwięk niestandardowy==
+Oprócz wyboru jednego z gotowych dźwięków możesz też wygenerować dźwięk z pojedynczych składowych harmonicznych.
+
+Pierwsza składowa harmoniczna to fala sinusoidalna. Druga to fala sinusoidalna o 2 razy większej częstotliwości. Trzecia to fala sinusoidalna o 3 razy większej częstotliwości itd. Ich ilość jest nieograniczona, ale trzeba pamiętać, że nim więcej składowych, tym większe obciążenie dla komputera. Za pomocą suwaka możesz kontrolować głośność każdej z tych składowych z osobna.
+
+Po prawej stronie dostępny jest wykres pokazujący kształt tej fali (podobnie jak w [[oscyloskop|oscyloskopie]]).
+
+==ADSR==
+Jest to zmiana głośności w czasie.</page><page lang="pl" kat="jms" nazwa="Flanger" polskanazwa="Flanger">Flanger daje efekt chóru.
+
+==Zasada działania==
+Flanger kopiuje ten sam dźwięk kilka razy, ale za każdym razem dźwięk jest minimalnie na zmianę rozciągany i ściskany, przez co kolejne kopie dźwięku nakładają się w różny sposób.</page><page lang="pl" kat="jms" nazwa="Pogłos" polskanazwa="Pogłos">Działanie pogłosu polega na tym, że dźwięk jest powtarzany z pewnym opóźnieniem, ale za każdym razem ciszej.</page></wiki>

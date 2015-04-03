@@ -204,7 +204,7 @@ namespace Syntezator_Krawczyka
                     polaczenie.Headers.Add("user-agent", "SyntezatorKrawczyka");
                     polaczenie.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                     
-                    var json = polaczenie.UploadString("http://jaebestudo.tk/json.php?phpsession=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + autor + "\"}"));
+                    var json = polaczenie.UploadString("http://jaebestudio.tk/json.php?phpsess=" + sesjaPHP, "POST", koduj("{\"utwory\":\"" + autor + "\"}"));
                     var ret = new UtworySerwer();
                     if (RegexUtwory.IsMatch(json))
                     {
