@@ -18,7 +18,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Interaction logic for Widmo.xaml
     /// </summary>
-    public partial class Widmo : Window
+    public partial class Widmo : zawartośćOkna
     {
         public static Widmo wid = null;
         public static Queue<float[,]> dane = new Queue<float[,]>();
@@ -32,10 +32,17 @@ namespace Syntezator_Krawczyka
         {
             if (wid == null)
                 wid = new Widmo();
-            wid.Show();
+            if (kontenerOkien.gdzieJest.ContainsKey(wid))
+                kontenerOkien.gdzieJest[wid].Show();
+            else
+            {
+                var okno = new kontenerOkno(wid);
+                kontenerOkien.gdzieJest[wid] = okno;
+                okno.Show();
+            }
+
             wid.Start();
             czas = DateTime.Now;
-
 
         }
         bool logarytmicznaSkala = false;

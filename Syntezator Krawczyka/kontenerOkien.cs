@@ -17,6 +17,8 @@ namespace Syntezator_Krawczyka
         public kontenerOkienchil ch;
         public static Dictionary<UIElement, Window> gdzieJest = new Dictionary<UIElement, Window>();
         public UIElementCollection Children { get { return ch; } }
+        [Bindable(true)]
+        public bool ZawszePrzyciski { get; set; }
         public kontenerOkien()
         {
             ch = new kontenerOkienchil(this);
@@ -123,6 +125,10 @@ namespace Syntezator_Krawczyka
         }
         private void poprawPrzyciski()
         {
+            if (parent.ZawszePrzyciski || gora.Children.Count >1)
+                gora.Visibility = Visibility.Visible;
+            else
+                gora.Visibility = Visibility.Collapsed;
             foreach (var x in gora.Children)
             {
                 if (((x as Button).Tag as UIElement).Visibility == Visibility.Visible)

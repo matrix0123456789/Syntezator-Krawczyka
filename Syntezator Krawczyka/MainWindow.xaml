@@ -488,7 +488,7 @@
                     <Slider Margin="87,7,196,0" VerticalAlignment="Top" Name="suwak" MouseEnter="suwakEnter" MouseLeave="suwakLeave" ValueChanged="suwak_ValueChanged"/>
                     <Slider Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
                     <Label Content="00:00/00:00" Margin="0,5,124,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                    <s:kontenerOkien Margin="0,35,0,0">
+                    <s:kontenerOkien Margin="0,35,0,0" ZawszePrzyciski="true">
                         <s:zawartośćOkna Title="Instrumenty">
                             <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
                                 <Grid>  <StackPanel Name="pokazInstr" /></Grid>
