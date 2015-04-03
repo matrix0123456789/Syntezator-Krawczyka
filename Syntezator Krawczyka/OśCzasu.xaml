@@ -1,8 +1,8 @@
-﻿<Window
+﻿<local:zawartośćOkna
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Syntezator_Krawczyka" x:Class="Syntezator_Krawczyka.OśCzasu"
-        Title="EdytorScierzek" Height="400" Width="450">
+        Title="EdytorScierzek">
     <Grid>
         <ScrollViewer Margin="0,0,119,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Grid x:Name="panel" >
@@ -35,4 +35,4 @@
         <Button Content="Nagraj z mikrofonu" ToolTip="Nagrywa dźwięk z mikrofonu lub wejścia liniowego" Margin="0,0,156,10" Click="mikrofonnagraj_click" HorizontalAlignment="Right" Width="123" Height="20" VerticalAlignment="Bottom"/>
 
     </Grid>
-</Window>
+</local:zawartośćOkna>

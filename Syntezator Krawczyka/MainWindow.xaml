@@ -480,7 +480,7 @@
             <s:Wstążka.PodSpodem>
                 <Grid Drop="Grid_Drop">
 
-
+                    
 
                     <Button Content="Czyść bufor" Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,0,0,131" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
                     <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="5,5,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="buttonGraj_Click" />
@@ -488,18 +488,18 @@
                     <Slider Margin="87,7,196,0" VerticalAlignment="Top" Name="suwak" MouseEnter="suwakEnter" MouseLeave="suwakLeave" ValueChanged="suwak_ValueChanged"/>
                     <Slider Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,142,0,0" VerticalAlignment="Top" Width="87" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
                     <Label Content="00:00/00:00" Margin="0,5,124,0" Name="czas" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                    <TabControl Margin="0,35,0,0">
-                        <TabItem Header="Instrumenty">
+                    <s:kontenerOkien Margin="0,35,0,0">
+                        <s:zawartośćOkna Title="Instrumenty">
                             <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
                                 <Grid>  <StackPanel Name="pokazInstr" /></Grid>
                             </ScrollViewer>
-                        </TabItem>
-                        <TabItem Header="Scieżki">
+                        </s:zawartośćOkna>
+                        <s:zawartośćOkna s:Title="Scieżki" Visibility="Collapsed">
                             <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
                                 <WrapPanel Name="pokazŚcie" />
                             </ScrollViewer>
-                        </TabItem>
-                    </TabControl>
+                        </s:zawartośćOkna>
+                    </s:kontenerOkien>
                     <Grid Height="26" Margin="0,5,10,0" VerticalAlignment="Top" Background="#223" MouseDown="Grid_MouseEnter" HorizontalAlignment="Right" Width="114">
                         <Label VerticalAlignment="Top" Foreground="White" HorizontalAlignment="Center" Name="LogowanieTxt">Zaloguj</Label>
                     </Grid>

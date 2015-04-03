@@ -488,8 +488,12 @@ namespace Syntezator_Krawczyka
 
         private void OśCzasu_Click(object sender, RoutedEventArgs e)
         {
-            var okno = new OśCzasu();
-            okno.Show();
+            var okno2 = new OśCzasu();
+            
+                var okno = new kontenerOkno(okno2);
+                kontenerOkien.gdzieJest[okno2] = okno;
+                okno.Show();
+           
         }
 
         private void Oscyloskop_Click(object sender, RoutedEventArgs e)

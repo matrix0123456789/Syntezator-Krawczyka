@@ -17,7 +17,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Interaction logic for Oscyloskop.xaml
     /// </summary>
-    public partial class Oscyloskop : Window
+    public partial class Oscyloskop : zawartośćOkna, IDisposable
     {
         public static Oscyloskop oscyl = null;
         public static Queue<float[,]> dane = new Queue<float[,]>();
@@ -30,7 +30,15 @@ namespace Syntezator_Krawczyka
         {
             if (oscyl == null)
                 oscyl = new Oscyloskop();
-            oscyl.Show();
+            if(kontenerOkien.gdzieJest.ContainsKey(oscyl))
+                kontenerOkien.gdzieJest[oscyl].Show();
+            else
+            {
+                var okno = new kontenerOkno(oscyl);
+                kontenerOkien.gdzieJest[oscyl] = okno;
+                okno.Show();
+            }
+            
             oscyl.Start();
             czas = DateTime.Now;
 
@@ -186,6 +194,13 @@ namespace Syntezator_Krawczyka
         private void jakosc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             przeskok = 100 / jakosc.Value;
+        }
+
+        public void Dispose()
+        {
+
+            oscyl = null;
+            timer = null;
         }
     }
 }

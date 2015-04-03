@@ -20,7 +20,7 @@ namespace Syntezator_Krawczyka
     /// <summary>
     /// Interaction logic for EdytorScierzek.xaml
     /// </summary>
-    public partial class OśCzasu : Window, IDisposable
+    public partial class OśCzasu : zawartośćOkna, IDisposable
     {
         List<List<odDo>> elementy = new List<List<odDo>>();
         float dlugosc

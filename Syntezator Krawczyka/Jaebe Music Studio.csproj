@@ -192,6 +192,10 @@
     <Compile Include="JaebeHelp\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="kontenerOkien.cs" />
+    <Compile Include="kontenerOkno.xaml.cs">
+      <DependentUpon>kontenerOkno.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Nagrywanie.xaml.cs">
       <DependentUpon>Nagrywanie.xaml</DependentUpon>
     </Compile>
@@ -375,6 +379,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JaebeHelp\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="kontenerOkno.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

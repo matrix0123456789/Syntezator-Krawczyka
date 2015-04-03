@@ -1,0 +1,9 @@
+﻿<Window x:Class="Syntezator_Krawczyka.kontenerOkno"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:Syntezator_Krawczyka"
+        Title="kontenerOkno" Height="300" Width="300" Closed="Window_Closed">
+    <Grid>
+        <l:kontenerOkien x:Name="kont"></l:kontenerOkien>
+    </Grid>
+</Window>
