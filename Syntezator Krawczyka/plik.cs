@@ -496,7 +496,8 @@ namespace Syntezator_Krawczyka
                 for (var i = 0; i < Statyczne.otwartyplik.sameSample.Count; i++)
                 {
                     var rozsz = Statyczne.otwartyplik.sameSample[i].sample.plik.Substring(Statyczne.otwartyplik.sameSample[i].sample.plik.LastIndexOf('.'));
-                    zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik, "sample/" + i + rozsz);
+                    //zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik, "sample/" + i + rozsz);
+                    zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik);
                 } zip.CommitUpdate();
                 zip.Close();
 
