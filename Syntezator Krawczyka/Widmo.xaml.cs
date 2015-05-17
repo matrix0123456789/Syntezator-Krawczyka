@@ -188,31 +188,35 @@ namespace Syntezator_Krawczyka
                     aktualniePrzetwarzane = dane.Dequeue();
                     pozycja = 0;
                 }
-                for (int i = 0; i < ilePróbek; i++)
+                try
                 {
-                    pozycja++;
-                    if (pozycja == aktualniePrzetwarzane.Length / 2)
+                    for (int i = 0; i < ilePróbek; i++)
                     {
-                        while (dane.Count == 0)
+                        pozycja++;
+                        if (pozycja == aktualniePrzetwarzane.Length / 2)
                         {
-                            Thread.Sleep(1);
-                            if (czOst.AddSeconds(ilepr*2 / plik.Hz) < DateTime.Now)
+                            while (dane.Count == 0)
                             {
-                                aktualniePrzetwarzane = null;
-                                goto rysuj;
-                            }//linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, 0.5 * wykres.ActualHeight));
-                            //linia.Points.Add(new Point(wykres.ActualWidth, 0.5 * wykres.ActualHeight));
-                            //aktualniePrzetwarzane = null;
-                            //pozycja = 0;
-                            //wykres.Children.Add(linia);
-                            //break;
+                                Thread.Sleep(1);
+                                if (czOst.AddSeconds(ilepr * 2 / plik.Hz) < DateTime.Now)
+                                {
+                                    aktualniePrzetwarzane = null;
+                                    goto rysuj;
+                                }//linia.Points.Add(new Point(wykres.ActualWidth * i / ilePróbek, 0.5 * wykres.ActualHeight));
+                                //linia.Points.Add(new Point(wykres.ActualWidth, 0.5 * wykres.ActualHeight));
+                                //aktualniePrzetwarzane = null;
+                                //pozycja = 0;
+                                //wykres.Children.Add(linia);
+                                //break;
+                            }
+
+                            aktualniePrzetwarzane = dane.Dequeue();
+                            pozycja = 0;
                         }
-                        
-                        aktualniePrzetwarzane = dane.Dequeue();
-                        pozycja = 0;
+                        zespolone[i] = new Complex(aktualniePrzetwarzane[0, pozycja], 0);
                     }
-                    zespolone[i] = new Complex(aktualniePrzetwarzane[0, pozycja], 0);
                 }
+                catch { }
             rysuj:
                 Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (ThreadStart)delegate()
                 {
