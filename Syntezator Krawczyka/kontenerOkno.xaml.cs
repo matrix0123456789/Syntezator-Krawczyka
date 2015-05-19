@@ -49,5 +49,15 @@ namespace Syntezator_Krawczyka
         {
             Dispose();
         }
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            MainWindow.thi.Window_KeyDown(sender, e);
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            MainWindow.thi.Window_KeyUp(sender, e);
+
+        }
     }
 }

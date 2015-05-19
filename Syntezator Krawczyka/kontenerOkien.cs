@@ -25,6 +25,7 @@ namespace Syntezator_Krawczyka
             //VerticalAlignment = VerticalAlignment.Top;
             SizeChanged += Wstążka_SizeChanged;
             this.Loaded += Wstążka_Loaded;
+            
         }
 
 
@@ -75,13 +76,25 @@ namespace Syntezator_Krawczyka
         {
             dol.Margin = new Thickness(0, gora.ActualHeight, 0, 0);
         }
+        public override bool Contains(UIElement element)
+        {
+            return dol.Children.Contains(element);
+        }
         public override int Add(UIElement element)
         {
             var but = new Button();
             but.Padding = new Thickness(5, 2, 5, 2);
             but.Background = Brushes.White;
             but.Click += but_Click;
+            but.ContextMenu = new ContextMenu();
+            var menuElNoweOkno=new MenuItem();
+            menuElNoweOkno.Header="Przenieś do nowego okna.";
+            menuElNoweOkno.Click+=menuElNoweOkno_Click;
+            menuElNoweOkno.Tag = but;
+            but.ContextMenu.Items.Add(menuElNoweOkno);
             but.Tag = element;
+            
+            but.PreviewMouseLeftButtonDown += but_MouseDown;
             but.Margin = new Thickness(0, 3, 0, 0);
             but.BorderThickness = new Thickness(0, 0, 1, 0);
             but.VerticalAlignment = VerticalAlignment.Top;
@@ -91,9 +104,31 @@ namespace Syntezator_Krawczyka
             
             karty.Add(but, element);
             //but.Content = element;
-            poprawPrzyciski();
+            load();
             return 10;
 
+        }
+
+        void but_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            but_Click(sender, e);
+            var obj = new DataObject("jms/karta", (sender as Button).Tag);
+            
+            obj.SetData("jms/karta", new Object[]{(sender as Button).Tag, this});
+            DragDrop.DoDragDrop(parent, obj, DragDropEffects.All);
+        }
+        
+
+        void menuElNoweOkno_Click(object sender, RoutedEventArgs e)
+        {
+            var przyc = ((sender as FrameworkElement).Tag as Button);
+          var elem= (przyc.Tag as UIElement);
+          Remove(elem);
+
+          var okno = new kontenerOkno(elem);
+          kontenerOkien.gdzieJest[elem] = okno;
+          okno.Show();
+            
         }
         public Dictionary<Button, UIElement> karty = new Dictionary<Button, UIElement>();
         void but_Click(object sender, RoutedEventArgs e)
@@ -125,7 +160,7 @@ namespace Syntezator_Krawczyka
         }
         private void poprawPrzyciski()
         {
-            if (parent.ZawszePrzyciski || gora.Children.Count >1)
+            if (parent.ZawszePrzyciski || gora.Children.Count >-1)
                 gora.Visibility = Visibility.Visible;
             else
                 gora.Visibility = Visibility.Collapsed;
@@ -139,14 +174,17 @@ namespace Syntezator_Krawczyka
         }
         public override void Remove(UIElement element)
         {
-            foreach (var x in dol.Children)
+            lock (dol)
             {
-                if (x == element)
-                    dol.Children.Remove(element);
-            } foreach (var x in gora.Children)
-            {
-                if ((x as Button).Tag == element)
-                    gora.Children.Remove(x as Button);
+                foreach (var x in dol.Children)
+                {
+                    if (x == element)
+                    { dol.Children.Remove(element); break; }
+                } foreach (var x in gora.Children)
+                {
+                    if ((x as Button).Tag == element)
+                    { gora.Children.Remove(x as Button); break; }
+                }
             }
         }
         public override void RemoveAt(int index)

@@ -60,7 +60,7 @@ namespace Syntezator_Krawczyka
                 lock (dane)
                 {
                     var ilePróbek = (int)(plik.Hz / częstotliwość);
-                    Title = (DateTime.Now - czas).TotalMilliseconds.ToString();
+                    //Title = (DateTime.Now - czas).TotalMilliseconds.ToString();
                     czas = czas.AddMilliseconds(1000 / częstotliwość);
                     while ((DateTime.Now - czas).TotalMilliseconds > 1000 / częstotliwość*10)
                     {

@@ -356,6 +356,20 @@ namespace Syntezator_Krawczyka
                 else
                     Statyczne.otwartyplik = new plik((e.Data.GetData("FileDrop") as String[])[0]);
             }
+            else if (e.Data.GetData("jms/karta") != null)
+            {
+                
+                var obj = e.Data.GetData("jms/karta");
+                var objt = (Object[])obj;
+                var elem = (FrameworkElement)objt[0];
+                if (thi.KontenerOkienMainWindow.Children.Contains(elem))
+                    return;
+                var staraWst = (kontenerOkienchil)objt[1];
+                staraWst.Remove(elem);
+                thi.KontenerOkienMainWindow.Children.Add(elem);
+                e.Handled = true;
+                
+            }
             else
             {
                 e.Effects = DragDropEffects.None;
