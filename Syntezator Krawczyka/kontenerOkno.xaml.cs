@@ -59,5 +59,30 @@ namespace Syntezator_Krawczyka
             MainWindow.thi.Window_KeyUp(sender, e);
 
         }
+        public void Grid_DragOver(object sender, DragEventArgs e)
+        {
+        }
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+           if (e.Data.GetData("jms/karta") != null)
+            {
+
+                var obj = e.Data.GetData("jms/karta");
+                var objt = (Object[])obj;
+                var elem = (FrameworkElement)objt[0];
+                if (kont.Children.Contains(elem))
+                    return;
+                var staraWst = (kontenerOkienchil)objt[1];
+                staraWst.Remove(elem);
+                elem.Visibility = Visibility.Collapsed;
+                kont.Children.Add(elem);
+                e.Handled = true;
+
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
     }
 }

@@ -366,6 +366,7 @@ namespace Syntezator_Krawczyka
                     return;
                 var staraWst = (kontenerOkienchil)objt[1];
                 staraWst.Remove(elem);
+                elem.Visibility = Visibility.Collapsed;
                 thi.KontenerOkienMainWindow.Children.Add(elem);
                 e.Handled = true;
                 
