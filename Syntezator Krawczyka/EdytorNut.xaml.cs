@@ -311,7 +311,10 @@ namespace Syntezator_Krawczyka
                                     {
                                         // x.Margin.Top -= skalaY;
                                         var thi = x.Margin;
+
                                         thi.Left += skok;
+                                        if (thi.Left < 0)
+                                            thi.Left = 0;
                                         x.Margin = thi;
 
                                         var n = (nutaXml)x.Tag;
@@ -321,7 +324,9 @@ namespace Syntezator_Krawczyka
                                             delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) + (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
                                         }
                                         catch { }
-                                       // n.nuta.opuznienie += (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
+                                        if (delay < 0)
+                                            delay = 0;
+                                        // n.nuta.opuznienie += (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
                                         n.nuta.opuznienieF += (skok / skalaX);
                                         n.nuta.przeliczOpóźnenie();
                                         var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
@@ -338,6 +343,8 @@ namespace Syntezator_Krawczyka
                                         // x.Margin.Top -= skalaY;
                                         var thi = x.Margin;
                                         thi.Left -= skok;
+                                        if (thi.Left < 0)
+                                            thi.Left = 0;
                                         x.Margin = thi;
 
                                         var n = (nutaXml)x.Tag;
@@ -345,15 +352,18 @@ namespace Syntezator_Krawczyka
                                         try
                                         {
                                             delay = float.Parse(n.xml.Attributes["delay"].Value, CultureInfo.InvariantCulture) - (float)(skok / skalaX);//TODO bezpieczeńtwo z niepwnym xmlem na starcie
+
+                                            if (delay < 0)
+                                                delay = 0;
+                                            //n.nuta.opuznienie -= (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
+                                            n.nuta.opuznienieF -= (skok / skalaX);
+                                            n.nuta.przeliczOpóźnenie();
+                                            var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                                            atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
+                                            n.xml.Attributes.SetNamedItem(atrybut);
+                                            Statyczne.otwartyplik.zmiana();
                                         }
                                         catch { }
-                                        //n.nuta.opuznienie -= (long)((skok / skalaX) * 60 * plik.Hz / plik.tempo);
-                                        n.nuta.opuznienieF -= (skok / skalaX);
-                                        n.nuta.przeliczOpóźnenie();
-                                        var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
-                                        atrybut.Value = (delay).ToString(CultureInfo.InvariantCulture);
-                                        n.xml.Attributes.SetNamedItem(atrybut);
-                                        Statyczne.otwartyplik.zmiana();
                                     }
                             }
 
@@ -387,6 +397,8 @@ namespace Syntezator_Krawczyka
                     var n = (nutaXml)aktywna.Tag;
                     var cz = double.Parse(czas.Text);
                     var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("delay");
+                    if (cz < 0)
+                        throw (null);
                     atrybut.Value = cz.ToString(CultureInfo.InvariantCulture);
                     n.xml.Attributes.SetNamedItem(atrybut);
                     aktywna.Margin = new Thickness((cz * skalaX), aktywna.Margin.Top, 0, 0);

@@ -24,6 +24,12 @@ namespace Syntezator_Krawczyka
         {
             aktywne = null;
             InitializeComponent();
+            Loaded += EdytorFali_Loaded;
+            
+        }
+
+        void EdytorFali_Loaded(object sender, RoutedEventArgs e)
+        {
             aktListaFal();
         }
         public FalaNiestandardowa aktywne;

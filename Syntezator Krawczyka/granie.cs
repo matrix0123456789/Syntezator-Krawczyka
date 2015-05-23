@@ -90,11 +90,73 @@ namespace Syntezator_Krawczyka.Synteza
                     else if (zz[x].zagrano < 0)
                         i = o;
                     long max;
-                    if (oz < zz[x].dźwięk.LongLength - zz[x].zagrano)
+                    long dzlonlen;
+                    if (zz[x].dźwiękWielokanałowy != null)
+                        dzlonlen = zz[x].dźwiękWielokanałowy.GetLongLength(1);
+                    else
+                        dzlonlen = zz[x].dźwięk.LongLength;
+                    if (oz < dzlonlen - zz[x].zagrano)
                         max = oz;
                     else
-                        max = zz[x].dźwięk.LongLength - zz[x].zagrano;
-                    if (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1)
+                        max = dzlonlen - zz[x].zagrano;
+                    if (zz[x].dźwiękWielokanałowy != null)
+                    {
+                        if (zz[x].dźwiękWielokanałowy.GetLongLength(0) == 1)
+                        {
+                            if (zz[x].nuta == null || (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1))
+                            {
+                                for (; i < max; i++)
+                                {
+
+
+                                    fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + zz[x].zagrano];
+                                    fala[1, i] += zz[x].dźwiękWielokanałowy[0, i + zz[x].zagrano];
+
+                                }
+                            }
+                            else
+                            {
+                                var mn0 = zz[x].nuta.głośność * zz[x].nuta.balans0;
+                                var mn1 = zz[x].nuta.głośność * zz[x].nuta.balans1;
+                                for (; i < oz && i + zz[x].zagrano < zz[x].dźwięk.LongLength; i++)
+                                {
+
+
+                                    fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + zz[x].zagrano] * mn0;
+                                    fala[1, i] += zz[x].dźwiękWielokanałowy[0, i + zz[x].zagrano] * mn1;
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (zz[x].nuta == null || (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1))
+                            {
+                                for (; i < max; i++)
+                                {
+
+
+                                    fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + zz[x].zagrano];
+                                    fala[1, i] += zz[x].dźwiękWielokanałowy[1, i + zz[x].zagrano];
+
+                                }
+                            }
+                            else
+                            {
+                                var mn0 = zz[x].nuta.głośność * zz[x].nuta.balans0;
+                                var mn1 = zz[x].nuta.głośność * zz[x].nuta.balans1;
+                                for (; i < oz && i + zz[x].zagrano < zz[x].dźwięk.LongLength; i++)
+                                {
+
+
+                                    fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + zz[x].zagrano] * mn0;
+                                    fala[1, i] += zz[x].dźwiękWielokanałowy[1, i + zz[x].zagrano] * mn1;
+
+                                }
+                            }
+                        }
+                    }
+                    else if (zz[x].nuta == null || (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1))
                     {
                         for (; i < max; i++)
                         {
@@ -362,10 +424,11 @@ namespace Syntezator_Krawczyka.Synteza
                                 for (int x = 0; x < zz.Length; x++)
                                 {
 
-                                    if (zz[x].nuta.dane == null || zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd)
+                                    if (zz[x].nuta != null && (zz[x].nuta.dane == null || zz[x].zagrano > zz[x].nuta.dane.Length + zz[x].nuta.generujOd))
                                     {
                                         zz[x].nuta.dane = null;
                                         zz[x].dźwięk = null;
+                                        zz[x].dźwiękWielokanałowy = null;
                                         grają.Remove(zz[x].nuta.id);
                                     }
 
@@ -373,7 +436,7 @@ namespace Syntezator_Krawczyka.Synteza
                                     {
                                         liczIle++;
 
-                                        if (zz[x].nuta.głośność == 0 || (zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0))
+                                        if (zz[x].nuta != null && (zz[x].nuta.głośność == 0 || (zz[x].nuta.balans0 == 0 && zz[x].nuta.balans1 == 0)))
                                         {
 
                                             zz[x].zagrano += o;
@@ -386,8 +449,14 @@ namespace Syntezator_Krawczyka.Synteza
                                             i = o;
                                         //else
                                         // i = zz[x].zagrano - zz[x].nuta.generujOd;
-                                        var opt1 = zz[x].zagrano - zz[x].nuta.generujOd;
-                                        var opt2 = zz[x].dźwięk.LongLength - opt1;
+                                        long opt1 = zz[x].zagrano;
+                                        if (zz[x].nuta != null)
+                                            opt1 -= zz[x].nuta.generujOd;
+                                        long opt2;
+                                        if (zz[x].dźwiękWielokanałowy != null)
+                                            opt2 = zz[x].dźwiękWielokanałowy.GetLongLength(1) - opt1;
+                                        else
+                                            opt2 = zz[x].dźwięk.LongLength - opt1;
                                         long opt3;
                                         if (o < opt2 && o < falaLength)
                                             opt3 = o;
@@ -395,7 +464,76 @@ namespace Syntezator_Krawczyka.Synteza
                                             opt3 = opt2;
                                         else
                                             opt3 = falaLength;
-                                        if (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1)
+                                        if (zz[x].dźwiękWielokanałowy != null)
+                                        {
+                                            if (zz[x].dźwiękWielokanałowy.GetLength(0) == 1)
+                                            {
+                                                if (zz[x].nuta == null || (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1))
+                                                {
+                                                    if (i < -opt1)
+                                                        i = -opt1;
+                                                    for (; i < opt3; i++)
+                                                    {
+
+                                                        {
+                                                            fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + opt1];
+                                                            fala[1, i] += zz[x].dźwiękWielokanałowy[0, i + opt1];
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (i < -opt1)
+                                                        i = -opt1;
+                                                    var mn0 = zz[x].nuta.głośność * zz[x].nuta.balans0;
+                                                    var mn1 = zz[x].nuta.głośność * zz[x].nuta.balans1;
+                                                    for (; i < opt3; i++)
+                                                    {
+
+                                                        {
+                                                            fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + opt1] * mn0;
+                                                            fala[1, i] += zz[x].dźwiękWielokanałowy[0, i + opt1] * mn1;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (zz[x].nuta == null || (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1))
+                                                {
+                                                    if (i < -opt1)
+                                                        i = -opt1;
+                                                    for (; i < opt3; i++)
+                                                    {
+
+                                                        {
+                                                            fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + opt1];
+                                                            fala[1, i] += zz[x].dźwiękWielokanałowy[1, i + opt1];
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (i < -opt1)
+                                                        i = -opt1;
+                                                    var mn0 = zz[x].nuta.głośność * zz[x].nuta.balans0;
+                                                    var mn1 = zz[x].nuta.głośność * zz[x].nuta.balans1;
+                                                    for (; i < opt3; i++)
+                                                    {
+
+                                                        {
+                                                            fala[0, i] += zz[x].dźwiękWielokanałowy[0, i + opt1] * mn0;
+                                                            fala[1, i] += zz[x].dźwiękWielokanałowy[1, i + opt1] * mn1;
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (zz[x].nuta.głośność == 1 && zz[x].nuta.balans0 == 1 && zz[x].nuta.balans1 == 1)
                                         {
                                             if (i < -opt1)
                                                 i = -opt1;
@@ -508,10 +646,10 @@ namespace Syntezator_Krawczyka.Synteza
                     }*/
 
                 }
-            return czyJeszczeRaz;
+                return czyJeszczeRaz;
             }
-            catch {return true; }
-            
+            catch { return true; }
+
         }
         static Timer jedenTimer;
         public static void Działaj(nuta input)

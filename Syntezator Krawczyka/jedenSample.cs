@@ -24,13 +24,15 @@ namespace Syntezator_Krawczyka
         public XmlNode xml;
         public long start = 0;
         public long end = int.MaxValue;
+        public long id;
         public jedenSample()
         {
+            id = nuta.nowyid;
             głośność = 1;
             granie.graniestart();
             xml = Statyczne.otwartyplik.xml.CreateElement("sample");
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(xml);
-            
+
         }
 
         public jedenSample(string x)
@@ -102,7 +104,7 @@ namespace Syntezator_Krawczyka
             {
                 dl = (int)Math.Ceiling(sample.fala.GetLength(1) * zmianaCzęstotliwości);
                 dane = new float[sample.fala.GetLength(0), dl];
-                for (byte k = 0; k < sample.kanały; k++)
+                for (byte k = 0; k < sample.kanały; k++)//TODO do optymalizacji
                     for (var i2 = 0; l > i2; i2++)
                     {
                         var dz = (i2) / zmianaCzęstotliwości;
@@ -120,23 +122,32 @@ namespace Syntezator_Krawczyka
             }
 
 
-            if (granie.wynik == null) { }
-            /*lock (granie.grają)
+            if (granie.wynik == null)
             {
-                if (granie.grają.ContainsKey(input.id))
+                lock (granie.grają)
                 {
-                    grają[input.id].dźwięk = (input).dane;
-                    grają[input.id].nuta = input;
+                    if (granie.grają.ContainsKey(id))
+                    {
+                        granie.grają[id].dźwiękWielokanałowy = dane;
+                        granie.grają[id].nuta = null;
+                        granie.grają[id].zagrano = (long)(start * plik.Hz / sample.częstotliwość);
+                    }
+                    else
+                    {
+                        var gratym = new gra(dane);
+                        gratym.zagrano = (long)(start * plik.Hz / sample.częstotliwość);
+                        granie.grają.Add(id, gratym);
+
+                    }
+                    granie.grajRaz();
                 }
-                else
-                    grają.Add(input.id, new gra(input));
-            }*/
+            }
             else
             {
 
 
                 long i = delay;
-                var opt1 = -delay + start;
+                var opt1 = -delay + (long)(start * plik.Hz / sample.częstotliwość);
 
                 var opt3 = end - opt1;
                 try
@@ -196,7 +207,7 @@ namespace Syntezator_Krawczyka
             {
                 if (sample.fala == null)
                     return 0;
-                return  sample.fala.GetLongLength(1);
+                return sample.fala.GetLongLength(1);
             }
         }
         public long dlugoscGrana

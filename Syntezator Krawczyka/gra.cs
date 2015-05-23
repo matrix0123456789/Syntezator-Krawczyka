@@ -8,10 +8,13 @@ namespace Syntezator_Krawczyka
     public class gra
     {
         public float[] dźwięk;
-        public long zagrano=0;
+        public float[,] dźwiękWielokanałowy;
+        public long zagrano = 0;
         public nuta nuta;
         public gra(float[] dźwięk)
         { this.dźwięk = dźwięk; }
+        public gra(float[,] dźwięk)
+        { this.dźwiękWielokanałowy = dźwięk; }
         public gra(nuta nuta)
         {
             this.nuta = nuta;
