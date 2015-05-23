@@ -53,7 +53,8 @@ namespace Syntezator_Krawczyka
 
         void sample_load()
         {
-            end = sample.max;
+            if (end == int.MaxValue)
+                end = sample.max;
         }
 
         public jedenSample(XmlNode xml)
@@ -149,7 +150,7 @@ namespace Syntezator_Krawczyka
                 long i = delay;
                 var opt1 = -delay + (long)(start * plik.Hz / sample.częstotliwość);
 
-                var opt3 = end - opt1;
+                var opt3 = (long)(end * plik.Hz / sample.częstotliwość) - opt1;
                 try
                 {
                     /*if (głośność == 1)
