@@ -761,6 +761,8 @@ namespace Syntezator_Krawczyka
         }
         internal sciezka duplikujScierzke(sciezka org)
         {
+            if (org.oryginał!=org&&org.oryginał != null)
+                return duplikujScierzke(org.oryginał);
             var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
             var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("copy");
             var id = atrybut1.Value = org.nazwa;
@@ -775,8 +777,8 @@ namespace Syntezator_Krawczyka
             foreach(var nut in org.nuty)
             {
                 var kop = (nuta)nut.Clone();
-                kop.opuznienie += scie.delay;
-                kop.opuznienieF += scie.delayUstawione;
+                kop.opuznienie += scie.delay-org.delay;
+                kop.opuznienieF += scie.delayUstawione-org.delayUstawione;
                 scie.nuty.Add(kop);
             }
             sciezki.Add(scie);

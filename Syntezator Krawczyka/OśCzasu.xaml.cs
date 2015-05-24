@@ -221,12 +221,12 @@ namespace Syntezator_Krawczyka
             public odDo(sciezka s)
             {
                 sciezka = s;
-                start = s.delay;
+                start = (long)(s.delayUstawione * 60 / plik.tempo * plik.Hz);
             }
             public odDo(jedenSample s)
             {
                 sciezka = s;
-                start = s.delay;
+                start = (long)(s.delayUstawione * 60 / plik.tempo * plik.Hz);
             }
             public void odsw()
             {

@@ -76,6 +76,8 @@ namespace Syntezator_Krawczyka
                     {
                         var res2 = SendMessage(proces.MainWindowHandle, 8753, (IntPtr)polecenia.Nazwa.GetHashCode(), (IntPtr)0);
                     }
+                    if (cz > 1000)
+                        _Nazwa = "nieznany";
                 }
                 return _Nazwa;
             }
@@ -143,6 +145,8 @@ namespace Syntezator_Krawczyka
 
             if (msg == 8753)
             {
+                while (!otwarte.ContainsKey((long)lParam))
+                    Thread.Sleep(1);
                 otwarte[(long)lParam].czyWłączone = true;
                 /* ThreadPool.QueueUserWorkItem((a) =>
                  {

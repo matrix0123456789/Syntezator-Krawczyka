@@ -24,21 +24,25 @@ namespace VTSx86
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int SendMessage(IntPtr hwnd, [MarshalAs(UnmanagedType.U4)] int Msg, IntPtr wParam, IntPtr lParam);
         Process host;
+        System.Threading.Timer watchdog;
         public Form1()
         {
             InitializeComponent();
             Hide();
+
             try
             {
                 HostCommandStub cmdstub = new HostCommandStub(); //Code for this class is in the VSTHost Sample code
                 cont = VstPluginContext.Create(Environment.GetCommandLineArgs()[1], cmdstub);
                 cont.PluginCommandStub.StartProcess();
-
             }
             catch { }
             host = Process.GetProcessById(int.Parse(Environment.GetCommandLineArgs()[2]));
+            host.Exited += host_Exited;
+            watchdog = new System.Threading.Timer(watchdogCallback, host, 5000, 5000);
             cont.PluginCommandStub.Open();
             cont.PluginCommandStub.EditorOpen(this.Handle);
+            MessageBox.Show(cont.PluginCommandStub.PluginContext.PluginInfo.Flags.ToString());
             // pokarzOkno();
             ThreadPool.QueueUserWorkItem((a) =>
                 {
@@ -55,25 +59,54 @@ namespace VTSx86
             });
         }
 
+        private void watchdogCallback(object state)
+        {
+            if (host.HasExited)
+                Process.GetCurrentProcess().Kill();
+
+        }
+
+        void host_Exited(object sender, EventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
+        }
+
+
         private void dzwiekodb(object state)
         {
-            VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
-            VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
-
-            var vstInputBuffers = inputMgr.ToArray();
-            var vstOutputBuffers = outputMgr.ToArray();
-            cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
-
-            unsafe
+            try
             {
-                float* tablica = (float*)Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
-                for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
+                VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
+                VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
+               
+                var vstInputBuffers = inputMgr.ToArray();
+                var vstOutputBuffers = outputMgr.ToArray();
+                for (int i = 0; i < 4800; i++)
+                    vstInputBuffers[0][i] = (float)(i % 480) / 1000;
+                cont.PluginCommandStub.SetBlockSize(4800);
+                cont.PluginCommandStub.SetSampleRate(48000);
+                cont.PluginCommandStub.SetProcessPrecision(VstProcessPrecision.Process32);
+                cont.PluginCommandStub.StartProcess();
+                cont.PluginCommandStub.MainsChanged(true);
+                cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
+                cont.PluginCommandStub.StopProcess();
+                cont.PluginCommandStub.MainsChanged(false);
+                
+
+                unsafe
                 {
-                    tablica[2 * i] = vstOutputBuffers[0][i];
-                    tablica[2 * i + 1] = vstOutputBuffers[1][i];
+                    float* tablica = (float*)Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
+                    for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
+                    {
+                       // if (vstOutputBuffers[0][i] != 0)
+                      //      MessageBox.Show(i.ToString());
+                        tablica[2 * i] = vstOutputBuffers[0][i];
+                        tablica[2 * i + 1] = vstOutputBuffers[1][i];
+                    }
+                    MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
                 }
-                MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
             }
+            catch (Exception e) { MessageBox.Show(e.ToString()); }
         }
 
         private VstEvent[] CreateMidiEvent(byte statusByte, byte midiNote, byte midiVelocity)
@@ -119,6 +152,7 @@ namespace VTSx86
             {
 
                 var polecenie = (polecenia)message.WParam;
+               // MessageBox.Show(polecenie.ToString());
                 // 
                 switch (polecenie)
                 {
@@ -132,7 +166,7 @@ namespace VTSx86
                         MessageBox.Show(b.ToString());*/
                         cont.PluginCommandStub.SetSampleRate(48000);
 
-                        VstEvent[] vEvent = CreateMidiEvent(144, lp.lpData[0].nuta, 100);
+                        VstEvent[] vEvent = CreateMidiEvent(144, (byte)lp.lpData[0].nuta, 100);
                         cont.PluginCommandStub.ProcessEvents(vEvent);
                         //cont.PluginCommandStub.
                         break;
@@ -152,7 +186,7 @@ namespace VTSx86
             }
             if (message.Msg == 8753)
             {
-                // MessageBox.Show(message.ToString());
+                MessageBox.Show(((polecenia)message.WParam).ToString());
                 if ((int)message.WParam == polecenia.pokarzOkno.GetHashCode())
                     pokarzOkno();
                 if ((int)message.WParam == polecenia.Nazwa.GetHashCode())

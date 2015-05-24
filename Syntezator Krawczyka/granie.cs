@@ -717,6 +717,10 @@ namespace Syntezator_Krawczyka.Synteza
                     for (int i = 0; i < length; i++)
                     {
                         nut.dane[i] = input[i * 2];
+                        if(input[i * 2]!=0)
+                        {
+
+                        }
                     }
                     grają.Add(nuta.nowyid, new gra(nut));
                     /* if (grają.ContainsKey(input.id))
