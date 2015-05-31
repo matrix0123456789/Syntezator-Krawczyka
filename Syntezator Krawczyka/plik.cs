@@ -13,10 +13,12 @@ using System.Windows.Shell;
 using System.Windows.Controls;
 using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
+using Noesis.Javascript;
 namespace Syntezator_Krawczyka
 {
     public class plik
     {
+        public JS.Context skrypt = new JS.Context();
         public DateTime zmieniono = DateTime.Now;
         public void zmiana()
         {
@@ -78,13 +80,13 @@ namespace Syntezator_Krawczyka
                         do
                         {
                             ent = zis.GetNextEntry();
-                            if(ent.Name=="project.jms")
+                            if (ent.Name == "project.jms")
                             {
                                 xml.Load(zis);
                                 break;
                             }
 
-                       }while(ent!=null);
+                        } while (ent != null);
                     }
                     else
                     {
@@ -388,6 +390,16 @@ namespace Syntezator_Krawczyka
                 }
 
             MainWindow.ileScierzekWyswietla = 0;
+
+            var listaSkryptów = xml.GetElementsByTagName("script");
+            try
+            {
+                for (var i = 0; i < listaSkryptów.Count; i++)
+                {
+                    var ret = skrypt.Run(listaSkryptów[i].InnerText);
+                }
+            }
+            catch { }
         }
 
 
@@ -761,7 +773,7 @@ namespace Syntezator_Krawczyka
         }
         internal sciezka duplikujScierzke(sciezka org)
         {
-            if (org.oryginał!=org&&org.oryginał != null)
+            if (org.oryginał != org && org.oryginał != null)
                 return duplikujScierzke(org.oryginał);
             var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
             var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("copy");
@@ -774,11 +786,11 @@ namespace Syntezator_Krawczyka
 
             sciezka scie = new sciezka(id, scierzkaXML, true);
             scie.oryginał = org;
-            foreach(var nut in org.nuty)
+            foreach (var nut in org.nuty)
             {
                 var kop = (nuta)nut.Clone();
-                kop.opuznienie += scie.delay-org.delay;
-                kop.opuznienieF += scie.delayUstawione-org.delayUstawione;
+                kop.opuznienie += scie.delay - org.delay;
+                kop.opuznienieF += scie.delayUstawione - org.delayUstawione;
                 scie.nuty.Add(kop);
             }
             sciezki.Add(scie);
@@ -971,17 +983,19 @@ namespace Syntezator_Krawczyka
                 {
                     granie.liczbaGenerowanych++;
                     granie.liczbaGenerowanychMax++;
-                    ThreadPool.QueueUserWorkItem((a) => { x.działaj();
-
-                    lock (granie.liczbaGenerowanychBlokada)
+                    ThreadPool.QueueUserWorkItem((a) =>
                     {
-                        granie.liczbaGenerowanych--;
-                        if (!granie.można && granie.liczbaGenerowanych == 0)
+                        x.działaj();
 
-                            granie.grajcale(false);
-                    }
+                        lock (granie.liczbaGenerowanychBlokada)
+                        {
+                            granie.liczbaGenerowanych--;
+                            if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                                granie.grajcale(false);
+                        }
                     });
-                    
+
 
                 }
                 var dialog = new SaveFileDialog();
@@ -1003,37 +1017,37 @@ namespace Syntezator_Krawczyka
                 dis = Start.thi.Dispatcher;
             else
                 return;
-           dis.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
-            {
-                try
-                {
-                    var lista = JumpList.GetJumpList(Application.Current);
+            dis.BeginInvoke(System.Windows.Threading.DispatcherPriority.Send, (ThreadStart)delegate()
+             {
+                 try
+                 {
+                     var lista = JumpList.GetJumpList(Application.Current);
 
-                    if (lista == null)
-                        lista = new JumpList();
-                    lista.ShowRecentCategory = false;
-                    lista.ShowFrequentCategory = false;
-                    lista.JumpItems.Clear();
-                    for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
-                    {
-                        var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
-                        //lista.
-                        var item = new JumpTask();
-                        item.Description = str;
-                        item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
-                        item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
-                        item.Arguments = str;
-                        item.CustomCategory = "Ostatnie";
-                        lista.JumpItems.Add(item);
-                        // lab.Content=;
+                     if (lista == null)
+                         lista = new JumpList();
+                     lista.ShowRecentCategory = false;
+                     lista.ShowFrequentCategory = false;
+                     lista.JumpItems.Clear();
+                     for (var i = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 1; i >= 0 && i >= Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte.Count - 20; i--)
+                     {
+                         var str = Syntezator_Krawczyka.Properties.Settings.Default.OstatnioOtwarte[i];
+                         //lista.
+                         var item = new JumpTask();
+                         item.Description = str;
+                         item.Title = str.Substring(str.LastIndexOfAny(new char[] { '/', '\\' }) + 1);
+                         item.WorkingDirectory = str.Substring(0, str.LastIndexOfAny(new char[] { '/', '\\' }));
+                         item.Arguments = str;
+                         item.CustomCategory = "Ostatnie";
+                         lista.JumpItems.Add(item);
+                         // lab.Content=;
 
 
-                    }
-                    lista.Apply();
-                    JumpList.SetJumpList(Application.Current, lista);
-                }
-                catch { }
-            });
+                     }
+                     lista.Apply();
+                     JumpList.SetJumpList(Application.Current, lista);
+                 }
+                 catch { }
+             });
         }
 
     }
