@@ -27,6 +27,7 @@ namespace VTSx86
         System.Threading.Timer watchdog;
         public Form1()
         {
+            
             InitializeComponent();
             Hide();
 
@@ -46,7 +47,7 @@ namespace VTSx86
             // pokarzOkno();
             ThreadPool.QueueUserWorkItem((a) =>
                 {
-                    SendMessage(host.MainWindowHandle, 8753, (IntPtr)polecenia.załadowano.GetHashCode(), (IntPtr)Process.GetCurrentProcess().Id);
+                    SendMessage(host.MainWindowHandle, 8753, Handle, (IntPtr)Process.GetCurrentProcess().Id);
                 });
             //System.Threading.Timer dzwiekti = new System.Threading.Timer(dzwiekodb, null, 100, 100);
             ThreadPool.QueueUserWorkItem((a) =>
@@ -186,7 +187,7 @@ namespace VTSx86
             }
             if (message.Msg == 8753)
             {
-                MessageBox.Show(((polecenia)message.WParam).ToString());
+               // MessageBox.Show(((polecenia)message.WParam).ToString());
                 if ((int)message.WParam == polecenia.pokarzOkno.GetHashCode())
                     pokarzOkno();
                 if ((int)message.WParam == polecenia.Nazwa.GetHashCode())

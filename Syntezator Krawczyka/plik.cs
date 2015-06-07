@@ -13,12 +13,16 @@ using System.Windows.Shell;
 using System.Windows.Controls;
 using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
+#if JS
 using Noesis.Javascript;
+#endif
 namespace Syntezator_Krawczyka
 {
     public class plik
     {
+#if JS
         public JS.Context skrypt = new JS.Context();
+#endif
         public DateTime zmieniono = DateTime.Now;
         public void zmiana()
         {
@@ -390,7 +394,7 @@ namespace Syntezator_Krawczyka
                 }
 
             MainWindow.ileScierzekWyswietla = 0;
-
+#if JS
             var listaSkryptów = xml.GetElementsByTagName("script");
             try
             {
@@ -400,6 +404,7 @@ namespace Syntezator_Krawczyka
                 }
             }
             catch { }
+#endif 
         }
 
 

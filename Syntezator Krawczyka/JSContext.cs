@@ -1,4 +1,5 @@
-﻿using Noesis.Javascript;
+﻿#if JS
+using Noesis.Javascript;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,3 +23,4 @@ namespace Syntezator_Krawczyka.JS
         }
     }
 }
+#endif
