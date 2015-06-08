@@ -52,8 +52,9 @@ namespace Syntezator_Krawczyka
             otwarte.Add(proces.Id, this);
             czyWłączone = true;
             Statyczne.otwartyplik.zapis += zapiszUstawienia;
+            timerek = new System.Threading.Thread(timerekCall);
+            timerek.Start();
         }
-
         private void zapiszUstawienia()
         {
             SendMessage(MainWindowHandle, 8753, (IntPtr)polecenia.Zapisz.GetHashCode(), (IntPtr)0);
@@ -91,7 +92,14 @@ namespace Syntezator_Krawczyka
             var dane = new NutaStruct();
             dane.nuta = (int)(funkcje.ton(input.ilepróbekNaStarcie) * 2 + 60);
             dane.a = 0x11223344;
-            MessageHelper.sendWindowsMessage((int)MainWindowHandle, (int)polecenia.działaj.GetHashCode(), dane);
+            MessageHelper.sendWindowsMessage((int)MainWindowHandle, (int)polecenia.wcisnijKlawisz.GetHashCode(), dane);
+        }
+        public void pusc(nuta input)
+        {
+            var dane = new NutaStruct();
+            dane.nuta = (int)(funkcje.ton(input.ilepróbekNaStarcie) * 2 + 60);
+            dane.a = 0x11223344;
+            MessageHelper.sendWindowsMessage((int)MainWindowHandle, (int)polecenia.puśćKlawisz.GetHashCode(), dane);
         }
 
         public bool czyWłączone
@@ -148,18 +156,41 @@ namespace Syntezator_Krawczyka
                 source.AddHook(new HwndSourceHook(WndProc));
             }
         }
-        static public void wndprocStart() { }
 
+        private void timerekCall(object state)
+        {
+            while (true)
+            {
+                var arr = granie.dodanoDo.ToArray();
+                foreach (var x in arr)
+                {
+                    
+                        SendMessage(otwarte[(long)x.Key].MainWindowHandle, 8753, (IntPtr)polecenia.stanZaladowano.GetHashCode(), (IntPtr)x.Value);
+                    
+                }
+                Thread.Sleep(10);
+            }
+            
+        }
+        static public void wndprocStart() { }
+        System.Threading.Thread timerek;
 
         private unsafe static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
 
-            if (msg == 8753)
+            if (msg == 8754)
             {
-                while (!otwarte.ContainsKey((long)lParam))
+                var i = 0;
+                while (!otwarte.ContainsKey((long)lParam)&&i<3000)
+                {
                     Thread.Sleep(1);
-                otwarte[(long)lParam].czyWłączone = true;
-                otwarte[(long)lParam].MainWindowHandle = wParam;
+                   // i++;
+                }
+                if (otwarte.ContainsKey((long)lParam))
+                {
+                    otwarte[(long)lParam].czyWłączone = true;
+                    otwarte[(long)lParam].MainWindowHandle = wParam;
+                }
                 /* ThreadPool.QueueUserWorkItem((a) =>
                  {
                      SendMessage(otwarte[(int)lParam].MainWindowHandle, 8753, (uint)polecenia.pokarzOkno.GetHashCode(), new byte[0]);
@@ -189,12 +220,19 @@ namespace Syntezator_Krawczyka
                 {
 
                     var o = (COPYBYTESTRUCT3)a.GetLParam(typeof(COPYBYTESTRUCT3));
-                    granie.Działaj(o.lpData, (o.cbData - 10) / 8, 0, 0);
+                    long opuz = 0;
+                    lock (granie.dodanoDo)
+                    {
+                        if (granie.dodanoDo.ContainsKey(o.dwData))
+                            opuz = granie.dodanoDo[o.dwData];
+                        granie.Działaj(o.lpData, (o.cbData - 10) / 8, opuz, 0);
+                        granie.dodanoDo[o.dwData] = opuz + (o.cbData - 10) / 8;
+                        return (IntPtr)granie.dodanoDo[o.dwData];
+                    }
                 }
             }
             return IntPtr.Zero;
         }
-
         public void ładuj(string base64chunk)
         {
             var res = MessageHelper.sendWindowsMessage((int)MainWindowHandle, (int)polecenia.Ładuj, base64chunk);
@@ -203,6 +241,7 @@ namespace Syntezator_Krawczyka
         {
             SendMessage(MainWindowHandle, 8753, (IntPtr)polecenia.pokarzOkno.GetHashCode(), (IntPtr)0);
         }
+
 
     }
 

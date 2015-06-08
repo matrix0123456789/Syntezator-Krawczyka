@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace Syntezator_Krawczyka
 {
 
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz, Zapisz, Ładuj, Dźwięk }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, wcisnijKlawisz, puśćKlawisz, Zapisz, Ładuj, Dźwięk, stanZaladowano }
     public struct NutaStruct
     {
         public int a;
@@ -149,7 +149,7 @@ namespace SIURegistry_Installer
                 cds.lpData = (byte*)msg;
                 //SendMessage(hWnd, 0x4A, wParam, ref cds);
                 //cds.lpData[0] = msg;
-                SendMessage(hWnd, 0x4A, wParam, ref cds);
+                result=SendMessage(hWnd, 0x4A, wParam, ref cds);
 
             }
             return result;

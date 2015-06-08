@@ -184,6 +184,7 @@ namespace Syntezator_Krawczyka.Synteza
                     if (zz[x].zagrano >= zz[x].dźwięk.Length)
                         zz[x].nuta.dane = zz[x].dźwięk = null;
 
+
                 }
             }
             else
@@ -204,6 +205,7 @@ namespace Syntezator_Krawczyka.Synteza
             catch (FormatException a)
             {*/
             grają.Clear();
+
             if (graj)
                 funkcje.graj(fala);
             else
@@ -582,6 +584,16 @@ namespace Syntezator_Krawczyka.Synteza
                     if (grają.Count > 0)
                         if (funkcje.graj(fala))
                         { }// goto dodatkowy;
+                    lock (dodanoDo)
+                    {
+                        var arr = dodanoDo.Keys.ToArray();
+                        foreach (var y in arr)
+                        {
+                            dodanoDo[y] = dodanoDo[y] - fala.GetLength(1);
+                            if (dodanoDo[y] < 0)
+                                dodanoDo[y] = 0;
+                        }
+                    }
                 }
                 catch (FormatException a) { funkcje.graj(fala); }
                 // grajRazCale();
@@ -589,6 +601,7 @@ namespace Syntezator_Krawczyka.Synteza
 
             teraz = false;
         }
+        public static Dictionary<IntPtr, long> dodanoDo = new Dictionary<IntPtr, long>();
         public static bool liveGraj()
         {
             try
@@ -707,7 +720,7 @@ namespace Syntezator_Krawczyka.Synteza
             //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }
             //catch { }
         }
-        public unsafe static void Działaj(float* input, long length, long inputopuznienie, long inputgenerujOd)
+        public unsafe static gra Działaj(float* input, long length, long inputopuznienie, long inputgenerujOd)
         {
             if (wynik == null)
                 lock (grają)
@@ -717,12 +730,15 @@ namespace Syntezator_Krawczyka.Synteza
                     for (int i = 0; i < length; i++)
                     {
                         nut.dane[i] = input[i * 2];
-                        if(input[i * 2]!=0)
+                        if (input[i * 2] != 0)
                         {
 
                         }
                     }
-                    grają.Add(nuta.nowyid, new gra(nut));
+                    var gra = new gra(nut);
+                    gra.zagrano = -inputopuznienie;
+                    grają.Add(nuta.nowyid, gra);
+                    return gra;
                     /* if (grają.ContainsKey(input.id))
                      {
                          grają[input.id].dźwięk = (input).dane;
@@ -750,6 +766,7 @@ namespace Syntezator_Krawczyka.Synteza
                 }
                 catch (IndexOutOfRangeException) { }
                 Marshal.FreeHGlobal((IntPtr)input);
+                return null;
             }
             //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }
             //catch { }

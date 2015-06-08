@@ -47,19 +47,13 @@ namespace VTSx86
             // pokarzOkno();
             ThreadPool.QueueUserWorkItem((a) =>
                 {
-                    SendMessage(host.MainWindowHandle, 8753, Handle, (IntPtr)Process.GetCurrentProcess().Id);
+                    SendMessage(host.MainWindowHandle, 8754, Handle, (IntPtr)Process.GetCurrentProcess().Id);
                 });
             //System.Threading.Timer dzwiekti = new System.Threading.Timer(dzwiekodb, null, 100, 100);
-            ThreadPool.QueueUserWorkItem((a) =>
-            {
-                while (true)
-                {
-                    dzwiekodb(null);
-                    Thread.Sleep(10);
-                }
-            });
+           
+            dzorbTimer = new System.Threading.Timer(dzwiekodb, null, 10, 10);
         }
-
+        System.Threading.Timer dzorbTimer;
         private void watchdogCallback(object state)
         {
             if (host.HasExited)
@@ -72,9 +66,16 @@ namespace VTSx86
             Process.GetCurrentProcess().Kill();
         }
 
-
+        bool started = false;
         private void dzwiekodb(object state)
         {
+           /* if(zostałoPróbek>10000)
+            {
+                zostałoPróbek -= 4800;
+                return;
+            }*/
+            if (zostałoPróbek > 10000)
+                return;
             try
             {
                 VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
@@ -84,14 +85,18 @@ namespace VTSx86
                 var vstOutputBuffers = outputMgr.ToArray();
                 for (int i = 0; i < 4800; i++)
                     vstInputBuffers[0][i] = (float)(i % 480) / 1000;
-                cont.PluginCommandStub.SetBlockSize(4800);
-                cont.PluginCommandStub.SetSampleRate(48000);
-                cont.PluginCommandStub.SetProcessPrecision(VstProcessPrecision.Process32);
-                cont.PluginCommandStub.StartProcess();
-                cont.PluginCommandStub.MainsChanged(true);
+                if (!started)
+                {
+                    started = true;
+                    cont.PluginCommandStub.SetBlockSize(4800);
+                    cont.PluginCommandStub.SetSampleRate(48000);
+                    cont.PluginCommandStub.SetProcessPrecision(VstProcessPrecision.Process32);
+                    cont.PluginCommandStub.StartProcess();
+                    cont.PluginCommandStub.MainsChanged(true);
+                }
                 cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
-                cont.PluginCommandStub.StopProcess();
-                cont.PluginCommandStub.MainsChanged(false);
+               // cont.PluginCommandStub.StopProcess();
+              //  cont.PluginCommandStub.MainsChanged(false);
                 
 
                 unsafe
@@ -104,12 +109,13 @@ namespace VTSx86
                         tablica[2 * i] = vstOutputBuffers[0][i];
                         tablica[2 * i + 1] = vstOutputBuffers[1][i];
                     }
-                    MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
+                   /*zostałoPróbek=*/ MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
+                   zostałoPróbek += 4800;
                 }
             }
             catch (Exception e) { MessageBox.Show(e.ToString()); }
         }
-
+        static int zostałoPróbek=0;
         private VstEvent[] CreateMidiEvent(byte statusByte, byte midiNote, byte midiVelocity)
         {
             /* 
@@ -151,14 +157,15 @@ namespace VTSx86
             //filter the RF_TESTMESSAGE
             if (message.Msg == 0x4A)
             {
-
+                VstEvent[] vEvent;
                 var polecenie = (polecenia)message.WParam;
                // MessageBox.Show(polecenie.ToString());
                 // 
+                COPYBYTESTRUCT lp;
                 switch (polecenie)
                 {
-                    case polecenia.działaj:
-                        var lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
+                    case polecenia.wcisnijKlawisz:
+                         lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
 
                         // var test = cont.PluginCommandStub.GetParameterProperties(0);
                         /*var a = (VstPluginCommandStub)cont.PluginCommandStub;
@@ -167,7 +174,21 @@ namespace VTSx86
                         MessageBox.Show(b.ToString());*/
                         cont.PluginCommandStub.SetSampleRate(48000);
 
-                        VstEvent[] vEvent = CreateMidiEvent(144, (byte)lp.lpData[0].nuta, 100);
+                         vEvent = CreateMidiEvent(144, (byte)lp.lpData[0].nuta, 100);
+                        cont.PluginCommandStub.ProcessEvents(vEvent);
+                        //cont.PluginCommandStub.
+                        break;
+                    case polecenia.puśćKlawisz:
+                         lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
+
+                        // var test = cont.PluginCommandStub.GetParameterProperties(0);
+                        /*var a = (VstPluginCommandStub)cont.PluginCommandStub;
+                       var b= a.GetDestinationBuffer();
+                        
+                        MessageBox.Show(b.ToString());*/
+                        cont.PluginCommandStub.SetSampleRate(48000);
+
+                         vEvent = CreateMidiEvent(128, (byte)lp.lpData[0].nuta, 100);
                         cont.PluginCommandStub.ProcessEvents(vEvent);
                         //cont.PluginCommandStub.
                         break;
@@ -190,6 +211,12 @@ namespace VTSx86
                // MessageBox.Show(((polecenia)message.WParam).ToString());
                 if ((int)message.WParam == polecenia.pokarzOkno.GetHashCode())
                     pokarzOkno();
+                if ((int)message.WParam == polecenia.stanZaladowano.GetHashCode())
+                {
+                    zostałoPróbek =(int) message.LParam;
+                    
+                    return;
+                }
                 if ((int)message.WParam == polecenia.Nazwa.GetHashCode())
                 {
 

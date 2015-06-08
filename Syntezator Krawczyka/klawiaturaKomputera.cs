@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Syntezator_Krawczyka
 {
-   public enum typKlawiaturyKomputera:byte { dolna, górna }
+    public enum typKlawiaturyKomputera : byte { dolna, górna }
     /// <summary>
     /// Umożliwia granie na żywo bez klawiatury midi za pomocą klawiatury komputerowej
     /// </summary>
@@ -229,24 +229,24 @@ namespace Syntezator_Krawczyka
                             else
                             {
                                 prz = new nuta();
-                                ///// try
-                                //{
-                                nuty.Add(t, prz);
-                                /*}
-                                catch (Exception ezz)
-                                {
-
-                                    if (nuty.ContainsKey(t))
-                                        prz = nuty[t];
-                                    else
-                                        throw new Exception("Błąd ze słownikami");
-                                }*/
-                                lock (wszytskieNuty)
-                                    wszytskieNuty.Add(prz);
+                                
                             }
                             prz.ilepróbek = prz.ilepróbekNaStarcie = (plik.Hz / funkcje.częstotliwość(0, t / 2f)) / Math.Pow(2, oktawy + (tony / 6));
+                            if (sekw.GetType() == typeof(wtyczkaVST))
+                            {
+                                sekw.działaj(prz);
+                            }
                             prz.długość = int.MaxValue / 16;
                             prz.sekw = sekw;
+                            if (sekw.GetType() != typeof(wtyczkaVST))
+                                {
+
+
+                                    nuty.Add(t, prz);
+
+                                    lock (wszytskieNuty)
+                                        wszytskieNuty.Add(prz);
+                                }
                             //object[] tabl = new object[1];
                             //tabl[0] = prz;
                             /*System.Threading.ThreadPool.QueueUserWorkItem((o) =>
@@ -254,15 +254,24 @@ namespace Syntezator_Krawczyka
                             lock (granie.grają) { sekw.wyjście[0].DrógiModół.działaj(prz); }
                             });*/
                         }
+
                     }
                 }
                 else
                 {
-
-                    if (nuty.ContainsKey(t))
+                    if (sekw.GetType() == typeof(wtyczkaVST))
                     {
-                        nuty[t].długość = (long)((nuty[t].start.ElapsedMilliseconds) * plik.kHz);
-                        nuty.Remove(t);
+                        var prz = new nuta();
+                        prz.ilepróbek = prz.ilepróbekNaStarcie = (plik.Hz / funkcje.częstotliwość(0, t / 2f)) / Math.Pow(2, oktawy + (tony / 6));
+                        (sekw as wtyczkaVST).pusc(prz);
+                    }
+                    else
+                    {
+                        if (nuty.ContainsKey(t))
+                        {
+                            nuty[t].długość = (long)((nuty[t].start.ElapsedMilliseconds) * plik.kHz);
+                            nuty.Remove(t);
+                        }
                     }
                 }
             }

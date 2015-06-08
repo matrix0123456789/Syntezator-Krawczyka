@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace Syntezator_Krawczyka
 {
 
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, działaj, puśćKlawisz, Zapisz, Ładuj, Dźwięk }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, wcisnijKlawisz, puśćKlawisz, Zapisz, Ładuj, Dźwięk, stanZaladowano }
     public struct NutaStruct
     {
         public int a;
