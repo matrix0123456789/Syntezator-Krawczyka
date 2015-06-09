@@ -69,51 +69,55 @@ namespace VTSx86
         bool started = false;
         private void dzwiekodb(object state)
         {
-           /* if(zostałoPróbek>10000)
+            lock (cont)
             {
-                zostałoPróbek -= 4800;
-                return;
-            }*/
-            if (zostałoPróbek > 10000)
-                return;
-            try
-            {
-                VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
-                VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
-               
-                var vstInputBuffers = inputMgr.ToArray();
-                var vstOutputBuffers = outputMgr.ToArray();
-                for (int i = 0; i < 4800; i++)
-                    vstInputBuffers[0][i] = (float)(i % 480) / 1000;
-                if (!started)
+                /* if(zostałoPróbek>10000)
                 {
-                    started = true;
-                    cont.PluginCommandStub.SetBlockSize(4800);
-                    cont.PluginCommandStub.SetSampleRate(48000);
-                    cont.PluginCommandStub.SetProcessPrecision(VstProcessPrecision.Process32);
-                    cont.PluginCommandStub.StartProcess();
-                    cont.PluginCommandStub.MainsChanged(true);
-                }
-                cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
-               // cont.PluginCommandStub.StopProcess();
-              //  cont.PluginCommandStub.MainsChanged(false);
-                
+                    zostałoPróbek -= 4800;
+                    return;
+                }*/
+                if (zostałoPróbek > 10000)
+                    return;
+                try
+                {
+                    VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
+                    VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
 
-                unsafe
-                {
-                    float* tablica = (float*)Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
-                    for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
+                    var vstInputBuffers = inputMgr.ToArray();
+                    var vstOutputBuffers = outputMgr.ToArray();
+                    for (int i = 0; i < 4800; i++)
+                        vstInputBuffers[0][i] = (float)(i % 480) / 1000;
+                    if (!started)
                     {
-                       // if (vstOutputBuffers[0][i] != 0)
-                      //      MessageBox.Show(i.ToString());
-                        tablica[2 * i] = vstOutputBuffers[0][i];
-                        tablica[2 * i + 1] = vstOutputBuffers[1][i];
+                        started = true;
+                        cont.PluginCommandStub.SetBlockSize(4800);
+                        cont.PluginCommandStub.SetSampleRate(48000);
+                        cont.PluginCommandStub.SetProcessPrecision(VstProcessPrecision.Process32);
+                        cont.PluginCommandStub.StartProcess();
+                        cont.PluginCommandStub.MainsChanged(true);
                     }
-                   /*zostałoPróbek=*/ MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
-                   zostałoPróbek += 4800;
+                    cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
+                    // cont.PluginCommandStub.StopProcess();
+                    //  cont.PluginCommandStub.MainsChanged(false);
+
+
+                    unsafe
+                    {
+                        float* tablica = (float*)Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
+                        for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
+                        {
+                            // if (vstOutputBuffers[0][i] != 0)
+                            //      MessageBox.Show(i.ToString());
+                            tablica[2 * i] = vstOutputBuffers[0][i];
+                            tablica[2 * i + 1] = vstOutputBuffers[1][i];
+                        }
+                        /*zostałoPróbek=*/
+                        MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
+                        zostałoPróbek += 4800;
+                    }
                 }
+                catch (Exception e) { MessageBox.Show(e.ToString()); }
             }
-            catch (Exception e) { MessageBox.Show(e.ToString()); }
         }
         static int zostałoPróbek=0;
         private VstEvent[] CreateMidiEvent(byte statusByte, byte midiNote, byte midiVelocity)

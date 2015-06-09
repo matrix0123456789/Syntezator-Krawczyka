@@ -11,12 +11,18 @@ namespace Syntezator_Krawczyka
     {
 
        public UserControl UI;
-        public void działaj(nuta input)
-        {
-            var wiadomość = new NoteEvent(10, 1, MidiCommandCode.NoteOn, (int)(Math.Round(funkcje.ton(input.ilepróbek)*2))+48, 127);
-            
-            urządzenie.Send(wiadomość.GetAsShortMessage());
-        }
+       public void działaj(nuta input)
+       {
+           var wiadomość = new NoteEvent(10, kanał, MidiCommandCode.NoteOn, (int)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48, 127);
+
+           urządzenie.Send(wiadomość.GetAsShortMessage());
+       }
+       public void pusc(nuta input)
+       {
+           var wiadomość = new NoteEvent(10, kanał, MidiCommandCode.NoteOff, (int)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48, 127);
+
+           urządzenie.Send(wiadomość.GetAsShortMessage());
+       }
 
         public bool czyWłączone
         {
@@ -29,7 +35,21 @@ namespace Syntezator_Krawczyka
         {
             throw new NotImplementedException();
         }
-        int nrUrządzenia = 0;
+        int _nrUrządzenia = 0;
+        public int nrUrządzenia
+        {
+            get { return _nrUrządzenia; }
+            set
+            {
+                if (value == _nrUrządzenia)
+                    return;
+                urządzenie = new MidiOut(nrUrządzenia);
+                urządzenie.Volume = 0xfffffff;
+                instrument = instrument;
+                _nrUrządzenia = value;
+            }
+        }
+        public byte kanał = 1;
         MidiOut urządzenie;
         public InstrumentMidi()
         {

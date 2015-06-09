@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Background="OldLace" Height="63" Width="153" HorizontalAlignment="Left" VerticalAlignment="Top">
-    <Grid Width="200" Height="100">
+             mc:Ignorable="d" Background="OldLace"  HorizontalAlignment="Left" VerticalAlignment="Top">
+    <Grid>
         <TextBox HorizontalAlignment="Left" Height="23" Name="instrument" Margin="10,10,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" TextChanged="instrument_TextChanged"/>
-
+        <TextBox HorizontalAlignment="Left" Height="23" Name="kanał" Margin="10,40,10,10" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" TextChanged="kanał_TextChanged"/>
+        <ComboBox Name="urządzenie" SelectionChanged="urządzenie_SelectionChanged" VerticalAlignment="Top" Margin="10,70,10,10"></ComboBox>
     </Grid>
 </UserControl>

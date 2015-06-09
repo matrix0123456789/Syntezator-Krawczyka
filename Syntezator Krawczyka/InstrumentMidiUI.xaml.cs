@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Midi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,12 @@ namespace Syntezator_Krawczyka
         {
             InitializeComponent();
             ParentNode = p;
+            for(var i=0;i<MidiOut.NumberOfDevices;i++)
+            {
+                var info=MidiOut.DeviceInfo(i);
+                urządzenie.Items.Add(info.ProductName);
+            }
+            urządzenie.SelectedIndex = ParentNode.nrUrządzenia;
         }
 
         private void instrument_TextChanged(object sender, TextChangedEventArgs e)
@@ -33,6 +40,21 @@ namespace Syntezator_Krawczyka
                 ParentNode.instrument = byte.Parse(instrument.Text);
             }
             catch { }
+        }
+
+        private void kanał_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                ParentNode.kanał = byte.Parse(instrument.Text);
+            }
+            catch { }
+
+        }
+
+        private void urządzenie_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ParentNode.nrUrządzenia = urządzenie.SelectedIndex;
         }
 
     }

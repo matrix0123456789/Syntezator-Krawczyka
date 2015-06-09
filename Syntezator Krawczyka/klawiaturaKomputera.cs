@@ -229,24 +229,31 @@ namespace Syntezator_Krawczyka
                             else
                             {
                                 prz = new nuta();
-                                
+
                             }
                             prz.ilepróbek = prz.ilepróbekNaStarcie = (plik.Hz / funkcje.częstotliwość(0, t / 2f)) / Math.Pow(2, oktawy + (tony / 6));
                             if (sekw.GetType() == typeof(wtyczkaVST))
                             {
+                                if (!nuty.ContainsKey(t))
                                 sekw.działaj(prz);
                             }
-                            prz.długość = int.MaxValue / 16;
-                            prz.sekw = sekw;
-                            if (sekw.GetType() != typeof(wtyczkaVST))
-                                {
+                            if (sekw.GetType() == typeof(InstrumentMidi))
+                            {
+
+                                if (!nuty.ContainsKey(t))
+                                sekw.działaj(prz);
+                            }
+                            else
+                            {
+                                prz.długość = int.MaxValue / 16;
+                                prz.sekw = sekw;
 
 
-                                    nuty.Add(t, prz);
-
-                                    lock (wszytskieNuty)
+                                lock (wszytskieNuty)
+                                    if (!wszytskieNuty.Contains(prz))
                                         wszytskieNuty.Add(prz);
-                                }
+                            }
+                            nuty[t] = (prz);
                             //object[] tabl = new object[1];
                             //tabl[0] = prz;
                             /*System.Threading.ThreadPool.QueueUserWorkItem((o) =>
@@ -265,14 +272,19 @@ namespace Syntezator_Krawczyka
                         prz.ilepróbek = prz.ilepróbekNaStarcie = (plik.Hz / funkcje.częstotliwość(0, t / 2f)) / Math.Pow(2, oktawy + (tony / 6));
                         (sekw as wtyczkaVST).pusc(prz);
                     }
-                    else
+                    else if (sekw.GetType() == typeof(InstrumentMidi))
                     {
-                        if (nuty.ContainsKey(t))
-                        {
-                            nuty[t].długość = (long)((nuty[t].start.ElapsedMilliseconds) * plik.kHz);
-                            nuty.Remove(t);
-                        }
+                        var prz = new nuta();
+                        prz.ilepróbek = prz.ilepróbekNaStarcie = (plik.Hz / funkcje.częstotliwość(0, t / 2f)) / Math.Pow(2, oktawy + (tony / 6));
+                        (sekw as InstrumentMidi).pusc(prz);
                     }
+
+                    if (nuty.ContainsKey(t))
+                    {
+                        nuty[t].długość = (long)((nuty[t].start.ElapsedMilliseconds) * plik.kHz);
+                        nuty.Remove(t);
+                    }
+
                 }
             }
         }
