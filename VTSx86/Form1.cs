@@ -28,7 +28,7 @@ namespace VTSx86
         System.Threading.Timer watchdog;
         public Form1()
         {
-
+            hwnd = Handle;
             InitializeComponent();
             Hide();
 
@@ -48,12 +48,13 @@ namespace VTSx86
             // pokarzOkno();
             ThreadPool.QueueUserWorkItem((a) =>
                 {
-                    SendMessage(host.MainWindowHandle, 8754, Handle, (IntPtr)Process.GetCurrentProcess().Id);
+                    SendMessage(host.MainWindowHandle, 8754, hwnd, (IntPtr)Process.GetCurrentProcess().Id);
                 });
             //System.Threading.Timer dzwiekti = new System.Threading.Timer(dzwiekodb, null, 100, 100);
 
             dzorbTimer = new System.Threading.Timer(dzwiekodb, null, 10, 10);
         }
+        IntPtr hwnd;
         System.Threading.Timer dzorbTimer;
         private void watchdogCallback(object state)
         {
@@ -81,13 +82,11 @@ namespace VTSx86
                     return;
                 try
                 {
-                    VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
-                    VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
+                    VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4900);
+                    VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4900);
 
                     var vstInputBuffers = inputMgr.ToArray();
                     var vstOutputBuffers = outputMgr.ToArray();
-                    for (int i = 0; i < 4800; i++)
-                        vstInputBuffers[0][i] = (float)(i % 480) / 1000;
                     if (!started)
                     {
                         started = true;
@@ -203,8 +202,8 @@ namespace VTSx86
                         lock (cont)
                         {
                             var lp2 = (COPYDATASTRUCT)message.GetLParam(typeof(COPYDATASTRUCT));
-                            
-                            var str=new MemoryStream( Convert.FromBase64String( lp2.lpData));
+
+                            var str = new MemoryStream(Convert.FromBase64String(lp2.lpData));
                             var read = new BinaryReader(str);
                             cont.PluginCommandStub.SetSampleRate(48000);
                             long pozycja = 0;
@@ -213,13 +212,13 @@ namespace VTSx86
                             long długość = read.ReadInt64();
                             long hash = read.ReadInt64();
                             List<MidiEventzczasem> wyd = new List<MidiEventzczasem>((int)długość);
-                            for (var i = 0; i < długość*2; i++)
+                            for (var i = 0; i < długość * 2; i++)
                             {
                                 wyd.Add(new MidiEventzczasem(read.ReadInt64(), CreateMidiEvent((byte)read.ReadInt64(), (byte)read.ReadInt64(), (byte)read.ReadInt64())));
 
                             }
                             wyd.Sort();
-                            for (var i = 0; i < długość*2; i++)
+                            for (var i = 0; i < długość * 2; i++)
                             {
                                 zagrajŚcieżkę(pozycja, wyd[i].czas, przesunięcie, hash);
                                 pozycja = wyd[i].czas;
@@ -285,7 +284,7 @@ namespace VTSx86
 
                 var vstInputBuffers = inputMgr.ToArray();
                 var vstOutputBuffers = outputMgr.ToArray();
-                
+
                 if (!started)
                 {
                     started = true;
@@ -315,8 +314,8 @@ namespace VTSx86
                         tablica[2 * i + 9] = vstOutputBuffers[1][i];
                     }
                     /*zostałoPróbek=*/
-                    MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.DźwiękŚcieżki.GetHashCode(), (tablica2), vstOutputBuffers[0].SampleCount * 8+40);
-                   // Marshal.FreeHGlobal((IntPtr)tablica);
+                    MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.DźwiękŚcieżki.GetHashCode(), (tablica2), vstOutputBuffers[0].SampleCount * 8 + 40);
+                    // Marshal.FreeHGlobal((IntPtr)tablica);
                 }
             }
             catch (Exception e) { MessageBox.Show(e.ToString()); }

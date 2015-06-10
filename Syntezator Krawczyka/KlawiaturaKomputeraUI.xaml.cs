@@ -54,17 +54,20 @@ namespace Syntezator_Krawczyka
         {
             lock (comboBox1)
             {
-                comboBox1.Items.Clear();
-                if(Statyczne.otwartyplik!=null)
-                foreach (var mod in Statyczne.otwartyplik.moduły)
+                lock (Statyczne.otwartyplik.moduły)
                 {
-                    comboBox1.Items.Add(new ComboBoxItem());
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
-                    (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
-                    if (parent.sekw == mod.Value.sekw)
-                    {
-                        comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
-                    }
+                    comboBox1.Items.Clear();
+                    if (Statyczne.otwartyplik != null)
+                        foreach (var mod in Statyczne.otwartyplik.moduły)
+                        {
+                            comboBox1.Items.Add(new ComboBoxItem());
+                            (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as FrameworkElement).Tag = mod.Value.sekw;
+                            (comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1) as ComboBoxItem).Content = mod.Key;
+                            if (parent.sekw == mod.Value.sekw)
+                            {
+                                comboBox1.SelectedItem = comboBox1.Items.GetItemAt(comboBox1.Items.Count - 1);
+                            }
+                        }
                 }
             }
         }

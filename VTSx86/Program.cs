@@ -16,8 +16,8 @@ namespace VTSx86
         static void Main()
         {
 #if DEBUG
-            bool pętla = true;
-          //  while (pętla) { Thread.Sleep(10); }
+            int pętla = 1000;
+            while (pętla-->0) { Thread.Sleep(10); }
 #endif
           Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
