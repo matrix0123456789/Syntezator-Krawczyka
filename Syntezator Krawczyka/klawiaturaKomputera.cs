@@ -237,7 +237,7 @@ namespace Syntezator_Krawczyka
                                 if (!nuty.ContainsKey(t))
                                 sekw.działaj(prz);
                             }
-                            if (sekw.GetType() == typeof(InstrumentMidi))
+                            else if (sekw.GetType() == typeof(InstrumentMidi))
                             {
 
                                 if (!nuty.ContainsKey(t))
@@ -266,6 +266,8 @@ namespace Syntezator_Krawczyka
                 }
                 else
                 {
+                    if (sekw == null)
+                        return;
                     if (sekw.GetType() == typeof(wtyczkaVST))
                     {
                         var prz = new nuta();

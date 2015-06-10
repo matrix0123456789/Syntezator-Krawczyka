@@ -602,6 +602,7 @@ namespace Syntezator_Krawczyka.Synteza
             teraz = false;
         }
         public static Dictionary<IntPtr, long> dodanoDo = new Dictionary<IntPtr, long>();
+        public static Dictionary<IntPtr, long> dodanoDo2 = new Dictionary<IntPtr, long>();
         public static bool liveGraj()
         {
             try
@@ -765,7 +766,6 @@ namespace Syntezator_Krawczyka.Synteza
                     }
                 }
                 catch (IndexOutOfRangeException) { }
-                Marshal.FreeHGlobal((IntPtr)input);
                 return null;
             }
             //try { funkcje.graj((double[])input[0], double.Parse(_ustawienia["głośność"])); }

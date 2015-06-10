@@ -39,16 +39,19 @@ namespace Syntezator_Krawczyka
                 return;
             lock (comboBox1)
             {
-                comboBox1.Items.Clear();
-                foreach (var mod in Statyczne.otwartyplik.moduły)
+                lock (Statyczne.otwartyplik.moduły)
                 {
-                    var chil = new ComboBoxItem();
-                    (chil as FrameworkElement).Tag = mod.Value.sekw;
-                    (chil as ComboBoxItem).Content = mod.Key;
-                    comboBox1.Items.Add(chil);
-                    if (parent.sekw == mod.Value.sekw)
+                    comboBox1.Items.Clear();
+                    foreach (var mod in Statyczne.otwartyplik.moduły)
                     {
-                        comboBox1.SelectedItem = chil;
+                        var chil = new ComboBoxItem();
+                        (chil as FrameworkElement).Tag = mod.Value.sekw;
+                        (chil as ComboBoxItem).Content = mod.Key;
+                        comboBox1.Items.Add(chil);
+                        if (parent.sekw == mod.Value.sekw)
+                        {
+                            comboBox1.SelectedItem = chil;
+                        }
                     }
                 }
             }

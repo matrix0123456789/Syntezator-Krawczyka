@@ -6,8 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Syntezator_Krawczyka
 {
-
-    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, wcisnijKlawisz, puśćKlawisz, Zapisz, Ładuj, Dźwięk, stanZaladowano }
+    enum polecenia { pokarzOkno, ukryjOkno, załadowano, Nazwa, wcisnijKlawisz, puśćKlawisz, Zapisz, Ładuj, Dźwięk, stanZaladowano, zagrajŚcieżkę, DźwiękŚcieżki }
     public struct NutaStruct
     {
         public int a;
@@ -38,6 +37,13 @@ namespace SIURegistry_Installer
         // [MarshalAs(UnmanagedType.LPStr)]
         public byte* lpData;
     }
+    public unsafe struct COPYBYTESTRUCT3
+    {
+        public IntPtr dwData;
+        public int cbData;
+        // [MarshalAs(UnmanagedType.LPStr)]
+        public IntPtr lpData;
+    }
     public class MessageHelper
     {
         [DllImport("User32.dll")]
@@ -54,6 +60,8 @@ namespace SIURegistry_Installer
         public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYBYTESTRUCT lParam);
         [DllImport("User32.dll", EntryPoint = "SendMessage")]
         public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYBYTESTRUCT2 lParam);
+        [DllImport("User32.dll", EntryPoint = "SendMessage")]
+        public static extern int SendMessage(int hWnd, int Msg, int wParam, ref COPYBYTESTRUCT3 lParam);
 
         //For use with WM_COPYDATA and COPYDATASTRUCT
         [DllImport("User32.dll", EntryPoint = "PostMessage")]
@@ -123,7 +131,7 @@ namespace SIURegistry_Installer
             if (hWnd != 0)
             {
                 COPYBYTESTRUCT2 cds;
-                cds.dwData = (IntPtr)Process.GetCurrentProcess().Id;
+                cds.dwData = procesID;
                 cds.cbData = msg.Length + 10;
                 var blok = Marshal.AllocHGlobal(msg.Length + 10);
                 Marshal.StructureToPtr(msg, blok, false);
@@ -135,18 +143,19 @@ namespace SIURegistry_Installer
             }
             return result;
         }
-        public unsafe static int sendWindowsMessage(int hWnd, int wParam, float* msg, int length)
+        static IntPtr procesID = (IntPtr)Process.GetCurrentProcess().Id;
+        public static int sendWindowsMessage(int hWnd, int wParam, IntPtr msg, int length)
         {
             int result = 0;
 
             if (hWnd != 0)
             {
-                COPYBYTESTRUCT2 cds;
-                cds.dwData = (IntPtr)Process.GetCurrentProcess().Id;
+                COPYBYTESTRUCT3 cds;
+                cds.dwData = procesID;
                 cds.cbData = length + 10;
                 //var blok = Marshal.AllocHGlobal(msg.Length + 10);
                 //Marshal.StructureToPtr(msg, blok, false);
-                cds.lpData = (byte*)msg;
+                cds.lpData = msg;
                 //SendMessage(hWnd, 0x4A, wParam, ref cds);
                 //cds.lpData[0] = msg;
                 result=SendMessage(hWnd, 0x4A, wParam, ref cds);

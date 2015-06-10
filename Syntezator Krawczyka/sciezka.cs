@@ -76,26 +76,35 @@ namespace Syntezator_Krawczyka
         {
             lock (granie.grają)
             {
-                granie.liczbaGenerowanychMax += nuty.Count;
-                granie.liczbaGenerowanych += nuty.Count;
-                foreach (var prz in nuty)
+                if (sekw == null)
+                    return;
+                else if (sekw.GetType() == typeof(wtyczkaVST))
                 {
-                    var tabl = (nuta)prz.Clone();
-                    tabl.głośność = głośność;
-                    tabl.grajDo = long.MaxValue;
-                    System.Threading.ThreadPool.QueueUserWorkItem((o) =>
+                    (sekw as wtyczkaVST).działaj(this);
+                }
+                else
+                {
+                    granie.liczbaGenerowanychMax += nuty.Count;
+                    granie.liczbaGenerowanych += nuty.Count;
+                    foreach (var prz in nuty)
                     {
-                        if (sekw != null)
-
-                            sekw.działaj(tabl);
-                        lock (granie.liczbaGenerowanychBlokada)
+                        var tabl = (nuta)prz.Clone();
+                        tabl.głośność = głośność;
+                        tabl.grajDo = long.MaxValue;
+                        System.Threading.ThreadPool.QueueUserWorkItem((o) =>
                         {
-                            granie.liczbaGenerowanych--;
-                            if (!granie.można && granie.liczbaGenerowanych == 0)
+                            if (sekw != null)
 
-                                granie.grajcale(false);
-                        }
-                    }, tabl);
+                                sekw.działaj(tabl);
+                            lock (granie.liczbaGenerowanychBlokada)
+                            {
+                                granie.liczbaGenerowanych--;
+                                if (!granie.można && granie.liczbaGenerowanych == 0)
+
+                                    granie.grajcale(false);
+                            }
+                        }, tabl);
+                    }
                 }
             }
         }

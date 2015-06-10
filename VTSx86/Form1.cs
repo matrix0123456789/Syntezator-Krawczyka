@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -27,7 +28,7 @@ namespace VTSx86
         System.Threading.Timer watchdog;
         public Form1()
         {
-            
+
             InitializeComponent();
             Hide();
 
@@ -43,14 +44,14 @@ namespace VTSx86
             watchdog = new System.Threading.Timer(watchdogCallback, host, 5000, 5000);
             cont.PluginCommandStub.Open();
             cont.PluginCommandStub.EditorOpen(this.Handle);
-            MessageBox.Show(cont.PluginCommandStub.PluginContext.PluginInfo.Flags.ToString());
+            //MessageBox.Show(cont.PluginCommandStub.PluginContext.PluginInfo.Flags.ToString());
             // pokarzOkno();
             ThreadPool.QueueUserWorkItem((a) =>
                 {
                     SendMessage(host.MainWindowHandle, 8754, Handle, (IntPtr)Process.GetCurrentProcess().Id);
                 });
             //System.Threading.Timer dzwiekti = new System.Threading.Timer(dzwiekodb, null, 100, 100);
-           
+
             dzorbTimer = new System.Threading.Timer(dzwiekodb, null, 10, 10);
         }
         System.Threading.Timer dzorbTimer;
@@ -103,7 +104,8 @@ namespace VTSx86
 
                     unsafe
                     {
-                        float* tablica = (float*)Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
+                        var tablica2 = Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8);
+                        float* tablica = (float*)tablica2;
                         for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
                         {
                             // if (vstOutputBuffers[0][i] != 0)
@@ -112,14 +114,15 @@ namespace VTSx86
                             tablica[2 * i + 1] = vstOutputBuffers[1][i];
                         }
                         /*zostałoPróbek=*/
-                        MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica), vstOutputBuffers[0].SampleCount * 8);
+                        MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.Dźwięk.GetHashCode(), (tablica2), vstOutputBuffers[0].SampleCount * 8);
                         zostałoPróbek += 4800;
+                        Marshal.FreeHGlobal((IntPtr)tablica);
                     }
                 }
                 catch (Exception e) { MessageBox.Show(e.ToString()); }
             }
         }
-        static int zostałoPróbek=0;
+        static int zostałoPróbek = 0;
         private VstEvent[] CreateMidiEvent(byte statusByte, byte midiNote, byte midiVelocity)
         {
             /* 
@@ -163,13 +166,13 @@ namespace VTSx86
             {
                 VstEvent[] vEvent;
                 var polecenie = (polecenia)message.WParam;
-               // MessageBox.Show(polecenie.ToString());
+                // MessageBox.Show(polecenie.ToString());
                 // 
                 COPYBYTESTRUCT lp;
                 switch (polecenie)
                 {
                     case polecenia.wcisnijKlawisz:
-                         lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
+                        lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
 
                         // var test = cont.PluginCommandStub.GetParameterProperties(0);
                         /*var a = (VstPluginCommandStub)cont.PluginCommandStub;
@@ -178,12 +181,12 @@ namespace VTSx86
                         MessageBox.Show(b.ToString());*/
                         cont.PluginCommandStub.SetSampleRate(48000);
 
-                         vEvent = CreateMidiEvent(144, (byte)lp.lpData[0].nuta, 100);
+                        vEvent = CreateMidiEvent(144, (byte)lp.lpData[0].nuta, 100);
                         cont.PluginCommandStub.ProcessEvents(vEvent);
                         //cont.PluginCommandStub.
                         break;
                     case polecenia.puśćKlawisz:
-                         lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
+                        lp = (COPYBYTESTRUCT)message.GetLParam(typeof(COPYBYTESTRUCT));
 
                         // var test = cont.PluginCommandStub.GetParameterProperties(0);
                         /*var a = (VstPluginCommandStub)cont.PluginCommandStub;
@@ -192,8 +195,38 @@ namespace VTSx86
                         MessageBox.Show(b.ToString());*/
                         cont.PluginCommandStub.SetSampleRate(48000);
 
-                         vEvent = CreateMidiEvent(128, (byte)lp.lpData[0].nuta, 100);
+                        vEvent = CreateMidiEvent(128, (byte)lp.lpData[0].nuta, 100);
                         cont.PluginCommandStub.ProcessEvents(vEvent);
+                        //cont.PluginCommandStub.
+                        break;
+                    case polecenia.zagrajŚcieżkę:
+                        lock (cont)
+                        {
+                            var lp2 = (COPYDATASTRUCT)message.GetLParam(typeof(COPYDATASTRUCT));
+                            
+                            var str=new MemoryStream( Convert.FromBase64String( lp2.lpData));
+                            var read = new BinaryReader(str);
+                            cont.PluginCommandStub.SetSampleRate(48000);
+                            long pozycja = 0;
+                            long maxDl = read.ReadInt64();
+                            long przesunięcie = read.ReadInt64();
+                            long długość = read.ReadInt64();
+                            long hash = read.ReadInt64();
+                            List<MidiEventzczasem> wyd = new List<MidiEventzczasem>((int)długość);
+                            for (var i = 0; i < długość*2; i++)
+                            {
+                                wyd.Add(new MidiEventzczasem(read.ReadInt64(), CreateMidiEvent((byte)read.ReadInt64(), (byte)read.ReadInt64(), (byte)read.ReadInt64())));
+
+                            }
+                            wyd.Sort();
+                            for (var i = 0; i < długość*2; i++)
+                            {
+                                zagrajŚcieżkę(pozycja, wyd[i].czas, przesunięcie, hash);
+                                pozycja = wyd[i].czas;
+                                cont.PluginCommandStub.ProcessEvents(wyd[i].e);
+                            }
+                            zagrajŚcieżkę(pozycja, maxDl, przesunięcie, hash);
+                        }
                         //cont.PluginCommandStub.
                         break;
                     case polecenia.Ładuj:
@@ -212,13 +245,13 @@ namespace VTSx86
             }
             if (message.Msg == 8753)
             {
-               // MessageBox.Show(((polecenia)message.WParam).ToString());
+                // MessageBox.Show(((polecenia)message.WParam).ToString());
                 if ((int)message.WParam == polecenia.pokarzOkno.GetHashCode())
                     pokarzOkno();
                 if ((int)message.WParam == polecenia.stanZaladowano.GetHashCode())
                 {
-                    zostałoPróbek =(int) message.LParam;
-                    
+                    zostałoPróbek = (int)message.LParam;
+
                     return;
                 }
                 if ((int)message.WParam == polecenia.Nazwa.GetHashCode())
@@ -239,6 +272,54 @@ namespace VTSx86
             }
             //be sure to pass along all messages to the base also
             base.WndProc(ref message);
+        }
+
+        private void zagrajŚcieżkę(long pozycja, long maxDl, long przesuniecie, long hash)
+        {
+            if (maxDl - pozycja == 0)
+                return;
+            try
+            {
+                VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, (int)(maxDl - pozycja));
+                VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, (int)(maxDl - pozycja));
+
+                var vstInputBuffers = inputMgr.ToArray();
+                var vstOutputBuffers = outputMgr.ToArray();
+                
+                if (!started)
+                {
+                    started = true;
+                    cont.PluginCommandStub.SetSampleRate(48000);
+                    cont.PluginCommandStub.SetProcessPrecision(VstProcessPrecision.Process32);
+                    cont.PluginCommandStub.StartProcess();
+                    cont.PluginCommandStub.MainsChanged(true);
+                }
+                cont.PluginCommandStub.SetBlockSize((int)(maxDl - pozycja));
+                cont.PluginCommandStub.ProcessReplacing(vstInputBuffers, vstOutputBuffers);
+                // cont.PluginCommandStub.StopProcess();
+                //  cont.PluginCommandStub.MainsChanged(false);
+
+
+                unsafe
+                {
+                    var tablica2 = Marshal.AllocHGlobal(vstOutputBuffers[0].SampleCount * 8 + 40);
+                    float* tablica = (float*)tablica2;
+                    ((long*)tablica)[0] = pozycja + przesuniecie;
+                    ((long*)tablica)[1] = maxDl;
+                    ((long*)tablica)[2] = hash;
+                    for (var i = 0; i < vstOutputBuffers[0].SampleCount; i++)
+                    {
+                        // if (vstOutputBuffers[0][i] != 0)
+                        //      MessageBox.Show(i.ToString());
+                        tablica[2 * i + 8] = vstOutputBuffers[0][i];
+                        tablica[2 * i + 9] = vstOutputBuffers[1][i];
+                    }
+                    /*zostałoPróbek=*/
+                    MessageHelper.sendWindowsMessage((int)host.MainWindowHandle, polecenia.DźwiękŚcieżki.GetHashCode(), (tablica2), vstOutputBuffers[0].SampleCount * 8+40);
+                   // Marshal.FreeHGlobal((IntPtr)tablica);
+                }
+            }
+            catch (Exception e) { MessageBox.Show(e.ToString()); }
         }
         VstPluginContext cont;
         //Form okno = null;
@@ -488,5 +569,26 @@ namespace VTSx86
     {
         public int a;
         public double ilepróbekNaStarcie;
+    }
+    public struct MidiEventzczasem : IComparable<MidiEventzczasem>
+    {
+        public VstEvent[] e;
+        public long czas;
+
+        public MidiEventzczasem(long p, VstEvent[] vstEvent)
+        {
+            czas = p;
+            e = vstEvent;
+        }
+
+        public int CompareTo(MidiEventzczasem other)
+        {
+            var c = czas - other.czas;
+            if (c > 0)
+                return 1;
+            if (c < 0)
+                return -1;
+            return 0;
+        }
     }
 }

@@ -110,13 +110,13 @@ namespace Syntezator_Krawczyka
 
         public long symuluj(long p)
         {
-            throw new NotImplementedException();
+            return p;
         }
 
         public System.Xml.XmlNode xml;
         private Process proces;
         IntPtr _MainWindowHandle = (IntPtr)0;
-       public IntPtr MainWindowHandle
+        public IntPtr MainWindowHandle
         {
             get
             {
@@ -164,13 +164,13 @@ namespace Syntezator_Krawczyka
                 var arr = granie.dodanoDo.ToArray();
                 foreach (var x in arr)
                 {
-                    
-                        SendMessage(otwarte[(long)x.Key].MainWindowHandle, 8753, (IntPtr)polecenia.stanZaladowano.GetHashCode(), (IntPtr)x.Value);
-                    
+
+                    SendMessage(otwarte[(long)x.Key].MainWindowHandle, 8753, (IntPtr)polecenia.stanZaladowano.GetHashCode(), (IntPtr)x.Value);
+
                 }
                 Thread.Sleep(10);
             }
-            
+
         }
         static public void wndprocStart() { }
         System.Threading.Thread timerek;
@@ -181,10 +181,10 @@ namespace Syntezator_Krawczyka
             if (msg == 8754)
             {
                 var i = 0;
-                while (!otwarte.ContainsKey((long)lParam)&&i<3000)
+                while (!otwarte.ContainsKey((long)lParam) && i < 3000)
                 {
                     Thread.Sleep(1);
-                   // i++;
+                    // i++;
                 }
                 if (otwarte.ContainsKey((long)lParam))
                 {
@@ -227,7 +227,24 @@ namespace Syntezator_Krawczyka
                             opuz = granie.dodanoDo[o.dwData];
                         granie.Działaj(o.lpData, (o.cbData - 10) / 8, opuz, 0);
                         granie.dodanoDo[o.dwData] = opuz + (o.cbData - 10) / 8;
+                        //Marshal.FreeHGlobal((IntPtr)o.lpData);
                         return (IntPtr)granie.dodanoDo[o.dwData];
+                    }
+                }
+                else if ((polecenia)wParam == polecenia.DźwiękŚcieżki)
+                {
+
+                    var o = (COPYBYTESTRUCT3)a.GetLParam(typeof(COPYBYTESTRUCT3));
+                    long opuz = 0;
+                    lock (granie.dodanoDo2)
+                    {
+                        if (granie.dodanoDo2.ContainsKey((IntPtr)((long*)o.lpData)[2]))
+                            opuz = granie.dodanoDo2[(IntPtr)((long*)o.lpData)[2]];
+                        granie.Działaj(o.lpData + 8, (o.cbData - 18) / 8, ((long*)o.lpData)[0], 0);
+                        opuz=granie.dodanoDo2[(IntPtr)((long*)o.lpData)[2]] = opuz - (o.cbData - 18) / 8;
+                        if (opuz <= 0)
+                            granie.liczbaGenerowanych--;
+                        return (IntPtr)granie.dodanoDo2[(IntPtr)((long*)o.lpData)[2]];
                     }
                 }
             }
@@ -243,6 +260,35 @@ namespace Syntezator_Krawczyka
         }
 
 
+
+        internal void działaj(sciezka sciezka)
+        {
+            granie.liczbaGenerowanych++;
+            granie.liczbaGenerowanychMax++;
+            var hash = (IntPtr)sciezka.GetHashCode();
+            granie.dodanoDo2[hash] = granie.wynik.GetLongLength(1) - sciezka.delay;
+            byte[] buf=new byte[64 * sciezka.nuty.Count + 32];
+            var dane = new MemoryStream(buf);
+            var wr = new BinaryWriter(dane);
+            wr.Write(granie.wynik.GetLongLength(1));
+            wr.Write(sciezka.delay);
+            wr.Write((long)sciezka.nuty.Count);
+            wr.Write((long)hash);
+            for (var i = 0; i < sciezka.nuty.Count; i++)
+            {
+                wr.Write((long)sciezka.nuty[i].opuznienie);
+                wr.Write((long)144);
+                wr.Write((long)(funkcje.ton(sciezka.nuty[i].ilepróbekNaStarcie) * 2 + 60));
+                wr.Write((long)127);
+                wr.Write((long)(sciezka.nuty[i].długość+sciezka.nuty[i].opuznienie));
+                wr.Write((long)128);
+                wr.Write((long)(funkcje.ton(sciezka.nuty[i].ilepróbekNaStarcie) * 2 + 60));
+                wr.Write((long)127);
+            }
+            wr.Close();
+            dane.Close();
+            var res = MessageHelper.sendWindowsMessage((int)MainWindowHandle, (int)polecenia.zagrajŚcieżkę, Convert.ToBase64String(buf));
+        }
     }
 
 }
