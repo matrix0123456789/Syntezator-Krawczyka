@@ -13,13 +13,17 @@ namespace Syntezator_Krawczyka
        public UserControl UI;
        public void działaj(nuta input)
        {
-           var wiadomość = new NoteEvent(10, kanał, MidiCommandCode.NoteOn, (int)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48, 127);
+           if ((sbyte)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48 < 0)
+               return;
+           var wiadomość = new NoteEvent(10, kanał, MidiCommandCode.NoteOn, (sbyte)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48, 127);
 
            urządzenie.Send(wiadomość.GetAsShortMessage());
        }
        public void pusc(nuta input)
        {
-           var wiadomość = new NoteEvent(10, kanał, MidiCommandCode.NoteOff, (int)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48, 127);
+           if ((sbyte)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48 < 0)
+               return;
+           var wiadomość = new NoteEvent(10, kanał, MidiCommandCode.NoteOff, (sbyte)(Math.Round(funkcje.ton(input.ilepróbek) * 2)) + 48, 127);
 
            urządzenie.Send(wiadomość.GetAsShortMessage());
        }

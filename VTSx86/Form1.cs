@@ -82,8 +82,8 @@ namespace VTSx86
                     return;
                 try
                 {
-                    VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4900);
-                    VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4900);
+                    VstAudioBufferManager inputMgr = new VstAudioBufferManager(2, 4800);
+                    VstAudioBufferManager outputMgr = new VstAudioBufferManager(2, 4800);
 
                     var vstInputBuffers = inputMgr.ToArray();
                     var vstOutputBuffers = outputMgr.ToArray();

@@ -46,7 +46,7 @@ namespace Syntezator_Krawczyka
         {
             try
             {
-                ParentNode.kanał = byte.Parse(instrument.Text);
+                ParentNode.kanał = byte.Parse(kanał.Text);
             }
             catch { }
 
