@@ -778,8 +778,13 @@ namespace Syntezator_Krawczyka
         }
         internal sciezka duplikujScierzke(sciezka org)
         {
+            return duplikujScierzke(org, org.delay, org.delayUstawione);
+        }
+        internal sciezka duplikujScierzke(sciezka org, long orgdelay, double orgdelayUst)
+        {
+
             if (org.oryginał != org && org.oryginał != null)
-                return duplikujScierzke(org.oryginał);
+                return duplikujScierzke(org.oryginał, orgdelay, orgdelayUst);
             var scierzkaXML = Statyczne.otwartyplik.xml.CreateElement("track");
             var atrybut1 = Statyczne.otwartyplik.xml.CreateAttribute("copy");
             var id = atrybut1.Value = org.nazwa;
@@ -787,6 +792,9 @@ namespace Syntezator_Krawczyka
             var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("delay");
             atrybut2.Value = "0";
             scierzkaXML.Attributes.SetNamedItem(atrybut2);
+            var atrybut3 = Statyczne.otwartyplik.xml.CreateAttribute("sound");
+            atrybut3.Value = org.xml.Attributes["sound"].Value;
+            scierzkaXML.Attributes.SetNamedItem(atrybut3);
             Statyczne.otwartyplik.xml.DocumentElement.AppendChild(scierzkaXML);
 
             sciezka scie = new sciezka(id, scierzkaXML, true);

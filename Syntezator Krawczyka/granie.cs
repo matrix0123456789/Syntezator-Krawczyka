@@ -354,9 +354,9 @@ namespace Syntezator_Krawczyka.Synteza
                             }
                         }*/
                         lock (zmianaLiczGenLock) { liczbaGenerowanych--; }
-                        if (liczbaGenerowanych == 0)
+                       // if (liczbaGenerowanych == 0)
 
-                            grajRaz();
+                         //   grajRaz();
                     }
                 }
             if (liczbaGenerowanych == 0 || grają.Count > 0)
@@ -369,6 +369,8 @@ namespace Syntezator_Krawczyka.Synteza
             {
                 graniePlay = false;
                 graniePrzy = 0;
+                można = true;
+                //wynik = null;
             }
             if (można && liczbaGenerowanych == 0)
             {
@@ -668,7 +670,8 @@ namespace Syntezator_Krawczyka.Synteza
         static Timer jedenTimer;
         public static void Działaj(nuta input)
         {
-            if (wynik == null)
+            
+            if (można||wynik == null)
                 lock (grają)
                 {
                     if (grają.ContainsKey(input.id))

@@ -96,7 +96,7 @@ namespace Syntezator_Krawczyka
 
         public static bool gpgpu;
 
-        public const string wersja = "0.9.7";
+        public const string wersja = "0.9.9";
    }
    public enum ModułyEnum { Sekwencer,Oscylator, Granie, cutoff, flanger}
 }

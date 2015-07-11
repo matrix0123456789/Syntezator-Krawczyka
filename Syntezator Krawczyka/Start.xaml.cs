@@ -92,7 +92,7 @@ namespace Syntezator_Krawczyka
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
                 dialog.Filter = "Wszystkie pliki z nutami|*.mid;*.midi;*.xml;*.jms|Plik XML|*.xml|Plik Jaebe Music Studio|*.jms|Plik MIDI|*.mid;*.midi|Wszystkie Pliki|*.*";
                 dialog.ShowDialog();
-                if (dialog.FileName != null)
+                if (dialog.FileName != null && dialog.FileName != "")
                 {
                     string[] explode = dialog.FileName.Split('.');
                     if (explode.Last() == "mid" || explode.Last() == "midi")
@@ -100,10 +100,11 @@ namespace Syntezator_Krawczyka
                     else
                         Statyczne.otwartyplik = new plik(dialog.FileName);
                     main.Show();
+                        Close();
                 }
             }
             catch (Exception e2) { MessageBox.Show(e2.ToString(), "Błąd", MessageBoxButton.OK, MessageBoxImage.Error); }
-            Close();
+            
         }
 
         public static Window thi;

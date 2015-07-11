@@ -155,8 +155,11 @@ namespace Syntezator_Krawczyka
                                     {
                                         try
                                         {
-                                            if (!pokazŚcie.Children.Contains(x.UI))
-                                                pokazŚcie.Children.Add(x.UI);
+                                            lock (pokazŚcie)
+                                            {
+                                                if (!pokazŚcie.Children.Contains(x.UI))
+                                                    pokazŚcie.Children.Add(x.UI);
+                                            }
                                         }
                                         catch (ArgumentException) { }
                                     }

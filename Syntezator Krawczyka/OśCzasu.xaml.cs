@@ -454,6 +454,8 @@ namespace Syntezator_Krawczyka
         private void duplikuj_click(object sender, RoutedEventArgs e)
         {
             var scorg = (aktywna.Tag as odDo).sciezka as sciezka;
+            //if (scorg.oryginał != null)
+            //    scorg = scorg.oryginał;
             var sc = Statyczne.otwartyplik.duplikujScierzke(scorg);
             sc.delayUstawione = scorg.delayUstawione;
             sc.delay = scorg.delay;

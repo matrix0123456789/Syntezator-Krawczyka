@@ -80,6 +80,7 @@ namespace Syntezator_Krawczyka
         double ilepróbekMinOst = 100, ilepróbekMaxOst = 100;//określenie przedziału tonów
         bool rysujSkale(List<sciezka> inplist, bool wymuś)
         {
+            przeliczZXmla(inplist);
             double ilepróbekMin, ilepróbekMax;//określenie przedziału tonów
             try
             {
@@ -133,6 +134,21 @@ namespace Syntezator_Krawczyka
                 }
             }
             return zmianaSkali;
+        }
+
+        private void przeliczZXmla(List<sciezka> inplist)
+        {
+            foreach(var x in inplist)
+            {
+                if (x.nuty.Count != x.xml.ChildNodes.Count)
+                {
+
+                }
+                for (var i = 0; i < x.nuty.Count;i++ )
+                {
+                    x.nuty[i].ilepróbekNaStarcie = funkcje.ilepróbek(short.Parse(x.xml.ChildNodes[i].Attributes.GetNamedItem("octave").Value, CultureInfo.InvariantCulture), float.Parse(x.xml.ChildNodes[i].Attributes.GetNamedItem("note").Value, CultureInfo.InvariantCulture));
+                }
+            }
         }
         void rysujNuty(sciezka input, Brush kolor)
         {
@@ -516,7 +532,7 @@ namespace Syntezator_Krawczyka
 
         private void Button_Click(object sender, RoutedEventArgs e)//Przycisk "nowa nuta"
         {
-            var nuta = new nuta(funkcje.częstotliwość(0, 0), 1, main.delayUstawione);
+            var nuta = new nuta(funkcje.ilepróbek(0, 0), 1, main.delayUstawione);
             main.nuty.Add(nuta);
             var nutaXML = Statyczne.otwartyplik.xml.CreateElement("nute");
 
