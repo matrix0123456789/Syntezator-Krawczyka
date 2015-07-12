@@ -106,7 +106,7 @@ namespace Syntezator_Krawczyka
                 dl = (int)Math.Ceiling(sample.fala.GetLength(1) * zmianaCzęstotliwości);
                 dane = new float[sample.fala.GetLength(0), dl];
                 for (byte k = 0; k < sample.kanały; k++)//TODO do optymalizacji
-                    for (var i2 = 0; l > i2; i2++)
+                    for (var i2 = 0; dl > i2; i2++)
                     {
                         var dz = (i2) / zmianaCzęstotliwości;
                         if (dz + 1 < l)

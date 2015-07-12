@@ -145,7 +145,7 @@
             </s:WstążkaKarta>
             <s:WstążkaKarta Tytuł="Melodia" Visibility="Collapsed" Height="78">
                 <WrapPanel Margin="3">
-                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Edytor nut"  Click="Button_Click" ToolTip="Umożliwia przeglądanie całego zapisu nutowego." Width="34">
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Edytor nut" Click="Button_Click" ToolTip="Umożliwia przeglądanie całego zapisu nutowego." Width="34">
                         <s:Przycisk.Obrazek>
                             <Canvas Name="layer1">
                                 <Canvas.RenderTransform>
@@ -222,6 +222,15 @@
                             </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
+                    <s:Przycisk s:Rozmiar="Duży" s:Podpis="Dodaj filtr"  Click="buttonNowyFiltr_Click"  ToolTip="Dodaj wirtualny filtr" Width="63">
+                        <s:Przycisk.Obrazek>
+                            <Canvas>
+                                <Canvas.Resources/>
+                                <!--Unknown tag: metadata-->
+                               
+                            </Canvas>
+                        </s:Przycisk.Obrazek>
+                    </s:Przycisk>
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Dodaj ścierzkę"  Click="buttonNowaScierzka_Click"  ToolTip="Dodaj scierzkę z nutami" Width="46">
                         <s:Przycisk.Obrazek>
                             <Canvas>
@@ -294,13 +303,13 @@
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Wczytaj dźwięk"  Click="sample_Click"  ToolTip="Wczytuje próbkę dźwięku z pliku" Width="46">
                         <s:Przycisk.Obrazek>
                             <Canvas>
-                                  </Canvas>
+                            </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Nagraj"  Click="nagraj_Click"  ToolTip="Nagrywa dźwięk z mikrofonu lub wejścia liniowego" Width="46">
                         <s:Przycisk.Obrazek>
                             <Canvas>
-                               </Canvas>
+                            </Canvas>
                         </s:Przycisk.Obrazek>
                     </s:Przycisk>
                     <s:Przycisk s:Rozmiar="Duży" s:Podpis="Oś czasu"  Click="OśCzasu_Click"  ToolTip="Pokazuje wszystkie ścierzki w formie osi czasu" Width="35">
@@ -480,7 +489,7 @@
             <s:Wstążka.PodSpodem>
                 <Grid Drop="Grid_Drop">
 
-                    
+
 
                     <Button Content="Czyść bufor" Visibility="Collapsed" HorizontalAlignment="Left" Margin="12,0,0,131" Name="button1" Width="92" Click="button1_Click" Height="23" VerticalAlignment="Bottom" />
                     <Button Content="Graj" Height="23" HorizontalAlignment="Left" Margin="5,5,0,0" Name="button6" VerticalAlignment="Top" Width="36" Click="buttonGraj_Click" />
@@ -491,7 +500,16 @@
                     <s:kontenerOkien x:Name="KontenerOkienMainWindow" Margin="0,35,0,0" ZawszePrzyciski="true">
                         <s:zawartośćOkna Title="Instrumenty">
                             <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
-                                <Grid>  <StackPanel Name="pokazInstr" /></Grid>
+                                <Grid>
+                                    <StackPanel Name="pokazInstr" />
+                                </Grid>
+                            </ScrollViewer>
+                        </s:zawartośćOkna>
+                        <s:zawartośćOkna Title="Filtry" Visibility="Collapsed">
+                            <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Auto">
+                                <Grid>
+                                    <StackPanel Name="pokazFiltry" />
+                                </Grid>
                             </ScrollViewer>
                         </s:zawartośćOkna>
                         <s:zawartośćOkna s:Title="Scieżki" Visibility="Collapsed">

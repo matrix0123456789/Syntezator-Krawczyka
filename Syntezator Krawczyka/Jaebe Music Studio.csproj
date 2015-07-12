@@ -204,6 +204,9 @@
     <Compile Include="Nagrywanie.xaml.cs">
       <DependentUpon>Nagrywanie.xaml</DependentUpon>
     </Compile>
+    <Compile Include="nowyFiltr.xaml.cs">
+      <DependentUpon>nowyFiltr.xaml</DependentUpon>
+    </Compile>
     <Compile Include="rekonstruktorUI.xaml.cs">
       <DependentUpon>rekonstruktorUI.xaml</DependentUpon>
     </Compile>
@@ -264,6 +267,7 @@
     <Compile Include="suwakOkno.xaml.cs">
       <DependentUpon>suwakOkno.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TcpWyjście.cs" />
     <Compile Include="Test.xaml.cs">
       <DependentUpon>Test.xaml</DependentUpon>
     </Compile>
@@ -392,6 +396,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Nagrywanie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="nowyFiltr.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

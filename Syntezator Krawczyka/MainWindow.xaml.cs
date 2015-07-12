@@ -220,6 +220,10 @@ namespace Syntezator_Krawczyka
         {
 
             aktualizacjaOkna.Abort();
+            foreach(var x in granie.strumienieWyjścia)
+            {
+                x.Close();
+            }
             Environment.Exit(0);
             App.Current.Shutdown();
         }
@@ -289,6 +293,11 @@ namespace Syntezator_Krawczyka
         private void buttonNowyInstrument_Click(object sender, RoutedEventArgs e)
         {
             var a = new nowyInstrument();
+            a.Show();
+        }
+        private void buttonNowyFiltr_Click(object sender, RoutedEventArgs e)
+        {
+            var a = new nowyFiltr();
             a.Show();
         }
         private void buttonNowaScierzka_Click(object sender, RoutedEventArgs e)
@@ -541,6 +550,8 @@ namespace Syntezator_Krawczyka
         private void WyjDzwieku_Click(object sender, RoutedEventArgs e)
         {
             WyjścieDzwieku.pokarz();
+           // var wątek = new Thread(() => { TcpWyjście.start(); });
+            //wątek.Start();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)

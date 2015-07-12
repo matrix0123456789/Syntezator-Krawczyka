@@ -92,7 +92,14 @@ namespace Syntezator_Krawczyka
                 Statyczne.bufor.ClearBuffer();
                 goto bufordodaj;
             }
-
+        for (var i = 0; i < granie.strumienieWyjścia.Count;i++ )
+        {
+            try
+            {
+                granie.strumienieWyjścia[i].Write(bufor, 0, fala.Length * 2);
+            }
+            catch { }
+        }
             return false;
 
 

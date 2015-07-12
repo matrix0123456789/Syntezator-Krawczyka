@@ -8,6 +8,8 @@ using System.Xml;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Documents;
+using System.IO;
 
 namespace Syntezator_Krawczyka.Synteza
 {
@@ -24,7 +26,7 @@ namespace Syntezator_Krawczyka.Synteza
         static public int graniePrzy = 0, granieMax = 0, granieI = 0;
         static public bool graniePlay = false;
         static public nuta[] granieNuty;
-
+        public static List<System.IO.Stream> strumienieWyjścia = new List<Stream>();
         public void akt() { }
         public UserControl UI
         {
