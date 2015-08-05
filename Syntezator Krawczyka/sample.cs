@@ -22,10 +22,12 @@ namespace Syntezator_Krawczyka
         public ushort kanały = 1;
         private string p;
         public event Action load;
+
         public sample(string p)
         {
             {
                 plik = p;
+                rozszerzeniePliku = p.Substring(p.LastIndexOf('.')+1);
                 System.Threading.ThreadPool.QueueUserWorkItem((Action) =>
                 {
                     BinaryReader zawartość;
@@ -218,5 +220,7 @@ namespace Syntezator_Krawczyka
                 return fala.GetLongLength(1);
             }
         }
+
+        public string rozszerzeniePliku="bin";
     }
 }

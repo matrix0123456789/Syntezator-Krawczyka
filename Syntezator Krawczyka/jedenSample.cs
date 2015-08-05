@@ -49,6 +49,9 @@ namespace Syntezator_Krawczyka
             var atrybut = Statyczne.otwartyplik.xml.CreateAttribute("file");
             atrybut.Value = x;
             xml.Attributes.SetNamedItem(atrybut);
+            var atrybut2 = Statyczne.otwartyplik.xml.CreateAttribute("orginalFile");
+            atrybut2.Value = x;
+            xml.Attributes.SetNamedItem(atrybut2);
         }
 
         void sample_load()

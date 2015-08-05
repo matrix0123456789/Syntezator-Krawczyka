@@ -194,7 +194,9 @@ namespace Syntezator_Krawczyka
                     var listaSameSample = xml.GetElementsByTagName("sample");
                     for (int i = 0; i < listaSameSample.Count; i++)
                     {
-                        if (listaSameSample[i].Attributes["file"] != null)
+                        if (listaSameSample[i].Attributes["zipFile"] != null)
+                        { }
+                        else if (listaSameSample[i].Attributes["file"] != null)
                         {
                             var a = new jedenSample(listaSameSample[i]);
                             Statyczne.otwartyplik.sameSample.Add(a);
@@ -404,7 +406,7 @@ namespace Syntezator_Krawczyka
                 }
             }
             catch { }
-#endif 
+#endif
         }
 
 
@@ -450,13 +452,12 @@ namespace Syntezator_Krawczyka
             }
             //aktJumpList();
         }
-        public void zapisz(string path) { zapisz(path, true); }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="path">Ścieżka do pliku</param>
         /// <param name="OstatnioOtwarte">Czy dodać do listy "Ostatnio Otwarte"</param>
-        public void zapisz(string path, bool OstatnioOtwarte)
+        public void zapisz(string path, bool OstatnioOtwarte = true)
         {
 
             uaktualnij();
@@ -476,7 +477,6 @@ namespace Syntezator_Krawczyka
                 zapis = new System.IO.StreamWriter(str);
                 // var stor=new MemoryArchiveStorage();
 
-                zapis = new System.IO.StreamWriter(str);
                 //ZipEntry e = zip.AddEntry("Content-From-Stream.bin", "basedirectory", StreamToRead);
                 // To use the entryStream as a file to be added to the zip,
                 // we need to put it into an implementation of IStaticDataSource.
@@ -505,16 +505,28 @@ namespace Syntezator_Krawczyka
             zapis.Flush();
             if (Statyczne.otwartyplik.pakuj == true && OstatnioOtwarte && Statyczne.otwartyplik.sameSample.Count > 0)
             {
-                zapis.BaseStream.Position = 0;
+                //zapis.BaseStream.Position = 0;
                 // Both CommitUpdate and Close must be called.
 
                 // Set this so that Close does not close the memorystream
                 zip.IsStreamOwner = true;
                 for (var i = 0; i < Statyczne.otwartyplik.sameSample.Count; i++)
                 {
-                    var rozsz = Statyczne.otwartyplik.sameSample[i].sample.plik.Substring(Statyczne.otwartyplik.sameSample[i].sample.plik.LastIndexOf('.'));
-                    //zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik, "sample/" + i + rozsz);
-                    zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik);
+                   // var rozsz = Statyczne.otwartyplik.sameSample[i].sample.plik.Substring(Statyczne.otwartyplik.sameSample[i].sample.plik.LastIndexOf('.'));
+
+
+
+                    var str = new StreamReader(Statyczne.otwartyplik.sameSample[i].sample.plik);
+                    CustomStaticDataSource sds = new CustomStaticDataSource();
+                    sds.SetStream(str.BaseStream);
+                    //zip.BeginUpdate();
+                    // If an entry of the same name already exists, it will be overwritten; otherwise added.
+                    zip.Add(sds, "files\\" + i + "." + Statyczne.otwartyplik.sameSample[i].sample.rozszerzeniePliku);
+
+
+
+
+                  //  zip.Add(Statyczne.otwartyplik.sameSample[i].sample.plik);
                 } zip.CommitUpdate();
                 zip.Close();
 

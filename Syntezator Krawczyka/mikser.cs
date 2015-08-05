@@ -12,7 +12,10 @@ namespace Syntezator_Krawczyka.Synteza
     {
         public UserControl UI
         {
-            get { return _UI; }
+            get { 
+                if(_UI ==null)
+                    _UI = new UserControl();
+                return _UI; }
         }
         int ilewej = 0;
         public void akt()
@@ -42,7 +45,7 @@ namespace Syntezator_Krawczyka.Synteza
             wyjście[0] = new Typ();
             wejście = new List<Typ>();
             _ustawienia = new Dictionary<string, string>();
-            _UI = new UserControl();
+            
         }
         Dictionary<long, List<nuta>> nuty = new Dictionary<long, List<nuta>>();
         public void działaj(nuta input)
